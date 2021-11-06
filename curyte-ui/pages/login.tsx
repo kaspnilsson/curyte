@@ -22,7 +22,7 @@ const Login = () => {
     <Layout>
       <Container>
         <Card className="max-w-sm w-96 m-auto">
-          <CardHeader color="lightBlue" class="">
+          <CardHeader color="lightBlue">
             <h2
               color="white"
               className="text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight"

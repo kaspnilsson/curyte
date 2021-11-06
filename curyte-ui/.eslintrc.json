@@ -1,6 +1,6 @@
 {
-  "extends": ["next/core-web-vitals"],
+  "extends": ["next"],
   "rules": {
-    "react/jsx-filename-extension": [1, { "extensions": ["**/*.{tsx}"] }]
+    "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }]
   }
 }

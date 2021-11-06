@@ -1,6 +1,6 @@
 import firebase from '../firebase/clientApp';
 import Link from 'next/link';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Author } from '../interfaces/author';
 import Avatar from './Avatar';
@@ -8,6 +8,7 @@ import Container from './Container';
 import Button from '@material-tailwind/react/Button';
 import Dropdown from '@material-tailwind/react/Dropdown';
 import DropdownItem from '@material-tailwind/react/DropdownItem';
+import DropdownLink from '@material-tailwind/react/DropdownLink';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
@@ -39,7 +40,6 @@ const Header = () => {
     router.push('/login');
   };
 
-  // Destructure user, loading, and error out of the hook.
   const [user, loading, error] = useAuthState(firebase.auth());
 
   return (
@@ -81,6 +81,9 @@ const Header = () => {
                   color="black"
                   buttonText={<Avatar author={user as Author} photoOnly />}
                 >
+                  <DropdownLink href="/account/settings">
+                    Account settings
+                  </DropdownLink>
                   <DropdownItem onClick={() => logOut()}>Sign out</DropdownItem>
                 </Dropdown>
               </div>

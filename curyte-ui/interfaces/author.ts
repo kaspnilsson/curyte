@@ -3,4 +3,6 @@ export declare interface Author {
   email: string;
   photoURL: string;
   uid: string;
+  bio: string;
+  username: string;
 }

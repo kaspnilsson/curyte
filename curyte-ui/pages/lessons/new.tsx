@@ -10,6 +10,7 @@ import Container from '../../components/Container';
 import Layout from '../../components/Layout';
 import LessonSectionEditor from '../../components/LessonSectionEditor';
 import { LessonSection } from '../../interfaces/lesson';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 const initialState = { sections: [{ title: '', content: '' }] };
 
@@ -79,7 +80,8 @@ const NewLessonView = () => {
   const [saving, setSaving] = useState(false);
   const [description, setDescription] = useState('');
   const [state, dispatch] = useReducer(reducer, initialState);
-  if (loading) return <div>Loading</div>;
+  if (loading) return <LoadingSpinner />;
+
   if (router.isFallback || (!loading && !user))
     return <ErrorPage statusCode={404} />;
 

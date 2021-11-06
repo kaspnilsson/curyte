@@ -14,7 +14,6 @@ const Layout = ({ preview, children }: Props) => {
     <>
       <div className="min-h-screen relative">
         <Header />
-        {/* <Alert preview={preview} /> */}
         {/* keep pb-24 in sync with footer height */}
         <main className="pb-24 m-auto w-full lg:w-2/3">{children}</main>
         <Footer />

@@ -8,7 +8,7 @@ type Props = {
 
 const LessonSection = ({ section }: Props) => {
   return (
-    <div className="max-w-2xl mx-auto py-8">
+    <div className="py-8">
       <h1>{section.title}</h1>
       <FancyEditor content={section.content} readOnly />
     </div>

@@ -1,18 +1,17 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import ErrorPage from 'next/error';
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
+import React from 'react';
 import { LessonStorageModel } from '../../interfaces/lesson';
 import firebase from '../../firebase/clientApp';
 import { GetServerSideProps } from 'next';
 import Layout from '../../components/Layout';
 import { Author } from '../../interfaces/author';
-import Header from '../../components/Header';
 import Container from '../../components/Container';
 import LessonTitle from '../../components/LessonTitle';
 import LessonHeader from '../../components/LessonHeader';
 import LessonSection from '../../components/LessonSection';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 type Props = {
   lesson: LessonStorageModel;
@@ -27,10 +26,10 @@ const LessonView = ({ lesson, author }: Props) => {
     <Layout>
       <Container>
         {router.isFallback ? (
-          <LessonTitle>Loading…</LessonTitle>
+          <LoadingSpinner />
         ) : (
           <>
-            <article className="mb-32">
+            <article className="mb-32 max-w-2xl">
               <Head>
                 <title>{lesson.title}</title>
                 {/* <meta property="og:image" content={lesson.ogImage.url} /> */}
@@ -52,6 +51,7 @@ const LessonView = ({ lesson, author }: Props) => {
     </Layout>
   );
 };
+
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const lesson = await firebase
     .firestore()
@@ -74,4 +74,5 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     props: { lesson, author },
   };
 };
+
 export default LessonView;

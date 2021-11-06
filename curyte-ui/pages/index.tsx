@@ -14,6 +14,7 @@ import Layout from '../components/Layout';
 import Container from '../components/Container';
 import Button from '@material-tailwind/react/Button';
 import LessonPreview from '../components/LessonPreview';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const Home = () => {
   const db = firebase.firestore();
@@ -21,11 +22,13 @@ const Home = () => {
   const [lessons, lessonsLoading, lessonsError] =
     useCollection<LessonStorageModel>(db.collection('lessons'), {});
 
-  const [user, loading, error] = useAuthState(firebase.auth());
+  const [user, userLoading, error] = useAuthState(firebase.auth());
+
+  const loading = lessonsLoading || userLoading;
 
   return (
     <>
-      {loading && <h4>Loading...</h4>}
+      {loading && <LoadingSpinner />}
       {!loading && (
         <>
           <Layout>
