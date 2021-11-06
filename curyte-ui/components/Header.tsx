@@ -72,7 +72,7 @@ const Header = () => {
             )}
             {user && (
               <div className="flex items-center">
-                <Link href="/login" passHref>
+                <Link href="/lessons/new" passHref>
                   <Button className="font-semibold py-2 px-4 ">
                     Start writing
                   </Button>
