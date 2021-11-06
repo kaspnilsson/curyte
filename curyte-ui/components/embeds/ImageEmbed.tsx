@@ -3,12 +3,10 @@ import { EmbedDescriptor } from 'rich-markdown-editor/dist/types';
 import { EmbedProps } from './props';
 import { PhotographIcon } from '@heroicons/react/outline';
 import Image from '@material-tailwind/react/Image';
+import { imageUrlMatchRegex } from './matchers';
 
-const imageUrlMatchRegex = new RegExp(
-  /(http)?s?:?(\/\/[^"']*\.(?:png|jpg|jpeg|gif|png|svg))/g
-);
-
-export const ImageEmbed = ({ attrs }: EmbedProps) => {
+const ImageEmbed = ({ attrs }: EmbedProps) => {
+  debugger;
   return (
     <Image
       className="max-w-full w-fit-content h-auto"
@@ -29,6 +27,7 @@ export const ImageEmbedDescriptor: EmbedDescriptor = {
     />
   ),
   matcher: (url: string) => {
+    debugger;
     return imageUrlMatchRegex.test(url) || false;
   },
   component: ImageEmbed,

@@ -24,8 +24,6 @@ const Header = () => {
       // like componentWillUnmount()
       window.removeEventListener('scroll', () => handleScroll);
     };
-    // Here, we set useEffect() arguments as empty array.
-    // This means useEffect() will only run once after component loaded
   }, []);
 
   const handleScroll = () => {

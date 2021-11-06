@@ -1,8 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import { EmbedDescriptor } from 'rich-markdown-editor/dist/types';
+import { youtubeUrlMatchRegex } from './matchers';
 import { EmbedProps } from './props';
 
-export const YoutubeEmbed = ({ attrs }: EmbedProps) => {
+const YoutubeEmbed = ({ attrs }: EmbedProps) => {
   const videoId = attrs.matches[1];
 
   return (
@@ -26,11 +27,7 @@ export const YoutubeEmbedDescriptor: EmbedDescriptor = {
     />
   ),
   matcher: (url: string) => {
-    return (
-      url.match(
-        /(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([a-zA-Z0-9_-]{11})$/i
-      ) || false
-    );
+    return url.match(youtubeUrlMatchRegex) || false;
   },
   component: YoutubeEmbed,
 };

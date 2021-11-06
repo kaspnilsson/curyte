@@ -2,12 +2,10 @@
 import { EmbedDescriptor } from 'rich-markdown-editor/dist/types';
 import { EmbedProps } from './props';
 import { PresentationChartBarIcon } from '@heroicons/react/outline';
+import { specialUrlMatchers, urlMatchRegex } from './matchers';
 
-const urlMatchRegex = new RegExp(
-  /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi
-);
-
-export const IFrameEmbed = ({ attrs }: EmbedProps) => {
+const IFrameEmbed = ({ attrs }: EmbedProps) => {
+  debugger;
   return (
     <iframe
       className="rounded-xl shadow-lg border-none w-full h-96 my-8"
@@ -27,6 +25,15 @@ export const IFrameEmbedDescriptor: EmbedDescriptor = {
     />
   ),
   matcher: (url: string) => {
+    for (const matcher of specialUrlMatchers) {
+      debugger;
+      if (matcher.test(url)) {
+        debugger;
+        return false;
+      }
+    }
+    debugger;
+    // Url matcher is very aggressive. Make sure it matches this URL and _none_ of the other URL matchers.
     return urlMatchRegex.test(url) || false;
   },
   component: IFrameEmbed,

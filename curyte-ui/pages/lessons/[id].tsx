@@ -29,7 +29,7 @@ const LessonView = ({ lesson, author }: Props) => {
           <LoadingSpinner />
         ) : (
           <>
-            <article className="mb-32 max-w-2xl">
+            <article className="mb-32">
               <Head>
                 <title>{lesson.title}</title>
                 {/* <meta property="og:image" content={lesson.ogImage.url} /> */}

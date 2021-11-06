@@ -1,15 +1,12 @@
-import Head from 'next/head';
 import React from 'react';
-// import Alert from './alert';
 import Footer from './Footer';
 import Header from './Header';
 
 type Props = {
-  preview?: boolean;
   children: React.ReactNode;
 };
 
-const Layout = ({ preview, children }: Props) => {
+const Layout = ({ children }: Props) => {
   return (
     <>
       <div className="min-h-screen relative">
