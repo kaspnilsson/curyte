@@ -4,19 +4,16 @@ import { EmbedProps } from './props';
 import { PresentationChartBarIcon } from '@heroicons/react/outline';
 import { specialUrlMatchers, urlMatchRegex } from './matchers';
 
-const IFrameEmbed = ({ attrs }: EmbedProps) => {
-  debugger;
-  return (
-    <iframe
-      className="rounded-xl shadow-lg border-none w-full h-96 my-8"
-      title={`Embedded webpage`}
-      src={attrs.href}
-    />
-  );
-};
+const IFrameEmbed = ({ attrs }: EmbedProps) => (
+  <iframe
+    className="rounded-xl shadow-lg border-2 border-gray-200 w-full h-96 my-8"
+    title={`Embedded web page`}
+    src={attrs.href}
+  />
+);
 
 export const IFrameEmbedDescriptor: EmbedDescriptor = {
-  title: 'Embed',
+  title: 'Web page',
   keywords: 'web url webpage iframe link',
   icon: () => (
     <PresentationChartBarIcon
@@ -25,14 +22,9 @@ export const IFrameEmbedDescriptor: EmbedDescriptor = {
     />
   ),
   matcher: (url: string) => {
-    for (const matcher of specialUrlMatchers) {
-      debugger;
-      if (matcher.test(url)) {
-        debugger;
-        return false;
-      }
+    for (const urlMatcher of specialUrlMatchers) {
+      if (urlMatcher.test(url)) return false;
     }
-    debugger;
     // Url matcher is very aggressive. Make sure it matches this URL and _none_ of the other URL matchers.
     return urlMatchRegex.test(url) || false;
   },

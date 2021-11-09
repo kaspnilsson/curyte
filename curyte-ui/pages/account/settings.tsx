@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-filename-extension */
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import ErrorPage from 'next/error';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -14,7 +14,7 @@ import Textarea from '@material-tailwind/react/Textarea';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
 const SettingsView = () => {
-  const router = useRouter();
+  // const router = useRouter();
 
   const [user, userLoading, error] = useAuthState(firebase.auth());
   const [author, setAuthor] = useState<Author | null>(null);
@@ -26,11 +26,6 @@ const SettingsView = () => {
     setAuthorChanged(true);
     setAuthor(a);
   };
-
-  if (!userLoading && !user) {
-    // redirect to root
-    router.push('/');
-  }
 
   useEffect(() => {
     if (user && !author) {

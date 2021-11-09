@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import ErrorPage from 'next/error';
 import React from 'react';
 import { LessonStorageModel } from '../../interfaces/lesson';
@@ -19,34 +18,26 @@ type Props = {
 };
 
 const LessonView = ({ lesson, author }: Props) => {
-  const router = useRouter();
-  if (!router.isFallback && (!lesson || !lesson.title))
-    return <ErrorPage statusCode={404} />;
+  if (!lesson || !lesson.title) return <ErrorPage statusCode={404} />;
   return (
     <Layout>
       <Container>
-        {router.isFallback ? (
-          <LoadingSpinner />
-        ) : (
-          <>
-            <article className="mb-32">
-              <Head>
-                <title>{lesson.title}</title>
-                {/* <meta property="og:image" content={lesson.ogImage.url} /> */}
-              </Head>
-              <LessonHeader
-                description={lesson.description}
-                title={lesson.title}
-                // coverImage={undefined}
-                date={lesson.created}
-                author={author}
-              />
-              {lesson.sections.map((section, index) => (
-                <LessonSection section={section} key={index} />
-              ))}
-            </article>
-          </>
-        )}
+        <article className="mb-32">
+          <Head>
+            <title>{lesson.title}</title>
+            {/* <meta property="og:image" content={lesson.ogImage.url} /> */}
+          </Head>
+          <LessonHeader
+            description={lesson.description}
+            title={lesson.title}
+            // coverImage={undefined}
+            date={lesson.created}
+            author={author}
+          />
+          {lesson.sections.map((section, index) => (
+            <LessonSection section={section} key={index} />
+          ))}
+        </article>
       </Container>
     </Layout>
   );

@@ -15,16 +15,40 @@ import Container from '../components/Container';
 import Button from '@material-tailwind/react/Button';
 import LessonPreview from '../components/LessonPreview';
 import LoadingSpinner from '../components/LoadingSpinner';
+import Input from '@material-tailwind/react/Input';
+import { DocumentData } from '@google-cloud/firestore';
+import { useFuzzy } from '../hooks/useFuzzy';
+
+const mapToLesson = (doc: DocumentData): LessonStorageModel => ({
+  ...doc.data(),
+  lessonId: doc.id,
+});
+
+const fuseOptions = {
+  distance: 10000,
+  keys: [
+    { name: 'title', weight: 0.5 },
+    { name: 'description', weight: 0.3 },
+    { name: 'sections.title', weight: 0.15 },
+    { name: 'sections.content', weight: 0.05 },
+  ],
+};
 
 const Home = () => {
   const db = firebase.firestore();
 
-  const [lessons, lessonsLoading, lessonsError] =
+  const [unmappedLessons, lessonsLoading, lessonsError] =
     useCollection<LessonStorageModel>(db.collection('lessons'), {});
+  const lessons = (unmappedLessons?.docs || []).map(mapToLesson);
 
   const [user, userLoading, error] = useAuthState(firebase.auth());
 
   const loading = lessonsLoading || userLoading;
+
+  const { result, keyword, search } = useFuzzy<LessonStorageModel>(
+    lessons,
+    fuseOptions
+  );
 
   return (
     <>
@@ -46,6 +70,17 @@ const Home = () => {
                   Because lessons can be so much more than just PDFs from the
                   90s.
                 </p>
+
+                <Input
+                  type="text"
+                  size="lg"
+                  outline
+                  placeholder="Search for a lesson..."
+                  value={keyword}
+                  onChange={({ target }: React.ChangeEvent<HTMLInputElement>) =>
+                    search(target.value)
+                  }
+                />
                 {user ? null : (
                   <Link href="/login" passHref>
                     <Button
@@ -57,14 +92,12 @@ const Home = () => {
                   </Link>
                 )}
               </section>
-              {lessons?.docs?.map((lesson) => (
+              {result.map((lesson) => (
                 <div
                   className="border-b border-gray-200 pb-8 mb-8"
-                  key={lesson.id}
+                  key={lesson.lessonId}
                 >
-                  <LessonPreview
-                    lesson={{ ...lesson.data(), lessonId: lesson.id }}
-                  />
+                  <LessonPreview lesson={lesson} />
                 </div>
               ))}
             </Container>

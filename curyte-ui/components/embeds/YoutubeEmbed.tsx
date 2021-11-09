@@ -3,17 +3,13 @@ import { EmbedDescriptor } from 'rich-markdown-editor/dist/types';
 import { youtubeUrlMatchRegex } from './matchers';
 import { EmbedProps } from './props';
 
-const YoutubeEmbed = ({ attrs }: EmbedProps) => {
-  const videoId = attrs.matches[1];
-
-  return (
-    <iframe
-      className="rounded-xl shadow-lg border-none w-full h-96 my-8"
-      title={`Youtube Embed ${videoId}`}
-      src={`https://www.youtube.com/embed/${videoId}?modestbranding=1`}
-    />
-  );
-};
+const YoutubeEmbed = ({ attrs }: EmbedProps) => (
+  <iframe
+    className="rounded-xl shadow-lg border-2 border-gray-20 w-full h-96 my-8"
+    title={`Youtube Embed ${attrs.matches[1]}`}
+    src={`https://www.youtube.com/embed/${attrs.matches[1]}?modestbranding=1`}
+  />
+);
 
 export const YoutubeEmbedDescriptor: EmbedDescriptor = {
   title: 'YouTube',
@@ -26,8 +22,6 @@ export const YoutubeEmbedDescriptor: EmbedDescriptor = {
       height={24}
     />
   ),
-  matcher: (url: string) => {
-    return url.match(youtubeUrlMatchRegex) || false;
-  },
+  matcher: (url: string) => url.match(youtubeUrlMatchRegex) || false,
   component: YoutubeEmbed,
 };
