@@ -76,7 +76,9 @@ const Header = ({ children }: Props) => {
                 </Link>
                 <Dropdown
                   color="black"
-                  buttonText={<Avatar author={user as Author} photoOnly />}
+                  buttonText={
+                    <Avatar author={user as unknown as Author} photoOnly />
+                  }
                 >
                   <DropdownLink href="/account/settings">
                     Account settings
