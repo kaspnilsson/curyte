@@ -80,7 +80,7 @@ const Header = ({ children }: Props) => {
                     <Avatar author={user as unknown as Author} photoOnly />
                   }
                 >
-                  <DropdownLink href="/account/settings">
+                  <DropdownLink href="/accounts/me">
                     Account settings
                   </DropdownLink>
                   <DropdownItem onClick={() => logOut()}>Sign out</DropdownItem>

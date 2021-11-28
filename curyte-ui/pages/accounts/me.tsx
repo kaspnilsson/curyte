@@ -13,7 +13,7 @@ import Input from '@material-tailwind/react/Input';
 import Textarea from '@material-tailwind/react/Textarea';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
-const SettingsView = () => {
+const MySettingsView = () => {
   const router = useRouter();
 
   const [user, userLoading, error] = useAuthState(firebase.auth());
@@ -146,4 +146,4 @@ const SettingsView = () => {
   );
 };
 
-export default SettingsView;
+export default MySettingsView;
