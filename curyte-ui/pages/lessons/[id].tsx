@@ -46,11 +46,8 @@ const LessonView = ({ lesson, author }: Props) => {
               <title>{lesson.title}</title>
             </Head>
             <LessonHeader
-              description={lesson.description}
-              title={lesson.title}
-              date={lesson.created}
               author={author}
-              lessonId={lesson.lessonId}
+              lesson={lesson}
               handleDelete={
                 user && user.uid === lesson.authorId ? handleDelete : undefined
               }

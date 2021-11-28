@@ -8,31 +8,26 @@ import DateFormatter from './DateFormatter';
 import LessonTitle from './LessonTitle';
 import Button from '@material-tailwind/react/Button';
 import { useRouter } from 'next/router';
+import { LessonStorageModel } from '../interfaces/lesson';
 
 type Props = {
-  title: string;
-  lessonId: string;
-  description: string;
+  lesson: LessonStorageModel;
   coverImage?: string;
-  date: string;
   author: Author;
   handleDelete?: () => void;
 };
 
-const LessonHeader = ({
-  title,
-  description,
-  coverImage,
-  date,
-  author,
-  lessonId,
-  handleDelete,
-}: Props) => {
+const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
   return (
     <>
-      <LessonTitle>{title}</LessonTitle>
+      <LessonTitle>{lesson.title}</LessonTitle>
+      {lesson.parentLessonId && (
+        <Link as={`/lessons/${lesson.parentLessonId}`} href="/lessons/[id]">
+          <a className="hover:underline text-blue">View original</a>
+        </Link>
+      )}
       <div className="text-2xl focus:outline-none mt-1 text-gray-500 mb-8">
-        {description}
+        {lesson.description}
       </div>
       {/* <div className="mb-8 md:mb-16 sm:mx-0">
         <CoverImage title={title} src={coverImage || ''} />
@@ -41,17 +36,28 @@ const LessonHeader = ({
         <div className="">
           <Avatar author={author} />
         </div>
-        <div className="text-sm">
-          <DateFormatter dateString={date} />
+        <div>
+          <div className="text-sm flex items-center">
+            {lesson.updated && (
+              <div className="mr-1 text-gray-500">Created:</div>
+            )}
+            <DateFormatter dateString={lesson.created} />
+          </div>
+          {lesson.updated && (
+            <div className="text-sm flex items-center">
+              <div className="mr-1 text-gray-500">Updated:</div>
+              <DateFormatter dateString={lesson.updated} />
+            </div>
+          )}
         </div>
       </div>
       <div className="flex gap-2">
         <Link
           passHref
-          as={`/lessons/edit/${lessonId}`}
+          as={`/lessons/edit/${lesson.lessonId}`}
           href="/lessons/edit/[id]"
         >
-          <Button buttonType="outline">Edit</Button>
+          <Button buttonType="outline">Edit / copy</Button>
         </Link>
         {handleDelete && (
           <Button buttonType="outline" onClick={handleDelete}>
