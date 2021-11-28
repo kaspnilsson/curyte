@@ -19,7 +19,6 @@ type Props = {
 };
 
 const LessonView = ({ lesson, author }: Props) => {
-  if (!lesson || !lesson.title) return <ErrorPage statusCode={404} />;
   const [user, loading, error] = useAuthState(firebase.auth());
   const [saving, setSaving] = useState(false);
 
@@ -34,6 +33,8 @@ const LessonView = ({ lesson, author }: Props) => {
     setSaving(false);
     router.push('/');
   };
+
+  if (!lesson || !lesson.title) return <ErrorPage statusCode={404} />;
 
   return (
     <>
