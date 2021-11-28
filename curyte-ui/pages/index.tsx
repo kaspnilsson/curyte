@@ -83,7 +83,7 @@ const Home = () => {
                     search(target.value)
                   }
                 />
-                {user ? null : (
+                {/* {user ? null : (
                   <Link href="/login" passHref>
                     <Button
                       className="font-semibold py-2 px-4 "
@@ -92,7 +92,7 @@ const Home = () => {
                       Get started
                     </Button>
                   </Link>
-                )}
+                )} */}
               </section>
               {result.map((lesson) => (
                 <div
