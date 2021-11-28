@@ -1,3 +1,4 @@
+import firebase from '../firebase/clientApp';
 import Link from 'next/link';
 import React from 'react';
 import { Author } from '../interfaces/author';
@@ -6,6 +7,7 @@ import CoverImage from './CoverImage';
 import DateFormatter from './DateFormatter';
 import LessonTitle from './LessonTitle';
 import Button from '@material-tailwind/react/Button';
+import { useRouter } from 'next/router';
 
 type Props = {
   title: string;
@@ -14,6 +16,7 @@ type Props = {
   coverImage?: string;
   date: string;
   author: Author;
+  handleDelete?: () => void;
 };
 
 const LessonHeader = ({
@@ -23,6 +26,7 @@ const LessonHeader = ({
   date,
   author,
   lessonId,
+  handleDelete,
 }: Props) => {
   return (
     <>
@@ -41,7 +45,7 @@ const LessonHeader = ({
           <DateFormatter dateString={date} />
         </div>
       </div>
-      <div>
+      <div className="flex gap-2">
         <Link
           passHref
           as={`/lessons/edit/${lessonId}`}
@@ -49,6 +53,11 @@ const LessonHeader = ({
         >
           <Button buttonType="outline">Edit</Button>
         </Link>
+        {handleDelete && (
+          <Button buttonType="outline" onClick={handleDelete}>
+            Delete
+          </Button>
+        )}
       </div>
     </>
   );

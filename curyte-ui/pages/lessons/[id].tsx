@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import ErrorPage from 'next/error';
-import React from 'react';
+import React, { useState } from 'react';
 import { LessonStorageModel } from '../../interfaces/lesson';
 import firebase from '../../firebase/clientApp';
 import { GetServerSideProps } from 'next';
@@ -10,6 +10,8 @@ import Container from '../../components/Container';
 import LessonHeader from '../../components/LessonHeader';
 import LessonSection from '../../components/LessonSection';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRouter } from 'next/router';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 type Props = {
   lesson: LessonStorageModel;
@@ -19,27 +21,47 @@ type Props = {
 const LessonView = ({ lesson, author }: Props) => {
   if (!lesson || !lesson.title) return <ErrorPage statusCode={404} />;
   const [user, loading, error] = useAuthState(firebase.auth());
+  const [saving, setSaving] = useState(false);
+
+  const router = useRouter();
+  const handleDelete = async () => {
+    setSaving(true);
+    await firebase
+      .firestore()
+      .collection('lessons')
+      .doc(lesson.lessonId)
+      .delete();
+    setSaving(false);
+    router.push('/');
+  };
 
   return (
-    <Layout>
-      <Container>
-        <article className="mb-32">
-          <Head>
-            <title>{lesson.title}</title>
-          </Head>
-          <LessonHeader
-            description={lesson.description}
-            title={lesson.title}
-            date={lesson.created}
-            author={author}
-            lessonId={lesson.lessonId}
-          />
-          {lesson.sections.map((section, index) => (
-            <LessonSection section={section} key={index} />
-          ))}
-        </article>
-      </Container>
-    </Layout>
+    <>
+      {saving && <LoadingSpinner />}
+      <Layout>
+        <Container>
+          <article className="mb-32">
+            <Head>
+              <title>{lesson.title}</title>
+            </Head>
+            <LessonHeader
+              description={lesson.description}
+              title={lesson.title}
+              date={lesson.created}
+              author={author}
+              lessonId={lesson.lessonId}
+              handleDelete={
+                user.uid === lesson.authorId ? handleDelete : undefined
+              }
+            />
+            {lesson.sections.map((section, index) => (
+              <LessonSection section={section} key={index} />
+            ))}
+          </article>
+        </Container>
+      </Layout>
+      );
+    </>
   );
 };
 

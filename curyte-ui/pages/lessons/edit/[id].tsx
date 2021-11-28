@@ -16,7 +16,7 @@ const EditLessonView = ({ lesson, author }: Props) => {
   if (!lesson || !lesson.title) return <ErrorPage statusCode={404} />;
   const [user, loading, error] = useAuthState(firebase.auth());
 
-  return <EditLessonPage lesson={lesson} user={user} />;
+  return <EditLessonPage lesson={lesson} user={user as unknown as Author} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
