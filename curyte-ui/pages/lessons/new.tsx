@@ -156,7 +156,7 @@ const NewLessonView = () => {
                 />
               </div>
             ))}
-            <Button
+            {/* <Button
               buttonType="outline"
               className="mt-4 font-semibold py-2 px-4 m-auto flex items-center justify-between"
               onClick={() =>
@@ -167,7 +167,7 @@ const NewLessonView = () => {
             >
               <PlusIcon className="h-5 w-5 mr-2" />
               Add lesson section
-            </Button>
+            </Button> */}
           </div>
         </div>
       </Container>
