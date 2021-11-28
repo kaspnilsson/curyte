@@ -7,7 +7,7 @@ import { imageUrlMatchRegex } from './matchers';
 
 const ImageEmbed = ({ attrs }: EmbedProps) => (
   <Image
-    className="max-w-full w-fit-content h-auto my-8"
+    className="w-full w-fit-content h-auto my-8"
     raised
     alt="Embedded image"
     src={attrs.href}
