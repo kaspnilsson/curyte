@@ -51,7 +51,7 @@ const LessonView = ({ lesson, author }: Props) => {
               author={author}
               lessonId={lesson.lessonId}
               handleDelete={
-                user.uid === lesson.authorId ? handleDelete : undefined
+                user && user.uid === lesson.authorId ? handleDelete : undefined
               }
             />
             {lesson.sections.map((section, index) => (
