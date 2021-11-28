@@ -25,5 +25,7 @@ export declare interface LessonStorageModel {
   title: string;
   description: string;
   created: string;
+  updated?: string;
+  parentLessonId?: string;
   sections: LessonSection[];
 }

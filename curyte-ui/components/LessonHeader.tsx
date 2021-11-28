@@ -1,12 +1,15 @@
+import Link from 'next/link';
 import React from 'react';
 import { Author } from '../interfaces/author';
 import Avatar from './Avatar';
 import CoverImage from './CoverImage';
 import DateFormatter from './DateFormatter';
 import LessonTitle from './LessonTitle';
+import Button from '@material-tailwind/react/Button';
 
 type Props = {
   title: string;
+  lessonId: string;
   description: string;
   coverImage?: string;
   date: string;
@@ -19,6 +22,7 @@ const LessonHeader = ({
   coverImage,
   date,
   author,
+  lessonId,
 }: Props) => {
   return (
     <>
@@ -36,6 +40,15 @@ const LessonHeader = ({
         <div className="text-sm">
           <DateFormatter dateString={date} />
         </div>
+      </div>
+      <div>
+        <Link
+          passHref
+          as={`/lessons/edit/${lessonId}`}
+          href="/lessons/edit/[id]"
+        >
+          <Button buttonType="outline">Edit</Button>
+        </Link>
       </div>
     </>
   );

@@ -7,10 +7,9 @@ import { GetServerSideProps } from 'next';
 import Layout from '../../components/Layout';
 import { Author } from '../../interfaces/author';
 import Container from '../../components/Container';
-import LessonTitle from '../../components/LessonTitle';
 import LessonHeader from '../../components/LessonHeader';
 import LessonSection from '../../components/LessonSection';
-import LoadingSpinner from '../../components/LoadingSpinner';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 type Props = {
   lesson: LessonStorageModel;
@@ -19,20 +18,21 @@ type Props = {
 
 const LessonView = ({ lesson, author }: Props) => {
   if (!lesson || !lesson.title) return <ErrorPage statusCode={404} />;
+  const [user, loading, error] = useAuthState(firebase.auth());
+
   return (
     <Layout>
       <Container>
         <article className="mb-32">
           <Head>
             <title>{lesson.title}</title>
-            {/* <meta property="og:image" content={lesson.ogImage.url} /> */}
           </Head>
           <LessonHeader
             description={lesson.description}
             title={lesson.title}
-            // coverImage={undefined}
             date={lesson.created}
             author={author}
+            lessonId={lesson.lessonId}
           />
           {lesson.sections.map((section, index) => (
             <LessonSection section={section} key={index} />

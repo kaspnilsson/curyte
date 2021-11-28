@@ -9,7 +9,7 @@ import FancyEditor from './FancyEditor';
 interface Props {
   section: LessonSection;
   onChange: (value: LessonSection) => void;
-  onDelete: () => void;
+  onDelete?: () => void;
 }
 
 const LessonSectionEditor = ({ section, onChange, onDelete }: Props) => {
@@ -45,14 +45,16 @@ const LessonSectionEditor = ({ section, onChange, onDelete }: Props) => {
           value={section.title}
           onChange={inputCallback}
         />
-        <Button
-          iconOnly
-          onClick={() => onDelete()}
-          color="gray"
-          buttonType="outline"
-        >
-          <XIcon className="h-5 w-5" />
-        </Button>
+        {onDelete && (
+          <Button
+            iconOnly
+            onClick={() => onDelete()}
+            color="gray"
+            buttonType="outline"
+          >
+            <XIcon className="h-5 w-5" />
+          </Button>
+        )}
       </div>
       <FancyEditor content={content} onChange={editorCallback} />
     </div>
