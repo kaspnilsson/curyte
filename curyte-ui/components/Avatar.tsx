@@ -34,7 +34,9 @@ const Avatar = ({ author, photoOnly, big }: Props) => {
             <Link as={`/accounts/${author.uid}`} href="/accounts/id">
               <a
                 className={
-                  big ? 'text-4xl font-bold ml-4' : 'text-lg font-bold ml-4'
+                  big
+                    ? 'hover:underline text-4xl font-bold ml-4'
+                    : 'hover:underline text-lg font-bold ml-4'
                 }
               >
                 {author.displayName}
