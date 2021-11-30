@@ -124,7 +124,7 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
               disabled={!canSubmit}
               buttonType="outline"
               className="disabled:opacity-50 font-semibold flex items-center justify-between"
-              onClick={handleSubmit}
+              onClick={localHandleSubmit}
             >
               <UploadIcon className="h-5 w-5 mr-2" />
               Publish
