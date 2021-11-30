@@ -16,7 +16,7 @@ export declare interface LessonInfo {
 export declare interface LessonSection {
   title: string;
   content: string;
-}
+} 
 
 export declare interface LessonStorageModel {
   authorId: string;
@@ -28,4 +28,5 @@ export declare interface LessonStorageModel {
   updated?: string;
   parentLessonId?: string;
   sections: LessonSection[];
+  published: boolean;
 }

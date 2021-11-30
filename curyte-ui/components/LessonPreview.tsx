@@ -2,7 +2,9 @@ import Avatar from './Avatar';
 import Link from 'next/link';
 import { LessonStorageModel } from '../interfaces/lesson';
 import React from 'react';
+import firebase from '../firebase/clientApp';
 import DateFormatter from './DateFormatter';
+import { useCollection } from 'react-firebase-hooks/firestore';
 
 type Props = {
   lesson: LessonStorageModel;
@@ -16,7 +18,7 @@ const LessonPreview = ({ lesson }: Props) => {
       </div>
       <h3 className="text-xl mb-3 leading-snug">
         <Link as={`/lessons/${lesson.lessonId}`} href="/lessons/[id]">
-          <a className="hover:underline">{lesson.title}</a>
+          <a className="hover:underline">{lesson.title || '(no title)'}</a>
         </Link>
       </h3>
       <div className="text-sm mb-4 flex">

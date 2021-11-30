@@ -1,18 +1,13 @@
 // index.tsx
 import Head from 'next/head';
-import Link from 'next/link';
 import { useCollection } from 'react-firebase-hooks/firestore';
-import Auth from '../components/Auth';
 
-import Image from 'next/image';
-import styles from '../styles/Home.module.css';
 import firebase from '../firebase/clientApp';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { LessonStorageModel, LessonInfo } from '../interfaces/lesson';
 import Layout from '../components/Layout';
 import Container from '../components/Container';
-import Button from '@material-tailwind/react/Button';
 import LessonPreview from '../components/LessonPreview';
 import LoadingSpinner from '../components/LoadingSpinner';
 import Input from '@material-tailwind/react/Input';
@@ -35,10 +30,11 @@ const fuseOptions = {
 };
 
 const Home = () => {
-  const db = firebase.firestore();
-
   const [unmappedLessons, lessonsLoading, lessonsError] =
-    useCollection<LessonStorageModel>(db.collection('lessons'), {});
+    useCollection<LessonStorageModel>(
+      firebase.firestore().collection('lessons').where('published', '==', true),
+      {}
+    );
   const lessons = (unmappedLessons?.docs || [])
     .map(mapToLesson)
     .sort((a, b) => (b.created || '').localeCompare(a.created || ''));

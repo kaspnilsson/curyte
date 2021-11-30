@@ -33,9 +33,28 @@ const EditLessonView = ({ lesson }: Props) => {
         .add({
           ...l,
           parentLessonId: lesson!.lessonId,
-          created: firebase.firestore.Timestamp.now().toDate().toISOString(),
         });
       router.push(`/lessons/${ref.id}`);
+    }
+  };
+  const handleSaveDraft = async (l: LessonStorageModel) => {
+    if (user && user.uid && user?.uid === lesson?.authorId) {
+      const ref = await firebase
+        .firestore()
+        .collection('lessons')
+        .doc(lesson.lessonId)
+        .set(l);
+      router.push(`/lessons/edit/${lesson.lessonId}`);
+    } else {
+      // Logged in user is making a clone
+      const ref = await firebase
+        .firestore()
+        .collection('lessons')
+        .add({
+          ...l,
+          parentLessonId: lesson!.lessonId,
+        });
+      router.push(`/lessons/edit/${ref.id}`);
     }
   };
 
@@ -46,6 +65,7 @@ const EditLessonView = ({ lesson }: Props) => {
       lesson={lesson}
       user={user as unknown as Author}
       handleSubmit={handleSubmit}
+      handleSaveDraft={handleSaveDraft}
     />
   );
 };

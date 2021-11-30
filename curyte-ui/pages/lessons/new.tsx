@@ -13,11 +13,16 @@ const NewLessonView = () => {
     const ref = await firebase.firestore().collection('lessons').add(l);
     router.push(`/lessons/${ref.id}`);
   };
+  const handleSaveDraft = async (l: LessonStorageModel) => {
+    const ref = await firebase.firestore().collection('lessons').add(l);
+    router.push(`/lessons/edit/${ref.id}`);
+  };
 
   return (
     <EditLessonPage
       user={user as unknown as Author}
       handleSubmit={handleSubmit}
+      handleSaveDraft={handleSaveDraft}
     />
   );
 };

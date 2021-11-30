@@ -9,11 +9,13 @@ import LessonSectionEditor from './LessonSectionEditor';
 import { LessonSection, LessonStorageModel } from '../interfaces/lesson';
 import { Author } from '../interfaces/author';
 import LoadingSpinner from './LoadingSpinner';
+import { SaveIcon } from '@heroicons/react/outline';
 
 type Props = {
   lesson?: LessonStorageModel;
   user: Author;
   handleSubmit: (l: LessonStorageModel) => Promise<void>;
+  handleSaveDraft: (l: LessonStorageModel) => Promise<void>;
 };
 
 const initialState = { sections: [{ title: '', content: '' }] };
@@ -89,20 +91,34 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
     state.sections.every((section) => section.content)
   );
 
+  const newLesson = {
+    ...lesson,
+    title,
+    description,
+    authorName: user!.displayName,
+    authorId: user!.uid,
+    sections: state.sections,
+    created:
+      lesson?.created ||
+      firebase.firestore.Timestamp.now().toDate().toISOString(),
+    updated: firebase.firestore.Timestamp.now().toDate().toISOString(),
+  };
+
   const localHandleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
     try {
       setSaving(true);
-      const newLesson = {
-        ...lesson,
-        title,
-        description,
-        authorName: user!.displayName,
-        authorId: user!.uid,
-        sections: state.sections,
-        updated: firebase.firestore.Timestamp.now().toDate().toISOString(),
-      };
-      await handleSubmit(newLesson);
+      await handleSubmit({ ...newLesson, published: true });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const localHandleSaveDraft = async (event: SyntheticEvent) => {
+    event.preventDefault();
+    try {
+      setSaving(true);
+      await handleSubmit({ ...newLesson, published: false });
     } finally {
       setSaving(false);
     }
@@ -168,6 +184,14 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
       </Container>
       <footer className="bg-white border-t border-accent-2 bottom-0 left-0 fixed w-full h-24 z-10">
         <div className="h-full m-auto w-full lg:w-2/3 flex items-center justify-end">
+          <Button
+            buttonType="outline"
+            className="disabled:opacity-50 font-semibold flex items-center justify-between mr-4"
+            onClick={localHandleSaveDraft}
+          >
+            <SaveIcon className="h-5 w-5 mr-2" />
+            Save as draft
+          </Button>
           <Button
             disabled={!canSubmit}
             className="disabled:opacity-50 font-semibold flex items-center justify-between"
