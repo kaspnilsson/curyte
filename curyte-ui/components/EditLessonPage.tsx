@@ -1,8 +1,5 @@
 import firebase from '../firebase/clientApp';
-import { useRouter } from 'next/router';
-import ErrorPage from 'next/error';
 import React, { SyntheticEvent, useReducer, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { PlusIcon, UploadIcon } from '@heroicons/react/solid';
 import Button from '@material-tailwind/react/Button';
 
@@ -10,13 +7,13 @@ import Container from './Container';
 import Layout from './Layout';
 import LessonSectionEditor from './LessonSectionEditor';
 import { LessonSection, LessonStorageModel } from '../interfaces/lesson';
-import LoadingSpinner from './LoadingSpinner';
 import { Author } from '../interfaces/author';
-import fi from 'date-fns/esm/locale/fi/index.js';
+import LoadingSpinner from './LoadingSpinner';
 
 type Props = {
   lesson?: LessonStorageModel;
   user: Author;
+  handleSubmit: (l: LessonStorageModel) => Promise<void>;
 };
 
 const initialState = { sections: [{ title: '', content: '' }] };
@@ -79,18 +76,11 @@ function reducer(state: LessonSectionState, action: LessonSectionAction) {
   }
 }
 
-const EditLessonPage = ({ lesson }: Props) => {
-  const router = useRouter();
-  const [user, loading, error] = useAuthState(firebase.auth());
-
+const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
   const [title, setTitle] = useState(lesson?.title || '');
   const [saving, setSaving] = useState(false);
   const [description, setDescription] = useState(lesson?.description || '');
   const [state, dispatch] = useReducer(reducer, lesson || initialState);
-  if (loading) return <LoadingSpinner />;
-
-  if (router.isFallback || (!loading && !user))
-    return <ErrorPage statusCode={404} />;
 
   const canSubmit = !!(
     title &&
@@ -99,52 +89,33 @@ const EditLessonPage = ({ lesson }: Props) => {
     state.sections.every((section) => section.title && section.content)
   );
 
-  const handleSubmit = async (event: SyntheticEvent) => {
+  const localHandleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
-    setSaving(true);
-    const newLesson = {
-      title,
-      description,
-      authorName: user!.displayName,
-      authorId: user!.uid,
-      sections: state.sections,
-      updated: firebase.firestore.Timestamp.now().toDate().toISOString(),
-    };
-
     try {
-      if (user && user.uid && user?.uid === lesson?.authorId) {
-        const ref = await firebase
-          .firestore()
-          .collection('lessons')
-          .doc(lesson.lessonId)
-          .set({ ...newLesson });
-        router.push(`/lessons/${lesson.lessonId}`);
-      } else {
-        // Logged in user is making a clone
-        const ref = await firebase
-          .firestore()
-          .collection('lessons')
-          .add({
-            ...newLesson,
-            parentLessonId: lesson!.lessonId,
-            created: firebase.firestore.Timestamp.now().toDate().toISOString(),
-          });
-        router.push(`/lessons/${ref.id}`);
-      }
-    } catch {
+      setSaving(true);
+      const newLesson = {
+        ...lesson,
+        title,
+        description,
+        authorName: user!.displayName,
+        authorId: user!.uid,
+        sections: state.sections,
+        updated: firebase.firestore.Timestamp.now().toDate().toISOString(),
+      };
+      await handleSubmit(newLesson);
     } finally {
       setSaving(false);
     }
   };
 
+  if (saving) return <LoadingSpinner />;
   return (
     <Layout>
       <Container>
         <div className="flex flex-col">
           <div className="flex items-center justify-between w-full">
-            <input
-              className="text-4xl focus:outline-none font-semibold flex-grow"
-              type="text"
+            <textarea
+              className="text-4xl focus:outline-none font-semibold flex-grow resize-none"
               placeholder="Enter title..."
               value={title}
               onChange={({ target }) => setTitle(target.value)}
@@ -159,9 +130,8 @@ const EditLessonPage = ({ lesson }: Props) => {
               Publish
             </Button>
           </div>
-          <input
-            className="text-2xl focus:outline-none mt-1 text-gray-500"
-            type="text"
+          <textarea
+            className="text-2xl focus:outline-none mt-1 text-gray-500 resize-none"
             placeholder="Enter description..."
             value={description}
             onChange={({ target }) => setDescription(target.value)}

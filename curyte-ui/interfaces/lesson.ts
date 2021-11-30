@@ -21,10 +21,10 @@ export declare interface LessonSection {
 export declare interface LessonStorageModel {
   authorId: string;
   authorName: string;
-  lessonId: string;
+  lessonId?: string;
   title: string;
   description: string;
-  created: string;
+  created?: string;
   updated?: string;
   parentLessonId?: string;
   sections: LessonSection[];

@@ -72,7 +72,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       return mapped;
     })
     .then((result) => {
-      result.sort((a, b) => b.created.localeCompare(a.created));
+      result.sort((a, b) => (b.created || '').localeCompare(a.created || ''));
       return result;
     });
   return {

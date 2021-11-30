@@ -41,7 +41,7 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
             {lesson.updated && (
               <div className="mr-1 text-gray-500">Created:</div>
             )}
-            <DateFormatter dateString={lesson.created} />
+            {lesson.created && <DateFormatter dateString={lesson.created} />}
           </div>
           {lesson.updated && (
             <div className="text-sm flex items-center">

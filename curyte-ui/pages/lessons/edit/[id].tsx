@@ -6,17 +6,48 @@ import { GetServerSideProps } from 'next';
 import { Author } from '../../../interfaces/author';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import EditLessonPage from '../../../components/EditLessonPage';
+import { useRouter } from 'next/router';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 type Props = {
   lesson: LessonStorageModel;
-  author: Author;
 };
 
-const EditLessonView = ({ lesson, author }: Props) => {
+const EditLessonView = ({ lesson }: Props) => {
   const [user, loading, error] = useAuthState(firebase.auth());
+  const router = useRouter();
 
-  if (!lesson || !lesson.title) return <ErrorPage statusCode={404} />;
-  return <EditLessonPage lesson={lesson} user={user as unknown as Author} />;
+  const handleSubmit = async (l: LessonStorageModel) => {
+    if (user && user.uid && user?.uid === lesson?.authorId) {
+      const ref = await firebase
+        .firestore()
+        .collection('lessons')
+        .doc(lesson.lessonId)
+        .set(l);
+      router.push(`/lessons/${lesson.lessonId}`);
+    } else {
+      // Logged in user is making a clone
+      const ref = await firebase
+        .firestore()
+        .collection('lessons')
+        .add({
+          ...l,
+          parentLessonId: lesson!.lessonId,
+          created: firebase.firestore.Timestamp.now().toDate().toISOString(),
+        });
+      router.push(`/lessons/${ref.id}`);
+    }
+  };
+
+  if (loading) return <LoadingSpinner />;
+  if (!lesson || !lesson.title || !user) return <ErrorPage statusCode={404} />;
+  return (
+    <EditLessonPage
+      lesson={lesson}
+      user={user as unknown as Author}
+      handleSubmit={handleSubmit}
+    />
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
@@ -29,16 +60,9 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       ...(result.data() as LessonStorageModel),
       lessonId: result.id,
     }));
-  const author = await firebase
-    .firestore()
-    .collection('users')
-    .doc(lesson.authorId)
-    .get()
-    .then((result) => ({
-      ...(result.data() as Author),
-    }));
+
   return {
-    props: { lesson, author },
+    props: { lesson },
   };
 };
 

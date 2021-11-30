@@ -21,7 +21,7 @@ const LessonPreview = ({ lesson }: Props) => {
       </h3>
       <div className="text-sm mb-4 flex">
         <div className="font-bold mr-4">{lesson.authorName}</div>
-        <DateFormatter dateString={lesson.created} />
+        {lesson.created && <DateFormatter dateString={lesson.created} />}
       </div>
       <p className="text-md leading-relaxed mb-4">{lesson.description}</p>
     </div>
