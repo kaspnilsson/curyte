@@ -58,7 +58,6 @@ const LessonView = ({ lesson, author }: Props) => {
           </article>
         </Container>
       </Layout>
-      );
     </>
   );
 };

@@ -41,7 +41,7 @@ const Home = () => {
     useCollection<LessonStorageModel>(db.collection('lessons'), {});
   const lessons = (unmappedLessons?.docs || [])
     .map(mapToLesson)
-    .sort((a, b) => b.created.localeCompare(a.created));
+    .sort((a, b) => (b.created || '').localeCompare(a.created || ''));
 
   const [user, userLoading, error] = useAuthState(firebase.auth());
 
