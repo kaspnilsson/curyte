@@ -38,12 +38,14 @@ const LessonSectionEditor = ({ section, onChange, onDelete }: Props) => {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <textarea
-          className="text-2xl focus:outline-none mt-1 flex-1 resize-none"
-          placeholder="Enter section title..."
-          value={section.title}
-          onChange={inputCallback}
-        />
+        {section.title && (
+          <textarea
+            className="text-2xl focus:outline-none mt-1 flex-1 resize-none"
+            placeholder="Enter section title..."
+            value={section.title}
+            onChange={inputCallback}
+          />
+        )}
         {onDelete && (
           <Button
             iconOnly

@@ -86,7 +86,7 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
     title &&
     description &&
     state.sections.length &&
-    state.sections.every((section) => section.title && section.content)
+    state.sections.every((section) => section.content)
   );
 
   const localHandleSubmit = async (event: SyntheticEvent) => {
@@ -110,9 +110,9 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
 
   if (saving) return <LoadingSpinner />;
   return (
-    <Layout>
+    <Layout withFooter={false}>
       <Container>
-        <div className="flex flex-col">
+        <div className="flex flex-col flex-grow overflow-y-auto">
           <div className="flex items-center justify-between w-full">
             <textarea
               className="text-4xl focus:outline-none font-semibold flex-grow resize-none"
@@ -120,15 +120,6 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
               value={title}
               onChange={({ target }) => setTitle(target.value)}
             />
-            <Button
-              disabled={!canSubmit}
-              buttonType="outline"
-              className="disabled:opacity-50 font-semibold flex items-center justify-between"
-              onClick={localHandleSubmit}
-            >
-              <UploadIcon className="h-5 w-5 mr-2" />
-              Publish
-            </Button>
           </div>
           <textarea
             className="text-2xl focus:outline-none mt-1 text-gray-500 resize-none"
@@ -175,6 +166,18 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
           </div>
         </div>
       </Container>
+      <footer className="bg-white border-t border-accent-2 bottom-0 left-0 fixed w-full h-24 z-10">
+        <div className="h-full m-auto w-full lg:w-2/3 flex items-center justify-end">
+          <Button
+            disabled={!canSubmit}
+            className="disabled:opacity-50 font-semibold flex items-center justify-between"
+            onClick={localHandleSubmit}
+          >
+            <UploadIcon className="h-5 w-5 mr-2" />
+            Publish
+          </Button>
+        </div>
+      </footer>
     </Layout>
   );
 };
