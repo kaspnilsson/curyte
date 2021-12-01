@@ -131,11 +131,7 @@ const MySettingsView = () => {
               </div>
             </section>
             <section className="flex flex-col my-8">
-              <Button
-                buttonType="outline"
-                className="w-56"
-                onClick={handleDelete}
-              >
+              <Button color="red" className="w-56" onClick={handleDelete}>
                 Delete account
               </Button>
             </section>
