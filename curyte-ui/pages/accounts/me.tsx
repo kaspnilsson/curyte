@@ -12,6 +12,7 @@ import Button from '@material-tailwind/react/Button';
 import Input from '@material-tailwind/react/Input';
 import Textarea from '@material-tailwind/react/Textarea';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import * as api from '../../firebase/api';
 
 const MySettingsView = () => {
   const router = useRouter();
@@ -31,14 +32,7 @@ const MySettingsView = () => {
     if (user && !author) {
       setLoading(true);
       const fetchAuthor = async () => {
-        const author = await firebase
-          .firestore()
-          .collection('users')
-          .doc(user!.uid)
-          .get()
-          .then((result) => ({
-            ...(result.data() as Author),
-          }));
+        const author = await api.getAuthor(user.uid);
         setAuthor(author);
         setLoading(false);
       };
@@ -48,12 +42,9 @@ const MySettingsView = () => {
 
   const handleSave = async (event: SyntheticEvent) => {
     event.preventDefault();
+    if (!author) return;
     setSaving(true);
-    await firebase
-      .firestore()
-      .collection('users')
-      .doc(user!.uid)
-      .set({ ...author });
+    await api.updateAuthor(author);
     setSaving(false);
   };
 

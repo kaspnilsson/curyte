@@ -4,7 +4,7 @@ import { useCollection } from 'react-firebase-hooks/firestore';
 
 import firebase from '../firebase/clientApp';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { LessonStorageModel, LessonInfo } from '../interfaces/lesson';
 import Layout from '../components/Layout';
 import Container from '../components/Container';
@@ -13,11 +13,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import Input from '@material-tailwind/react/Input';
 import { DocumentData } from '@google-cloud/firestore';
 import { useFuzzy } from '../hooks/useFuzzy';
-
-const mapToLesson = (doc: DocumentData): LessonStorageModel => ({
-  ...doc.data(),
-  lessonId: doc.id,
-});
+import * as api from '../firebase/api';
 
 const fuseOptions = {
   distance: 10000,
@@ -30,18 +26,21 @@ const fuseOptions = {
 };
 
 const Home = () => {
-  const [unmappedLessons, lessonsLoading, lessonsError] =
-    useCollection<LessonStorageModel>(
-      firebase.firestore().collection('lessons').where('published', '==', true),
-      {}
-    );
-  const lessons = (unmappedLessons?.docs || [])
-    .map(mapToLesson)
-    .sort((a, b) => (b.created || '').localeCompare(a.created || ''));
-
   const [user, userLoading, error] = useAuthState(firebase.auth());
+  const [lessons, setLessons] = useState<LessonStorageModel[]>([]);
+  const [loading, setLoading] = useState(userLoading);
 
-  const loading = lessonsLoading || userLoading;
+  useEffect(() => {
+    if (!user) return;
+    setLoading(true);
+
+    api
+      .getLessons([{ fieldPath: 'published', opStr: '==', value: true }])
+      .then((res) => {
+        setLoading(false);
+        setLessons(res);
+      });
+  }, [user]);
 
   const { result, keyword, search } = useFuzzy<LessonStorageModel>(
     lessons,
@@ -93,7 +92,7 @@ const Home = () => {
               {result.map((lesson) => (
                 <div
                   className="border-b border-gray-200 pb-8 mb-8"
-                  key={lesson.lessonId}
+                  key={lesson.uid}
                 >
                   <LessonPreview lesson={lesson} />
                 </div>

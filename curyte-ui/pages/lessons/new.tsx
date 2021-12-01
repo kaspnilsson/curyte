@@ -5,17 +5,18 @@ import EditLessonPage from '../../components/EditLessonPage';
 import { Author } from '../../interfaces/author';
 import { LessonStorageModel } from '../../interfaces/lesson';
 import { useRouter } from 'next/router';
+import * as api from '../../firebase/api';
 
 const NewLessonView = () => {
   const router = useRouter();
   const [user, loading, error] = useAuthState(firebase.auth());
   const handleSubmit = async (l: LessonStorageModel) => {
-    const ref = await firebase.firestore().collection('lessons').add(l);
-    router.push(`/lessons/${ref.id}`);
+    const uid = await api.updateLesson(l);
+    router.push(`/lessons/${uid}`);
   };
   const handleSaveDraft = async (l: LessonStorageModel) => {
-    const ref = await firebase.firestore().collection('lessons').add(l);
-    router.push(`/lessons/edit/${ref.id}`);
+    const uid = await api.updateLesson(l);
+    router.push(`/lessons/edit/${uid}`);
   };
 
   return (

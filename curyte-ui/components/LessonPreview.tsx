@@ -17,7 +17,7 @@ const LessonPreview = ({ lesson }: Props) => {
         {/* <CoverImage slug={slug} title={title} src={coverImage} /> */}
       </div>
       <h3 className="text-xl mb-3 leading-snug">
-        <Link as={`/lessons/${lesson.lessonId}`} href="/lessons/[id]">
+        <Link as={`/lessons/${lesson.uid}`} href="/lessons/[id]">
           <a className="hover:underline">{lesson.title || '(no title)'}</a>
         </Link>
       </h3>

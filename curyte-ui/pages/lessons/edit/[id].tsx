@@ -8,6 +8,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import EditLessonPage from '../../../components/EditLessonPage';
 import { useRouter } from 'next/router';
 import LoadingSpinner from '../../../components/LoadingSpinner';
+import * as api from '../../../firebase/api';
 
 type Props = {
   lesson: LessonStorageModel;
@@ -18,44 +19,34 @@ const EditLessonView = ({ lesson }: Props) => {
   const router = useRouter();
 
   const handleSubmit = async (l: LessonStorageModel) => {
-    if (user && user.uid && user?.uid === lesson?.authorId) {
-      const ref = await firebase
-        .firestore()
-        .collection('lessons')
-        .doc(lesson.lessonId)
-        .set(l);
-      router.push(`/lessons/${lesson.lessonId}`);
+    let uid;
+    if (user && user.uid && user?.uid === l?.authorId) {
+      // User owns this lesson
+      uid = await api.updateLesson(l, l.uid);
+      router.push(`/lessons/${uid}`);
     } else {
       // Logged in user is making a clone
-      const ref = await firebase
-        .firestore()
-        .collection('lessons')
-        .add({
-          ...l,
-          parentLessonId: lesson!.lessonId,
-        });
-      router.push(`/lessons/${ref.id}`);
+      uid = await api.updateLesson({
+        ...l,
+        parentLessonId: l!.uid,
+      });
     }
+    router.push(`/lessons/${uid}`);
   };
   const handleSaveDraft = async (l: LessonStorageModel) => {
-    if (user && user.uid && user?.uid === lesson?.authorId) {
-      const ref = await firebase
-        .firestore()
-        .collection('lessons')
-        .doc(lesson.lessonId)
-        .set(l);
-      router.push(`/lessons/edit/${lesson.lessonId}`);
+    let uid;
+    if (user && user.uid && user?.uid === l?.authorId) {
+      // User owns this lesson
+      uid = await api.updateLesson(l, l.uid);
+      router.push(`/lessons/edit/${uid}`);
     } else {
       // Logged in user is making a clone
-      const ref = await firebase
-        .firestore()
-        .collection('lessons')
-        .add({
-          ...l,
-          parentLessonId: lesson!.lessonId,
-        });
-      router.push(`/lessons/edit/${ref.id}`);
+      uid = await api.updateLesson({
+        ...l,
+        parentLessonId: l!.uid,
+      });
     }
+    router.push(`/lessons/edit/${uid}`);
   };
 
   if (loading) return <LoadingSpinner />;
@@ -71,15 +62,7 @@ const EditLessonView = ({ lesson }: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const lesson = await firebase
-    .firestore()
-    .collection('lessons')
-    .doc(query.id as string)
-    .get()
-    .then((result) => ({
-      ...(result.data() as LessonStorageModel),
-      lessonId: result.id,
-    }));
+  const lesson = await api.getLesson(query.id as string);
 
   return {
     props: { lesson },

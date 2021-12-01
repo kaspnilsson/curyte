@@ -107,7 +107,8 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
         updated: firebase.firestore.Timestamp.now().toDate().toISOString(),
       };
       setSaving(true);
-      await handleSubmit({ ...newLesson, published: true });
+      // UID set by API module
+      await handleSubmit({ ...newLesson, published: true, uid: '' });
     } finally {
       setSaving(false);
     }
@@ -129,7 +130,8 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
         updated: firebase.firestore.Timestamp.now().toDate().toISOString(),
       };
       setSaving(true);
-      await handleSubmit({ ...newLesson, published: false });
+      // UID set by API module
+      await handleSubmit({ ...newLesson, published: false, uid: '' });
     } finally {
       setSaving(false);
     }

@@ -54,7 +54,7 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
       <div className="flex gap-2">
         <Link
           passHref
-          as={`/lessons/edit/${lesson.lessonId}`}
+          as={`/lessons/edit/${lesson.uid}`}
           href="/lessons/edit/[id]"
         >
           <Button buttonType="outline">Edit / copy</Button>

@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import LessonPreview from '../../components/LessonPreview';
 import Avatar from '../../components/Avatar';
+import * as api from '../../firebase/api';
 
 type Props = {
   lessons: LessonStorageModel[];
@@ -33,10 +34,7 @@ const UserView = ({ lessons, author }: Props) => {
           Lessons
         </h2>
         {lessons.map((lesson) => (
-          <div
-            className="border-b border-gray-200 pb-8 mb-8"
-            key={lesson.lessonId}
-          >
+          <div className="border-b border-gray-200 pb-8 mb-8" key={lesson.uid}>
             <LessonPreview lesson={lesson} />
           </div>
         ))}
@@ -47,34 +45,11 @@ const UserView = ({ lessons, author }: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const author = await firebase
-    .firestore()
-    .collection('users')
-    .doc(query.id as string)
-    .get()
-    .then((result) => ({
-      ...(result.data() as Author),
-    }));
+  const author = await api.getAuthor(query.id as string);
 
-  const lessons = await firebase
-    .firestore()
-    .collection('lessons')
-    .where('authorId', '==', author.uid)
-    .get()
-    .then((result) => {
-      const mapped: LessonStorageModel[] = [];
-      result.docs.forEach((result) =>
-        mapped.push({
-          ...(result.data() as LessonStorageModel),
-          lessonId: result.id,
-        })
-      );
-      return mapped;
-    })
-    .then((result) => {
-      result.sort((a, b) => (b.created || '').localeCompare(a.created || ''));
-      return result;
-    });
+  const lessons = await api.getLessons([
+    { opStr: '==', value: author.uid, fieldPath: 'authorId' },
+  ]);
   return {
     props: { lessons, author },
   };

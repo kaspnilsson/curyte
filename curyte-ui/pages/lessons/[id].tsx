@@ -12,6 +12,7 @@ import LessonSection from '../../components/LessonSection';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/router';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import * as api from '../../firebase/api';
 
 type Props = {
   lesson: LessonStorageModel;
@@ -25,11 +26,7 @@ const LessonView = ({ lesson, author }: Props) => {
   const router = useRouter();
   const handleDelete = async () => {
     setSaving(true);
-    await firebase
-      .firestore()
-      .collection('lessons')
-      .doc(lesson.lessonId)
-      .delete();
+    await api.deleteLesson(lesson.uid);
     setSaving(false);
     router.push('/');
   };
@@ -63,23 +60,10 @@ const LessonView = ({ lesson, author }: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const lesson = await firebase
-    .firestore()
-    .collection('lessons')
-    .doc(query.id as string)
-    .get()
-    .then((result) => ({
-      ...(result.data() as LessonStorageModel),
-      lessonId: result.id,
-    }));
-  const author = await firebase
-    .firestore()
-    .collection('users')
-    .doc(lesson.authorId)
-    .get()
-    .then((result) => ({
-      ...(result.data() as Author),
-    }));
+  const lesson = await api.getLesson(query.id as string);
+
+  const author = await api.getAuthor(lesson.authorId);
+
   return {
     props: { lesson, author },
   };
