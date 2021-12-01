@@ -91,22 +91,21 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
     state.sections.every((section) => section.content)
   );
 
-  const newLesson = {
-    ...lesson,
-    title,
-    description,
-    authorName: user!.displayName,
-    authorId: user!.uid,
-    sections: state.sections,
-    created:
-      lesson?.created ||
-      firebase.firestore.Timestamp.now().toDate().toISOString(),
-    updated: firebase.firestore.Timestamp.now().toDate().toISOString(),
-  };
-
   const localHandleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
     try {
+      const newLesson = {
+        ...lesson,
+        title,
+        description,
+        authorName: user!.displayName,
+        authorId: user!.uid,
+        sections: state.sections,
+        created:
+          lesson?.created ||
+          firebase.firestore.Timestamp.now().toDate().toISOString(),
+        updated: firebase.firestore.Timestamp.now().toDate().toISOString(),
+      };
       setSaving(true);
       await handleSubmit({ ...newLesson, published: true });
     } finally {
@@ -117,6 +116,18 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
   const localHandleSaveDraft = async (event: SyntheticEvent) => {
     event.preventDefault();
     try {
+      const newLesson = {
+        ...lesson,
+        title,
+        description,
+        authorName: user!.displayName,
+        authorId: user!.uid,
+        sections: state.sections,
+        created:
+          lesson?.created ||
+          firebase.firestore.Timestamp.now().toDate().toISOString(),
+        updated: firebase.firestore.Timestamp.now().toDate().toISOString(),
+      };
       setSaving(true);
       await handleSubmit({ ...newLesson, published: false });
     } finally {
