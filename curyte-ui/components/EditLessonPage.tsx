@@ -106,6 +106,7 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
         authorName: user?.displayName || '',
         authorId: user?.uid || '',
         sections: state.sections,
+        saveCount: 0,
         created:
           lesson?.created ||
           firebase.firestore.Timestamp.now().toDate().toISOString(),
@@ -137,7 +138,12 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
       }
       setSaving(true)
       // UID set by API module
-      await handleSubmit({ ...newLesson, published: false, uid: '' })
+      await handleSubmit({
+        ...newLesson,
+        published: false,
+        uid: '',
+        saveCount: 0,
+      })
     } finally {
       setSaving(false)
     }

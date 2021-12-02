@@ -5,9 +5,26 @@ import AuthorLink from './AuthorLink'
 import DateFormatter from './DateFormatter'
 import LessonTitle from './LessonTitle'
 import * as api from '../firebase/api'
+import firebase from '../firebase/clientApp'
 import { LessonStorageModel } from '../interfaces/lesson'
 import LessonLink from './LessonLink'
-import { Button, Badge, Center, Divider } from '@chakra-ui/react'
+import {
+  IconButton,
+  Badge,
+  Center,
+  Divider,
+  Menu,
+  MenuList,
+  MenuItem,
+  MenuButton,
+} from '@chakra-ui/react'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import {
+  BookmarkIcon,
+  DocumentRemoveIcon,
+  DuplicateIcon,
+  MenuIcon,
+} from '@heroicons/react/outline'
 
 type Props = {
   lesson: LessonStorageModel
@@ -17,20 +34,39 @@ type Props = {
 }
 
 const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
+  const [user, userLoading] = useAuthState(firebase.auth())
   const [, setLoading] = useState(false)
   const [parentLesson, setParentLesson] = useState<LessonStorageModel | null>(
     null
   )
+  const [isSaved, setIsSaved] = useState(false)
+
   useEffect(() => {
+    if (userLoading) return
+    setLoading(true)
     const fetchParent = async () => {
       if (lesson.parentLessonId) {
-        setLoading(true)
         setParentLesson(await api.getLesson(lesson.parentLessonId))
-        setLoading(false)
       }
     }
-    fetchParent()
-  }, [lesson])
+    const fetchIsSaved = async () => {
+      setIsSaved(await api.getUserHasSavedLesson(lesson.uid))
+    }
+    Promise.all([fetchParent(), fetchIsSaved()]).then(() => {
+      setLoading(false)
+    })
+  }, [lesson, user, userLoading])
+
+  const toggleSaveLesson = async () => {
+    setLoading(true)
+    setIsSaved(!isSaved)
+    if (isSaved) {
+      await api.removeSavedLesson(lesson.uid)
+    } else {
+      await api.saveLesson(lesson.uid)
+    }
+    setLoading(false)
+  }
 
   return (
     <>
@@ -68,40 +104,52 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
         <CoverImage title={title} src={coverImage || ''} />
       </div> */}
       <div className="flex mb-6 items-center justify-between">
-        <div className="">
+        <div className="flex gap-4 items-center">
           <AuthorLink author={author} />
+          {lesson.created && <DateFormatter dateString={lesson.created} />}
         </div>
-        <table>
-          <tr className="text-sm">
-            {lesson.updated && (
-              <td className="pr-2 text-gray-500  text-right">Created</td>
-            )}
-            <td>
-              {lesson.created && <DateFormatter dateString={lesson.created} />}
-            </td>
-          </tr>
-          {lesson.updated && (
-            <tr className="text-sm">
-              <td className="pr-2 text-gray-500 text-right">Updated</td>
-              <td>
-                <DateFormatter dateString={lesson.updated} />
-              </td>
-            </tr>
-          )}
-        </table>
-        <div className="flex gap-2">
-          <Link
-            passHref
-            as={`/lessons/edit/${lesson.uid}`}
-            href="/lessons/edit/[id]"
+        <div className="flex gap-1">
+          <IconButton
+            borderRadius="full"
+            size="sm"
+            aria-label={isSaved ? 'Saved' : 'Save'}
+            colorScheme="blue"
+            variant="ghost"
+            onClick={() => toggleSaveLesson()}
           >
-            <Button variant="outline">Make a copy</Button>
-          </Link>
-          {handleDelete && (
-            <Button variant="outline" onClick={handleDelete}>
-              Delete
-            </Button>
-          )}
+            <BookmarkIcon
+              className="h-5 w-5 text-inherit"
+              style={{ fill: isSaved ? '#3182ce' : 'transparent' }}
+            />
+          </IconButton>
+          <Menu>
+            <MenuButton
+              borderRadius="full"
+              size="sm"
+              as={IconButton}
+              aria-label="Options"
+              icon={<MenuIcon className="h-5 w-5 text-inherit" />}
+              variant="subtle"
+            />
+            <MenuList>
+              <Link
+                passHref
+                as={`/lessons/edit/${lesson.uid}`}
+                href="/lessons/edit/[id]"
+              >
+                <MenuItem>
+                  <DuplicateIcon className="h-5 w-5 text-inherit mr-4" />
+                  Make a copy
+                </MenuItem>
+              </Link>
+              {handleDelete && (
+                <MenuItem onClick={handleDelete}>
+                  <DocumentRemoveIcon className="h-5 w-5 text-inherit mr-4" />
+                  Delete lesson
+                </MenuItem>
+              )}
+            </MenuList>
+          </Menu>
         </div>
       </div>
     </>

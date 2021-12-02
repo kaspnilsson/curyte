@@ -8,7 +8,6 @@ import { imageUrlMatchRegex } from './matchers'
 const ImageEmbed = ({ attrs }: EmbedProps) => (
   <Image
     className="w-full w-fit-content h-auto my-8 rounded-xl shadow-lg border-2 border-gray-200 "
-    raised
     alt="Embedded image"
     src={attrs.href}
   />

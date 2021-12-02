@@ -1,4 +1,4 @@
-import { Author } from '../interfaces/author'
+import { Author, SavedLesson } from '../interfaces/author'
 import { LessonStorageModel } from '../interfaces/lesson'
 import firebase from './clientApp'
 
@@ -101,4 +101,46 @@ export async function updateAuthor(author: Author): Promise<void> {
     .collection('users')
     .doc(author.uid)
     .set(author)
+}
+
+const computeSavedLessonUid = (savedLesson: SavedLesson): string =>
+  `${savedLesson.userId}:${savedLesson.lessonId}`
+
+export async function saveLesson(lessonId: string): Promise<void> {
+  if (!firebase.auth().currentUser) return
+  const savedLesson = { lessonId, userId: firebase.auth().currentUser!.uid }
+  await firebase
+    .firestore()
+    .collection('savedLessons')
+    .doc(computeSavedLessonUid(savedLesson))
+    .set(savedLesson)
+}
+
+export async function removeSavedLesson(lessonId: string): Promise<void> {
+  if (!firebase.auth().currentUser) return
+  const savedLesson = { lessonId, userId: firebase.auth().currentUser!.uid }
+  return await firebase
+    .firestore()
+    .collection('savedLessons')
+    .doc(computeSavedLessonUid(savedLesson))
+    .delete()
+}
+
+export async function getUserHasSavedLesson(
+  lessonId: string
+): Promise<boolean> {
+  if (!firebase.auth().currentUser) return false
+  console.log(await firebase.auth().currentUser?.getIdTokenResult())
+  return (
+    await firebase
+      .firestore()
+      .collection('savedLessons')
+      .doc(
+        computeSavedLessonUid({
+          userId: firebase.auth().currentUser!.uid,
+          lessonId,
+        })
+      )
+      .get()
+  ).exists
 }

@@ -15,3 +15,8 @@ export declare interface Links {
   publicEmail?: string
   venmo?: string
 }
+
+export declare interface SavedLesson {
+  lessonId: string
+  userId: string
+}
