@@ -114,8 +114,8 @@ const Header = ({ children, showProgressBar }: Props) => {
             style={{
               width: `${progress}%`,
               height: '3px',
-              background: 'blue',
-              opacity: '0.5',
+              background: '#3182ce',
+              opacity: '0.8',
               marginTop: '-3px',
             }}
           />
