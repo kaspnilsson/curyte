@@ -1,6 +1,6 @@
 import firebase from '../firebase/clientApp'
 import React, { SyntheticEvent, useReducer, useState } from 'react'
-import { PlusIcon, UploadIcon } from '@heroicons/react/solid'
+import { UploadIcon } from '@heroicons/react/solid'
 import { Button } from '@chakra-ui/react'
 
 import Container from './Container'
@@ -95,13 +95,14 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
 
   const localHandleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault()
+    if (!user) return
     try {
       const newLesson = {
         ...lesson,
         title,
         description,
-        authorName: user!.displayName,
-        authorId: user!.uid,
+        authorName: user?.displayName || '',
+        authorId: user?.uid || '',
         sections: state.sections,
         created:
           lesson?.created ||
@@ -118,13 +119,14 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
 
   const localHandleSaveDraft = async (event: SyntheticEvent) => {
     event.preventDefault()
+    if (!user) return
     try {
       const newLesson = {
         ...lesson,
         title,
         description,
-        authorName: user!.displayName,
-        authorId: user!.uid,
+        authorName: user?.displayName || '',
+        authorId: user?.uid || '',
         sections: state.sections,
         created:
           lesson?.created ||

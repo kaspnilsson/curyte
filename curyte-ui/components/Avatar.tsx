@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import Link from 'next/link'
 import { Author } from '../interfaces/author'
 import { Image, Tag } from '@chakra-ui/react'
 import React from 'react'

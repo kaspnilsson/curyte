@@ -1,11 +1,12 @@
-import { Author } from '../interfaces/author';
-import { LessonStorageModel } from '../interfaces/lesson';
-import firebase from './clientApp';
+import { Author } from '../interfaces/author'
+import { LessonStorageModel } from '../interfaces/lesson'
+import firebase from './clientApp'
 
 export interface WhereClause {
-  fieldPath: string | firebase.firestore.FieldPath;
-  opStr: firebase.firestore.WhereFilterOp;
-  value: any;
+  fieldPath: string | firebase.firestore.FieldPath
+  opStr: firebase.firestore.WhereFilterOp
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value: any
 }
 
 /**
@@ -21,20 +22,20 @@ export async function getLessons(
     | firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
     | firebase.firestore.Query<firebase.firestore.DocumentData> = firebase
     .firestore()
-    .collection('lessons');
+    .collection('lessons')
   for (const clause of whereClauses) {
-    fn = fn.where(clause.fieldPath, clause.opStr, clause.value);
+    fn = fn.where(clause.fieldPath, clause.opStr, clause.value)
   }
   return fn
     .orderBy('created', 'desc')
     .get()
     .then((result) => {
-      const mapped: LessonStorageModel[] = [];
+      const mapped: LessonStorageModel[] = []
       result.docs.forEach((result) =>
         mapped.push(result.data() as LessonStorageModel)
-      );
-      return mapped;
-    });
+      )
+      return mapped
+    })
 }
 
 /**
@@ -46,7 +47,7 @@ export async function getLessons(
 export async function getLesson(uid: string): Promise<LessonStorageModel> {
   return (
     await firebase.firestore().collection('lessons').doc(uid).get()
-  ).data() as LessonStorageModel;
+  ).data() as LessonStorageModel
 }
 
 /**
@@ -56,7 +57,7 @@ export async function getLesson(uid: string): Promise<LessonStorageModel> {
  * @returns
  */
 export async function deleteLesson(uid: string): Promise<void> {
-  return await firebase.firestore().collection('lessons').doc(uid).delete();
+  return await firebase.firestore().collection('lessons').doc(uid).delete()
 }
 
 /**
@@ -75,11 +76,11 @@ export async function updateLesson(
         .toLocaleLowerCase()
         .replace(/[^a-z 0-9]/g, '')
         .replace(/ /g, '-')
-        .substring(0, 32) + `-${Date.now()}`;
-    lesson.uid = uid;
+        .substring(0, 32) + `-${Date.now()}`
+    lesson.uid = uid
   }
-  await firebase.firestore().collection('lessons').doc(uid).set(lesson);
-  return uid;
+  await firebase.firestore().collection('lessons').doc(uid).set(lesson)
+  return uid
 }
 
 /**
@@ -91,7 +92,7 @@ export async function updateLesson(
 export async function getAuthor(uid: string): Promise<Author> {
   return (
     await firebase.firestore().collection('users').doc(uid).get()
-  ).data() as Author;
+  ).data() as Author
 }
 
 export async function updateAuthor(author: Author): Promise<void> {
@@ -99,5 +100,5 @@ export async function updateAuthor(author: Author): Promise<void> {
     .firestore()
     .collection('users')
     .doc(author.uid)
-    .set(author);
+    .set(author)
 }

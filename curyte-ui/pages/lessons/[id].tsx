@@ -20,7 +20,7 @@ type Props = {
 }
 
 const LessonView = ({ lesson, author }: Props) => {
-  const [user, loading, error] = useAuthState(firebase.auth())
+  const [user] = useAuthState(firebase.auth())
   const [saving, setSaving] = useState(false)
 
   const router = useRouter()

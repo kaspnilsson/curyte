@@ -1,6 +1,6 @@
 import firebase from '../firebase/clientApp'
 import Link from 'next/link'
-import React, { SyntheticEvent, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { Author } from '../interfaces/author'
 import Container from './Container'
@@ -48,7 +48,7 @@ const Header = ({ children, showProgressBar }: Props) => {
     firebase.auth().signOut()
   }
 
-  const [user, loading, error] = useAuthState(firebase.auth())
+  const [user] = useAuthState(firebase.auth())
 
   return (
     <>

@@ -21,7 +21,7 @@ import LessonPreview from '../../components/LessonPreview'
 const MySettingsView = () => {
   const router = useRouter()
 
-  const [user, userLoading, error] = useAuthState(firebase.auth())
+  const [user, userLoading] = useAuthState(firebase.auth())
   const [author, setAuthor] = useState<Author | null>(null)
   const [loading, setLoading] = useState(userLoading)
   const [saving, setSaving] = useState(false)
@@ -67,7 +67,7 @@ const MySettingsView = () => {
   const handleDelete = async (event: SyntheticEvent) => {
     event.preventDefault()
     setSaving(true)
-    await firebase.auth().currentUser!.delete()
+    await firebase.auth().currentUser?.delete()
     setSaving(false)
     router.push('/')
   }

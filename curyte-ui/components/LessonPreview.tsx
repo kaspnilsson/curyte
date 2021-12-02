@@ -1,10 +1,7 @@
-import AuthorLink from './AuthorLink'
 import Link from 'next/link'
 import { LessonStorageModel } from '../interfaces/lesson'
 import React from 'react'
-import firebase from '../firebase/clientApp'
 import DateFormatter from './DateFormatter'
-import { useCollection } from 'react-firebase-hooks/firestore'
 
 type Props = {
   lesson: LessonStorageModel

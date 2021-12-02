@@ -15,7 +15,7 @@ type Props = {
 }
 
 const EditLessonView = ({ lesson }: Props) => {
-  const [user, loading, error] = useAuthState(firebase.auth())
+  const [user, loading] = useAuthState(firebase.auth())
   const router = useRouter()
 
   const handleSubmit = async (l: LessonStorageModel) => {
@@ -29,7 +29,7 @@ const EditLessonView = ({ lesson }: Props) => {
       // Logged in user is making a clone
       uid = await api.updateLesson({
         ...l,
-        parentLessonId: l!.uid,
+        parentLessonId: l?.uid || '',
       })
     }
     router.push(`/lessons/${uid}`)
@@ -45,7 +45,7 @@ const EditLessonView = ({ lesson }: Props) => {
       // Logged in user is making a clone
       uid = await api.updateLesson({
         ...l,
-        parentLessonId: l!.uid,
+        parentLessonId: l?.uid || '',
       })
     }
     router.push(`/lessons/edit/${uid}`)

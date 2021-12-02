@@ -1,8 +1,7 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 
 type Props = {
   title: string
-  isDraft?: boolean
 }
 
 export const computeClassesForTitle = (title: string): string => {
@@ -11,7 +10,7 @@ export const computeClassesForTitle = (title: string): string => {
   return 'text-4xl'
 }
 
-const LessonTitle = ({ title, isDraft }: Props) => {
+const LessonTitle = ({ title }: Props) => {
   return (
     <div className="mb-4">
       <h1

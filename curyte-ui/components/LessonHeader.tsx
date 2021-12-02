@@ -1,13 +1,10 @@
-import firebase from '../firebase/clientApp'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { Author } from '../interfaces/author'
 import AuthorLink from './AuthorLink'
-import CoverImage from './CoverImage'
 import DateFormatter from './DateFormatter'
 import LessonTitle from './LessonTitle'
 import { Button, Badge } from '@chakra-ui/react'
-import * as chakra from '@chakra-ui/react'
 import * as api from '../firebase/api'
 import { LessonStorageModel } from '../interfaces/lesson'
 import LessonLink from './LessonLink'
@@ -20,7 +17,7 @@ type Props = {
 }
 
 const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
-  const [loading, setLoading] = useState(false)
+  const [, setLoading] = useState(false)
   const [parentLesson, setParentLesson] = useState<LessonStorageModel | null>(
     null
   )
@@ -37,7 +34,7 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
 
   return (
     <>
-      <LessonTitle title={lesson.title} isDraft={!lesson.published} />
+      <LessonTitle title={lesson.title} />
       <div className="flex items-center mb-4 h-min">
         {parentLesson && (
           <div className="flex items-center h-min ">

@@ -9,7 +9,7 @@ import * as api from '../../firebase/api'
 
 const NewLessonView = () => {
   const router = useRouter()
-  const [user, loading, error] = useAuthState(firebase.auth())
+  const [user] = useAuthState(firebase.auth())
   const handleSubmit = async (l: LessonStorageModel) => {
     const uid = await api.updateLesson(l)
     router.push(`/lessons/${uid}`)

@@ -1,11 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { LessonStorageModel } from '../../interfaces/lesson'
-import firebase from '../../firebase/clientApp'
 import { GetServerSideProps } from 'next'
 import Layout from '../../components/Layout'
 import { Author } from '../../interfaces/author'
 import Container from '../../components/Container'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import LessonPreview from '../../components/LessonPreview'
 import * as api from '../../firebase/api'
 import SocialLinks from '../../components/SocialLinks'
@@ -17,7 +15,6 @@ type Props = {
 }
 
 const UserView = ({ lessons, author }: Props) => {
-  const [user, loading, error] = useAuthState(firebase.auth())
   return (
     <Layout>
       <Container>
@@ -41,7 +38,6 @@ const UserView = ({ lessons, author }: Props) => {
             <LessonPreview lesson={lesson} />
           </div>
         ))}
-        `
       </Container>
     </Layout>
   )

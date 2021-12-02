@@ -4,12 +4,10 @@ import { LessonStorageModel } from '../../interfaces/lesson'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import * as api from '../../firebase/api'
 import firebase from '../../firebase/clientApp'
-import Link from 'next/link'
-import { DocumentTextIcon } from '@heroicons/react/outline'
 import LessonLink from '../../components/LessonLink'
 
 const DraftsPage = () => {
-  const [user, userLoading, error] = useAuthState(firebase.auth())
+  const [user, userLoading] = useAuthState(firebase.auth())
   const [lessons, setLessons] = useState<LessonStorageModel[]>([])
   const [loading, setLoading] = useState(userLoading)
 
