@@ -1,3 +1,4 @@
+import { parseISO } from 'date-fns'
 import { Author, SavedLesson } from '../interfaces/author'
 import { LessonStorageModel } from '../interfaces/lesson'
 import firebase from './clientApp'
@@ -26,16 +27,18 @@ export async function getLessons(
   for (const clause of whereClauses) {
     fn = fn.where(clause.fieldPath, clause.opStr, clause.value)
   }
-  return fn
-    .orderBy('created', 'desc')
-    .get()
-    .then((result) => {
-      const mapped: LessonStorageModel[] = []
-      result.docs.forEach((result) =>
-        mapped.push(result.data() as LessonStorageModel)
-      )
-      return mapped
-    })
+  return fn.get().then((result) => {
+    const mapped: LessonStorageModel[] = []
+    result.docs.forEach((result) =>
+      mapped.push(result.data() as LessonStorageModel)
+    )
+    mapped.sort(
+      (a, b) =>
+        parseISO(b.created).getMilliseconds() -
+        parseISO(a.created).getMilliseconds()
+    )
+    return mapped
+  })
 }
 
 /**
