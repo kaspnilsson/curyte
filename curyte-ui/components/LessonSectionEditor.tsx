@@ -3,7 +3,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { LessonSection } from '../interfaces/lesson';
 import { XIcon } from '@heroicons/react/solid';
 import { useDebounceCallback } from '@react-hook/debounce';
-import Button from '@material-tailwind/react/Button';
+import { Button } from '@chakra-ui/react';
+
 import FancyEditor from './FancyEditor';
 
 interface Props {
@@ -51,7 +52,7 @@ const LessonSectionEditor = ({ section, onChange, onDelete }: Props) => {
             iconOnly
             onClick={() => onDelete()}
             color="gray"
-            buttonType="outline"
+            variant="outline"
           >
             <XIcon className="h-5 w-5" />
           </Button>

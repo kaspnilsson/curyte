@@ -1,11 +1,9 @@
-import Card from '@material-tailwind/react/Card';
-import CardHeader from '@material-tailwind/react/CardHeader';
-import CardBody from '@material-tailwind/react/CardBody';
 import Layout from '../components/Layout';
 import React from 'react';
 import Container from '../components/Container';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from '../firebase/clientApp';
+import { Box } from '@chakra-ui/react';
 
 // Configure FirebaseUI.
 const uiConfig = {
@@ -21,22 +19,22 @@ const Login = () => {
   return (
     <Layout>
       <Container>
-        <Card className="max-w-sm w-96 m-auto">
-          <CardHeader color="lightBlue">
-            <h2
-              color="white"
-              className="text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight"
-            >
-              Login
-            </h2>
-          </CardHeader>
-          <CardBody>
-            <StyledFirebaseAuth
-              uiConfig={uiConfig}
-              firebaseAuth={firebase.auth()}
-            />
-          </CardBody>
-        </Card>
+        <Box
+          rounded={'lg'}
+          className="w-96 m-auto p-8 flex flex-col items-center"
+          boxShadow={'lg'}
+        >
+          <h2
+            color="white"
+            className="text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight mb-4"
+          >
+            Login
+          </h2>
+          <StyledFirebaseAuth
+            uiConfig={uiConfig}
+            firebaseAuth={firebase.auth()}
+          />
+        </Box>
       </Container>
     </Layout>
   );

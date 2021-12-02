@@ -6,13 +6,17 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import Avatar from '../../components/Avatar';
 import Container from '../../components/Container';
 import Layout from '../../components/Layout';
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import firebase from '../../firebase/clientApp';
 import { Author } from '../../interfaces/author';
-import Button from '@material-tailwind/react/Button';
-import Input from '@material-tailwind/react/Input';
-import Textarea from '@material-tailwind/react/Textarea';
+import { Button } from '@chakra-ui/react';
+import { Input } from '@chakra-ui/react';
+import { Textarea } from '@chakra-ui/react';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import * as api from '../../firebase/api';
+import DraftsPage from '../lessons/drafts';
+import { LessonStorageModel } from '../../interfaces/lesson';
+import LessonPreview from '../../components/LessonPreview';
 
 const MySettingsView = () => {
   const router = useRouter();
@@ -21,6 +25,7 @@ const MySettingsView = () => {
   const [author, setAuthor] = useState<Author | null>(null);
   const [loading, setLoading] = useState(userLoading);
   const [saving, setSaving] = useState(false);
+  const [lessons, setLessons] = useState<LessonStorageModel[]>([]);
   const [authorChanged, setAuthorChanged] = useState(false);
 
   const modifyAuthor = (a: Author) => {
@@ -34,9 +39,22 @@ const MySettingsView = () => {
       const fetchAuthor = async () => {
         const author = await api.getAuthor(user.uid);
         setAuthor(author);
-        setLoading(false);
       };
-      fetchAuthor();
+
+      const fetchLessons = async () => {
+        api
+          .getLessons([
+            { fieldPath: 'published', opStr: '==', value: true },
+            { fieldPath: 'authorId', opStr: '==', value: user.uid },
+          ])
+          .then((res) => {
+            setLessons(res);
+          });
+      };
+
+      Promise.all([fetchLessons(), fetchAuthor()]).then(() =>
+        setLoading(false)
+      );
     }
   }, [author, loading, user]);
 
@@ -64,68 +82,105 @@ const MySettingsView = () => {
         <Layout>
           {saving && <LoadingSpinner />}
           <Container>
-            <Avatar author={author}></Avatar>
-            <section className="flex flex-col my-8">
-              <div className="flex items-center justify-between">
-                <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
-                  Profile settings
-                </h2>
-                <Button
-                  buttonType="outline"
-                  className="w-fit-content disabled:opacity-50"
-                  onClick={handleSave}
-                  disabled={!authorChanged}
-                >
-                  Save
-                </Button>
-              </div>
-              <div className="my-2">
-                <Textarea
-                  type="text"
-                  size="lg"
-                  outline
-                  placeholder="Bio"
-                  value={author.bio}
-                  onChange={({ target }: React.ChangeEvent<HTMLInputElement>) =>
-                    modifyAuthor({ ...author, bio: target.value })
-                  }
-                />
-              </div>
-              <div className="my-2">
-                <Input
-                  type="text"
-                  size="lg"
-                  outline
-                  placeholder="Username"
-                  value={author.username}
-                  onChange={({ target }: React.ChangeEvent<HTMLInputElement>) =>
-                    modifyAuthor({ ...author, username: target.value })
-                  }
-                />
-              </div>
-            </section>
-            <section className="flex flex-col my-8">
-              <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
-                Email settings
-              </h2>
-              <div className="my-2">
-                <Input
-                  type="text"
-                  size="lg"
-                  outline
-                  placeholder="Email"
-                  value={author.email}
-                  onChange={({ target }: React.ChangeEvent<HTMLInputElement>) =>
-                    modifyAuthor({ ...author, email: target.value })
-                  }
-                />
-              </div>
-            </section>
-            <section className="flex flex-col my-8">
-              <Button color="red" className="w-56" onClick={handleDelete}>
-                Delete account
-              </Button>
-            </section>
+            <div className="pb-4">
+              <Avatar author={author}></Avatar>
+            </div>
+            <Tabs>
+              <TabList>
+                <Tab>Posts</Tab>
+                <Tab>Settings</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <section className="flex flex-col my-8">
+                    <div className="flex items-left justify-between flex-col">
+                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                        Lessons
+                      </h2>
+                      {lessons.map((lesson) => (
+                        <div
+                          className="border-b border-gray-200 pb-8 mb-8"
+                          key={lesson.uid}
+                        >
+                          <LessonPreview lesson={lesson} />
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                  <section className="flex flex-col my-8">
+                    <div className="flex items-left justify-between flex-col">
+                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                        Drafts
+                      </h2>
+                      <DraftsPage />
+                    </div>
+                  </section>
+                </TabPanel>
+                <TabPanel>
+                  <section className="flex flex-col my-8">
+                    <div className="flex items-center justify-between">
+                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                        Profile settings
+                      </h2>
+                      <Button
+                        variant="outline"
+                        className="w-fit-content disabled:opacity-50"
+                        onClick={handleSave}
+                        disabled={!authorChanged}
+                      >
+                        Save
+                      </Button>
+                    </div>
+                    <div className="my-2">
+                      <Textarea
+                        type="text"
+                        size="lg"
+                        variant="outline"
+                        placeholder="Bio"
+                        value={author.bio}
+                        onChange={(e) =>
+                          modifyAuthor({ ...author, bio: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="my-2">
+                      <Input
+                        type="text"
+                        size="lg"
+                        variant="outline"
+                        placeholder="Username"
+                        value={author.username}
+                        onChange={(e) =>
+                          modifyAuthor({ ...author, username: e.target.value })
+                        }
+                      />
+                    </div>
+                  </section>
+                  <section className="flex flex-col my-8">
+                    <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                      Email settings
+                    </h2>
+                    <div className="my-2">
+                      <Input
+                        type="text"
+                        size="lg"
+                        variant="outline"
+                        placeholder="Email"
+                        value={author.email}
+                        onChange={(e) =>
+                          modifyAuthor({ ...author, email: e.target.value })
+                        }
+                      />
+                    </div>
+                  </section>
+                  <section className="flex flex-col my-8">
+                    <Button color="red" className="w-56" onClick={handleDelete}>
+                      Delete account
+                    </Button>
+                  </section>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
           </Container>
         </Layout>
       )}

@@ -6,7 +6,8 @@ import Avatar from './Avatar';
 import CoverImage from './CoverImage';
 import DateFormatter from './DateFormatter';
 import LessonTitle from './LessonTitle';
-import Button from '@material-tailwind/react/Button';
+import { Button } from '@chakra-ui/react';
+
 import { useRouter } from 'next/router';
 import { LessonStorageModel } from '../interfaces/lesson';
 
@@ -36,20 +37,24 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
         <div className="">
           <Avatar author={author} />
         </div>
-        <div>
-          <div className="text-sm flex items-center">
+        <table>
+          <tr className="text-sm">
             {lesson.updated && (
-              <div className="mr-1 text-gray-500">Created:</div>
+              <td className="pr-2 text-gray-500  text-right">Created</td>
             )}
-            {lesson.created && <DateFormatter dateString={lesson.created} />}
-          </div>
+            <td>
+              {lesson.created && <DateFormatter dateString={lesson.created} />}
+            </td>
+          </tr>
           {lesson.updated && (
-            <div className="text-sm flex items-center">
-              <div className="mr-1 text-gray-500">Updated:</div>
-              <DateFormatter dateString={lesson.updated} />
-            </div>
+            <tr className="text-sm">
+              <td className="pr-2 text-gray-500 text-right">Updated</td>
+              <td>
+                <DateFormatter dateString={lesson.updated} />
+              </td>
+            </tr>
           )}
-        </div>
+        </table>
       </div>
       <div className="flex gap-2">
         <Link
@@ -57,10 +62,10 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
           as={`/lessons/edit/${lesson.uid}`}
           href="/lessons/edit/[id]"
         >
-          <Button buttonType="outline">Edit / copy</Button>
+          <Button variant="outline">Edit / copy</Button>
         </Link>
         {handleDelete && (
-          <Button buttonType="outline" onClick={handleDelete}>
+          <Button variant="outline" onClick={handleDelete}>
             Delete
           </Button>
         )}

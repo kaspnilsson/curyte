@@ -1,7 +1,7 @@
 import firebase from '../firebase/clientApp';
 import React, { SyntheticEvent, useReducer, useState } from 'react';
 import { PlusIcon, UploadIcon } from '@heroicons/react/solid';
-import Button from '@material-tailwind/react/Button';
+import { Button } from '@chakra-ui/react';
 
 import Container from './Container';
 import Layout from './Layout';
@@ -181,7 +181,7 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
               </div>
             ))}
             {/* <Button
-              buttonType="outline"
+              variant="outline"
               className="mt-4 font-semibold py-2 px-4 m-auto flex items-center justify-between"
               onClick={() =>
                 dispatch({
@@ -198,7 +198,7 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
       <footer className="bg-white border-t border-accent-2 bottom-0 left-0 fixed w-full h-24 z-10">
         <div className="h-full m-auto w-full lg:w-2/3 flex items-center justify-end">
           <Button
-            buttonType="outline"
+            variant="outline"
             className="disabled:opacity-50 font-semibold flex items-center justify-between mr-4"
             onClick={localHandleSaveDraft}
           >

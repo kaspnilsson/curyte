@@ -10,7 +10,7 @@ import Layout from '../components/Layout';
 import Container from '../components/Container';
 import LessonPreview from '../components/LessonPreview';
 import LoadingSpinner from '../components/LoadingSpinner';
-import Input from '@material-tailwind/react/Input';
+import { Input } from '@chakra-ui/react';
 import { DocumentData } from '@google-cloud/firestore';
 import { useFuzzy } from '../hooks/useFuzzy';
 import * as api from '../firebase/api';
@@ -71,18 +71,16 @@ const Home = () => {
                 <Input
                   type="text"
                   size="lg"
-                  outline
+                  variant="outline"
                   placeholder="Search for a lesson..."
                   value={keyword}
-                  onChange={({ target }: React.ChangeEvent<HTMLInputElement>) =>
-                    search(target.value)
-                  }
+                  onChange={(e) => search(e.target.value)}
                 />
                 {/* {user ? null : (
                   <Link href="/login" passHref>
                     <Button
                       className="font-semibold py-2 px-4 "
-                      buttonType="outline"
+                      variant="outline"
                     >
                       Get started
                     </Button>

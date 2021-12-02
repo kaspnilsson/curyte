@@ -1,8 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
 import { Author } from '../interfaces/author';
-import Image from '@material-tailwind/react/Image';
-import CardHeader from '@material-tailwind/react/CardHeader';
+import { Image, Tag } from '@chakra-ui/react';
 import React from 'react';
 
 type Props = {
@@ -20,15 +19,16 @@ const Avatar = ({ author, photoOnly, big }: Props) => {
           {author.photoURL ? (
             <Image
               src={author.photoURL}
-              rounded={true}
-              raised={true}
-              className={big ? 'w-40 h-40' : 'w-10 h-10'}
+              borderRadius="full"
+              className={big ? 'shadow-xl w-40 h-40' : 'shadow-xl w-10 h-10'}
               alt={author.displayName}
             />
           ) : (
-            <CardHeader className="round" color="gray">
-              {author.displayName ? author.displayName.substring(0, 2) : '?'}
-            </CardHeader>
+            <Tag borderRadius="full" size="lg" variant="solid">
+              {author.displayName
+                ? author.displayName.substring(0, 2).toLocaleUpperCase()
+                : '?'}
+            </Tag>
           )}
           {!photoOnly && (
             <Link as={`/accounts/${author.uid}`} href="/accounts/id">
@@ -36,7 +36,7 @@ const Avatar = ({ author, photoOnly, big }: Props) => {
                 className={
                   big
                     ? 'hover:underline text-4xl font-bold ml-4'
-                    : 'hover:underline text-lg font-bold ml-4'
+                    : 'hover:underline text-lg font-bold ml-2'
                 }
               >
                 {author.displayName}

@@ -1,15 +1,11 @@
-// index.tsx
-import Head from 'next/head';
-
 import { useAuthState } from 'react-firebase-hooks/auth';
 import React, { useEffect, useState } from 'react';
 import { LessonStorageModel } from '../../interfaces/lesson';
-import Layout from '../../components/Layout';
-import Container from '../../components/Container';
-import LessonPreview from '../../components/LessonPreview';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import * as api from '../../firebase/api';
 import firebase from '../../firebase/clientApp';
+import Link from 'next/link';
+import { DocumentTextIcon } from '@heroicons/react/outline';
 
 const DraftsPage = () => {
   const [user, userLoading, error] = useAuthState(firebase.auth());
@@ -35,23 +31,22 @@ const DraftsPage = () => {
     <>
       {loading && <LoadingSpinner />}
       {!loading && (
-        <>
-          <Layout>
-            <Head>
-              <title>Drafts</title>
-            </Head>
-            <Container>
-              {lessons.map((lesson) => (
-                <div
-                  className="border-b border-gray-200 pb-8 mb-8"
-                  key={lesson.uid}
-                >
-                  <LessonPreview lesson={lesson} />
-                </div>
-              ))}
-            </Container>
-          </Layout>
-        </>
+        <div className="flex flex-col">
+          {lessons.map((lesson) => (
+            <Link
+              as={`/lessons/${lesson.uid}`}
+              href="/lessons/[id]"
+              key={lesson.uid}
+            >
+              <a className="hover:underline">
+                <h3 className="text-xl mb-3 leading-snug flex items-center">
+                  <DocumentTextIcon className="h-5 w-5 mr-2" />
+                  {lesson.title || '(no title)'}
+                </h3>
+              </a>
+            </Link>
+          ))}
+        </div>
       )}
     </>
   );

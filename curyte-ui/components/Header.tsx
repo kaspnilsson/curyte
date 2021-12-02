@@ -5,11 +5,16 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { Author } from '../interfaces/author';
 import Avatar from './Avatar';
 import Container from './Container';
-import Button from '@material-tailwind/react/Button';
-import Dropdown from '@material-tailwind/react/Dropdown';
-import DropdownItem from '@material-tailwind/react/DropdownItem';
-import DropdownLink from '@material-tailwind/react/DropdownLink';
+import { Button } from '@chakra-ui/react';
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  IconButton,
+} from '@chakra-ui/react';
 import Head from 'next/head';
+import router from 'next/router';
 
 type Props = {
   children: React.ReactNode;
@@ -64,7 +69,7 @@ const Header = ({ children }: Props) => {
             </div>
             {!user && (
               <Link passHref href={'/login'}>
-                <Button buttonType="outline">Log in</Button>
+                <Button variant="outline">Log in</Button>
               </Link>
             )}
             {user && (
@@ -74,17 +79,19 @@ const Header = ({ children }: Props) => {
                     Start writing
                   </Button>
                 </Link>
-                <Dropdown
-                  color="black"
-                  buttonText={
-                    <Avatar author={user as unknown as Author} photoOnly />
-                  }
-                >
-                  <DropdownLink href="/accounts/me">
-                    Account settings
-                  </DropdownLink>
-                  <DropdownItem onClick={() => logOut()}>Sign out</DropdownItem>
-                </Dropdown>
+                <div className="ml-4">
+                  <Menu>
+                    <MenuButton>
+                      <Avatar author={user as unknown as Author} photoOnly />
+                    </MenuButton>
+                    <MenuList>
+                      <MenuItem onClick={() => router.push('/accounts/me')}>
+                        View account
+                      </MenuItem>
+                      <MenuItem onClick={() => logOut()}>Sign out</MenuItem>
+                    </MenuList>
+                  </Menu>
+                </div>
               </div>
             )}
           </div>

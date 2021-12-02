@@ -2,7 +2,7 @@
 import { EmbedDescriptor } from 'rich-markdown-editor/dist/types';
 import { EmbedProps } from './props';
 import { PhotographIcon } from '@heroicons/react/outline';
-import Image from '@material-tailwind/react/Image';
+import { Image } from '@chakra-ui/react';
 import { imageUrlMatchRegex } from './matchers';
 
 const ImageEmbed = ({ attrs }: EmbedProps) => (
