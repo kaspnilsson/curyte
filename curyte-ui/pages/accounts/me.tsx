@@ -47,13 +47,26 @@ const MySettingsView = () => {
       const fetchAuthor = async () => {
         const author = await api.getAuthor(user.uid)
         setAuthor(author)
-
-        return api
-          .getLessons([
-            { fieldPath: 'published', opStr: '==', value: true },
-            { fieldPath: 'uid', opStr: 'in', value: author.savedLessons || [] },
-          ])
-          .then((res) => setSavedLessons(res))
+        if (!!author.savedLessons) {
+          return api
+            .getLessons([
+              { fieldPath: 'published', opStr: '==', value: true },
+              {
+                fieldPath: 'uid',
+                opStr: 'in',
+                value: author.savedLessons || [],
+              },
+            ])
+            .then((res) => {
+              res.sort(
+                (a, b) =>
+                  // author.savedLessons has oldest saves first
+                  author.savedLessons.indexOf(b.uid) -
+                  author.savedLessons.indexOf(a.uid)
+              )
+              setSavedLessons(res)
+            })
+        }
       }
 
       const fetchLessons = async () => {
@@ -112,7 +125,7 @@ const MySettingsView = () => {
                       </h2>
                       {lessons.map((lesson) => (
                         <div
-                          className="border-b border-gray-200 pb-8 mb-8"
+                          className="border-b border-gray-200 pb-2 mb-2"
                           key={lesson.uid}
                         >
                           <LessonPreview lesson={lesson} />
@@ -120,13 +133,15 @@ const MySettingsView = () => {
                       ))}
                       {!lessons.length && 'Nothing here yet!'}
                     </div>
+                  </section>
+                  <section className="flex flex-col my-8">
                     <div className="flex items-left justify-between flex-col">
                       <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
                         Saved
                       </h2>
                       {savedLessons.map((lesson) => (
                         <div
-                          className="border-b border-gray-200 pb-8 mb-8"
+                          className="border-b border-gray-200 pb-2 mb-2"
                           key={lesson.uid}
                         >
                           <LessonPreview lesson={lesson} />
@@ -134,6 +149,8 @@ const MySettingsView = () => {
                       ))}
                       {!savedLessons.length && 'Nothing here yet!'}
                     </div>
+                  </section>
+                  <section className="flex flex-col my-8">
                     <div className="flex items-left justify-between flex-col">
                       <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
                         Drafts
