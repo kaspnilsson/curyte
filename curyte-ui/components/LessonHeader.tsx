@@ -8,6 +8,7 @@ import { Button, Badge } from '@chakra-ui/react'
 import * as api from '../firebase/api'
 import { LessonStorageModel } from '../interfaces/lesson'
 import LessonLink from './LessonLink'
+import { Center, Divider } from '@chakra-ui/react'
 
 type Props = {
   lesson: LessonStorageModel
@@ -44,7 +45,11 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
             <LessonLink lesson={parentLesson} />
           </div>
         )}
-        {parentLesson && !lesson.published && <span className="mx-4">·</span>}
+        {parentLesson && !lesson.published && (
+          <Center className="h-6 w-6 mx-3">
+            <Divider orientation="vertical" />
+          </Center>
+        )}
         {!lesson.published && (
           <Badge
             variant="subtle"
@@ -92,7 +97,7 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
           as={`/lessons/edit/${lesson.uid}`}
           href="/lessons/edit/[id]"
         >
-          <Button variant="outline">Edit / copy</Button>
+          <Button variant="outline">Make a copy</Button>
         </Link>
         {handleDelete && (
           <Button variant="outline" onClick={handleDelete}>

@@ -81,9 +81,11 @@ function reducer(state: LessonSectionState, action: LessonSectionAction) {
 }
 
 const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
-  const [title, setTitle] = useState(lesson?.title || '')
+  const [title, setTitle] = useState(lesson?.title.trim() || '')
   const [saving, setSaving] = useState(false)
-  const [description, setDescription] = useState(lesson?.description || '')
+  const [description, setDescription] = useState(
+    lesson?.description.trim() || ''
+  )
   const [state, dispatch] = useReducer(reducer, lesson || initialState)
 
   const canSubmit = !!(
@@ -148,9 +150,10 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
         <div className="flex flex-col flex-grow overflow-y-auto">
           <div className="flex items-center justify-between w-full">
             <TextareaAutosize
+              autoFocus
               className={`${computeClassesForTitle(
                 title
-              )} focus:outline-none font-semibold flex-grow resize-none tracking-tight md:tracking-tighter leading-tight h-min`}
+              )} focus:outline-none font-semibold flex-grow resize-none tracking-tight md:tracking-tighter leading-tight`}
               placeholder="Enter title..."
               value={title}
               onChange={({ target }) => setTitle(target.value)}
