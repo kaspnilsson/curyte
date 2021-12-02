@@ -8,6 +8,7 @@ import { Button, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react'
 import Head from 'next/head'
 import router from 'next/router'
 import Avatar from './Avatar'
+import CuryteLogo from './CuryteLogo'
 
 type Props = {
   children: React.ReactNode
@@ -57,6 +58,21 @@ const Header = ({ children, showProgressBar }: Props) => {
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet"
         />
+        <link
+          rel="icon"
+          href="/static/curyte_logo_black.svg"
+          media="(prefers-color-scheme:no-preference)"
+        />
+        <link
+          rel="icon"
+          href="/static/curyte_logo_white.svg"
+          media="(prefers-color-scheme:dark)"
+        />
+        <link
+          rel="icon"
+          href="/static/curyte_logo_black.svg"
+          media="(prefers-color-scheme:light)"
+        />
       </Head>
       <div
         className={`sticky ${
@@ -65,11 +81,18 @@ const Header = ({ children, showProgressBar }: Props) => {
       >
         <Container>
           <div className="flex justify-between items-center py-4">
-            <h2 className="text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
-              <Link href="/">
-                <a className="hover:underline">Curyte</a>
-              </Link>
-            </h2>
+            <Link href="/" passHref>
+              <Button
+                variant="link"
+                colorScheme="black"
+                className="flex gap-2 items-center"
+              >
+                <CuryteLogo />
+                <h2 className="text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                  Curyte
+                </h2>
+              </Button>
+            </Link>
             <div className="flex flex-grow mx-4 md:mx-8 lg:mx-24">
               {children}
             </div>

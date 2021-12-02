@@ -1,17 +1,11 @@
+import Image from 'next/image'
+
 const CuryteLogo = () => (
-  <svg
-    width="26"
-    height="26"
-    viewBox="0 0 26 26"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <circle cx="13.4198" cy="12.9335" r="1.39084" fill="black" />
-    <path
-      d="M1.41492 12.9396L5.42358 4.96476L13.4411 1M1.41492 12.9396L5.42358 20.9321M1.41492 12.9396L13.4411 1M1.41492 12.9396L13.4411 17.7283M1.41492 12.9396L13.4411 8.1445M13.4411 1L21.416 4.96476M21.416 4.96476L25.4247 12.9396M21.416 4.96476L13.4411 8.1445M25.4247 12.9396L21.416 20.9321L13.4411 24.7533M25.4247 12.9396L13.4411 24.7533M25.4247 12.9396L13.4411 17.7283M25.4247 12.9396L13.4411 8.1445M13.4411 24.7533L5.42358 20.9321M5.42358 20.9321L13.4411 17.7283"
-      stroke="black"
-      strokeLinejoin="round"
-    />
-  </svg>
+  <Image
+    src="/static/curyte_logo_black.svg"
+    alt="Curyte logo"
+    width="26px"
+    height="26px"
+  />
 )
 export default CuryteLogo
