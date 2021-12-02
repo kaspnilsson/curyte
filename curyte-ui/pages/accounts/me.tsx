@@ -6,11 +6,18 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import AuthorLink from '../../components/AuthorLink'
 import Container from '../../components/Container'
 import Layout from '../../components/Layout'
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import firebase from '../../firebase/clientApp'
 import { Author } from '../../interfaces/author'
-import { Button } from '@chakra-ui/react'
-import { Input, Textarea } from '@chakra-ui/react'
+import {
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  Button,
+  Input,
+  Textarea,
+} from '@chakra-ui/react'
 import TextareaAutosize from 'react-textarea-autosize'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import * as api from '../../firebase/api'

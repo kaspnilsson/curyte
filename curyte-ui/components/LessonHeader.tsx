@@ -4,11 +4,10 @@ import { Author } from '../interfaces/author'
 import AuthorLink from './AuthorLink'
 import DateFormatter from './DateFormatter'
 import LessonTitle from './LessonTitle'
-import { Button, Badge } from '@chakra-ui/react'
 import * as api from '../firebase/api'
 import { LessonStorageModel } from '../interfaces/lesson'
 import LessonLink from './LessonLink'
-import { Center, Divider } from '@chakra-ui/react'
+import { Button, Badge, Center, Divider } from '@chakra-ui/react'
 
 type Props = {
   lesson: LessonStorageModel
@@ -90,20 +89,20 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
             </tr>
           )}
         </table>
-      </div>
-      <div className="flex gap-2">
-        <Link
-          passHref
-          as={`/lessons/edit/${lesson.uid}`}
-          href="/lessons/edit/[id]"
-        >
-          <Button variant="outline">Make a copy</Button>
-        </Link>
-        {handleDelete && (
-          <Button variant="outline" onClick={handleDelete}>
-            Delete
-          </Button>
-        )}
+        <div className="flex gap-2">
+          <Link
+            passHref
+            as={`/lessons/edit/${lesson.uid}`}
+            href="/lessons/edit/[id]"
+          >
+            <Button variant="outline">Make a copy</Button>
+          </Link>
+          {handleDelete && (
+            <Button variant="outline" onClick={handleDelete}>
+              Delete
+            </Button>
+          )}
+        </div>
       </div>
     </>
   )
