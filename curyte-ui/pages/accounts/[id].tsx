@@ -1,5 +1,3 @@
-import Head from 'next/head';
-import ErrorPage from 'next/error';
 import React, { useState } from 'react';
 import { LessonStorageModel } from '../../interfaces/lesson';
 import firebase from '../../firebase/clientApp';
@@ -7,14 +5,11 @@ import { GetServerSideProps } from 'next';
 import Layout from '../../components/Layout';
 import { Author } from '../../interfaces/author';
 import Container from '../../components/Container';
-import LessonHeader from '../../components/LessonHeader';
-import LessonSection from '../../components/LessonSection';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useRouter } from 'next/router';
-import LoadingSpinner from '../../components/LoadingSpinner';
 import LessonPreview from '../../components/LessonPreview';
-import Avatar from '../../components/Avatar';
 import * as api from '../../firebase/api';
+import SocialLinks from '../../components/SocialLinks';
+import Avatar from '../../components/Avatar';
 
 type Props = {
   lessons: LessonStorageModel[];
@@ -26,9 +21,17 @@ const UserView = ({ lessons, author }: Props) => {
   return (
     <Layout>
       <Container>
-        <Avatar big author={author}></Avatar>
-        <section className="flex flex-col my-8">
-          <div className="my-2">{author.bio}</div>
+        <section className="flex my-8">
+          <div className="flex-grow">
+            <div className="text-4xl font-bold tracking-tight md:tracking-tighter leading-tight">
+              {author.displayName}
+            </div>
+            <div className="my-4">{author.bio}</div>
+            <SocialLinks author={author} />
+          </div>
+          <div className="ml-12 flex-none">
+            <Avatar author={author} className="w-32 h-32" />
+          </div>
         </section>
         <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
           Lessons

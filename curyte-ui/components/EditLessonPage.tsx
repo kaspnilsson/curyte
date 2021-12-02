@@ -144,7 +144,7 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
         <div className="flex flex-col flex-grow overflow-y-auto">
           <div className="flex items-center justify-between w-full">
             <textarea
-              className="text-4xl focus:outline-none font-semibold flex-grow resize-none"
+              className="text-4xl focus:outline-none font-semibold flex-grow resize-none tracking-tight md:tracking-tighter leading-tight"
               placeholder="Enter title..."
               value={title}
               onChange={({ target }) => setTitle(target.value)}

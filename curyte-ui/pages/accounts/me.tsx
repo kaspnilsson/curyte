@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import ErrorPage from 'next/error';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import Avatar from '../../components/Avatar';
+import AuthorLink from '../../components/AuthorLink';
 import Container from '../../components/Container';
 import Layout from '../../components/Layout';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
@@ -83,7 +83,7 @@ const MySettingsView = () => {
           {saving && <LoadingSpinner />}
           <Container>
             <div className="pb-4">
-              <Avatar author={author}></Avatar>
+              <AuthorLink author={author}></AuthorLink>
             </div>
             <Tabs>
               <TabList>
@@ -170,6 +170,62 @@ const MySettingsView = () => {
                         value={author.email}
                         onChange={(e) =>
                           modifyAuthor({ ...author, email: e.target.value })
+                        }
+                      />
+                    </div>
+                  </section>
+                  <section className="flex flex-col my-8">
+                    <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                      Links
+                    </h2>
+                    <div className="my-2">
+                      <Input
+                        type="text"
+                        size="lg"
+                        variant="outline"
+                        placeholder="Twitter"
+                        value={author.links?.twitter || ''}
+                        onChange={(e) =>
+                          modifyAuthor({
+                            ...author,
+                            links: { ...author.links, twitter: e.target.value },
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="my-2">
+                      <Input
+                        type="text"
+                        size="lg"
+                        variant="outline"
+                        placeholder="LinkedIn"
+                        value={author.links?.linkedin || ''}
+                        onChange={(e) =>
+                          modifyAuthor({
+                            ...author,
+                            links: {
+                              ...author.links,
+                              linkedin: e.target.value,
+                            },
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="my-2">
+                      <Input
+                        type="text"
+                        size="lg"
+                        variant="outline"
+                        placeholder="Personal website"
+                        value={author.links?.personalSite || ''}
+                        onChange={(e) =>
+                          modifyAuthor({
+                            ...author,
+                            links: {
+                              ...author.links,
+                              personalSite: e.target.value,
+                            },
+                          })
                         }
                       />
                     </div>

@@ -19,8 +19,9 @@ const EditLessonView = ({ lesson }: Props) => {
   const router = useRouter();
 
   const handleSubmit = async (l: LessonStorageModel) => {
+    if (!user) return;
     let uid;
-    if (user && user.uid && user?.uid === l?.authorId) {
+    if (user.uid === l?.authorId) {
       // User owns this lesson
       uid = await api.updateLesson(l, l.uid);
       router.push(`/lessons/${uid}`);
@@ -34,8 +35,9 @@ const EditLessonView = ({ lesson }: Props) => {
     router.push(`/lessons/${uid}`);
   };
   const handleSaveDraft = async (l: LessonStorageModel) => {
+    if (!user) return;
     let uid;
-    if (user && user.uid && user?.uid === l?.authorId) {
+    if (user.uid === l?.authorId) {
       // User owns this lesson
       uid = await api.updateLesson(l, l.uid);
       router.push(`/lessons/edit/${uid}`);

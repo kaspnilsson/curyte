@@ -36,7 +36,7 @@ const LessonView = ({ lesson, author }: Props) => {
   return (
     <>
       {saving && <LoadingSpinner />}
-      <Layout>
+      <Layout showProgressBar>
         <Container>
           <article className="mb-32">
             <Head>

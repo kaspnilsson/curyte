@@ -1,4 +1,4 @@
-import Avatar from './Avatar';
+import AuthorLink from './AuthorLink';
 import Link from 'next/link';
 import { LessonStorageModel } from '../interfaces/lesson';
 import React from 'react';

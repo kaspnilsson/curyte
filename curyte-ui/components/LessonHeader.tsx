@@ -1,15 +1,16 @@
 import firebase from '../firebase/clientApp';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Author } from '../interfaces/author';
-import Avatar from './Avatar';
+import AuthorLink from './AuthorLink';
 import CoverImage from './CoverImage';
 import DateFormatter from './DateFormatter';
 import LessonTitle from './LessonTitle';
-import { Button } from '@chakra-ui/react';
-
-import { useRouter } from 'next/router';
+import { Button, Badge } from '@chakra-ui/react';
+import * as chakra from '@chakra-ui/react';
+import * as api from '../firebase/api';
 import { LessonStorageModel } from '../interfaces/lesson';
+import LessonLink from './LessonLink';
 
 type Props = {
   lesson: LessonStorageModel;
@@ -19,14 +20,46 @@ type Props = {
 };
 
 const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
+  const [loading, setLoading] = useState(false);
+  const [parentLesson, setParentLesson] = useState<LessonStorageModel | null>(
+    null
+  );
+  useEffect(() => {
+    const fetchParent = async () => {
+      if (lesson.parentLessonId) {
+        setLoading(true);
+        setParentLesson(await api.getLesson(lesson.parentLessonId));
+        setLoading(false);
+      }
+    };
+    fetchParent();
+  }, [lesson]);
+
   return (
     <>
-      <LessonTitle>{lesson.title}</LessonTitle>
-      {lesson.parentLessonId && (
-        <Link as={`/lessons/${lesson.parentLessonId}`} href="/lessons/[id]">
-          <a className="hover:underline text-blue">View original</a>
-        </Link>
-      )}
+      <LessonTitle title={lesson.title} isDraft={!lesson.published} />
+      <div className="flex items-center mb-4 h-min">
+        {parentLesson && (
+          <div className="flex items-center h-min ">
+            <h1 className="text-xl font-bold tracking-tighter leading-tight md:leading-none text-center md:text-left mr-2">
+              Copied from
+            </h1>
+            <LessonLink lesson={parentLesson} />
+          </div>
+        )}
+        {parentLesson && !lesson.published && <span className="mx-4">·</span>}
+        {!lesson.published && (
+          <Badge
+            variant="subtle"
+            size="xl"
+            colorScheme="orange"
+            fontSize="1em"
+            className=" h-min"
+          >
+            Draft
+          </Badge>
+        )}
+      </div>
       <div className="text-2xl focus:outline-none mt-1 text-gray-500 mb-8">
         {lesson.description}
       </div>
@@ -35,7 +68,7 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
       </div> */}
       <div className="flex mb-6 items-center justify-between">
         <div className="">
-          <Avatar author={author} />
+          <AuthorLink author={author} />
         </div>
         <table>
           <tr className="text-sm">

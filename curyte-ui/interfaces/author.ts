@@ -5,4 +5,11 @@ export declare interface Author {
   uid: string;
   bio: string;
   username: string;
+  links?: Links;
+}
+
+export declare interface Links {
+  twitter?: string;
+  linkedin?: string;
+  personalSite?: string;
 }

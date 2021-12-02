@@ -6,6 +6,7 @@ import * as api from '../../firebase/api';
 import firebase from '../../firebase/clientApp';
 import Link from 'next/link';
 import { DocumentTextIcon } from '@heroicons/react/outline';
+import LessonLink from '../../components/LessonLink';
 
 const DraftsPage = () => {
   const [user, userLoading, error] = useAuthState(firebase.auth());
@@ -33,19 +34,9 @@ const DraftsPage = () => {
       {!loading && (
         <>
           {lessons.map((lesson) => (
-            <Link
-              as={`/lessons/${lesson.uid}`}
-              href="/lessons/[id]"
-              passHref
-              key={lesson.uid}
-            >
-              <h3 className="text-xl mb-3 leading-snug w-auto">
-                <a className="hover:underline w-auto flex items-center">
-                  <DocumentTextIcon className="h-5 w-5 mr-2" />
-                  {lesson.title || '(no title)'}
-                </a>
-              </h3>
-            </Link>
+            <div className="mb-3" key={lesson.uid}>
+              <LessonLink lesson={lesson} />
+            </div>
           ))}
           {!lessons.length && 'No drafts!'}
         </>

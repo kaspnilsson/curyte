@@ -3,25 +3,21 @@ import Link from 'next/link';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Author } from '../interfaces/author';
-import Avatar from './Avatar';
 import Container from './Container';
 import { Button } from '@chakra-ui/react';
-import {
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  IconButton,
-} from '@chakra-ui/react';
+import { Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
 import Head from 'next/head';
 import router from 'next/router';
+import Avatar from './Avatar';
 
 type Props = {
   children: React.ReactNode;
+  showProgressBar?: boolean;
 };
 
-const Header = ({ children }: Props) => {
+const Header = ({ children, showProgressBar }: Props) => {
   const [isSticky, setSticky] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     // Add scroll event when the component is loaded
@@ -35,6 +31,17 @@ const Header = ({ children }: Props) => {
 
   const handleScroll = () => {
     setSticky(document.documentElement.scrollTop > 0);
+    const winScroll =
+      document.body.scrollTop || document.documentElement.scrollTop;
+    const height =
+      document.documentElement.scrollHeight -
+      document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    if (height > 0) {
+      setProgress(scrolled);
+    } else {
+      setProgress(0);
+    }
   };
 
   const logOut = () => {
@@ -55,10 +62,10 @@ const Header = ({ children }: Props) => {
       <div
         className={`sticky ${
           isSticky ? 'shadow-xl' : ''
-        } top-0 z-10 bg-white py-4 mb-8 transition-shadow`}
+        } top-0 z-10 bg-white mb-4 transition-shadow`}
       >
         <Container>
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center py-4">
             <h2 className="text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
               <Link href="/">
                 <a className="hover:underline">Curyte</a>
@@ -82,7 +89,10 @@ const Header = ({ children }: Props) => {
                 <div className="ml-4">
                   <Menu>
                     <MenuButton>
-                      <Avatar author={user as unknown as Author} photoOnly />
+                      <Avatar
+                        author={user as unknown as Author}
+                        className="w-10 h-10"
+                      />
                     </MenuButton>
                     <MenuList>
                       <MenuItem onClick={() => router.push('/accounts/me')}>
@@ -96,6 +106,17 @@ const Header = ({ children }: Props) => {
             )}
           </div>
         </Container>
+        {showProgressBar && (
+          <div
+            style={{
+              width: `${progress}%`,
+              height: '3px',
+              background: 'blue',
+              opacity: '0.5',
+              marginTop: '-3px',
+            }}
+          />
+        )}
       </div>
     </>
   );

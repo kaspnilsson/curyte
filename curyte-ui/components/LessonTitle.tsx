@@ -1,14 +1,17 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
 type Props = {
-  children?: ReactNode;
+  title: string;
+  isDraft?: boolean;
 };
 
-const LessonTitle = ({ children }: Props) => {
+const LessonTitle = ({ title, isDraft }: Props) => {
   return (
-    <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-tight md:leading-none mb-12 text-center md:text-left">
-      {children}
-    </h1>
+    <div className="mb-4">
+      <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-tight md:leading-none text-center md:text-left">
+        {title}
+      </h1>
+    </div>
   );
 };
 
