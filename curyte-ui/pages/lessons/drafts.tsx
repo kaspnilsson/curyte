@@ -31,22 +31,24 @@ const DraftsPage = () => {
     <>
       {loading && <LoadingSpinner />}
       {!loading && (
-        <div className="flex flex-col">
+        <>
           {lessons.map((lesson) => (
             <Link
               as={`/lessons/${lesson.uid}`}
               href="/lessons/[id]"
+              passHref
               key={lesson.uid}
             >
-              <a className="hover:underline">
-                <h3 className="text-xl mb-3 leading-snug flex items-center">
+              <h3 className="text-xl mb-3 leading-snug w-auto">
+                <a className="hover:underline w-auto flex items-center">
                   <DocumentTextIcon className="h-5 w-5 mr-2" />
                   {lesson.title || '(no title)'}
-                </h3>
-              </a>
+                </a>
+              </h3>
             </Link>
           ))}
-        </div>
+          {!lessons.length && 'No drafts!'}
+        </>
       )}
     </>
   );

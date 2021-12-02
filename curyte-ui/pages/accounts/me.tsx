@@ -105,6 +105,7 @@ const MySettingsView = () => {
                           <LessonPreview lesson={lesson} />
                         </div>
                       ))}
+                      {!lessons.length && 'Nothing here yet!'}
                     </div>
                   </section>
                   <section className="flex flex-col my-8">

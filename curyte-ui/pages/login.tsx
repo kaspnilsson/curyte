@@ -24,10 +24,7 @@ const Login = () => {
           className="w-96 m-auto p-8 flex flex-col items-center"
           boxShadow={'lg'}
         >
-          <h2
-            color="white"
-            className="text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight mb-4"
-          >
+          <h2 className="text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight mb-4">
             Login
           </h2>
           <StyledFirebaseAuth
