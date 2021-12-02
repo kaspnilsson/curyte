@@ -215,6 +215,7 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
             Save as draft
           </Button>
           <Button
+            colorScheme="blue"
             disabled={!canSubmit}
             className="disabled:opacity-50 font-semibold flex items-center justify-between"
             onClick={localHandleSubmit}

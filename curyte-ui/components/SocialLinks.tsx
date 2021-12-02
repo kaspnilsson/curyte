@@ -54,8 +54,30 @@ const LessonTitle = ({ author }: Props) => {
           />
         </Link>
       )}
-      {author.email && (
-        <Link passHref href={`mailto:${author.email}`}>
+      {author.links?.linkedin && (
+        <Link passHref href={author.links.linkedin}>
+          <IconButton
+            variant="link"
+            aria-label="LinkedIn link"
+            icon={
+              <svg
+                className="h-5 w-5 m-2 hover:text-gray-700"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+                />
+              </svg>
+            }
+          />
+        </Link>
+      )}
+      {author.links?.publicEmail && (
+        <Link passHref href={`mailto:${author.links.publicEmail}`}>
           <IconButton
             variant="link"
             aria-label="Email link"
@@ -76,8 +98,8 @@ const LessonTitle = ({ author }: Props) => {
           />
         </Link>
       )}
-      {author.links?.linkedin && (
-        <Link passHref href={author.links.linkedin}>
+      {author.links?.venmo && (
+        <Link passHref href={author.links.venmo}>
           <IconButton
             variant="link"
             aria-label="LinkedIn link"
@@ -85,13 +107,21 @@ const LessonTitle = ({ author }: Props) => {
               <svg
                 className="h-5 w-5 m-2 hover:text-gray-700"
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
+                width="516"
+                height="516"
+                viewBox="0 0 516 516"
               >
-                <path
+                <rect
                   fill="currentColor"
-                  d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="516"
+                  height="516"
+                  rx="61"
+                  ry="61"
+                />
+                <path
+                  fill="white"
+                  d="M385.16,105c11.1,18.3,16.08,37.17,16.08,61,0,76-64.87,174.7-117.52,244H163.49L115.28,121.65l105.31-10L246.2,316.82C270,278,299.43,217,299.43,175.44c0-22.77-3.9-38.25-10-51Z"
                 />
               </svg>
             }

@@ -16,7 +16,7 @@ const LessonLink = ({ lesson }: Props) => {
       passHref
       key={lesson.uid}
     >
-      <Button variant="link">
+      <Button variant="link" colorScheme="black">
         <h3 className="text-xl leading-snug w-auto flex items-center">
           <DocumentTextIcon className="h-5 w-5 mr-2" />
           {lesson.title || '(no title)'}

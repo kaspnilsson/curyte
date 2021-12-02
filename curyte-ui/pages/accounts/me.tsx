@@ -10,8 +10,8 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import firebase from '../../firebase/clientApp'
 import { Author } from '../../interfaces/author'
 import { Button } from '@chakra-ui/react'
-import { Input } from '@chakra-ui/react'
-import { Textarea } from '@chakra-ui/react'
+import { Input, Textarea, Divider } from '@chakra-ui/react'
+import TextareaAutosize from 'react-textarea-autosize'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import * as api from '../../firebase/api'
 import DraftsPage from '../lessons/drafts'
@@ -84,9 +84,9 @@ const MySettingsView = () => {
               <AuthorLink author={author}></AuthorLink>
             </div>
             <Tabs>
-              <TabList>
-                <Tab>Posts</Tab>
-                <Tab>Settings</Tab>
+              <TabList colorScheme="blue">
+                <Tab colorScheme="blue">Posts</Tab>
+                <Tab colorScheme="blue">Settings</Tab>
               </TabList>
               <TabPanels>
                 <TabPanel>
@@ -122,7 +122,7 @@ const MySettingsView = () => {
                         Profile settings
                       </h2>
                       <Button
-                        variant="outline"
+                        colorScheme="blue"
                         className="w-fit-content disabled:opacity-50"
                         onClick={handleSave}
                         disabled={!authorChanged}
@@ -131,10 +131,12 @@ const MySettingsView = () => {
                       </Button>
                     </div>
                     <div className="my-2">
+                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                        Bio
+                      </h3>
                       <Textarea
-                        type="text"
-                        size="lg"
-                        variant="outline"
+                        as={TextareaAutosize}
+                        className="resize-none mt-1 w-full"
                         placeholder="Bio"
                         value={author.bio}
                         onChange={(e) =>
@@ -143,6 +145,9 @@ const MySettingsView = () => {
                       />
                     </div>
                     <div className="my-2">
+                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                        Username
+                      </h3>
                       <Input
                         type="text"
                         size="lg"
@@ -160,6 +165,9 @@ const MySettingsView = () => {
                       Email settings
                     </h2>
                     <div className="my-2">
+                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                        Email address
+                      </h3>
                       <Input
                         type="text"
                         size="lg"
@@ -177,11 +185,14 @@ const MySettingsView = () => {
                       Links
                     </h2>
                     <div className="my-2">
+                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                        Twitter
+                      </h3>
                       <Input
                         type="text"
                         size="lg"
                         variant="outline"
-                        placeholder="Twitter"
+                        placeholder="Leave blank to remove from public profile."
                         value={author.links?.twitter || ''}
                         onChange={(e) =>
                           modifyAuthor({
@@ -192,11 +203,14 @@ const MySettingsView = () => {
                       />
                     </div>
                     <div className="my-2">
+                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                        LinkedIn
+                      </h3>
                       <Input
                         type="text"
                         size="lg"
                         variant="outline"
-                        placeholder="LinkedIn"
+                        placeholder="Leave blank to remove from public profile."
                         value={author.links?.linkedin || ''}
                         onChange={(e) =>
                           modifyAuthor({
@@ -210,11 +224,14 @@ const MySettingsView = () => {
                       />
                     </div>
                     <div className="my-2">
+                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                        Personal website
+                      </h3>
                       <Input
                         type="text"
                         size="lg"
                         variant="outline"
-                        placeholder="Personal website"
+                        placeholder="Leave blank to remove from public profile."
                         value={author.links?.personalSite || ''}
                         onChange={(e) =>
                           modifyAuthor({
@@ -227,8 +244,50 @@ const MySettingsView = () => {
                         }
                       />
                     </div>
+                    <div className="my-2">
+                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                        Public email
+                      </h3>
+                      <Input
+                        type="text"
+                        size="lg"
+                        variant="outline"
+                        placeholder="Leave blank to remove from public profile."
+                        value={author.links?.publicEmail || ''}
+                        onChange={(e) =>
+                          modifyAuthor({
+                            ...author,
+                            links: {
+                              ...author.links,
+                              publicEmail: e.target.value,
+                            },
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="my-2">
+                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                        Venmo
+                      </h3>
+                      <Input
+                        type="text"
+                        size="lg"
+                        variant="outline"
+                        placeholder="Leave blank to remove from public profile."
+                        value={author.links?.venmo || ''}
+                        onChange={(e) =>
+                          modifyAuthor({
+                            ...author,
+                            links: {
+                              ...author.links,
+                              venmo: e.target.value,
+                            },
+                          })
+                        }
+                      />
+                    </div>
                   </section>
-                  <section className="flex flex-col my-8">
+                  <section className="my-8">
                     <Button color="red" className="w-56" onClick={handleDelete}>
                       Delete account
                     </Button>
