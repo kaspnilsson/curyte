@@ -6,6 +6,7 @@ export declare interface Author {
   bio: string
   username: string
   links?: Links
+  savedLessons: string[]
 }
 
 export declare interface Links {

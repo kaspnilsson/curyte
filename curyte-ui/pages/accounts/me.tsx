@@ -33,6 +33,7 @@ const MySettingsView = () => {
   const [loading, setLoading] = useState(userLoading)
   const [saving, setSaving] = useState(false)
   const [lessons, setLessons] = useState<LessonStorageModel[]>([])
+  const [savedLessons, setSavedLessons] = useState<LessonStorageModel[]>([])
   const [authorChanged, setAuthorChanged] = useState(false)
 
   const modifyAuthor = (a: Author) => {
@@ -46,6 +47,13 @@ const MySettingsView = () => {
       const fetchAuthor = async () => {
         const author = await api.getAuthor(user.uid)
         setAuthor(author)
+
+        return api
+          .getLessons([
+            { fieldPath: 'published', opStr: '==', value: true },
+            { fieldPath: 'uid', opStr: 'in', value: author.savedLessons || [] },
+          ])
+          .then((res) => setSavedLessons(res))
       }
 
       const fetchLessons = async () => {
@@ -112,8 +120,20 @@ const MySettingsView = () => {
                       ))}
                       {!lessons.length && 'Nothing here yet!'}
                     </div>
-                  </section>
-                  <section className="flex flex-col my-8">
+                    <div className="flex items-left justify-between flex-col">
+                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                        Saved
+                      </h2>
+                      {savedLessons.map((lesson) => (
+                        <div
+                          className="border-b border-gray-200 pb-8 mb-8"
+                          key={lesson.uid}
+                        >
+                          <LessonPreview lesson={lesson} />
+                        </div>
+                      ))}
+                      {!savedLessons.length && 'Nothing here yet!'}
+                    </div>
                     <div className="flex items-left justify-between flex-col">
                       <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
                         Drafts

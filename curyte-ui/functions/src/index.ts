@@ -1,6 +1,5 @@
 import * as functions from 'firebase-functions'
 import admin from 'firebase-admin'
-import { FieldValue } from 'firebase-admin/firestore'
 
 admin.initializeApp()
 const db = admin.firestore()
@@ -23,15 +22,35 @@ export const deleteDocumentsForUser = functions.auth.user().onDelete((user) => {
 export const decrementLessonSaveCount = functions.firestore
   .document('savedLessons/{savedLessonId}')
   .onDelete((change) => {
+    // Decrement save count
     db.collection('lessons')
       .doc(change.data().lessonId)
-      .update({ saveCount: FieldValue.increment(-1) })
+      .update({ saveCount: admin.firestore.FieldValue.increment(-1) })
+
+    // Update user saved posts
+    db.collection('users')
+      .doc(change.data().userId)
+      .update({
+        savedLessons: admin.firestore.FieldValue.arrayRemove(
+          change.data().lessonId
+        ),
+      })
   })
 
 export const incrementLessonSaveCount = functions.firestore
   .document('savedLessons/{savedLessonId}')
   .onCreate((change) => {
+    // Increment save count
     db.collection('lessons')
       .doc(change.data().lessonId)
-      .update({ saveCount: FieldValue.increment(1) })
+      .update({ saveCount: admin.firestore.FieldValue.increment(1) })
+
+    // Add saved lesson
+    db.collection('users')
+      .doc(change.data().userId)
+      .update({
+        savedLessons: admin.firestore.FieldValue.arrayUnion(
+          change.data().lessonId
+        ),
+      })
   })
