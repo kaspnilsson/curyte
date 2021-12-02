@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-import { EmbedDescriptor } from 'rich-markdown-editor/dist/types';
-import { EmbedProps } from './props';
-import { PresentationChartBarIcon } from '@heroicons/react/outline';
-import { specialUrlMatchers, urlMatchRegex } from './matchers';
+import { EmbedDescriptor } from 'rich-markdown-editor/dist/types'
+import { EmbedProps } from './props'
+import { PresentationChartBarIcon } from '@heroicons/react/outline'
+import { specialUrlMatchers, urlMatchRegex } from './matchers'
 
 const IFrameEmbed = ({ attrs }: EmbedProps) => (
   <iframe
@@ -10,7 +10,7 @@ const IFrameEmbed = ({ attrs }: EmbedProps) => (
     title={`Embedded web page`}
     src={attrs.href}
   />
-);
+)
 
 export const IFrameEmbedDescriptor: EmbedDescriptor = {
   title: 'Web page',
@@ -23,10 +23,10 @@ export const IFrameEmbedDescriptor: EmbedDescriptor = {
   ),
   matcher: (url: string) => {
     for (const urlMatcher of specialUrlMatchers) {
-      if (urlMatcher.test(url)) return false;
+      if (urlMatcher.test(url)) return false
     }
     // Url matcher is very aggressive. Make sure it matches this URL and _none_ of the other URL matchers.
-    return urlMatchRegex.test(url) || false;
+    return urlMatchRegex.test(url) || false
   },
   component: IFrameEmbed,
-};
+}

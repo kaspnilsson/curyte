@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
-import { EmbedDescriptor } from 'rich-markdown-editor/dist/types';
-import { EmbedProps } from './props';
-import { PhotographIcon } from '@heroicons/react/outline';
-import { Image } from '@chakra-ui/react';
-import { imageUrlMatchRegex } from './matchers';
+import { EmbedDescriptor } from 'rich-markdown-editor/dist/types'
+import { EmbedProps } from './props'
+import { PhotographIcon } from '@heroicons/react/outline'
+import { Image } from '@chakra-ui/react'
+import { imageUrlMatchRegex } from './matchers'
 
 const ImageEmbed = ({ attrs }: EmbedProps) => (
   <Image
@@ -12,7 +12,7 @@ const ImageEmbed = ({ attrs }: EmbedProps) => (
     alt="Embedded image"
     src={attrs.href}
   />
-);
+)
 export const ImageEmbedDescriptor: EmbedDescriptor = {
   title: 'Image from another site',
   keywords: 'image picture photo gif',
@@ -24,4 +24,4 @@ export const ImageEmbedDescriptor: EmbedDescriptor = {
   ),
   matcher: (url: string) => imageUrlMatchRegex.test(url) || false,
   component: ImageEmbed,
-};
+}

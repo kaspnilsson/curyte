@@ -1,54 +1,54 @@
-import firebase from '../firebase/clientApp';
-import Link from 'next/link';
-import React, { SyntheticEvent, useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { Author } from '../interfaces/author';
-import Container from './Container';
-import { Button } from '@chakra-ui/react';
-import { Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
-import Head from 'next/head';
-import router from 'next/router';
-import Avatar from './Avatar';
+import firebase from '../firebase/clientApp'
+import Link from 'next/link'
+import React, { SyntheticEvent, useEffect, useState } from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { Author } from '../interfaces/author'
+import Container from './Container'
+import { Button } from '@chakra-ui/react'
+import { Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react'
+import Head from 'next/head'
+import router from 'next/router'
+import Avatar from './Avatar'
 
 type Props = {
-  children: React.ReactNode;
-  showProgressBar?: boolean;
-};
+  children: React.ReactNode
+  showProgressBar?: boolean
+}
 
 const Header = ({ children, showProgressBar }: Props) => {
-  const [isSticky, setSticky] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [isSticky, setSticky] = useState(false)
+  const [progress, setProgress] = useState(0)
 
   useEffect(() => {
     // Add scroll event when the component is loaded
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll)
     return () => {
       // Remove scroll event after the component is unmount,
       // like componentWillUnmount()
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   const handleScroll = () => {
-    setSticky(document.documentElement.scrollTop > 0);
+    setSticky(document.documentElement.scrollTop > 0)
     const winScroll =
-      document.body.scrollTop || document.documentElement.scrollTop;
+      document.body.scrollTop || document.documentElement.scrollTop
     const height =
       document.documentElement.scrollHeight -
-      document.documentElement.clientHeight;
-    const scrolled = (winScroll / height) * 100;
+      document.documentElement.clientHeight
+    const scrolled = (winScroll / height) * 100
     if (height > 0) {
-      setProgress(scrolled);
+      setProgress(scrolled)
     } else {
-      setProgress(0);
+      setProgress(0)
     }
-  };
+  }
 
   const logOut = () => {
-    firebase.auth().signOut();
-  };
+    firebase.auth().signOut()
+  }
 
-  const [user, loading, error] = useAuthState(firebase.auth());
+  const [user, loading, error] = useAuthState(firebase.auth())
 
   return (
     <>
@@ -119,7 +119,7 @@ const Header = ({ children, showProgressBar }: Props) => {
         )}
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

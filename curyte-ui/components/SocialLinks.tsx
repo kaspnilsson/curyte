@@ -1,11 +1,11 @@
-import Link from 'next/link';
-import React from 'react';
-import { Author } from '../interfaces/author';
-import { IconButton } from '@chakra-ui/react';
+import Link from 'next/link'
+import React from 'react'
+import { Author } from '../interfaces/author'
+import { IconButton } from '@chakra-ui/react'
 
 type Props = {
-  author: Author;
-};
+  author: Author
+}
 
 const LessonTitle = ({ author }: Props) => {
   return (
@@ -99,7 +99,7 @@ const LessonTitle = ({ author }: Props) => {
         </Link>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default LessonTitle;
+export default LessonTitle

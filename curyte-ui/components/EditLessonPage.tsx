@@ -1,24 +1,26 @@
-import firebase from '../firebase/clientApp';
-import React, { SyntheticEvent, useReducer, useState } from 'react';
-import { PlusIcon, UploadIcon } from '@heroicons/react/solid';
-import { Button } from '@chakra-ui/react';
+import firebase from '../firebase/clientApp'
+import React, { SyntheticEvent, useReducer, useState } from 'react'
+import { PlusIcon, UploadIcon } from '@heroicons/react/solid'
+import { Button } from '@chakra-ui/react'
 
-import Container from './Container';
-import Layout from './Layout';
-import LessonSectionEditor from './LessonSectionEditor';
-import { LessonSection, LessonStorageModel } from '../interfaces/lesson';
-import { Author } from '../interfaces/author';
-import LoadingSpinner from './LoadingSpinner';
-import { SaveIcon } from '@heroicons/react/outline';
+import Container from './Container'
+import Layout from './Layout'
+import LessonSectionEditor from './LessonSectionEditor'
+import { LessonSection, LessonStorageModel } from '../interfaces/lesson'
+import { Author } from '../interfaces/author'
+import LoadingSpinner from './LoadingSpinner'
+import { SaveIcon } from '@heroicons/react/outline'
+import { computeClassesForTitle } from './LessonTitle'
+import TextareaAutosize from 'react-textarea-autosize'
 
 type Props = {
-  lesson?: LessonStorageModel;
-  user: Author;
-  handleSubmit: (l: LessonStorageModel) => Promise<void>;
-  handleSaveDraft: (l: LessonStorageModel) => Promise<void>;
-};
+  lesson?: LessonStorageModel
+  user: Author
+  handleSubmit: (l: LessonStorageModel) => Promise<void>
+  handleSaveDraft: (l: LessonStorageModel) => Promise<void>
+}
 
-const initialState = { sections: [{ title: '', content: '' }] };
+const initialState = { sections: [{ title: '', content: '' }] }
 
 enum LessonSectionActionType {
   ADD = 'ADD',
@@ -28,15 +30,15 @@ enum LessonSectionActionType {
 
 // An interface for our actions
 interface LessonSectionAction {
-  type: LessonSectionActionType;
+  type: LessonSectionActionType
   payload?: {
-    index?: number;
-    section?: LessonSection;
-  };
+    index?: number
+    section?: LessonSection
+  }
 }
 
 interface LessonSectionState {
-  sections: LessonSection[];
+  sections: LessonSection[]
 }
 
 function reducer(state: LessonSectionState, action: LessonSectionAction) {
@@ -45,7 +47,7 @@ function reducer(state: LessonSectionState, action: LessonSectionAction) {
       return {
         ...state,
         sections: [...state.sections, { title: '', content: '' }],
-      };
+      }
     }
     case LessonSectionActionType.EDIT: {
       if (
@@ -53,46 +55,46 @@ function reducer(state: LessonSectionState, action: LessonSectionAction) {
         action.payload.index === undefined ||
         action.payload.section === undefined
       ) {
-        throw new Error('Invalid payload for action: ' + action);
+        throw new Error('Invalid payload for action: ' + action)
       }
-      const sections = [...state.sections];
-      sections[action.payload.index] = action.payload.section;
+      const sections = [...state.sections]
+      sections[action.payload.index] = action.payload.section
       return {
         ...state,
         sections,
-      };
+      }
     }
     case LessonSectionActionType.REMOVE: {
       if (!action.payload || action.payload.index === undefined) {
-        throw new Error('Invalid payload for action: ' + action);
+        throw new Error('Invalid payload for action: ' + action)
       }
-      const sections = [...state.sections];
-      sections.splice(action.payload.index, 1);
+      const sections = [...state.sections]
+      sections.splice(action.payload.index, 1)
       return {
         ...state,
         sections,
-      };
+      }
     }
     default:
-      throw new Error();
+      throw new Error()
   }
 }
 
 const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
-  const [title, setTitle] = useState(lesson?.title || '');
-  const [saving, setSaving] = useState(false);
-  const [description, setDescription] = useState(lesson?.description || '');
-  const [state, dispatch] = useReducer(reducer, lesson || initialState);
+  const [title, setTitle] = useState(lesson?.title || '')
+  const [saving, setSaving] = useState(false)
+  const [description, setDescription] = useState(lesson?.description || '')
+  const [state, dispatch] = useReducer(reducer, lesson || initialState)
 
   const canSubmit = !!(
     title &&
     description &&
     state.sections.length &&
     state.sections.every((section) => section.content)
-  );
+  )
 
   const localHandleSubmit = async (event: SyntheticEvent) => {
-    event.preventDefault();
+    event.preventDefault()
     try {
       const newLesson = {
         ...lesson,
@@ -105,17 +107,17 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
           lesson?.created ||
           firebase.firestore.Timestamp.now().toDate().toISOString(),
         updated: firebase.firestore.Timestamp.now().toDate().toISOString(),
-      };
-      setSaving(true);
+      }
+      setSaving(true)
       // UID set by API module
-      await handleSubmit({ ...newLesson, published: true, uid: '' });
+      await handleSubmit({ ...newLesson, published: true, uid: '' })
     } finally {
-      setSaving(false);
+      setSaving(false)
     }
-  };
+  }
 
   const localHandleSaveDraft = async (event: SyntheticEvent) => {
-    event.preventDefault();
+    event.preventDefault()
     try {
       const newLesson = {
         ...lesson,
@@ -128,29 +130,31 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
           lesson?.created ||
           firebase.firestore.Timestamp.now().toDate().toISOString(),
         updated: firebase.firestore.Timestamp.now().toDate().toISOString(),
-      };
-      setSaving(true);
+      }
+      setSaving(true)
       // UID set by API module
-      await handleSubmit({ ...newLesson, published: false, uid: '' });
+      await handleSubmit({ ...newLesson, published: false, uid: '' })
     } finally {
-      setSaving(false);
+      setSaving(false)
     }
-  };
+  }
 
-  if (saving) return <LoadingSpinner />;
+  if (saving) return <LoadingSpinner />
   return (
     <Layout withFooter={false}>
       <Container>
         <div className="flex flex-col flex-grow overflow-y-auto">
           <div className="flex items-center justify-between w-full">
-            <textarea
-              className="text-4xl focus:outline-none font-semibold flex-grow resize-none tracking-tight md:tracking-tighter leading-tight"
+            <TextareaAutosize
+              className={`${computeClassesForTitle(
+                title
+              )} focus:outline-none font-semibold flex-grow resize-none tracking-tight md:tracking-tighter leading-tight h-min`}
               placeholder="Enter title..."
               value={title}
               onChange={({ target }) => setTitle(target.value)}
             />
           </div>
-          <textarea
+          <TextareaAutosize
             className="text-2xl focus:outline-none mt-1 text-gray-500 resize-none"
             placeholder="Enter description..."
             value={description}
@@ -167,7 +171,7 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
                           dispatch({
                             type: LessonSectionActionType.REMOVE,
                             payload: { index },
-                          });
+                          })
                         }
                       : undefined
                   }
@@ -175,7 +179,7 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
                     dispatch({
                       type: LessonSectionActionType.EDIT,
                       payload: { section, index },
-                    });
+                    })
                   }}
                 />
               </div>
@@ -216,7 +220,7 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
         </div>
       </footer>
     </Layout>
-  );
-};
+  )
+}
 
-export default EditLessonPage;
+export default EditLessonPage

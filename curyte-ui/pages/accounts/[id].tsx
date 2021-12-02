@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import { LessonStorageModel } from '../../interfaces/lesson';
-import firebase from '../../firebase/clientApp';
-import { GetServerSideProps } from 'next';
-import Layout from '../../components/Layout';
-import { Author } from '../../interfaces/author';
-import Container from '../../components/Container';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import LessonPreview from '../../components/LessonPreview';
-import * as api from '../../firebase/api';
-import SocialLinks from '../../components/SocialLinks';
-import Avatar from '../../components/Avatar';
+import React, { useState } from 'react'
+import { LessonStorageModel } from '../../interfaces/lesson'
+import firebase from '../../firebase/clientApp'
+import { GetServerSideProps } from 'next'
+import Layout from '../../components/Layout'
+import { Author } from '../../interfaces/author'
+import Container from '../../components/Container'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import LessonPreview from '../../components/LessonPreview'
+import * as api from '../../firebase/api'
+import SocialLinks from '../../components/SocialLinks'
+import Avatar from '../../components/Avatar'
 
 type Props = {
-  lessons: LessonStorageModel[];
-  author: Author;
-};
+  lessons: LessonStorageModel[]
+  author: Author
+}
 
 const UserView = ({ lessons, author }: Props) => {
-  const [user, loading, error] = useAuthState(firebase.auth());
+  const [user, loading, error] = useAuthState(firebase.auth())
   return (
     <Layout>
       <Container>
@@ -44,18 +44,18 @@ const UserView = ({ lessons, author }: Props) => {
         `
       </Container>
     </Layout>
-  );
-};
+  )
+}
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const author = await api.getAuthor(query.id as string);
+  const author = await api.getAuthor(query.id as string)
 
   const lessons = await api.getLessons([
     { opStr: '==', value: author.uid, fieldPath: 'authorId' },
-  ]);
+  ])
   return {
     props: { lessons, author },
-  };
-};
+  }
+}
 
-export default UserView;
+export default UserView

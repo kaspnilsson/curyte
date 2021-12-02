@@ -1,14 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
-import Editor from 'rich-markdown-editor';
-import 'github-markdown-css/github-markdown-light.css';
-import { YoutubeEmbedDescriptor } from './embeds/YoutubeEmbed';
-import { IFrameEmbedDescriptor } from './embeds/IFrameEmbed';
-import { ImageEmbedDescriptor } from './embeds/ImageEmbed';
+import Editor from 'rich-markdown-editor'
+import 'github-markdown-css/github-markdown-light.css'
+import { YoutubeEmbedDescriptor } from './embeds/YoutubeEmbed'
+import { IFrameEmbedDescriptor } from './embeds/IFrameEmbed'
+import { ImageEmbedDescriptor } from './embeds/ImageEmbed'
 
 interface Props {
-  content: string;
-  onChange?: (getContent: () => string) => void;
-  readOnly?: boolean;
+  content: string
+  onChange?: (getContent: () => string) => void
+  readOnly?: boolean
 }
 
 const FancyEditor = ({ content, onChange, readOnly = false }: Props) => {
@@ -25,7 +25,7 @@ const FancyEditor = ({ content, onChange, readOnly = false }: Props) => {
         ]}
       />
     </div>
-  );
-};
+  )
+}
 
-export default FancyEditor;
+export default FancyEditor

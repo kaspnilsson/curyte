@@ -1,13 +1,13 @@
-import React from 'react';
-import Footer from './Footer';
-import Header from './Header';
+import React from 'react'
+import Footer from './Footer'
+import Header from './Header'
 
 type Props = {
-  children: React.ReactNode;
-  headerChildren?: React.ReactNode;
-  withFooter?: boolean;
-  showProgressBar?: boolean;
-};
+  children: React.ReactNode
+  headerChildren?: React.ReactNode
+  withFooter?: boolean
+  showProgressBar?: boolean
+}
 
 const Layout = ({
   children,
@@ -24,7 +24,7 @@ const Layout = ({
         {withFooter && <Footer />}
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

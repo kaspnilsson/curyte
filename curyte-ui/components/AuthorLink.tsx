@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import Link from 'next/link';
-import { Author } from '../interfaces/author';
-import React from 'react';
-import Avatar from './Avatar';
+import Link from 'next/link'
+import { Author } from '../interfaces/author'
+import React from 'react'
+import Avatar from './Avatar'
 
 type Props = {
-  author: Author;
-};
+  author: Author
+}
 
 const AuthorLink = ({ author }: Props) => {
   return (
@@ -23,7 +23,7 @@ const AuthorLink = ({ author }: Props) => {
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default AuthorLink;
+export default AuthorLink

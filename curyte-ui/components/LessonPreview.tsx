@@ -1,14 +1,14 @@
-import AuthorLink from './AuthorLink';
-import Link from 'next/link';
-import { LessonStorageModel } from '../interfaces/lesson';
-import React from 'react';
-import firebase from '../firebase/clientApp';
-import DateFormatter from './DateFormatter';
-import { useCollection } from 'react-firebase-hooks/firestore';
+import AuthorLink from './AuthorLink'
+import Link from 'next/link'
+import { LessonStorageModel } from '../interfaces/lesson'
+import React from 'react'
+import firebase from '../firebase/clientApp'
+import DateFormatter from './DateFormatter'
+import { useCollection } from 'react-firebase-hooks/firestore'
 
 type Props = {
-  lesson: LessonStorageModel;
-};
+  lesson: LessonStorageModel
+}
 
 const LessonPreview = ({ lesson }: Props) => {
   return (
@@ -27,7 +27,7 @@ const LessonPreview = ({ lesson }: Props) => {
       </div>
       <p className="text-md leading-relaxed mb-4">{lesson.description}</p>
     </div>
-  );
-};
+  )
+}
 
-export default LessonPreview;
+export default LessonPreview

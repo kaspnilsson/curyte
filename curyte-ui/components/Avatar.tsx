@@ -1,13 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
-import Link from 'next/link';
-import { Author } from '../interfaces/author';
-import { Image, Tag } from '@chakra-ui/react';
-import React from 'react';
+import Link from 'next/link'
+import { Author } from '../interfaces/author'
+import { Image, Tag } from '@chakra-ui/react'
+import React from 'react'
 
 type Props = {
-  author: Author;
-  className?: string;
-};
+  author: Author
+  className?: string
+}
 
 const AuthorLink = ({ author, className }: Props) => {
   return (
@@ -33,7 +33,7 @@ const AuthorLink = ({ author, className }: Props) => {
         </Tag>
       )}
     </>
-  );
-};
+  )
+}
 
-export default AuthorLink;
+export default AuthorLink

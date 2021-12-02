@@ -31,6 +31,7 @@
     "react-firebaseui": "^5.0.2",
     "react-is": "^17.0.2",
     "react-markdown": "^7.1.0",
+    "react-textarea-autosize": "^8.3.3",
     "rich-markdown-editor": "^11.19.1",
     "styled-components": "^5.3.3",
     "webpack": "^5.62.1"
@@ -38,13 +39,16 @@
   "devDependencies": {
     "@types/node": "^16.11.6",
     "@types/react": "^17.0.34",
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
+    "@typescript-eslint/parser": "^5.0.0",
     "autoprefixer": "^10.4.0",
-    "eslint": "^7",
-    "eslint-config-next": "^12.0.3",
+    "eslint": "<8.0.0",
+    "eslint-config-next": "^12.0.4",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-next": "^0.0.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "postcss": "^8.3.11",
-    "prettier": "^2.4.1",
+    "prettier": "^2.5.0",
     "tailwindcss": "^2.2.19",
     "typescript": "^4.4.4"
   }

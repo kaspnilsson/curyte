@@ -1,7 +1,7 @@
 // components/Auth.tsx
-import React from 'react';
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import firebase from '../firebase/clientApp';
+import React from 'react'
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+import firebase from '../firebase/clientApp'
 
 // Configure FirebaseUI.
 const uiConfig = {
@@ -12,7 +12,7 @@ const uiConfig = {
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
   ],
-};
+}
 
 const SignInScreen = () => {
   return (
@@ -20,7 +20,7 @@ const SignInScreen = () => {
       <h1>Curyte Login</h1>
       <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
     </div>
-  );
-};
+  )
+}
 
-export default SignInScreen;
+export default SignInScreen

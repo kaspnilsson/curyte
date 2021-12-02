@@ -1,10 +1,10 @@
-import React from 'react';
-import { LessonSection } from '../interfaces/lesson';
-import FancyEditor from './FancyEditor';
+import React from 'react'
+import { LessonSection } from '../interfaces/lesson'
+import FancyEditor from './FancyEditor'
 
 type Props = {
-  section: LessonSection;
-};
+  section: LessonSection
+}
 
 const LessonSection = ({ section }: Props) => {
   return (
@@ -12,7 +12,7 @@ const LessonSection = ({ section }: Props) => {
       <h1>{section.title}</h1>
       <FancyEditor content={section.content} readOnly />
     </div>
-  );
-};
+  )
+}
 
-export default LessonSection;
+export default LessonSection

@@ -1,6 +1,6 @@
 export type EmbedProps = {
   attrs: {
-    href: string;
-    matches: string[];
-  };
-};
+    href: string
+    matches: string[]
+  }
+}

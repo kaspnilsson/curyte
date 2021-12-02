@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import { EmbedDescriptor } from 'rich-markdown-editor/dist/types';
-import { youtubeUrlMatchRegex } from './matchers';
-import { EmbedProps } from './props';
+import { EmbedDescriptor } from 'rich-markdown-editor/dist/types'
+import { youtubeUrlMatchRegex } from './matchers'
+import { EmbedProps } from './props'
 
 const YoutubeEmbed = ({ attrs }: EmbedProps) => (
   <iframe
@@ -9,7 +9,7 @@ const YoutubeEmbed = ({ attrs }: EmbedProps) => (
     title={`Youtube Embed ${attrs.matches[1]}`}
     src={`https://www.youtube.com/embed/${attrs.matches[1]}?modestbranding=1`}
   />
-);
+)
 
 export const YoutubeEmbedDescriptor: EmbedDescriptor = {
   title: 'YouTube',
@@ -24,4 +24,4 @@ export const YoutubeEmbedDescriptor: EmbedDescriptor = {
   ),
   matcher: (url: string) => url.match(youtubeUrlMatchRegex) || false,
   component: YoutubeEmbed,
-};
+}

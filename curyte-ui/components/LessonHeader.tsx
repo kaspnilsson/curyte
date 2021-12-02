@@ -1,39 +1,39 @@
-import firebase from '../firebase/clientApp';
-import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import { Author } from '../interfaces/author';
-import AuthorLink from './AuthorLink';
-import CoverImage from './CoverImage';
-import DateFormatter from './DateFormatter';
-import LessonTitle from './LessonTitle';
-import { Button, Badge } from '@chakra-ui/react';
-import * as chakra from '@chakra-ui/react';
-import * as api from '../firebase/api';
-import { LessonStorageModel } from '../interfaces/lesson';
-import LessonLink from './LessonLink';
+import firebase from '../firebase/clientApp'
+import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
+import { Author } from '../interfaces/author'
+import AuthorLink from './AuthorLink'
+import CoverImage from './CoverImage'
+import DateFormatter from './DateFormatter'
+import LessonTitle from './LessonTitle'
+import { Button, Badge } from '@chakra-ui/react'
+import * as chakra from '@chakra-ui/react'
+import * as api from '../firebase/api'
+import { LessonStorageModel } from '../interfaces/lesson'
+import LessonLink from './LessonLink'
 
 type Props = {
-  lesson: LessonStorageModel;
-  coverImage?: string;
-  author: Author;
-  handleDelete?: () => void;
-};
+  lesson: LessonStorageModel
+  coverImage?: string
+  author: Author
+  handleDelete?: () => void
+}
 
 const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
   const [parentLesson, setParentLesson] = useState<LessonStorageModel | null>(
     null
-  );
+  )
   useEffect(() => {
     const fetchParent = async () => {
       if (lesson.parentLessonId) {
-        setLoading(true);
-        setParentLesson(await api.getLesson(lesson.parentLessonId));
-        setLoading(false);
+        setLoading(true)
+        setParentLesson(await api.getLesson(lesson.parentLessonId))
+        setLoading(false)
       }
-    };
-    fetchParent();
-  }, [lesson]);
+    }
+    fetchParent()
+  }, [lesson])
 
   return (
     <>
@@ -104,7 +104,7 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
         )}
       </div>
     </>
-  );
-};
+  )
+}
 
-export default LessonHeader;
+export default LessonHeader

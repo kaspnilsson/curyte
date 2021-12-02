@@ -1,12 +1,12 @@
-import { DocumentTextIcon } from '@heroicons/react/outline';
-import Link from 'next/link';
-import React from 'react';
-import { Button } from '@chakra-ui/react';
-import { LessonStorageModel } from '../interfaces/lesson';
+import { DocumentTextIcon } from '@heroicons/react/outline'
+import Link from 'next/link'
+import React from 'react'
+import { Button } from '@chakra-ui/react'
+import { LessonStorageModel } from '../interfaces/lesson'
 
 type Props = {
-  lesson: LessonStorageModel;
-};
+  lesson: LessonStorageModel
+}
 
 const LessonLink = ({ lesson }: Props) => {
   return (
@@ -23,6 +23,6 @@ const LessonLink = ({ lesson }: Props) => {
         </h3>
       </Button>
     </Link>
-  );
-};
-export default LessonLink;
+  )
+}
+export default LessonLink

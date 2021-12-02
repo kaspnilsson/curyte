@@ -1,45 +1,45 @@
 /* eslint-disable react/jsx-filename-extension */
-import { useRouter } from 'next/router';
-import ErrorPage from 'next/error';
-import React, { SyntheticEvent, useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import AuthorLink from '../../components/AuthorLink';
-import Container from '../../components/Container';
-import Layout from '../../components/Layout';
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
-import firebase from '../../firebase/clientApp';
-import { Author } from '../../interfaces/author';
-import { Button } from '@chakra-ui/react';
-import { Input } from '@chakra-ui/react';
-import { Textarea } from '@chakra-ui/react';
-import LoadingSpinner from '../../components/LoadingSpinner';
-import * as api from '../../firebase/api';
-import DraftsPage from '../lessons/drafts';
-import { LessonStorageModel } from '../../interfaces/lesson';
-import LessonPreview from '../../components/LessonPreview';
+import { useRouter } from 'next/router'
+import ErrorPage from 'next/error'
+import React, { SyntheticEvent, useEffect, useState } from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import AuthorLink from '../../components/AuthorLink'
+import Container from '../../components/Container'
+import Layout from '../../components/Layout'
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
+import firebase from '../../firebase/clientApp'
+import { Author } from '../../interfaces/author'
+import { Button } from '@chakra-ui/react'
+import { Input } from '@chakra-ui/react'
+import { Textarea } from '@chakra-ui/react'
+import LoadingSpinner from '../../components/LoadingSpinner'
+import * as api from '../../firebase/api'
+import DraftsPage from '../lessons/drafts'
+import { LessonStorageModel } from '../../interfaces/lesson'
+import LessonPreview from '../../components/LessonPreview'
 
 const MySettingsView = () => {
-  const router = useRouter();
+  const router = useRouter()
 
-  const [user, userLoading, error] = useAuthState(firebase.auth());
-  const [author, setAuthor] = useState<Author | null>(null);
-  const [loading, setLoading] = useState(userLoading);
-  const [saving, setSaving] = useState(false);
-  const [lessons, setLessons] = useState<LessonStorageModel[]>([]);
-  const [authorChanged, setAuthorChanged] = useState(false);
+  const [user, userLoading, error] = useAuthState(firebase.auth())
+  const [author, setAuthor] = useState<Author | null>(null)
+  const [loading, setLoading] = useState(userLoading)
+  const [saving, setSaving] = useState(false)
+  const [lessons, setLessons] = useState<LessonStorageModel[]>([])
+  const [authorChanged, setAuthorChanged] = useState(false)
 
   const modifyAuthor = (a: Author) => {
-    setAuthorChanged(true);
-    setAuthor(a);
-  };
+    setAuthorChanged(true)
+    setAuthor(a)
+  }
 
   useEffect(() => {
     if (user && !author) {
-      setLoading(true);
+      setLoading(true)
       const fetchAuthor = async () => {
-        const author = await api.getAuthor(user.uid);
-        setAuthor(author);
-      };
+        const author = await api.getAuthor(user.uid)
+        setAuthor(author)
+      }
 
       const fetchLessons = async () => {
         api
@@ -48,31 +48,29 @@ const MySettingsView = () => {
             { fieldPath: 'authorId', opStr: '==', value: user.uid },
           ])
           .then((res) => {
-            setLessons(res);
-          });
-      };
+            setLessons(res)
+          })
+      }
 
-      Promise.all([fetchLessons(), fetchAuthor()]).then(() =>
-        setLoading(false)
-      );
+      Promise.all([fetchLessons(), fetchAuthor()]).then(() => setLoading(false))
     }
-  }, [author, loading, user]);
+  }, [author, loading, user])
 
   const handleSave = async (event: SyntheticEvent) => {
-    event.preventDefault();
-    if (!author) return;
-    setSaving(true);
-    await api.updateAuthor(author);
-    setSaving(false);
-  };
+    event.preventDefault()
+    if (!author) return
+    setSaving(true)
+    await api.updateAuthor(author)
+    setSaving(false)
+  }
 
   const handleDelete = async (event: SyntheticEvent) => {
-    event.preventDefault();
-    setSaving(true);
-    await firebase.auth().currentUser!.delete();
-    setSaving(false);
-    router.push('/');
-  };
+    event.preventDefault()
+    setSaving(true)
+    await firebase.auth().currentUser!.delete()
+    setSaving(false)
+    router.push('/')
+  }
 
   return (
     <>
@@ -242,7 +240,7 @@ const MySettingsView = () => {
         </Layout>
       )}
     </>
-  );
-};
+  )
+}
 
-export default MySettingsView;
+export default MySettingsView

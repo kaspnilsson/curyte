@@ -1,9 +1,9 @@
-import Layout from '../components/Layout';
-import React from 'react';
-import Container from '../components/Container';
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import firebase from '../firebase/clientApp';
-import { Box } from '@chakra-ui/react';
+import Layout from '../components/Layout'
+import React from 'react'
+import Container from '../components/Container'
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+import firebase from '../firebase/clientApp'
+import { Box } from '@chakra-ui/react'
 
 // Configure FirebaseUI.
 const uiConfig = {
@@ -13,7 +13,7 @@ const uiConfig = {
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
   ],
-};
+}
 
 const Login = () => {
   return (
@@ -34,7 +34,7 @@ const Login = () => {
         </Box>
       </Container>
     </Layout>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login
