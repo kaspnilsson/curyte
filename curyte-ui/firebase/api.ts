@@ -83,6 +83,14 @@ export async function updateLesson(
   return uid
 }
 
+export async function logLessonView(uid: string): Promise<void> {
+  await firebase
+    .firestore()
+    .collection('lessons')
+    .doc(uid)
+    .update({ viewCount: firebase.firestore.FieldValue.increment(1) })
+}
+
 /**
  * Gets an author from Firestore.
  *
@@ -130,7 +138,6 @@ export async function getUserHasSavedLesson(
   lessonId: string
 ): Promise<boolean> {
   if (!firebase.auth().currentUser) return false
-  console.log(await firebase.auth().currentUser?.getIdTokenResult())
   return (
     await firebase
       .firestore()

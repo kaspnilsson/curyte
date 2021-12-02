@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { LessonStorageModel } from '../interfaces/lesson'
 import React from 'react'
 import DateFormatter from './DateFormatter'
+import { Center, Divider } from '@chakra-ui/react'
 
 type Props = {
   lesson: LessonStorageModel
@@ -18,9 +19,17 @@ const LessonPreview = ({ lesson }: Props) => {
           <a className="hover:underline">{lesson.title || '(no title)'}</a>
         </Link>
       </h3>
-      <div className="text-sm mb-4 flex">
+      <div className="text-sm mb-4 flex items-center">
         <div className="font-bold mr-4">{lesson.authorName}</div>
         {lesson.created && <DateFormatter dateString={lesson.created} />}
+        {lesson.viewCount && (
+          <>
+            <Center className="h-4 w-6">
+              <Divider orientation="vertical" />
+            </Center>
+            {`${lesson.viewCount} views`}
+          </>
+        )}
       </div>
       <p className="text-md leading-relaxed mb-4">{lesson.description}</p>
     </div>

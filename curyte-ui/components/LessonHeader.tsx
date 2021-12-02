@@ -104,9 +104,17 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
         <CoverImage title={title} src={coverImage || ''} />
       </div> */}
       <div className="flex mb-6 items-center justify-between">
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-2 items-center">
           <AuthorLink author={author} />
           {lesson.created && <DateFormatter dateString={lesson.created} />}
+          {lesson.viewCount && (
+            <>
+              <Center className="h-4 w-6">
+                <Divider orientation="vertical" />
+              </Center>
+              {`${lesson.viewCount} views`}
+            </>
+          )}
         </div>
         <div className="flex gap-1">
           <IconButton
@@ -122,7 +130,7 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
               style={{ fill: isSaved ? '#3182ce' : 'transparent' }}
             />
           </IconButton>
-          <Menu>
+          <Menu id="more-menu" isLazy>
             <MenuButton
               borderRadius="full"
               size="sm"

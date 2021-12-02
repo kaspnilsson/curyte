@@ -107,6 +107,7 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
         authorId: user?.uid || '',
         sections: state.sections,
         saveCount: 0,
+        viewCount: 0,
         created:
           lesson?.created ||
           firebase.firestore.Timestamp.now().toDate().toISOString(),
@@ -143,6 +144,7 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
         published: false,
         uid: '',
         saveCount: 0,
+        viewCount: 0,
       })
     } finally {
       setSaving(false)

@@ -15,4 +15,5 @@ export declare interface LessonStorageModel {
   published: boolean
   parentLessonId?: string
   saveCount: number
+  viewCount: number
 }

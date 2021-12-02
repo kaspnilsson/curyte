@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import ErrorPage from 'next/error'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { LessonStorageModel } from '../../interfaces/lesson'
 import firebase from '../../firebase/clientApp'
 import { GetServerSideProps } from 'next'
@@ -30,6 +30,11 @@ const LessonView = ({ lesson, author }: Props) => {
     setSaving(false)
     router.push('/')
   }
+
+  // Log views only on render
+  useEffect(() => {
+    api.logLessonView(lesson.uid)
+  }, [lesson.uid])
 
   if (!lesson || !lesson.title) return <ErrorPage statusCode={404} />
 
