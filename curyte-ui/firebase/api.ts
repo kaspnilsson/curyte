@@ -26,7 +26,7 @@ export async function getLessons(
     fn = fn.where(clause.fieldPath, clause.opStr, clause.value);
   }
   return fn
-    .orderBy('created')
+    .orderBy('created', 'desc')
     .get()
     .then((result) => {
       const mapped: LessonStorageModel[] = [];
