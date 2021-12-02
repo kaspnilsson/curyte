@@ -74,6 +74,7 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
       <div className="flex items-center mb-4 h-min">
         {parentLesson && (
           <div className="flex items-center h-min ">
+            <span className="mr-2">➜</span>
             <h1 className="text-xl font-bold tracking-tighter leading-tight md:leading-none text-center md:text-left mr-2">
               Copied from
             </h1>
@@ -107,7 +108,7 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
         <div className="flex gap-2 items-center">
           <AuthorLink author={author} />
           {lesson.created && <DateFormatter dateString={lesson.created} />}
-          {lesson.viewCount && (
+          {!!lesson.viewCount && (
             <>
               <Center className="h-4 w-6">
                 <Divider orientation="vertical" />

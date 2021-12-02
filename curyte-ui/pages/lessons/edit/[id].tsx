@@ -21,15 +21,16 @@ const EditLessonView = ({ lesson }: Props) => {
   const handleSubmit = async (l: LessonStorageModel) => {
     if (!user) return
     let uid
-    if (user.uid === l?.authorId) {
+    if (user.uid === lesson?.authorId) {
       // User owns this lesson
-      uid = await api.updateLesson(l, l.uid)
+      uid = await api.updateLesson(l, lesson?.uid || '')
       router.push(`/lessons/${uid}`)
     } else {
       // Logged in user is making a clone
       uid = await api.updateLesson({
         ...l,
-        parentLessonId: l?.uid || '',
+        authorId: user.uid,
+        parentLessonId: lesson?.uid || '',
       })
     }
     router.push(`/lessons/${uid}`)
@@ -37,10 +38,14 @@ const EditLessonView = ({ lesson }: Props) => {
   const handleSaveDraft = async (l: LessonStorageModel) => {
     if (!user) return
 
-    const uid = await api.updateLesson({
-      ...l,
-      parentLessonId: l?.uid || '',
-    })
+    const uid = await api.updateLesson(
+      {
+        ...l,
+        authorId: user.uid,
+        parentLessonId: lesson?.uid || '',
+      },
+      lesson.published ? '' : lesson?.uid || ''
+    )
 
     router.push(`/lessons/edit/${uid}`)
   }

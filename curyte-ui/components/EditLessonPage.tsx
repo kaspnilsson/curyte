@@ -80,7 +80,12 @@ function reducer(state: LessonSectionState, action: LessonSectionAction) {
   }
 }
 
-const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
+const EditLessonPage = ({
+  lesson,
+  user,
+  handleSubmit,
+  handleSaveDraft,
+}: Props) => {
   const [title, setTitle] = useState(lesson?.title.trim() || '')
   const [saving, setSaving] = useState(false)
   const [description, setDescription] = useState(
@@ -112,10 +117,12 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
           lesson?.created ||
           firebase.firestore.Timestamp.now().toDate().toISOString(),
         updated: firebase.firestore.Timestamp.now().toDate().toISOString(),
+        published: true,
+        uid: '',
       }
       setSaving(true)
       // UID set by API module
-      await handleSubmit({ ...newLesson, published: true, uid: '' })
+      await handleSubmit(newLesson)
     } finally {
       setSaving(false)
     }
@@ -136,16 +143,14 @@ const EditLessonPage = ({ lesson, user, handleSubmit }: Props) => {
           lesson?.created ||
           firebase.firestore.Timestamp.now().toDate().toISOString(),
         updated: firebase.firestore.Timestamp.now().toDate().toISOString(),
-      }
-      setSaving(true)
-      // UID set by API module
-      await handleSubmit({
-        ...newLesson,
         published: false,
         uid: '',
         saveCount: 0,
         viewCount: 0,
-      })
+      }
+      setSaving(true)
+      // UID set by API module
+      await handleSaveDraft(newLesson)
     } finally {
       setSaving(false)
     }
