@@ -9,6 +9,7 @@ import Head from 'next/head'
 import router from 'next/router'
 import Avatar from './Avatar'
 import CuryteLogo from './CuryteLogo'
+import { indexRoute, loginRoute, newLessonRoute } from '../utils/routes'
 
 type Props = {
   children: React.ReactNode
@@ -83,7 +84,7 @@ const Header = ({ children, showProgressBar, title }: Props) => {
       >
         <Container>
           <div className="flex justify-between items-center py-4">
-            <Link href="/" passHref>
+            <Link href={indexRoute} passHref>
               <Button
                 variant="link"
                 colorScheme="black"
@@ -99,13 +100,13 @@ const Header = ({ children, showProgressBar, title }: Props) => {
               {children}
             </div>
             {!user && (
-              <Link passHref href={'/login'}>
+              <Link passHref href={loginRoute}>
                 <Button variant="outline">Log in</Button>
               </Link>
             )}
             {user && (
               <div className="flex items-center">
-                <Link href="/lessons/new" passHref>
+                <Link href={newLessonRoute} passHref>
                   <Button
                     className="font-semibold py-2 px-4"
                     colorScheme="purple"

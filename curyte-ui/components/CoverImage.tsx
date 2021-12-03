@@ -1,6 +1,7 @@
 import cn from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
+import { lessonRoute, lessonRouteHrefPath } from '../utils/routes'
 
 type Props = {
   title: string
@@ -21,7 +22,7 @@ const CoverImage = ({ title, src, slug }: Props) => {
   return (
     <div className="sm:mx-0">
       {slug ? (
-        <Link as={`/lessons/${slug}`} href="/lessons/[id]">
+        <Link as={lessonRoute(slug)} href={lessonRouteHrefPath}>
           <a aria-label={title}>{image}</a>
         </Link>
       ) : (

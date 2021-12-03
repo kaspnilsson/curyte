@@ -3,6 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 import { Button } from '@chakra-ui/react'
 import { LessonStorageModel } from '../interfaces/lesson'
+import { lessonRoute, lessonRouteHrefPath } from '../utils/routes'
 
 type Props = {
   lesson: LessonStorageModel
@@ -11,8 +12,8 @@ type Props = {
 const LessonLink = ({ lesson }: Props) => {
   return (
     <Link
-      as={`/lessons/${lesson.uid}`}
-      href="/lessons/[id]"
+      as={lessonRoute(lesson.uid)}
+      href={lessonRouteHrefPath}
       passHref
       key={lesson.uid}
     >

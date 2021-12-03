@@ -68,16 +68,6 @@ const Home = () => {
                   value={keyword}
                   onChange={(e) => search(e.target.value)}
                 />
-                {/* {user ? null : (
-                  <Link href="/login" passHref>
-                    <Button
-                      className="font-semibold py-2 px-4 "
-                      variant="outline"
-                    >
-                      Get started
-                    </Button>
-                  </Link>
-                )} */}
               </section>
               {result.map((lesson) => (
                 <div

@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { Author } from '../interfaces/author'
 import AuthorLink from './AuthorLink'
@@ -25,6 +24,8 @@ import {
   DuplicateIcon,
   MenuIcon,
 } from '@heroicons/react/outline'
+import { useRouter } from 'next/router'
+import { editRouteForLesson, loginRoute } from '../utils/routes'
 
 type Props = {
   lesson: LessonStorageModel
@@ -34,6 +35,7 @@ type Props = {
 }
 
 const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
+  const router = useRouter()
   const [user, userLoading] = useAuthState(firebase.auth())
   const [, setLoading] = useState(false)
   const [parentLesson, setParentLesson] = useState<LessonStorageModel | null>(
@@ -58,6 +60,11 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
   }, [lesson, user, userLoading])
 
   const toggleSaveLesson = async () => {
+    if (!user) {
+      // logged out!
+      router.push(loginRoute)
+      return
+    }
     setLoading(true)
     setIsSaved(!isSaved)
     if (isSaved) {
@@ -66,6 +73,15 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
       await api.saveLesson(lesson.uid)
     }
     setLoading(false)
+  }
+
+  const handleMakeCopy = async () => {
+    if (!user) {
+      // logged out!
+      router.push(loginRoute)
+      return
+    }
+    router.push(editRouteForLesson(lesson.uid))
   }
 
   return (
@@ -141,16 +157,10 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
               variant="subtle"
             />
             <MenuList>
-              <Link
-                passHref
-                as={`/lessons/edit/${lesson.uid}`}
-                href="/lessons/edit/[id]"
-              >
-                <MenuItem>
-                  <DuplicateIcon className="h-5 w-5 text-inherit mr-4" />
-                  Make a copy
-                </MenuItem>
-              </Link>
+              <MenuItem onClick={handleMakeCopy}>
+                <DuplicateIcon className="h-5 w-5 text-inherit mr-4" />
+                Make a copy
+              </MenuItem>
               {handleDelete && (
                 <MenuItem onClick={handleDelete}>
                   <DocumentRemoveIcon className="h-5 w-5 text-inherit mr-4" />

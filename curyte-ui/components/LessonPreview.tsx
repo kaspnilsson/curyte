@@ -3,6 +3,7 @@ import { LessonStorageModel } from '../interfaces/lesson'
 import React from 'react'
 import DateFormatter from './DateFormatter'
 import { Center, Divider } from '@chakra-ui/react'
+import { lessonRoute, lessonRouteHrefPath } from '../utils/routes'
 
 type Props = {
   lesson: LessonStorageModel
@@ -15,7 +16,7 @@ const LessonPreview = ({ lesson }: Props) => {
         {/* <CoverImage slug={slug} title={title} src={coverImage} /> */}
       </div>
       <h3 className="text-xl mb-3 leading-snug">
-        <Link as={`/lessons/${lesson.uid}`} href="/lessons/[id]">
+        <Link as={lessonRoute(lesson.uid)} href={lessonRouteHrefPath}>
           <a className="hover:underline">{lesson.title || '(no title)'}</a>
         </Link>
       </h3>

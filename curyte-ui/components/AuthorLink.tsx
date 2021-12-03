@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Author } from '../interfaces/author'
 import React from 'react'
 import Avatar from './Avatar'
+import { accountRoute, accountRouteHrefPath } from '../utils/routes'
 
 type Props = {
   author: Author
@@ -15,7 +16,11 @@ const AuthorLink = ({ author }: Props) => {
       {author && (
         <div className="flex items-center">
           <Avatar author={author} className="shadow-xl w-8 h-8" />
-          <Link as={`/accounts/${author.uid}`} href="/accounts/[id]" passHref>
+          <Link
+            as={accountRoute(author.uid)}
+            href={accountRouteHrefPath}
+            passHref
+          >
             <a className="hover:underline font-bold ml-2">
               {author.displayName}
             </a>
