@@ -22,12 +22,11 @@ const fuseOptions = {
 }
 
 const Home = () => {
-  const [user, userLoading] = useAuthState(firebase.auth())
+  const [, userLoading] = useAuthState(firebase.auth())
   const [lessons, setLessons] = useState<LessonStorageModel[]>([])
   const [loading, setLoading] = useState(userLoading)
 
   useEffect(() => {
-    if (!user) return
     setLoading(true)
 
     api
@@ -36,7 +35,7 @@ const Home = () => {
         setLoading(false)
         setLessons(res)
       })
-  }, [user])
+  }, [])
 
   const { result, keyword, search } = useFuzzy<LessonStorageModel>(
     lessons,

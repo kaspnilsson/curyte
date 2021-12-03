@@ -1,4 +1,4 @@
-import Link from 'next/link'
+//import a from 'next/link'
 import React from 'react'
 import { Author } from '../interfaces/author'
 import { IconButton } from '@chakra-ui/react'
@@ -7,11 +7,11 @@ type Props = {
   author: Author
 }
 
-const LessonTitle = ({ author }: Props) => {
+const Socialas = ({ author }: Props) => {
   return (
     <div className="flex items-center">
       {author.links?.twitter && (
-        <Link passHref href={author.links.twitter}>
+        <a target="_blank" href={author.links.twitter} rel="noreferrer">
           <IconButton
             variant="link"
             aria-label="Twitter link"
@@ -30,10 +30,10 @@ const LessonTitle = ({ author }: Props) => {
               </svg>
             }
           />
-        </Link>
+        </a>
       )}
       {author.links?.personalSite && (
-        <Link passHref href={author.links.personalSite}>
+        <a target="_blank" href={author.links.personalSite} rel="noreferrer">
           <IconButton
             variant="link"
             aria-label="Personal website link"
@@ -52,10 +52,10 @@ const LessonTitle = ({ author }: Props) => {
               </svg>
             }
           />
-        </Link>
+        </a>
       )}
       {author.links?.linkedin && (
-        <Link passHref href={author.links.linkedin}>
+        <a target="_blank" href={author.links.linkedin} rel="noreferrer">
           <IconButton
             variant="link"
             aria-label="LinkedIn link"
@@ -74,10 +74,14 @@ const LessonTitle = ({ author }: Props) => {
               </svg>
             }
           />
-        </Link>
+        </a>
       )}
       {author.links?.publicEmail && (
-        <Link passHref href={`mailto:${author.links.publicEmail}`}>
+        <a
+          target="_blank"
+          href={'mailto:' + author.links.publicEmail}
+          rel="noreferrer"
+        >
           <IconButton
             variant="link"
             aria-label="Email link"
@@ -96,13 +100,13 @@ const LessonTitle = ({ author }: Props) => {
               </svg>
             }
           />
-        </Link>
+        </a>
       )}
       {author.links?.venmo && (
-        <Link passHref href={author.links.venmo}>
+        <a target="_blank" href={author.links.venmo} rel="noreferrer">
           <IconButton
             variant="link"
-            aria-label="LinkedIn link"
+            aria-label="aedIn link"
             icon={
               <svg
                 className="h-5 w-5 m-2 hover:text-gray-700"
@@ -126,10 +130,10 @@ const LessonTitle = ({ author }: Props) => {
               </svg>
             }
           />
-        </Link>
+        </a>
       )}
     </div>
   )
 }
 
-export default LessonTitle
+export default Socialas

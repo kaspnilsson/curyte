@@ -41,6 +41,7 @@ export async function getLessons(
       return mapped
     })
   } catch (e) {
+    debugger
     console.error(e)
     return []
   }
@@ -58,6 +59,7 @@ export async function getLesson(uid: string): Promise<LessonStorageModel> {
       await firebase.firestore().collection('lessons').doc(uid).get()
     ).data() as LessonStorageModel
   } catch (e) {
+    debugger
     console.error(e)
     return {} as LessonStorageModel
   }
@@ -73,6 +75,7 @@ export async function deleteLesson(uid: string): Promise<void> {
   try {
     return await firebase.firestore().collection('lessons').doc(uid).delete()
   } catch (e) {
+    debugger
     console.error(e)
   }
 }
@@ -100,6 +103,7 @@ export async function updateLesson(
     await firebase.firestore().collection('lessons').doc(uid).set(lesson)
     return uid
   } catch (e) {
+    debugger
     console.error(e)
     return ''
   }
@@ -113,6 +117,7 @@ export async function logLessonView(uid: string): Promise<void> {
       .doc(uid)
       .update({ viewCount: firebase.firestore.FieldValue.increment(1) })
   } catch (e) {
+    debugger
     console.error(e)
   }
 }
@@ -129,6 +134,7 @@ export async function getAuthor(uid: string): Promise<Author> {
       await firebase.firestore().collection('users').doc(uid).get()
     ).data() as Author
   } catch (e) {
+    debugger
     console.error(e)
     return {} as Author
   }
@@ -142,6 +148,7 @@ export async function updateAuthor(author: Author): Promise<void> {
       .doc(author.uid)
       .set(author)
   } catch (e) {
+    debugger
     console.error(e)
   }
 }
@@ -162,6 +169,7 @@ export async function saveLesson(lessonId: string): Promise<void> {
       .doc(computeSavedLessonUid(savedLesson))
       .set(savedLesson)
   } catch (e) {
+    debugger
     console.error(e)
   }
 }
@@ -179,6 +187,7 @@ export async function removeSavedLesson(lessonId: string): Promise<void> {
       .doc(computeSavedLessonUid(savedLesson))
       .delete()
   } catch (e) {
+    debugger
     console.error(e)
   }
 }
@@ -201,6 +210,7 @@ export async function getUserHasSavedLesson(
         .get()
     ).exists
   } catch (e) {
+    debugger
     console.error(e)
     return false
   }

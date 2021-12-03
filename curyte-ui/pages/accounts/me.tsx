@@ -42,6 +42,10 @@ const MySettingsView = () => {
   }
 
   useEffect(() => {
+    if (!user && !userLoading) router.push('/')
+  }, [user, userLoading, router])
+
+  useEffect(() => {
     if (user && !author) {
       setLoading(true)
       const fetchAuthor = async () => {
@@ -103,7 +107,7 @@ const MySettingsView = () => {
   return (
     <>
       {loading && <LoadingSpinner />}
-      {!author && !loading && <ErrorPage statusCode={404} />}
+      {!user && !userLoading && <ErrorPage statusCode={404} />}
       {author && !loading && (
         <Layout>
           {saving && <LoadingSpinner />}
@@ -111,10 +115,10 @@ const MySettingsView = () => {
             <div className="pb-4">
               <AuthorLink author={author}></AuthorLink>
             </div>
-            <Tabs>
-              <TabList colorScheme="blue">
-                <Tab colorScheme="blue">Posts</Tab>
-                <Tab colorScheme="blue">Settings</Tab>
+            <Tabs colorScheme="blue">
+              <TabList>
+                <Tab>Posts</Tab>
+                <Tab>Settings</Tab>
               </TabList>
               <TabPanels>
                 <TabPanel>

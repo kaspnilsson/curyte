@@ -48,6 +48,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
   const lessons = await api.getLessons([
     { opStr: '==', value: author.uid, fieldPath: 'authorId' },
+    { opStr: '==', value: true, fieldPath: 'published' },
   ])
   return {
     props: { lessons, author },
