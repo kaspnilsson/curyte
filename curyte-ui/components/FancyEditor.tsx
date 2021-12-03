@@ -4,6 +4,11 @@ import 'github-markdown-css/github-markdown-light.css'
 import { YoutubeEmbedDescriptor } from './embeds/YoutubeEmbed'
 import { IFrameEmbedDescriptor } from './embeds/IFrameEmbed'
 import { ImageEmbedDescriptor } from './embeds/ImageEmbed'
+import { GoogleDocsEmbedDescriptor } from './embeds/GoogleDocsEmbed'
+import { GoogleDrawingsEmbedDescriptor } from './embeds/GoogleDrawingsEmbed'
+import { GoogleDriveEmbedDescriptor } from './embeds/GoogleDriveEmbed'
+import { GoogleSlidesEmbedDescriptor } from './embeds/GoogleSlidesEmbed'
+import { GoogleSheetsEmbedDescriptor } from './embeds/GoogleSheetsEmbed'
 
 interface Props {
   content: string
@@ -20,6 +25,11 @@ const FancyEditor = ({ content, onChange, readOnly = false }: Props) => {
         readOnly={readOnly}
         embeds={[
           YoutubeEmbedDescriptor,
+          GoogleDocsEmbedDescriptor,
+          GoogleDrawingsEmbedDescriptor,
+          GoogleDriveEmbedDescriptor,
+          GoogleSlidesEmbedDescriptor,
+          GoogleSheetsEmbedDescriptor,
           ImageEmbedDescriptor,
           IFrameEmbedDescriptor,
         ]}
