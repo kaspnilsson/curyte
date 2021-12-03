@@ -128,7 +128,7 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
           >
             <BookmarkIcon
               className="h-5 w-5 text-inherit"
-              style={{ fill: isSaved ? '#3182ce' : 'transparent' }}
+              style={{ fill: isSaved ? '#805AD5' : 'transparent' }}
             />
           </IconButton>
           <Menu id="more-menu" isLazy>
