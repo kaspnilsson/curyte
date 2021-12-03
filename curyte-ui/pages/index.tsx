@@ -1,6 +1,4 @@
 // index.tsx
-import Head from 'next/head'
-
 import firebase from '../firebase/clientApp'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import React, { useEffect, useState } from 'react'
@@ -51,9 +49,6 @@ const Home = () => {
       {!loading && (
         <>
           <Layout>
-            <Head>
-              <title>Curyte</title>
-            </Head>
             <Container>
               <section className="flex-row flex items-center justify-center mt-16 mb-8">
                 <h1 className="text-4xl md:text-6xl text-center font-bold tracking-tighter leading-tight">

@@ -13,9 +13,10 @@ import CuryteLogo from './CuryteLogo'
 type Props = {
   children: React.ReactNode
   showProgressBar?: boolean
+  title: string
 }
 
-const Header = ({ children, showProgressBar }: Props) => {
+const Header = ({ children, showProgressBar, title }: Props) => {
   const [isSticky, setSticky] = useState(false)
   const [progress, setProgress] = useState(0)
 
@@ -73,6 +74,7 @@ const Header = ({ children, showProgressBar }: Props) => {
           href="/static/curyte_logo_black.svg"
           media="(prefers-color-scheme:light)"
         />
+        <title>{title}</title>
       </Head>
       <div
         className={`sticky ${
