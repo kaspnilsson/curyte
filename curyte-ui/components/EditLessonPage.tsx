@@ -228,7 +228,7 @@ const EditLessonPage = ({
             Save as draft
           </Button>
           <Button
-            colorScheme="blue"
+            colorScheme="purple"
             disabled={!canSubmit}
             className="disabled:opacity-50 font-semibold flex items-center justify-between"
             onClick={localHandleSubmit}

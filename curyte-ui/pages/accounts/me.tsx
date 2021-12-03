@@ -115,7 +115,7 @@ const MySettingsView = () => {
             <div className="pb-4">
               <AuthorLink author={author}></AuthorLink>
             </div>
-            <Tabs colorScheme="blue">
+            <Tabs colorScheme="purple">
               <TabList>
                 <Tab>Posts</Tab>
                 <Tab>Settings</Tab>
@@ -170,7 +170,7 @@ const MySettingsView = () => {
                         Profile settings
                       </h2>
                       <Button
-                        colorScheme="blue"
+                        colorScheme="purple"
                         className="w-fit-content disabled:opacity-50"
                         onClick={handleSave}
                         disabled={!authorChanged}

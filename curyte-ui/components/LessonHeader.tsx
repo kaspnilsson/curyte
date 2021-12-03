@@ -122,7 +122,7 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
             borderRadius="full"
             size="sm"
             aria-label={isSaved ? 'Saved' : 'Save'}
-            colorScheme="blue"
+            colorScheme="purple"
             variant="ghost"
             onClick={() => toggleSaveLesson()}
           >

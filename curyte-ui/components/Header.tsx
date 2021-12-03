@@ -108,7 +108,7 @@ const Header = ({ children, showProgressBar, title }: Props) => {
                 <Link href="/lessons/new" passHref>
                   <Button
                     className="font-semibold py-2 px-4"
-                    colorScheme="blue"
+                    colorScheme="purple"
                   >
                     Start writing
                   </Button>
