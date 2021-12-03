@@ -19,26 +19,31 @@ export interface WhereClause {
 export async function getLessons(
   whereClauses: WhereClause[] = []
 ): Promise<LessonStorageModel[]> {
-  let fn:
-    | firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
-    | firebase.firestore.Query<firebase.firestore.DocumentData> = firebase
-    .firestore()
-    .collection('lessons')
-  for (const clause of whereClauses) {
-    fn = fn.where(clause.fieldPath, clause.opStr, clause.value)
+  try {
+    let fn:
+      | firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
+      | firebase.firestore.Query<firebase.firestore.DocumentData> = firebase
+      .firestore()
+      .collection('lessons')
+    for (const clause of whereClauses) {
+      fn = fn.where(clause.fieldPath, clause.opStr, clause.value)
+    }
+    return fn.get().then((result) => {
+      const mapped: LessonStorageModel[] = []
+      result.docs.forEach((result) =>
+        mapped.push(result.data() as LessonStorageModel)
+      )
+      mapped.sort(
+        (a, b) =>
+          parseISO(b.created).getMilliseconds() -
+          parseISO(a.created).getMilliseconds()
+      )
+      return mapped
+    })
+  } catch (e) {
+    console.error(e)
+    return []
   }
-  return fn.get().then((result) => {
-    const mapped: LessonStorageModel[] = []
-    result.docs.forEach((result) =>
-      mapped.push(result.data() as LessonStorageModel)
-    )
-    mapped.sort(
-      (a, b) =>
-        parseISO(b.created).getMilliseconds() -
-        parseISO(a.created).getMilliseconds()
-    )
-    return mapped
-  })
 }
 
 /**
@@ -48,9 +53,14 @@ export async function getLessons(
  * @returns
  */
 export async function getLesson(uid: string): Promise<LessonStorageModel> {
-  return (
-    await firebase.firestore().collection('lessons').doc(uid).get()
-  ).data() as LessonStorageModel
+  try {
+    return (
+      await firebase.firestore().collection('lessons').doc(uid).get()
+    ).data() as LessonStorageModel
+  } catch (e) {
+    console.error(e)
+    return {} as LessonStorageModel
+  }
 }
 
 /**
@@ -60,7 +70,11 @@ export async function getLesson(uid: string): Promise<LessonStorageModel> {
  * @returns
  */
 export async function deleteLesson(uid: string): Promise<void> {
-  return await firebase.firestore().collection('lessons').doc(uid).delete()
+  try {
+    return await firebase.firestore().collection('lessons').doc(uid).delete()
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 /**
@@ -73,25 +87,34 @@ export async function updateLesson(
   lesson: LessonStorageModel,
   uid?: string
 ): Promise<string> {
-  if (!uid) {
-    uid =
-      lesson.title
-        .toLocaleLowerCase()
-        .replace(/[^a-z 0-9]/g, '')
-        .replace(/ /g, '-')
-        .substring(0, 32) + `-${Date.now()}`
-    lesson.uid = uid
+  try {
+    if (!uid) {
+      uid =
+        lesson.title
+          .toLocaleLowerCase()
+          .replace(/[^a-z 0-9]/g, '')
+          .replace(/ /g, '-')
+          .substring(0, 32) + `-${Date.now()}`
+      lesson.uid = uid
+    }
+    await firebase.firestore().collection('lessons').doc(uid).set(lesson)
+    return uid
+  } catch (e) {
+    console.error(e)
+    return ''
   }
-  await firebase.firestore().collection('lessons').doc(uid).set(lesson)
-  return uid
 }
 
 export async function logLessonView(uid: string): Promise<void> {
-  await firebase
-    .firestore()
-    .collection('lessons')
-    .doc(uid)
-    .update({ viewCount: firebase.firestore.FieldValue.increment(1) })
+  try {
+    await firebase
+      .firestore()
+      .collection('lessons')
+      .doc(uid)
+      .update({ viewCount: firebase.firestore.FieldValue.increment(1) })
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 /**
@@ -101,56 +124,84 @@ export async function logLessonView(uid: string): Promise<void> {
  * @returns Promise<Author>
  */
 export async function getAuthor(uid: string): Promise<Author> {
-  return (
-    await firebase.firestore().collection('users').doc(uid).get()
-  ).data() as Author
+  try {
+    return (
+      await firebase.firestore().collection('users').doc(uid).get()
+    ).data() as Author
+  } catch (e) {
+    console.error(e)
+    return {} as Author
+  }
 }
 
 export async function updateAuthor(author: Author): Promise<void> {
-  return await firebase
-    .firestore()
-    .collection('users')
-    .doc(author.uid)
-    .set(author)
+  try {
+    return await firebase
+      .firestore()
+      .collection('users')
+      .doc(author.uid)
+      .set(author)
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 const computeSavedLessonUid = (savedLesson: SavedLesson): string =>
   `${savedLesson.userId}:${savedLesson.lessonId}`
 
 export async function saveLesson(lessonId: string): Promise<void> {
-  if (!firebase.auth().currentUser) return
-  const savedLesson = { lessonId, userId: firebase.auth().currentUser!.uid }
-  await firebase
-    .firestore()
-    .collection('savedLessons')
-    .doc(computeSavedLessonUid(savedLesson))
-    .set(savedLesson)
+  try {
+    if (!firebase.auth().currentUser) return
+    const savedLesson = {
+      lessonId,
+      userId: firebase.auth().currentUser?.uid || '',
+    }
+    await firebase
+      .firestore()
+      .collection('savedLessons')
+      .doc(computeSavedLessonUid(savedLesson))
+      .set(savedLesson)
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 export async function removeSavedLesson(lessonId: string): Promise<void> {
-  if (!firebase.auth().currentUser) return
-  const savedLesson = { lessonId, userId: firebase.auth().currentUser!.uid }
-  return await firebase
-    .firestore()
-    .collection('savedLessons')
-    .doc(computeSavedLessonUid(savedLesson))
-    .delete()
+  try {
+    if (!firebase.auth().currentUser) return
+    const savedLesson = {
+      lessonId,
+      userId: firebase.auth().currentUser?.uid || '',
+    }
+    return await firebase
+      .firestore()
+      .collection('savedLessons')
+      .doc(computeSavedLessonUid(savedLesson))
+      .delete()
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 export async function getUserHasSavedLesson(
   lessonId: string
 ): Promise<boolean> {
-  if (!firebase.auth().currentUser) return false
-  return (
-    await firebase
-      .firestore()
-      .collection('savedLessons')
-      .doc(
-        computeSavedLessonUid({
-          userId: firebase.auth().currentUser!.uid,
-          lessonId,
-        })
-      )
-      .get()
-  ).exists
+  try {
+    if (!firebase.auth().currentUser) return false
+    return (
+      await firebase
+        .firestore()
+        .collection('savedLessons')
+        .doc(
+          computeSavedLessonUid({
+            userId: firebase.auth().currentUser?.uid || '',
+            lessonId,
+          })
+        )
+        .get()
+    ).exists
+  } catch (e) {
+    console.error(e)
+    return false
+  }
 }
