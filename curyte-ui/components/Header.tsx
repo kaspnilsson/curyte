@@ -87,7 +87,7 @@ const Header = ({ children, showProgressBar, title }: Props) => {
               <Button
                 variant="link"
                 colorScheme="black"
-                className="flex gap-2 items-center"
+                className="flex gap-1 items-center"
               >
                 <CuryteLogo />
                 <h2 className="text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
