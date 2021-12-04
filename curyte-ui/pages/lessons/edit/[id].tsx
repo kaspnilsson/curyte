@@ -23,14 +23,14 @@ const EditLessonView = ({ lesson }: Props) => {
     let uid
     if (user.uid === lesson?.authorId) {
       // User owns this lesson
-      uid = await api.updateLesson(l, lesson?.uid || '')
+      uid = await api.updateLesson(l, lesson?.uid)
       router.push(`/lessons/${uid}`)
     } else {
       // Logged in user is making a clone
       uid = await api.updateLesson({
         ...l,
         authorId: user.uid,
-        parentLessonId: lesson?.uid || '',
+        parentLessonId: lesson?.uid,
       })
     }
     router.push(`/lessons/${uid}`)
@@ -42,9 +42,9 @@ const EditLessonView = ({ lesson }: Props) => {
       {
         ...l,
         authorId: user.uid,
-        parentLessonId: lesson?.uid || '',
+        parentLessonId: lesson?.uid,
       },
-      lesson.published ? '' : lesson?.uid || ''
+      lesson.published ? '' : lesson?.uid
     )
 
     router.push(`/lessons/edit/${uid}`)

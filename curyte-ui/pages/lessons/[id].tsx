@@ -31,10 +31,11 @@ const LessonView = ({ lesson, author }: Props) => {
     router.push('/')
   }
 
-  // Log views only on render
+  // Log views only on render of a published lesson
   useEffect(() => {
+    if (!lesson.published) return
     api.logLessonView(lesson.uid)
-  }, [lesson.uid])
+  }, [lesson.uid, lesson.published])
 
   if (!lesson || !lesson.title) return <ErrorPage statusCode={404} />
 

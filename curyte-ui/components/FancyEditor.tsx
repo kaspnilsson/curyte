@@ -18,7 +18,7 @@ interface Props {
 
 const FancyEditor = ({ content, onChange, readOnly = false }: Props) => {
   return (
-    <div className="markdown-body">
+    <div className="markdown-body w-full">
       <Editor
         value={content}
         onChange={onChange}

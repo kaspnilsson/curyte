@@ -91,7 +91,7 @@ export async function updateLesson(
   uid?: string
 ): Promise<string> {
   try {
-    if (!uid) {
+    if (!uid || uid === '') {
       uid =
         lesson.title
           .toLocaleLowerCase()
@@ -156,7 +156,9 @@ export async function updateAuthor(author: Author): Promise<void> {
 const computeSavedLessonUid = (savedLesson: SavedLesson): string =>
   `${savedLesson.userId}:${savedLesson.lessonId}`
 
-export async function saveLesson(lessonId: string): Promise<void> {
+export async function saveLessonForCurrentUser(
+  lessonId: string
+): Promise<void> {
   try {
     if (!firebase.auth().currentUser) return
     const savedLesson = {
@@ -174,7 +176,9 @@ export async function saveLesson(lessonId: string): Promise<void> {
   }
 }
 
-export async function removeSavedLesson(lessonId: string): Promise<void> {
+export async function removeSavedLessonForCurrentUser(
+  lessonId: string
+): Promise<void> {
   try {
     if (!firebase.auth().currentUser) return
     const savedLesson = {
@@ -192,7 +196,7 @@ export async function removeSavedLesson(lessonId: string): Promise<void> {
   }
 }
 
-export async function getUserHasSavedLesson(
+export async function getCurrentUserHasSavedLesson(
   lessonId: string
 ): Promise<boolean> {
   try {

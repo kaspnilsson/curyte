@@ -52,7 +52,7 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
       }
     }
     const fetchIsSaved = async () => {
-      setIsSaved(await api.getUserHasSavedLesson(lesson.uid))
+      setIsSaved(await api.getCurrentUserHasSavedLesson(lesson.uid))
     }
     Promise.all([fetchParent(), fetchIsSaved()]).then(() => {
       setLoading(false)
@@ -68,9 +68,9 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
     setLoading(true)
     setIsSaved(!isSaved)
     if (isSaved) {
-      await api.removeSavedLesson(lesson.uid)
+      await api.removeSavedLessonForCurrentUser(lesson.uid)
     } else {
-      await api.saveLesson(lesson.uid)
+      await api.saveLessonForCurrentUser(lesson.uid)
     }
     setLoading(false)
   }
