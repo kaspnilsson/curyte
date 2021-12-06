@@ -23,6 +23,8 @@ const NewLessonView = () => {
       }
       setLoading(true)
       fetchLesson()
+    } else {
+      setLesson(undefined)
     }
   }, [router.query.copyFrom])
 
