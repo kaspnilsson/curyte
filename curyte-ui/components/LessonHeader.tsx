@@ -5,7 +5,7 @@ import DateFormatter from './DateFormatter'
 import LessonTitle from './LessonTitle'
 import * as api from '../firebase/api'
 import firebase from '../firebase/clientApp'
-import { LessonStorageModel } from '../interfaces/lesson'
+import { Lesson } from '../interfaces/lesson'
 import LessonLink from './LessonLink'
 import {
   IconButton,
@@ -16,6 +16,7 @@ import {
   MenuList,
   MenuItem,
   MenuButton,
+  Button,
 } from '@chakra-ui/react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import {
@@ -23,28 +24,35 @@ import {
   DocumentRemoveIcon,
   DuplicateIcon,
   MenuIcon,
+  UploadIcon,
 } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
-import { editRouteForLesson, loginRoute } from '../utils/routes'
+import { loginRoute, newLessonRoute } from '../utils/routes'
 
 type Props = {
-  lesson: LessonStorageModel
+  lesson: Lesson
   coverImage?: string
   author: Author
   handleDelete?: () => void
+  handlePublish?: () => void
+  isDraft: boolean
 }
 
-const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
+const LessonHeader = ({
+  author,
+  lesson,
+  handleDelete,
+  handlePublish,
+  isDraft,
+}: Props) => {
   const router = useRouter()
   const [user, userLoading] = useAuthState(firebase.auth())
   const [, setLoading] = useState(false)
-  const [parentLesson, setParentLesson] = useState<LessonStorageModel | null>(
-    null
-  )
+  const [parentLesson, setParentLesson] = useState<Lesson | null>(null)
   const [isSaved, setIsSaved] = useState(false)
 
   useEffect(() => {
-    if (userLoading) return
+    if (!user || userLoading) return
     setLoading(true)
     const fetchParent = async () => {
       if (lesson.parentLessonId) {
@@ -81,7 +89,7 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
       router.push(loginRoute)
       return
     }
-    router.push(editRouteForLesson(lesson.uid))
+    router.push(newLessonRoute(lesson.uid))
   }
 
   return (
@@ -97,12 +105,12 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
             <LessonLink lesson={parentLesson} />
           </div>
         )}
-        {parentLesson && !lesson.published && (
+        {parentLesson && isDraft && (
           <Center className="h-6 w-6 mx-3">
             <Divider orientation="vertical" />
           </Center>
         )}
-        {!lesson.published && (
+        {isDraft && (
           <Badge
             variant="subtle"
             size="xl"
@@ -133,20 +141,33 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
             </>
           )}
         </div>
-        <div className="flex gap-1">
-          <IconButton
-            borderRadius="full"
-            size="sm"
-            aria-label={isSaved ? 'Saved' : 'Save'}
-            colorScheme="purple"
-            variant="ghost"
-            onClick={() => toggleSaveLesson()}
-          >
-            <BookmarkIcon
-              className="h-5 w-5 text-inherit"
-              style={{ fill: isSaved ? '#805AD5' : 'transparent' }}
-            />
-          </IconButton>
+        <div className="flex gap-1 items-center">
+          {handlePublish && (
+            <Button
+              size="sm"
+              colorScheme="purple"
+              className="font-semibold flex items-center justify-between mr-2"
+              onClick={handlePublish}
+            >
+              <UploadIcon className="h-5 w-5 mr-2" />
+              Publish
+            </Button>
+          )}
+          {!isDraft && (
+            <IconButton
+              borderRadius="full"
+              size="sm"
+              aria-label={isSaved ? 'Saved' : 'Save'}
+              colorScheme="purple"
+              variant="ghost"
+              onClick={() => toggleSaveLesson()}
+            >
+              <BookmarkIcon
+                className="h-5 w-5 text-inherit"
+                style={{ fill: isSaved ? '#805AD5' : 'transparent' }}
+              />
+            </IconButton>
+          )}
           <Menu id="more-menu" isLazy>
             <MenuButton
               borderRadius="full"
@@ -157,10 +178,12 @@ const LessonHeader = ({ author, lesson, handleDelete }: Props) => {
               variant="subtle"
             />
             <MenuList>
-              <MenuItem onClick={handleMakeCopy}>
-                <DuplicateIcon className="h-5 w-5 text-inherit mr-4" />
-                Make a copy
-              </MenuItem>
+              {!isDraft && (
+                <MenuItem onClick={handleMakeCopy}>
+                  <DuplicateIcon className="h-5 w-5 text-inherit mr-4" />
+                  Make a copy
+                </MenuItem>
+              )}
               {handleDelete && (
                 <MenuItem onClick={handleDelete}>
                   <DocumentRemoveIcon className="h-5 w-5 text-inherit mr-4" />

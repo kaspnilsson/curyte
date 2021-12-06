@@ -3,27 +3,27 @@ import Link from 'next/link'
 import React from 'react'
 import { Button } from '@chakra-ui/react'
 import { Lesson } from '../interfaces/lesson'
-import { lessonRoute, lessonRouteHrefPath } from '../utils/routes'
+import { draftRoute, draftRouteHrefPath } from '../utils/routes'
 
 type Props = {
-  lesson: Lesson
+  draft: Lesson
 }
 
-const LessonLink = ({ lesson }: Props) => {
+const DraftLink = ({ draft }: Props) => {
   return (
     <Link
-      as={lessonRoute(lesson.uid)}
-      href={lessonRouteHrefPath}
+      as={draftRoute(draft.uid)}
+      href={draftRouteHrefPath}
       passHref
-      key={lesson.uid}
+      key={draft.uid}
     >
       <Button variant="link" colorScheme="black">
         <h3 className="text-xl leading-snug w-auto flex items-center">
           <DocumentTextIcon className="h-5 w-5 mr-2" />
-          {lesson.title || '(no title)'}
+          {draft.title || '(no title)'}
         </h3>
       </Button>
     </Link>
   )
 }
-export default LessonLink
+export default DraftLink

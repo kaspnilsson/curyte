@@ -2,7 +2,7 @@
 import firebase from '../firebase/clientApp'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import React, { useEffect, useState } from 'react'
-import { LessonStorageModel } from '../interfaces/lesson'
+import { Lesson } from '../interfaces/lesson'
 import Layout from '../components/Layout'
 import Container from '../components/Container'
 import LessonPreview from '../components/LessonPreview'
@@ -23,24 +23,19 @@ const fuseOptions = {
 
 const Home = () => {
   const [, userLoading] = useAuthState(firebase.auth())
-  const [lessons, setLessons] = useState<LessonStorageModel[]>([])
+  const [lessons, setLessons] = useState<Lesson[]>([])
   const [loading, setLoading] = useState(userLoading)
 
   useEffect(() => {
     setLoading(true)
 
-    api
-      .getLessons([{ fieldPath: 'published', opStr: '==', value: true }])
-      .then((res) => {
-        setLoading(false)
-        setLessons(res)
-      })
+    api.getLessons([]).then((res) => {
+      setLoading(false)
+      setLessons(res)
+    })
   }, [])
 
-  const { result, keyword, search } = useFuzzy<LessonStorageModel>(
-    lessons,
-    fuseOptions
-  )
+  const { result, keyword, search } = useFuzzy<Lesson>(lessons, fuseOptions)
 
   return (
     <>
@@ -69,14 +64,15 @@ const Home = () => {
                   onChange={(e) => search(e.target.value)}
                 />
               </section>
-              {result.map((lesson) => (
-                <div
-                  className="border-b border-gray-200 pb-8 mb-8"
-                  key={lesson.uid}
-                >
-                  <LessonPreview lesson={lesson} />
-                </div>
-              ))}
+              {result &&
+                result.map((lesson) => (
+                  <div
+                    className="border-b border-gray-200 pb-8 mb-8"
+                    key={lesson.uid}
+                  >
+                    <LessonPreview lesson={lesson} />
+                  </div>
+                ))}
             </Container>
           </Layout>
         </>

@@ -1,40 +1,61 @@
-/* eslint-disable @next/next/no-img-element */
-import Editor from 'rich-markdown-editor'
-import 'github-markdown-css/github-markdown-light.css'
-import { YoutubeEmbedDescriptor } from './embeds/YoutubeEmbed'
-import { IFrameEmbedDescriptor } from './embeds/IFrameEmbed'
-import { ImageEmbedDescriptor } from './embeds/ImageEmbed'
-import { GoogleDocsEmbedDescriptor } from './embeds/GoogleDocsEmbed'
-import { GoogleDrawingsEmbedDescriptor } from './embeds/GoogleDrawingsEmbed'
-import { GoogleDriveEmbedDescriptor } from './embeds/GoogleDriveEmbed'
-import { GoogleSlidesEmbedDescriptor } from './embeds/GoogleSlidesEmbed'
-import { GoogleSheetsEmbedDescriptor } from './embeds/GoogleSheetsEmbed'
+import { useEditor, EditorContent, JSONContent } from '@tiptap/react'
+import Link from '@tiptap/extension-link'
+import Superscript from '@tiptap/extension-superscript'
+import Typography from '@tiptap/extension-typography'
+import Highlight from '@tiptap/extension-highlight'
+import Placeholder from '@tiptap/extension-placeholder'
+import { IFrameEmbed } from './embeds/IFrameEmbed'
+import StarterKit from '@tiptap/starter-kit'
+import React from 'react'
+import FancyEditorMenuBar from './FancyEditorMenuBar'
+import { YoutubeEmbed } from './embeds/YoutubeEmbed'
+import { GoogleDriveEmbed } from './embeds/GoogleDriveEmbed'
+import { ImageEmbed } from './embeds/ImageEmbed'
+import VimeoEmbed from './embeds/VimeoEmbed'
 
 interface Props {
-  content: string
-  onChange?: (getContent: () => string) => void
+  content: JSONContent | null
+  onUpdate?: (json: JSONContent) => void
   readOnly?: boolean
 }
 
-const FancyEditor = ({ content, onChange, readOnly = false }: Props) => {
+const FancyEditor = ({ content, onUpdate, readOnly }: Props) => {
+  const editor = useEditor({
+    extensions: [
+      Highlight,
+      Typography,
+      // Image,
+      // TextAlign,
+      Link,
+      Superscript,
+      // Table,
+      // TableCell,
+      // TableHeader,
+      // TableRow,
+      // Underline,
+      IFrameEmbed,
+      YoutubeEmbed,
+      VimeoEmbed,
+      StarterKit,
+      GoogleDriveEmbed,
+      ImageEmbed,
+      Placeholder.configure({
+        showOnlyWhenEditable: true,
+        placeholder: 'Write something interesting...',
+      }),
+    ],
+    content,
+    editable: !readOnly,
+    onUpdate: ({ editor }) => {
+      if (onUpdate) onUpdate(editor.getJSON())
+    },
+  })
+
   return (
-    <div className="markdown-body w-full">
-      <Editor
-        value={content}
-        onChange={onChange}
-        readOnly={readOnly}
-        embeds={[
-          YoutubeEmbedDescriptor,
-          GoogleDocsEmbedDescriptor,
-          GoogleDrawingsEmbedDescriptor,
-          GoogleDriveEmbedDescriptor,
-          GoogleSlidesEmbedDescriptor,
-          GoogleSheetsEmbedDescriptor,
-          ImageEmbedDescriptor,
-          IFrameEmbedDescriptor,
-        ]}
-      />
-    </div>
+    <>
+      {!readOnly && <FancyEditorMenuBar editor={editor} />}
+      <EditorContent className="markdown-body" editor={editor} />
+    </>
   )
 }
 

@@ -1,9 +1,6 @@
-export declare interface LessonSection {
-  title: string
-  content: string
-}
+import { JSONContent } from '@tiptap/react'
 
-export declare interface LessonStorageModel {
+export declare interface Lesson {
   authorId: string
   authorName: string
   uid: string
@@ -11,9 +8,8 @@ export declare interface LessonStorageModel {
   description: string
   created: string
   updated: string
-  sections: LessonSection[]
-  published: boolean
   parentLessonId?: string
   saveCount: number
   viewCount: number
+  content: JSONContent | null
 }

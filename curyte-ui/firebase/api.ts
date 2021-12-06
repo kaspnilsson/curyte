@@ -1,6 +1,7 @@
+import assert from 'assert'
 import { parseISO } from 'date-fns'
 import { Author, SavedLesson } from '../interfaces/author'
-import { LessonStorageModel } from '../interfaces/lesson'
+import { Lesson } from '../interfaces/lesson'
 import firebase from './clientApp'
 
 export interface WhereClause {
@@ -17,8 +18,8 @@ export interface WhereClause {
  * @returns
  */
 export async function getLessons(
-  whereClauses: WhereClause[] = []
-): Promise<LessonStorageModel[]> {
+  whereClauses: WhereClause[]
+): Promise<Lesson[]> {
   try {
     let fn:
       | firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
@@ -29,10 +30,8 @@ export async function getLessons(
       fn = fn.where(clause.fieldPath, clause.opStr, clause.value)
     }
     return fn.get().then((result) => {
-      const mapped: LessonStorageModel[] = []
-      result.docs.forEach((result) =>
-        mapped.push(result.data() as LessonStorageModel)
-      )
+      const mapped: Lesson[] = []
+      result.docs.forEach((result) => mapped.push(result.data() as Lesson))
       mapped.sort(
         (a, b) =>
           parseISO(b.created).getMilliseconds() -
@@ -41,9 +40,44 @@ export async function getLessons(
       return mapped
     })
   } catch (e) {
-    debugger
     console.error(e)
-    return []
+    debugger
+    throw e
+  }
+}
+
+/**
+ * Gets lessons from firestore by applying clauses.
+ *
+ * @param whereClauses
+ * @returns
+ */
+export async function getDrafts(
+  whereClauses: WhereClause[] = []
+): Promise<Lesson[]> {
+  try {
+    let fn:
+      | firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
+      | firebase.firestore.Query<firebase.firestore.DocumentData> = firebase
+      .firestore()
+      .collection('drafts')
+    for (const clause of whereClauses) {
+      fn = fn.where(clause.fieldPath, clause.opStr, clause.value)
+    }
+    return fn.get().then((result) => {
+      const mapped: Lesson[] = []
+      result.docs.forEach((result) => mapped.push(result.data() as Lesson))
+      mapped.sort(
+        (a, b) =>
+          parseISO(b.created).getMilliseconds() -
+          parseISO(a.created).getMilliseconds()
+      )
+      return mapped
+    })
+  } catch (e) {
+    console.error(e)
+    debugger
+    throw e
   }
 }
 
@@ -53,15 +87,34 @@ export async function getLessons(
  * @param uid the ID of the lesson to fetch
  * @returns
  */
-export async function getLesson(uid: string): Promise<LessonStorageModel> {
+export async function getLesson(uid: string): Promise<Lesson> {
   try {
     return (
       await firebase.firestore().collection('lessons').doc(uid).get()
-    ).data() as LessonStorageModel
+    ).data() as Lesson
   } catch (e) {
-    debugger
     console.error(e)
-    return {} as LessonStorageModel
+    debugger
+    throw e
+  }
+}
+
+/**
+ * Gets a lesson from firestore.
+ *
+ * @param uid the ID of the lesson to fetch
+ * @returns
+ */
+export async function getDraft(uid: string): Promise<Lesson> {
+  try {
+    if (!firebase.auth().currentUser) throw new Error('Not logged in')
+    return (
+      await firebase.firestore().collection('drafts').doc(uid).get()
+    ).data() as Lesson
+  } catch (e) {
+    console.error(e)
+    debugger
+    throw e
   }
 }
 
@@ -73,39 +126,90 @@ export async function getLesson(uid: string): Promise<LessonStorageModel> {
  */
 export async function deleteLesson(uid: string): Promise<void> {
   try {
+    if (!firebase.auth().currentUser) throw new Error('Not logged in')
     return await firebase.firestore().collection('lessons').doc(uid).delete()
   } catch (e) {
-    debugger
     console.error(e)
+    debugger
+    throw e
+  }
+}
+
+/**
+ * Deletes a lesson from firestore.
+ *
+ * @param uid the ID of the lesson to fetch
+ * @returns
+ */
+export async function deleteDraft(uid: string): Promise<void> {
+  try {
+    if (!firebase.auth().currentUser) throw new Error('Not logged in')
+    return await firebase.firestore().collection('drafts').doc(uid).delete()
+  } catch (e) {
+    console.error(e)
+    debugger
+    throw e
   }
 }
 
 /**
  * Updates a lesson. Creates a new lesson if no UID is provided.
- * @param lesson
- * @param uid optional, the lesson UID to update
+ * @param draft
  * @returns
  */
-export async function updateLesson(
-  lesson: LessonStorageModel,
-  uid?: string
+export async function createDraft(draft: Lesson): Promise<string> {
+  try {
+    if (!firebase.auth().currentUser) throw new Error('Not logged in')
+    draft.uid = Date.now().toString()
+    await firebase.firestore().collection('drafts').doc(draft.uid).set(draft)
+    return draft.uid
+  } catch (e) {
+    console.error(draft)
+    console.error(e)
+    debugger
+    throw e
+  }
+}
+
+/**
+ * Updates a lesson. Creates a new lesson if no UID is provided.
+ * @param draft
+ * @returns
+ */
+export async function updateDraft(draft: Lesson): Promise<void> {
+  try {
+    assert(draft.uid)
+    await firebase.firestore().collection('drafts').doc(draft.uid).update(draft)
+  } catch (e) {
+    console.error(draft)
+    console.error(e)
+    debugger
+    throw e
+  }
+}
+
+export async function publishLesson(
+  lesson: Lesson,
+  draftId?: string
 ): Promise<string> {
   try {
-    if (!uid || uid === '') {
-      uid =
-        lesson.title
-          .toLocaleLowerCase()
-          .replace(/[^a-z 0-9]/g, '')
-          .replace(/ /g, '-')
-          .substring(0, 32) + `-${Date.now()}`
-      lesson.uid = uid
+    lesson.uid =
+      lesson.title
+        .toLocaleLowerCase()
+        .replace(/[^a-z 0-9]/g, '')
+        .replace(/ /g, '-')
+        .substring(0, 32) + `-${Date.now()}`
+    await firebase.firestore().collection('lessons').doc(lesson.uid).set(lesson)
+    if (draftId) {
+      // Intentionally unawaited
+      firebase.firestore().collection('drafts').doc(draftId).delete()
     }
-    await firebase.firestore().collection('lessons').doc(uid).set(lesson)
-    return uid
+    return lesson.uid
   } catch (e) {
-    debugger
+    console.error(lesson)
     console.error(e)
-    return ''
+    debugger
+    throw e
   }
 }
 
@@ -117,8 +221,9 @@ export async function logLessonView(uid: string): Promise<void> {
       .doc(uid)
       .update({ viewCount: firebase.firestore.FieldValue.increment(1) })
   } catch (e) {
-    debugger
     console.error(e)
+    debugger
+    throw e
   }
 }
 
@@ -134,8 +239,8 @@ export async function getAuthor(uid: string): Promise<Author> {
       await firebase.firestore().collection('users').doc(uid).get()
     ).data() as Author
   } catch (e) {
-    debugger
     console.error(e)
+    debugger
     return {} as Author
   }
 }
@@ -148,8 +253,9 @@ export async function updateAuthor(author: Author): Promise<void> {
       .doc(author.uid)
       .set(author)
   } catch (e) {
-    debugger
     console.error(e)
+    debugger
+    throw e
   }
 }
 
@@ -171,8 +277,9 @@ export async function saveLessonForCurrentUser(
       .doc(computeSavedLessonUid(savedLesson))
       .set(savedLesson)
   } catch (e) {
-    debugger
     console.error(e)
+    debugger
+    throw e
   }
 }
 
@@ -191,8 +298,9 @@ export async function removeSavedLessonForCurrentUser(
       .doc(computeSavedLessonUid(savedLesson))
       .delete()
   } catch (e) {
-    debugger
     console.error(e)
+    debugger
+    throw e
   }
 }
 
@@ -214,8 +322,8 @@ export async function getCurrentUserHasSavedLesson(
         .get()
     ).exists
   } catch (e) {
-    debugger
     console.error(e)
-    return false
+    debugger
+    throw e
   }
 }

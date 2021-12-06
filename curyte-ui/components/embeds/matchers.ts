@@ -30,6 +30,9 @@ export const googleDrawingsUrlMatchRegex = new RegExp(
   '^https://docs.google.com/drawings/d/(.*)/(edit|preview)(.*)$'
 )
 
+export const vimeoUrlMatchRegex =
+  /(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^/]*)\/videos\/|)(\d+)(?:|\/\?)/i
+
 export const specialUrlMatchers = [
   imageUrlMatchRegex,
   youtubeUrlMatchRegex,

@@ -1,12 +1,12 @@
 import Link from 'next/link'
-import { LessonStorageModel } from '../interfaces/lesson'
+import { Lesson } from '../interfaces/lesson'
 import React from 'react'
 import DateFormatter from './DateFormatter'
 import { Center, Divider } from '@chakra-ui/react'
 import { lessonRoute, lessonRouteHrefPath } from '../utils/routes'
 
 type Props = {
-  lesson: LessonStorageModel
+  lesson: Lesson
 }
 
 const LessonPreview = ({ lesson }: Props) => {

@@ -1,63 +1,38 @@
 import Head from 'next/head'
 import ErrorPage from 'next/error'
-import React, { useEffect, useState } from 'react'
-import { LessonStorageModel } from '../../interfaces/lesson'
-import firebase from '../../firebase/clientApp'
+import React, { useEffect } from 'react'
+import { Lesson } from '../../interfaces/lesson'
 import { GetServerSideProps } from 'next'
 import Layout from '../../components/Layout'
 import { Author } from '../../interfaces/author'
 import Container from '../../components/Container'
 import LessonHeader from '../../components/LessonHeader'
-import LessonSection from '../../components/LessonSection'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { useRouter } from 'next/router'
-import LoadingSpinner from '../../components/LoadingSpinner'
 import * as api from '../../firebase/api'
+import FancyEditor from '../../components/FancyEditor'
 
 type Props = {
-  lesson: LessonStorageModel
+  lesson: Lesson
   author: Author
 }
 
-const LessonView = ({ lesson, author }: Props) => {
-  const [user] = useAuthState(firebase.auth())
-  const [saving, setSaving] = useState(false)
-
-  const router = useRouter()
-  const handleDelete = async () => {
-    setSaving(true)
-    await api.deleteLesson(lesson.uid)
-    setSaving(false)
-    router.push('/')
-  }
-
+const PublishedLessonView = ({ lesson, author }: Props) => {
   // Log views only on render of a published lesson
   useEffect(() => {
-    if (!lesson.published) return
     api.logLessonView(lesson.uid)
-  }, [lesson.uid, lesson.published])
+  }, [lesson.uid])
 
   if (!lesson || !lesson.title) return <ErrorPage statusCode={404} />
 
   return (
     <>
-      {saving && <LoadingSpinner />}
       <Layout showProgressBar title={lesson.title}>
         <Container>
           <article className="mb-32">
             <Head>
               <title>{lesson.title}</title>
             </Head>
-            <LessonHeader
-              author={author}
-              lesson={lesson}
-              handleDelete={
-                user && user.uid === lesson.authorId ? handleDelete : undefined
-              }
-            />
-            {lesson.sections.map((section, index) => (
-              <LessonSection section={section} key={index} />
-            ))}
+            <LessonHeader isDraft={false} author={author} lesson={lesson} />
+            <FancyEditor readOnly content={lesson.content} />
           </article>
         </Container>
       </Layout>
@@ -75,4 +50,4 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   }
 }
 
-export default LessonView
+export default PublishedLessonView

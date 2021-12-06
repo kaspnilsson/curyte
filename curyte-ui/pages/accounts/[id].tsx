@@ -1,5 +1,5 @@
 import React from 'react'
-import { LessonStorageModel } from '../../interfaces/lesson'
+import { Lesson } from '../../interfaces/lesson'
 import { GetServerSideProps } from 'next'
 import Layout from '../../components/Layout'
 import { Author } from '../../interfaces/author'
@@ -10,7 +10,7 @@ import SocialLinks from '../../components/SocialLinks'
 import Avatar from '../../components/Avatar'
 
 type Props = {
-  lessons: LessonStorageModel[]
+  lessons: Lesson[]
   author: Author
 }
 
@@ -48,7 +48,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
   const lessons = await api.getLessons([
     { opStr: '==', value: author.uid, fieldPath: 'authorId' },
-    { opStr: '==', value: true, fieldPath: 'published' },
   ])
   return {
     props: { lessons, author },

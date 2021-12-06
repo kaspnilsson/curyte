@@ -21,8 +21,8 @@ import {
 import TextareaAutosize from 'react-textarea-autosize'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import * as api from '../../firebase/api'
-import DraftsPage from '../lessons/drafts'
-import { LessonStorageModel } from '../../interfaces/lesson'
+import DraftsPage from '../drafts/all'
+import { Lesson } from '../../interfaces/lesson'
 import LessonPreview from '../../components/LessonPreview'
 
 const MySettingsView = () => {
@@ -32,8 +32,8 @@ const MySettingsView = () => {
   const [author, setAuthor] = useState<Author | null>(null)
   const [loading, setLoading] = useState(userLoading)
   const [saving, setSaving] = useState(false)
-  const [lessons, setLessons] = useState<LessonStorageModel[]>([])
-  const [savedLessons, setSavedLessons] = useState<LessonStorageModel[]>([])
+  const [lessons, setLessons] = useState<Lesson[]>([])
+  const [savedLessons, setSavedLessons] = useState<Lesson[]>([])
   const [authorChanged, setAuthorChanged] = useState(false)
 
   const modifyAuthor = (a: Author) => {
@@ -51,10 +51,9 @@ const MySettingsView = () => {
       const fetchAuthor = async () => {
         const author = await api.getAuthor(user.uid)
         setAuthor(author)
-        if (!!author.savedLessons) {
+        if (author.savedLessons.length) {
           return api
             .getLessons([
-              { fieldPath: 'published', opStr: '==', value: true },
               {
                 fieldPath: 'uid',
                 opStr: 'in',
@@ -75,10 +74,7 @@ const MySettingsView = () => {
 
       const fetchLessons = async () => {
         api
-          .getLessons([
-            { fieldPath: 'published', opStr: '==', value: true },
-            { fieldPath: 'authorId', opStr: '==', value: user.uid },
-          ])
+          .getLessons([{ fieldPath: 'authorId', opStr: '==', value: user.uid }])
           .then((res) => {
             setLessons(res)
           })

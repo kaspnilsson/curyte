@@ -1,8 +1,11 @@
 export const lessonRoute = (uid: string) => `/lessons/${uid}`
 export const lessonRouteHrefPath = '/lessons/[id]'
 
-export const editRouteForLesson = (uid: string) => `/lessons/edit/${uid}`
-export const editRouteHrefPath = '/lessons/edit/[id]'
+export const draftRoute = (uid: string) => `/drafts/${uid}`
+export const draftRouteHrefPath = '/drafts/[id]'
+
+export const draftPreviewRoute = (uid: string) => `/drafts/preview/${uid}`
+export const draftPreviewRouteHrefPath = '/drafts/preview/[id]'
 
 export const accountRoute = (uid: string) => `/accounts/${uid}`
 export const accountRouteHrefPath = '/accounts/[id]'
@@ -11,4 +14,8 @@ export const loginRoute = '/login'
 
 export const indexRoute = '/'
 
-export const newLessonRoute = '/lessons/new'
+export const newLessonRoute = (copyFrom?: string) => {
+  let out = '/lessons/new'
+  if (copyFrom) out += `?copyFrom=${copyFrom}`
+  return out
+}

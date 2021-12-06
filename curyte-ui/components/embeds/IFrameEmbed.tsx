@@ -1,32 +1,90 @@
-/* eslint-disable @next/next/no-img-element */
-import { EmbedDescriptor } from 'rich-markdown-editor/dist/types'
-import { EmbedProps } from './props'
-import { PresentationChartBarIcon } from '@heroicons/react/outline'
-import { specialUrlMatchers, urlMatchRegex } from './matchers'
+import { Node } from '@tiptap/core'
+import { mergeAttributes } from '@tiptap/react'
 
-const IFrameEmbed = ({ attrs }: EmbedProps) => (
-  <iframe
-    className="rounded-xl shadow-lg border-2 border-gray-200 w-full h-96 my-8"
-    title={`Embedded web page`}
-    src={attrs.href}
-  />
-)
-
-export const IFrameEmbedDescriptor: EmbedDescriptor = {
-  title: 'Web page',
-  keywords: 'web url webpage iframe link',
-  icon: () => (
-    <PresentationChartBarIcon
-      style={{ color: 'inherit' }}
-      className="h-5 w-5 opacity-80"
-    />
-  ),
-  matcher: (url: string) => {
-    for (const urlMatcher of specialUrlMatchers) {
-      if (urlMatcher.test(url)) return false
-    }
-    // Url matcher is very aggressive. Make sure it matches this URL and _none_ of the other URL matchers.
-    return urlMatchRegex.test(url) || false
-  },
-  component: IFrameEmbed,
+export interface IFrameOptions {
+  allowFullscreen: boolean
+  HTMLAttributes: {
+    [key: string]: unknown
+  }
 }
+
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    iframe: {
+      /**
+       * Add an iframe
+       */
+      setIFrame: (options: { src: string }) => ReturnType
+    }
+  }
+}
+
+export const IFrameEmbed = Node.create({
+  name: 'iframe',
+  group: 'block',
+  atom: true,
+  selectable: true,
+  draggable: true,
+
+  addOptions() {
+    return {
+      allowFullscreen: true,
+      HTMLAttributes: {
+        class:
+          'iframe-wrapper w-fit h-96 my-8 mx-1 shadow-lg w-full border-2 border-gray-200 rounded-xl',
+      },
+    }
+  },
+
+  addAttributes() {
+    return {
+      src: {
+        default: null,
+      },
+      frameborder: {
+        default: 0,
+      },
+      allowfullscreen: {
+        default: this.options.allowFullscreen,
+        parseHTML: () => {
+          return {
+            allowfullscreen: this.options.allowFullscreen,
+          }
+        },
+      },
+    }
+  },
+
+  parseHTML() {
+    return [
+      {
+        tag: 'iframe',
+      },
+    ]
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return [
+      'div',
+      { class: 'px-2 w-full h-fit' },
+      ['iframe', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)],
+    ]
+  },
+
+  addCommands() {
+    return {
+      setIFrame:
+        (options: { src: string }) =>
+        ({ tr, dispatch }) => {
+          const { selection } = tr
+          const node = this.type.create(options)
+
+          if (dispatch) {
+            tr.replaceRangeWith(selection.from, selection.to, node)
+          }
+
+          return true
+        },
+    }
+  },
+})

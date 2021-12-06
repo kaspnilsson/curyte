@@ -1,27 +1,90 @@
-/* eslint-disable @next/next/no-img-element */
-import { EmbedDescriptor } from 'rich-markdown-editor/dist/types'
-import { googleDriveUrlMatchRegex } from './matchers'
-import { EmbedProps } from './props'
+import { Node } from '@tiptap/core'
+import { mergeAttributes } from '@tiptap/react'
 
-const GoogleDriveEmbed = ({ attrs }: EmbedProps) => (
-  <iframe
-    className="rounded-xl shadow-lg border-2 border-gray-20 w-full h-96 my-8"
-    title={`Google Drive Embed ${attrs.matches[1]}`}
-    src={attrs.href.replace('/edit', '/preview')}
-  />
-)
-
-export const GoogleDriveEmbedDescriptor: EmbedDescriptor = {
-  title: 'Google Drive',
-  keywords: 'google drive',
-  icon: () => (
-    <img
-      alt="Google Drive Logo"
-      src="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo.png"
-      width={24}
-      height={24}
-    />
-  ),
-  matcher: (url: string) => url.match(googleDriveUrlMatchRegex) || false,
-  component: GoogleDriveEmbed,
+export interface IFrameOptions {
+  allowFullscreen: boolean
+  HTMLAttributes: {
+    [key: string]: unknown
+  }
 }
+
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    googledrive: {
+      /**
+       * Add a Google Doc / thing from GDrive
+       */
+      setGoogleDrive: (options: { src: string }) => ReturnType
+    }
+  }
+}
+
+export const GoogleDriveEmbed = Node.create({
+  name: 'googledrive',
+  group: 'block',
+  atom: true,
+  selectable: true,
+  draggable: true,
+
+  addOptions() {
+    return {
+      allowFullscreen: true,
+      HTMLAttributes: {
+        class:
+          'googledrive-wrapper w-full h-96 my-8 shadow-lg w-full border-2 border-gray-200 rounded-xl',
+      },
+    }
+  },
+
+  addAttributes() {
+    return {
+      src: {
+        default: null,
+      },
+      frameborder: {
+        default: 0,
+      },
+      allowfullscreen: {
+        default: this.options.allowFullscreen,
+        parseHTML: () => {
+          return {
+            allowfullscreen: this.options.allowFullscreen,
+          }
+        },
+      },
+    }
+  },
+
+  parseHTML() {
+    return [
+      {
+        tag: 'googledrive',
+      },
+    ]
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return [
+      'div',
+      { class: 'px-2 w-full h-fit' },
+      ['iframe', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)],
+    ]
+  },
+
+  addCommands() {
+    return {
+      setGoogleDrive:
+        (options: { src: string }) =>
+        ({ tr, dispatch }) => {
+          const { selection } = tr
+          const node = this.type.create(options)
+
+          if (dispatch) {
+            tr.replaceRangeWith(selection.from, selection.to, node)
+          }
+
+          return true
+        },
+    }
+  },
+})

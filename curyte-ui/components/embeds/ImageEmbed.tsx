@@ -1,26 +1,97 @@
-/* eslint-disable @next/next/no-img-element */
-import { EmbedDescriptor } from 'rich-markdown-editor/dist/types'
-import { EmbedProps } from './props'
-import { PhotographIcon } from '@heroicons/react/outline'
-import { Image } from '@chakra-ui/react'
+import { Node } from '@tiptap/core'
+import { mergeAttributes, nodeInputRule } from '@tiptap/react'
 import { imageUrlMatchRegex } from './matchers'
 
-const ImageEmbed = ({ attrs }: EmbedProps) => (
-  <Image
-    className="w-full w-fit-content h-auto my-8 rounded-xl shadow-lg border-2 border-gray-200 "
-    alt="Embedded image"
-    src={attrs.href}
-  />
-)
-export const ImageEmbedDescriptor: EmbedDescriptor = {
-  title: 'Image from another site',
-  keywords: 'image picture photo gif',
-  icon: () => (
-    <PhotographIcon
-      style={{ color: 'inherit' }}
-      className="h-5 w-5 opacity-80"
-    />
-  ),
-  matcher: (url: string) => imageUrlMatchRegex.test(url) || false,
-  component: ImageEmbed,
+export interface ImageOptions {
+  allowFullscreen: boolean
+  HTMLAttributes: {
+    [key: string]: unknown
+  }
 }
+
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    image: {
+      /**
+       * Add an image
+       */
+      setImage: (options: { src: string }) => ReturnType
+    }
+  }
+}
+
+export const ImageEmbed = Node.create({
+  name: 'image',
+  group: 'block',
+  atom: true,
+  selectable: true,
+  draggable: true,
+
+  addOptions() {
+    return {
+      allowFullScreen: true,
+      HTMLAttributes: {
+        class:
+          'image-wrapper w-full w-fit-content h-auto my-8 rounded-xl shadow-lg border-2 border-gray-200',
+      },
+    }
+  },
+
+  addAttributes() {
+    return {
+      src: {
+        default: null,
+      },
+      frameborder: {
+        default: 0,
+      },
+    }
+  },
+
+  parseHTML() {
+    return [
+      {
+        tag: 'image',
+      },
+    ]
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return [
+      'div',
+      { class: 'px-2 w-full h-fit' },
+      ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)],
+    ]
+  },
+
+  addInputRules() {
+    return [
+      nodeInputRule({
+        find: imageUrlMatchRegex,
+        type: this.type,
+        getAttributes: (match) => {
+          const [, src, id, type] = match
+
+          return { src, id, type }
+        },
+      }),
+    ]
+  },
+
+  addCommands() {
+    return {
+      setImage:
+        (options: { src: string }) =>
+        ({ tr, dispatch }) => {
+          const { selection } = tr
+          const node = this.type.create(options)
+
+          if (dispatch) {
+            tr.replaceRangeWith(selection.from, selection.to, node)
+          }
+
+          return true
+        },
+    }
+  },
+})

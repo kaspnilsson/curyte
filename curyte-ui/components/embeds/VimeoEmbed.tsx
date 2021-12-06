@@ -1,17 +1,17 @@
 import { Node, Command, nodeInputRule, mergeAttributes } from '@tiptap/core'
 import assert from 'assert'
-import { youtubeUrlMatchRegex } from './matchers'
+import { vimeoUrlMatchRegex } from './matchers'
 
 declare module '@tiptap/core' {
   interface Commands {
-    youtube: {
-      setYoutubeVideo: (options: { src: string }) => Command
+    vimeo: {
+      setVimeoVideo: (options: { src: string }) => Command
     }
   }
 }
 
-export const YoutubeEmbed = Node.create({
-  name: 'youtube',
+const VimeoEmbed = Node.create({
+  name: 'vimeo',
   group: 'block',
   atom: true,
   selectable: true,
@@ -48,16 +48,16 @@ export const YoutubeEmbed = Node.create({
   parseHTML() {
     return [
       {
-        tag: 'youtube',
+        tag: 'vimeo',
       },
     ]
   },
 
   renderHTML({ HTMLAttributes }) {
     assert(HTMLAttributes.src)
-    const src = `https://www.youtube.com/embed/${
-      HTMLAttributes.src.match(youtubeUrlMatchRegex)[1]
-    }?modestbranding=1`
+    const src = `https://player.vimeo.com/video/${
+      HTMLAttributes.src.match(vimeoUrlMatchRegex)[4]
+    }?byline=0`
     return [
       'div',
       { class: 'px-2 w-full h-fit' },
@@ -73,7 +73,7 @@ export const YoutubeEmbed = Node.create({
 
   addCommands() {
     return {
-      setYoutubeVideo:
+      setVimeoVideo:
         (options) =>
         ({ tr, dispatch }) => {
           const { selection } = tr
@@ -91,7 +91,7 @@ export const YoutubeEmbed = Node.create({
   addInputRules() {
     return [
       nodeInputRule({
-        find: youtubeUrlMatchRegex,
+        find: vimeoUrlMatchRegex,
         type: this.type,
         getAttributes: (match) => {
           const [, src, id, type] = match
@@ -102,3 +102,4 @@ export const YoutubeEmbed = Node.create({
     ]
   },
 })
+export default VimeoEmbed

@@ -106,7 +106,7 @@ const Header = ({ children, showProgressBar, title }: Props) => {
             )}
             {user && (
               <div className="flex items-center">
-                <Link href={newLessonRoute} passHref>
+                <Link href={newLessonRoute()} passHref>
                   <Button
                     className="font-semibold py-2 px-4"
                     colorScheme="purple"
