@@ -60,7 +60,7 @@ const VimeoEmbed = Node.create({
     }?byline=0`
     return [
       'div',
-      { class: 'px-2 w-full h-fit' },
+      { class: 'px-2 w-full h-fit', 'data-drag-handle': '' },
       [
         'iframe',
         {

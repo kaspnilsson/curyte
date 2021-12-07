@@ -66,7 +66,7 @@ export const IFrameEmbed = Node.create({
   renderHTML({ HTMLAttributes }) {
     return [
       'div',
-      { class: 'px-2 w-full h-fit' },
+      { class: 'px-2 w-full h-fit', 'data-drag-handle': '' },
       ['iframe', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)],
     ]
   },
