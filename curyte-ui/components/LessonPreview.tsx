@@ -5,6 +5,7 @@ import DateFormatter from './DateFormatter'
 import { Center, Divider } from '@chakra-ui/react'
 import { lessonRoute, lessonRouteHrefPath } from '../utils/routes'
 import TagChip from './TagChip'
+import CoverImage from './CoverImage'
 
 type Props = {
   lesson: Lesson
@@ -12,13 +13,21 @@ type Props = {
 
 const LessonPreview = ({ lesson }: Props) => {
   return (
-    <div>
-      <div className="mb-5">
-        {/* <CoverImage slug={slug} title={title} src={coverImage} /> */}
-      </div>
+    <div className="group">
+      {lesson.coverImageUrl && (
+        <div className="mb-5">
+          <CoverImage
+            lessonId={lesson.uid}
+            title={lesson.title}
+            src={lesson.coverImageUrl}
+          />
+        </div>
+      )}
       <h3 className="text-xl mb-3 leading-snug">
         <Link as={lessonRoute(lesson.uid)} href={lessonRouteHrefPath}>
-          <a className="hover:underline">{lesson.title || '(no title)'}</a>
+          <a className="hover:underline group-hover:underline">
+            {lesson.title || '(no title)'}
+          </a>
         </Link>
       </h3>
       <div className="text-sm mb-4 flex items-center">

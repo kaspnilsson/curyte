@@ -37,7 +37,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
   }
 
   return (
-    <div className="flex flex-wrap border-b border-t border-gray-200 mb-8 py-2 items-center">
+    <div className="flex flex-wrap border-b border-t border-gray-200 mb-8 py-2 items-center gap-1">
       <MenuIconButton
         label="Undo"
         onClick={() => editor.chain().focus().undo().run()}
@@ -49,15 +49,15 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         onClick={() => editor.chain().focus().redo().run()}
         icon={<i className="text-gray-900 ri-lg ri-arrow-go-forward-line" />}
       />
-      <Center className="h-6 w-4">
+      <Center className="h-6 w-2">
         <Divider
           orientation="vertical"
           className="border-gray-200 opacity-100"
         />
       </Center>
       <Menu id="style-menu" isLazy colorScheme="purple">
-        <MenuButton variant="ghost" colorScheme="purple" as={Button}>
-          <div className="flex items-center text-gray-900 gap-1">
+        <MenuButton size="xs" variant="ghost" colorScheme="purple" as={Button}>
+          <div className="flex items-center text-gray-900 gap-1 text-sm">
             Style
             <i className="ri-arrow-drop-down-line text-gray-900 ri-lg w-2"></i>
           </div>
@@ -107,7 +107,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
           />
         </MenuList>
       </Menu>
-      <Center className="h-6 w-4">
+      <Center className="h-6 w-2">
         <Divider
           orientation="vertical"
           className="border-gray-200 opacity-100"
@@ -132,9 +132,15 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         icon={<i className="text-gray-900 ri-lg ri-strikethrough" />}
       />
       <MenuIconButton
+        label="Underline"
+        onClick={() => editor.chain().focus().toggleUnderline().run()}
+        isActive={editor.isActive('underline')}
+        icon={<i className="text-gray-900 ri-lg ri-underline" />}
+      />
+      <MenuIconButton
         label="Highlight"
         onClick={() => editor.chain().focus().toggleHighlight().run()}
-        isActive={editor.isActive('hightlight')}
+        isActive={editor.isActive('highlight')}
         icon={<i className="text-gray-900 ri-lg ri-mark-pen-line" />}
       />
       <MenuIconButton
@@ -200,8 +206,8 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         icon={<i className="text-gray-900 ri-lg ri-separator" />}
       />
       <Menu id="insert-menu" isLazy colorScheme="purple">
-        <MenuButton variant="ghost" colorScheme="purple" as={Button}>
-          <div className="flex items-center text-gray-900 gap-1">
+        <MenuButton size="xs" variant="ghost" colorScheme="purple" as={Button}>
+          <div className="flex items-center text-gray-900 gap-1 text-sm">
             Insert
             <i className="ri-arrow-drop-down-line text-gray-900 ri-lg w-2"></i>
           </div>

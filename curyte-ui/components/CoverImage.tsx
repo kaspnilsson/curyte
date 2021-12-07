@@ -1,28 +1,38 @@
-import cn from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
+import React from 'react'
 import { lessonRoute, lessonRouteHrefPath } from '../utils/routes'
 
 type Props = {
   title: string
   src: string
-  slug?: string
+  lessonId?: string
+  width?: number
+  height?: number
 }
 
-const CoverImage = ({ title, src, slug }: Props) => {
+const CoverImage = ({
+  title,
+  lessonId,
+  src,
+  width = 1240,
+  height = 620,
+}: Props) => {
   const image = (
     <Image
       src={src}
+      height={height}
+      width={width}
+      layout="responsive"
       alt={`Cover Image for ${title}`}
-      className={cn('shadow-small', {
-        'hover:shadow-medium transition-shadow duration-200': slug,
-      })}
+      className="shadow-small image-wrapper w-full w-fit-content h-auto my-8 rounded-xl shadow-lg border-0"
     />
   )
+
   return (
-    <div className="sm:mx-0">
-      {slug ? (
-        <Link as={lessonRoute(slug)} href={lessonRouteHrefPath}>
+    <div className="sm:mx-0 h-full w-full">
+      {lessonId ? (
+        <Link as={lessonRoute(lessonId)} href={lessonRouteHrefPath}>
           <a aria-label={title}>{image}</a>
         </Link>
       ) : (
