@@ -56,6 +56,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const tagText = query.tag as string
   const [tag = null, lessons = null] = await Promise.all([
     api.getTag(query.tag as string),
+    // Could also use the lesson IDs from the tag directly
     api.getLessons([
       {
         fieldPath: 'tags',
