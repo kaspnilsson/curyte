@@ -19,7 +19,6 @@ import { YoutubeEmbed } from './embeds/YoutubeEmbed'
 import { GoogleDriveEmbed } from './embeds/GoogleDriveEmbed'
 import { ImageEmbed } from './embeds/ImageEmbed'
 import VimeoEmbed from './embeds/VimeoEmbed'
-import Dropcursor from '@tiptap/extension-dropcursor'
 import Color from '@tiptap/extension-color'
 import Table from '@tiptap/extension-table'
 import TableRow from '@tiptap/extension-table-row'
@@ -57,9 +56,9 @@ const FancyEditor = ({ content, onUpdate, readOnly }: Props) => {
       VimeoEmbed,
       StarterKit,
       GoogleDriveEmbed,
-      Dropcursor.configure({
-        color: '#6a7280',
-      }),
+      // Dropcursor.configure({
+      //   color: '#6a7280',
+      // }),
       ImageEmbed,
       TaskList,
       TaskItem.configure({

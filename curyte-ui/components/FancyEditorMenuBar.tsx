@@ -67,7 +67,6 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 1 }).run()
             }
-            isActive={editor.isActive('heading', { level: 1 })}
             icon={<i className="text-gray-900 ri-lg ri-h-1" />}
             label={'Heading 1'}
           />
@@ -75,7 +74,6 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 2 }).run()
             }
-            isActive={editor.isActive('heading', { level: 2 })}
             icon={<i className="text-gray-900 ri-lg ri-h-2" />}
             label="Heading 2"
           />
@@ -83,7 +81,6 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 3 }).run()
             }
-            isActive={editor.isActive('heading', { level: 3 })}
             icon={<i className="text-gray-900 ri-lg ri-h-3" />}
             label="Heading 3"
           />
@@ -91,15 +88,13 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 4 }).run()
             }
-            isActive={editor.isActive('heading', { level: 4 })}
-            icon={<i className="text-gray-900 ri-lg ri-h-6" />}
+            icon={<i className="text-gray-900 ri-lg ri-h-4" />}
             label="Heading 4"
           />
           <MenuItem
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 5 }).run()
             }
-            isActive={editor.isActive('heading', { level: 5 })}
             icon={<i className="text-gray-900 ri-lg ri-h-5" />}
             label="Heading 5"
           />
@@ -107,7 +102,6 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 6 }).run()
             }
-            isActive={editor.isActive('heading', { level: 6 })}
             icon={<i className="text-gray-900 ri-lg ri-h-6" />}
             label="Heading 6"
           />

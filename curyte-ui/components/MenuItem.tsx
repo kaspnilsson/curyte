@@ -4,25 +4,19 @@ interface Props {
   icon?: React.ReactNode
   label: string
   shortcut?: React.ReactNode
-  isActive?: boolean
   disabled?: boolean
 }
 
-const MenuItem = ({
-  onClick,
-  icon,
-  label,
-  shortcut,
-  isActive,
-  disabled,
-}: Props) => {
+const MenuItem = ({ onClick, icon, label, shortcut, disabled }: Props) => {
   return (
-    <chakra.MenuItem onClick={onClick} disabled={disabled} isActive={isActive}>
-      <div className="flex items-center gap-4">
-        {icon || null}
-        {label}
-        <div className="flex-end">{shortcut || null}</div>
-      </div>
+    <chakra.MenuItem
+      className="flex items-center gap-2 justify-items-start"
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {icon || null}
+      {label}
+      <div className="flex-end">{shortcut || null}</div>
     </chakra.MenuItem>
   )
 }

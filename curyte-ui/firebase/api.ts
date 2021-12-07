@@ -2,6 +2,7 @@ import assert from 'assert'
 import { parseISO } from 'date-fns'
 import { Author, SavedLesson } from '../interfaces/author'
 import { Lesson } from '../interfaces/lesson'
+import { Tag } from '../interfaces/tag'
 import firebase from './clientApp'
 
 export interface WhereClause {
@@ -321,6 +322,35 @@ export async function getCurrentUserHasSavedLesson(
         )
         .get()
     ).exists
+  } catch (e) {
+    console.error(e)
+    debugger
+    throw e
+  }
+}
+
+export async function getTag(tagText: string): Promise<Tag> {
+  try {
+    return (
+      await firebase.firestore().collection('tags').doc(tagText).get()
+    ).data() as Tag
+  } catch (e) {
+    console.error(e)
+    debugger
+    throw e
+  }
+}
+
+export async function logTagView(tagText: string): Promise<void> {
+  try {
+    await firebase
+      .firestore()
+      .collection('tags')
+      .doc(tagText)
+      .update({
+        tag: tagText,
+        viewCount: firebase.firestore.FieldValue.increment(1),
+      })
   } catch (e) {
     console.error(e)
     debugger

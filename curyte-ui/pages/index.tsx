@@ -14,10 +14,9 @@ import * as api from '../firebase/api'
 const fuseOptions = {
   distance: 10000,
   keys: [
-    { name: 'title', weight: 0.5 },
-    { name: 'description', weight: 0.3 },
-    { name: 'sections.title', weight: 0.15 },
-    { name: 'sections.content', weight: 0.05 },
+    { name: 'title', weight: 0.4 },
+    { name: 'tags', weight: 0.3 },
+    { name: 'description', weight: 0.2 },
   ],
 }
 
