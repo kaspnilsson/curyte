@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react'
 import React, { useRef, useState } from 'react'
 import UploadProgressBar from './UploadProgressBar'
+// import Resizer from 'react-image-file-resizer'
 
 export interface ImageUploadDialogProps {
   title: string
@@ -18,6 +19,22 @@ export interface ImageUploadDialogProps {
   onClose: () => void
   onSuccess: (url: string) => void
 }
+
+// const resizeFile = (file: File): Promise<File> =>
+//   new Promise((resolve) => {
+//     Resizer.imageFileResizer(
+//       file,
+//       1500,
+//       750,
+//       'WEBP',
+//       100,
+//       0,
+//       (uri) => {
+//         resolve(uri as File)
+//       },
+//       'file'
+//     )
+//   })
 
 const ImageUploadDialog = ({
   title,
@@ -32,7 +49,7 @@ const ImageUploadDialog = ({
   const [file, setFile] = useState<File | null>(null)
   const [error, setError] = useState('')
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.item(0)
 
     if (selected) {
