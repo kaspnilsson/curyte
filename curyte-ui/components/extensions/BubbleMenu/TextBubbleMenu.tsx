@@ -15,7 +15,6 @@ const TextBubbleMenu = ({ editor }: Props) => {
     <BubbleMenu
       editor={editor}
       tippyOptions={{
-        appendTo: () => document.body,
         duration: 200,
         animation: 'shift-away',
         zIndex: 1000,
