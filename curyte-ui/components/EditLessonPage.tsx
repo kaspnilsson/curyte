@@ -33,6 +33,7 @@ const EditLessonPage = ({
   const [description, setDescription] = useState(
     lesson?.description.trim() || ''
   )
+  const [tagsStr, setTagsStr] = useState(lesson?.tags.join(', ') || '')
   const [content, setContent] = useState(lesson?.content || null)
   const [saving, setSaving] = useState(false)
 
@@ -45,6 +46,7 @@ const EditLessonPage = ({
       const newLesson = {
         ...lesson,
         title,
+        tags: tagsStr.split(',').map((t) => t.trim()),
         description,
         authorName: user?.displayName || '',
         authorId: user?.uid || '',
@@ -70,6 +72,7 @@ const EditLessonPage = ({
     const newLesson = {
       ...lesson,
       title,
+      tags: tagsStr.split(',').map((t) => t.trim()),
       description,
       authorName: user?.displayName || '',
       authorId: user?.uid || '',
@@ -110,6 +113,12 @@ const EditLessonPage = ({
           placeholder="Enter description..."
           value={description}
           onChange={({ target }) => setDescription(target.value)}
+        />
+        <TextareaAutosize
+          className="text-xl focus:outline-none mt-4 resize-none"
+          placeholder="Enter a comma separated list of tags..."
+          value={tagsStr}
+          onChange={({ target }) => setTagsStr(target.value)}
         />
         <div className="flex flex-col py-8">
           <FancyEditor content={content} onUpdate={onUpdate} />

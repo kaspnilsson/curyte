@@ -54,3 +54,33 @@ export const incrementLessonSaveCount = functions.firestore
         ),
       })
   })
+
+export const createTagsForLesson = functions.firestore
+  .document('lessons/{lessonId}')
+  .onCreate((change) => {
+    for (const tag of change.data().tags || []) {
+      db.collection('tags')
+        .doc(tag)
+        .update({
+          tagText: tag,
+          lessonIds: admin.firestore.FieldValue.arrayUnion(
+            change.data().lessonId
+          ),
+        })
+    }
+  })
+
+export const deleteTagsForLesson = functions.firestore
+  .document('lessons/{lessonId}')
+  .onCreate((change) => {
+    for (const tag of change.data().tags || []) {
+      db.collection('tags')
+        .doc(tag)
+        .update({
+          tagText: tag,
+          lessonIds: admin.firestore.FieldValue.arrayRemove(
+            change.data().lessonId
+          ),
+        })
+    }
+  })

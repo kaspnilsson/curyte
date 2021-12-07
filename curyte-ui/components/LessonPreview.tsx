@@ -4,6 +4,7 @@ import React from 'react'
 import DateFormatter from './DateFormatter'
 import { Center, Divider } from '@chakra-ui/react'
 import { lessonRoute, lessonRouteHrefPath } from '../utils/routes'
+import TagChip from './TagChip'
 
 type Props = {
   lesson: Lesson
@@ -33,6 +34,13 @@ const LessonPreview = ({ lesson }: Props) => {
         )}
       </div>
       <p className="text-md leading-relaxed mb-4">{lesson.description}</p>
+      {lesson.tags?.length && (
+        <div className="flex gap-2 flex-wrap items-center mt-2">
+          {lesson.tags.map((t) => (
+            <TagChip tagLabel={t} key={t} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

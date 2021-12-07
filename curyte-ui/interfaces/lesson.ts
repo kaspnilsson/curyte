@@ -12,4 +12,5 @@ export declare interface Lesson {
   saveCount: number
   viewCount: number
   content: JSONContent | null
+  tags: string[]
 }

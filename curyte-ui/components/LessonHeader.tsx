@@ -28,6 +28,7 @@ import {
 } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
 import { loginRoute, newLessonRoute } from '../utils/routes'
+import TagChip from './TagChip'
 
 type Props = {
   lesson: Lesson
@@ -122,8 +123,17 @@ const LessonHeader = ({
           </Badge>
         )}
       </div>
-      <div className="text-2xl focus:outline-none mt-1 text-gray-500 mb-8">
-        {lesson.description}
+      <div className="mt-1 mb-8">
+        <div className="text-2xl focus:outline-none text-gray-500">
+          {lesson.description}
+        </div>
+        {lesson.tags?.length && (
+          <div className="flex gap-2 flex-wrap items-center mt-2">
+            {lesson.tags.map((t) => (
+              <TagChip tagLabel={t} key={t} />
+            ))}
+          </div>
+        )}
       </div>
       {/* <div className="mb-8 md:mb-16 sm:mx-0">
         <CoverImage title={title} src={coverImage || ''} />
