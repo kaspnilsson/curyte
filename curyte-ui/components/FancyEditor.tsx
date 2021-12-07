@@ -26,7 +26,7 @@ import TableRow from '@tiptap/extension-table-row'
 import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import Underline from '@tiptap/extension-underline'
-import BubbleMenu from './extensions/BubbleMenu/TextBubbleMenu'
+import TextBubbleMenu from './extensions/BubbleMenu/TextBubbleMenu'
 // import AddButton from './popovers/AddButton'
 // import DeleteButton from './popovers/DeleteButton'
 
@@ -89,7 +89,7 @@ const FancyEditor = ({ content, onUpdate, readOnly }: Props) => {
       <EditorContent className="markdown-body" editor={editor} />
       {editor && (
         <>
-          <BubbleMenu editor={editor} />
+          <TextBubbleMenu editor={editor} />
           <FloatingMenu editor={editor}>
             {/* {shouldShowPopover(editor) && ( */}
             <div
