@@ -357,3 +357,7 @@ export async function logTagView(tagText: string): Promise<void> {
     throw e
   }
 }
+
+export async function deleteImageAtUrl(url: string): Promise<void> {
+  return firebase.storage().refFromURL(url).delete()
+}

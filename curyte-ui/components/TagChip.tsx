@@ -10,15 +10,20 @@ interface Props {
 
 const TagChip = ({ tagLabel, colorScheme = 'purple' }: Props) => {
   return (
-    <Link passHref href={tagRouteHrefPath} as={tagRoute(tagLabel)}>
-      <Tag
-        colorScheme={colorScheme}
-        className="cursor-pointer hover:text-black"
-      >
-        <i className="ri-hashtag"></i>
-        <TagLabel>{tagLabel}</TagLabel>
-      </Tag>
-    </Link>
+    <>
+      {tagLabel && (
+        <Link passHref href={tagRouteHrefPath} as={tagRoute(tagLabel)}>
+          <Tag
+            colorScheme={colorScheme}
+            className="cursor-pointer hover:text-black"
+          >
+            <i className="ri-hashtag"></i>
+            <TagLabel>{tagLabel}</TagLabel>
+          </Tag>
+        </Link>
+      )}
+      {!tagLabel && null}
+    </>
   )
 }
 export default TagChip

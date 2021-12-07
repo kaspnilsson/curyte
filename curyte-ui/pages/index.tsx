@@ -48,7 +48,7 @@ const Home = () => {
                   Curriculum for the digital age.
                 </h1>
               </section>
-              <section className="flex-col flex items-center justify-around">
+              <section className="flex-col flex items-center justify-around mb-8">
                 {/* <p className="text-center tracking-tighter mb-8 text-gray-700">
                   Because lessons can be so much more than just PDFs from the
                   90s.

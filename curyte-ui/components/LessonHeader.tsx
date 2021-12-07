@@ -29,6 +29,7 @@ import {
 import { useRouter } from 'next/router'
 import { loginRoute, newLessonRoute } from '../utils/routes'
 import TagChip from './TagChip'
+import CoverImage from './CoverImage'
 
 type Props = {
   lesson: Lesson
@@ -135,9 +136,6 @@ const LessonHeader = ({
           </div>
         )}
       </div>
-      {/* <div className="mb-8 md:mb-16 sm:mx-0">
-        <CoverImage title={title} src={coverImage || ''} />
-      </div> */}
       <div className="flex mb-6 items-center justify-between">
         <div className="flex gap-2 items-center">
           <AuthorLink author={author} />
@@ -204,6 +202,11 @@ const LessonHeader = ({
           </Menu>
         </div>
       </div>
+      {lesson.coverImageUrl && (
+        <div className="mb-8 md:mb-16 sm:mx-0">
+          <CoverImage title={lesson.title} src={lesson.coverImageUrl} />
+        </div>
+      )}
     </>
   )
 }

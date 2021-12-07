@@ -13,4 +13,5 @@ export declare interface Lesson {
   viewCount: number
   content: JSONContent | null
   tags: string[]
+  coverImageUrl?: string
 }

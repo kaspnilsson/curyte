@@ -15,6 +15,8 @@ import FancyEditor from './FancyEditor'
 import { useDebounceCallback } from '@react-hook/debounce'
 import { draftPreviewRoute, draftPreviewRouteHrefPath } from '../utils/routes'
 import Link from 'next/link'
+import * as api from '../firebase/api'
+import EditableCoverImage from './EditableCoverImage'
 
 type Props = {
   lesson?: Lesson
@@ -33,8 +35,11 @@ const EditLessonPage = ({
   const [description, setDescription] = useState(
     lesson?.description.trim() || ''
   )
-  const [tagsStr, setTagsStr] = useState(lesson?.tags.join(', ') || '')
+  const [tagsStr, setTagsStr] = useState(lesson?.tags?.join(', ') || '')
   const [content, setContent] = useState(lesson?.content || null)
+  const [coverImageUrl, setCoverImageUrl] = useState(
+    lesson?.coverImageUrl || ''
+  )
   const [saving, setSaving] = useState(false)
 
   const canSubmit = !!(title && description && content)
@@ -58,6 +63,7 @@ const EditLessonPage = ({
           firebase.firestore.Timestamp.now().toDate().toISOString(),
         updated: firebase.firestore.Timestamp.now().toDate().toISOString(),
         uid: lesson?.uid || '',
+        coverImageUrl,
       }
       setSaving(true)
       await handleSubmit(newLesson)
@@ -84,6 +90,7 @@ const EditLessonPage = ({
       saveCount: 0,
       viewCount: 0,
       uid: lesson?.uid || '',
+      coverImageUrl,
     }
     // UID set by API module
     await handleSaveDraft(newLesson)
@@ -92,6 +99,12 @@ const EditLessonPage = ({
   const onUpdate = useDebounceCallback((json: JSONContent) => {
     setContent(json)
   }, 100)
+
+  const onCoverImageUpload = (url: string) => {
+    // Unawaited
+    if (coverImageUrl) api.deleteImageAtUrl(coverImageUrl)
+    setCoverImageUrl(url)
+  }
 
   if (saving) return <LoadingSpinner />
   return (
@@ -119,6 +132,11 @@ const EditLessonPage = ({
           placeholder="Enter a comma separated list of tags..."
           value={tagsStr}
           onChange={({ target }) => setTagsStr(target.value)}
+        />
+        <EditableCoverImage
+          title={lesson?.title || ''}
+          src={coverImageUrl}
+          onEditUrl={onCoverImageUpload}
         />
         <div className="flex flex-col py-8">
           <FancyEditor content={content} onUpdate={onUpdate} />
