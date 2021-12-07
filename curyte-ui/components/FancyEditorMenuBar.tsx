@@ -1,12 +1,9 @@
 import { Editor } from '@tiptap/react'
 import {
-  IconButton,
-  Tooltip,
   Center,
   Divider,
   Menu,
   MenuList,
-  MenuItem,
   MenuButton,
   Button,
 } from '@chakra-ui/react'
@@ -21,6 +18,8 @@ import {
   imageUrlMatchRegex,
   youtubeUrlMatchRegex,
 } from './embeds/matchers'
+import MenuIconButton from './MenuIconButton'
+import MenuItem from './MenuItem'
 
 interface Props {
   editor: Editor | null
@@ -39,29 +38,17 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
 
   return (
     <div className="flex flex-wrap border-b border-t border-gray-200 mb-8 py-2 items-center">
-      <Tooltip hasArrow label="Undo">
-        <IconButton
-          size="sm"
-          variant="ghost"
-          colorScheme="purple"
-          aria-label="undo"
-          onClick={() => editor.chain().focus().undo().run()}
-        >
-          <i className="text-gray-900 ri-lg ri-arrow-go-back-line" />
-        </IconButton>
-      </Tooltip>
-      <Tooltip hasArrow label="Redo">
-        <IconButton
-          size="sm"
-          variant="ghost"
-          colorScheme="purple"
-          aria-label="redo"
-          disabled={editor.can().redo()}
-          onClick={() => editor.chain().focus().redo().run()}
-        >
-          <i className="text-gray-900 ri-lg ri-arrow-go-forward-line" />
-        </IconButton>
-      </Tooltip>
+      <MenuIconButton
+        label="Undo"
+        onClick={() => editor.chain().focus().undo().run()}
+        icon={<i className="text-gray-900 ri-lg ri-arrow-go-back-line" />}
+      />
+      <MenuIconButton
+        label="Redo"
+        disabled={editor.can().redo()}
+        onClick={() => editor.chain().focus().redo().run()}
+        icon={<i className="text-gray-900 ri-lg ri-arrow-go-forward-line" />}
+      />
       <Center className="h-6 w-4">
         <Divider
           orientation="vertical"
@@ -69,13 +56,8 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         />
       </Center>
       <Menu id="style-menu" isLazy colorScheme="purple">
-        <MenuButton
-          variant="ghost"
-          colorScheme="purple"
-          aria-label="Options"
-          as={Button}
-        >
-          <div className="flex items-center text-gray-900">
+        <MenuButton variant="ghost" colorScheme="purple" as={Button}>
+          <div className="flex items-center text-gray-900 gap-1">
             Style
             <i className="ri-arrow-drop-down-line text-gray-900 ri-lg w-2"></i>
           </div>
@@ -86,73 +68,49 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
               editor.chain().focus().toggleHeading({ level: 1 }).run()
             }
             isActive={editor.isActive('heading', { level: 1 })}
-            aria-label="h1"
-          >
-            <div className="flex items-center gap-4">
-              <i className="text-gray-900 ri-lg ri-h-1" />
-              Heading 1
-            </div>
-          </MenuItem>
+            icon={<i className="text-gray-900 ri-lg ri-h-1" />}
+            label={'Heading 1'}
+          />
           <MenuItem
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 2 }).run()
             }
             isActive={editor.isActive('heading', { level: 2 })}
-            aria-label="h2"
-          >
-            <div className="flex items-center gap-4">
-              <i className="text-gray-900 ri-lg ri-h-2" />
-              Heading 2
-            </div>
-          </MenuItem>
+            icon={<i className="text-gray-900 ri-lg ri-h-2" />}
+            label="Heading 2"
+          />
           <MenuItem
-            aria-label="h3"
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 3 }).run()
             }
             isActive={editor.isActive('heading', { level: 3 })}
-          >
-            <div className="flex items-center gap-4">
-              <i className="text-gray-900 ri-lg ri-h-3" />
-              Heading 3
-            </div>
-          </MenuItem>
+            icon={<i className="text-gray-900 ri-lg ri-h-3" />}
+            label="Heading 3"
+          />
           <MenuItem
-            aria-label="h4"
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 4 }).run()
             }
             isActive={editor.isActive('heading', { level: 4 })}
-          >
-            <div className="flex items-center gap-4">
-              <i className="text-gray-900 ri-lg ri-h-6" />
-              Heading 4
-            </div>
-          </MenuItem>
+            icon={<i className="text-gray-900 ri-lg ri-h-6" />}
+            label="Heading 4"
+          />
           <MenuItem
-            aria-label="h5"
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 5 }).run()
             }
             isActive={editor.isActive('heading', { level: 5 })}
-          >
-            <div className="flex items-center gap-4">
-              <i className="text-gray-900 ri-lg ri-h-5" />
-              Heading 5
-            </div>
-          </MenuItem>
+            icon={<i className="text-gray-900 ri-lg ri-h-5" />}
+            label="Heading 5"
+          />
           <MenuItem
-            aria-label="h6"
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 6 }).run()
             }
             isActive={editor.isActive('heading', { level: 6 })}
-          >
-            <div className="flex items-center gap-4">
-              <i className="text-gray-900 ri-lg ri-h-6" />
-              Heading 6
-            </div>
-          </MenuItem>
+            icon={<i className="text-gray-900 ri-lg ri-h-6" />}
+            label="Heading 6"
+          />
         </MenuList>
       </Menu>
       <Center className="h-6 w-4">
@@ -161,154 +119,95 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
           className="border-gray-200 opacity-100"
         />
       </Center>
-      <Tooltip hasArrow label="Bold">
-        <IconButton
-          size="sm"
-          variant="ghost"
-          colorScheme="purple"
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          isActive={editor.isActive('bold')}
-          aria-label="bold"
-        >
-          <i className="text-gray-900 ri-lg ri-bold" />
-        </IconButton>
-      </Tooltip>
-      <Tooltip hasArrow label="Italicize">
-        <IconButton
-          size="sm"
-          variant="ghost"
-          colorScheme="purple"
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          isActive={editor.isActive('italic')}
-          aria-label="italic"
-        >
-          <i className="text-gray-900 ri-lg ri-italic" />
-        </IconButton>
-      </Tooltip>
-      <Tooltip hasArrow label="Strikethrough">
-        <IconButton
-          size="sm"
-          variant="ghost"
-          colorScheme="purple"
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          isActive={editor.isActive('strike')}
-          aria-label="strikethrough"
-        >
-          <i className="text-gray-900 ri-lg ri-strikethrough" />
-        </IconButton>
-      </Tooltip>
-      <Tooltip hasArrow label="Superscript">
-        <IconButton
-          size="sm"
-          variant="ghost"
-          colorScheme="purple"
-          onClick={() => editor.chain().focus().toggleSuperscript().run()}
-          isActive={editor.isActive('superscript')}
-          aria-label="superscript"
-        >
-          <i className="text-gray-900 ri-lg ri-superscript" />
-        </IconButton>
-      </Tooltip>
-      <Tooltip hasArrow label="Code (inline)">
-        <IconButton
-          size="sm"
-          variant="ghost"
-          colorScheme="purple"
-          onClick={() => editor.chain().focus().toggleCode().run()}
-          isActive={editor.isActive('code')}
-          aria-label="code"
-        >
-          <i className="text-gray-900 ri-lg ri-code-line" />
-        </IconButton>
-      </Tooltip>
-      <Tooltip hasArrow label="Clear formatting">
-        <IconButton
-          size="sm"
-          variant="ghost"
-          colorScheme="purple"
-          onClick={() => {
-            editor.chain().focus().unsetAllMarks().run()
-            editor.chain().focus().clearNodes().run()
-          }}
-          aria-label="Clear formatting"
-        >
-          <i className="text-gray-900 ri-lg ri-format-clear" />
-        </IconButton>
-      </Tooltip>
+      <MenuIconButton
+        label="Bold"
+        onClick={() => editor.chain().focus().toggleBold().run()}
+        isActive={editor.isActive('bold')}
+        icon={<i className="text-gray-900 ri-lg ri-bold" />}
+      />
+      <MenuIconButton
+        label="Italicize"
+        onClick={() => editor.chain().focus().toggleItalic().run()}
+        isActive={editor.isActive('italic')}
+        icon={<i className="text-gray-900 ri-lg ri-italic" />}
+      />
+      <MenuIconButton
+        label="Strikethrough"
+        onClick={() => editor.chain().focus().toggleStrike().run()}
+        isActive={editor.isActive('strike')}
+        icon={<i className="text-gray-900 ri-lg ri-strikethrough" />}
+      />
+      <MenuIconButton
+        label="Highlight"
+        onClick={() => editor.chain().focus().toggleHighlight().run()}
+        isActive={editor.isActive('hightlight')}
+        icon={<i className="text-gray-900 ri-lg ri-mark-pen-line" />}
+      />
+      <MenuIconButton
+        label="Superscript"
+        onClick={() => editor.chain().focus().toggleSuperscript().run()}
+        isActive={editor.isActive('superscript')}
+        icon={<i className="text-gray-900 ri-lg ri-superscript" />}
+      />
+      <MenuIconButton
+        label="Code (inline)"
+        onClick={() => editor.chain().focus().toggleCode().run()}
+        isActive={editor.isActive('code')}
+        icon={<i className="text-gray-900 ri-lg ri-code-line" />}
+      />
+      <MenuIconButton
+        label="Clear formatting"
+        onClick={() => {
+          editor.chain().focus().unsetAllMarks().run()
+          editor.chain().focus().clearNodes().run()
+        }}
+        icon={<i className="text-gray-900 ri-lg ri-format-clear" />}
+      />
       <Center className="h-6 w-4">
         <Divider
           orientation="vertical"
           className="border-gray-200 opacity-100"
         />
       </Center>
-      <Tooltip hasArrow label="Bulleted list">
-        <IconButton
-          size="sm"
-          variant="ghost"
-          colorScheme="purple"
-          aria-label="bulleted list"
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          isActive={editor.isActive('bulletList')}
-        >
-          <i className="text-gray-900 ri-lg ri-list-unordered" />
-        </IconButton>
-      </Tooltip>
-      <Tooltip hasArrow label="Ordered list">
-        <IconButton
-          size="sm"
-          variant="ghost"
-          colorScheme="purple"
-          aria-label="ordered list"
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          isActive={editor.isActive('orderedList')}
-        >
-          <i className="text-gray-900 ri-lg ri-list-ordered" />
-        </IconButton>
-      </Tooltip>
-      <Tooltip hasArrow label="Code (block)">
-        <IconButton
-          size="sm"
-          variant="ghost"
-          colorScheme="purple"
-          aria-label="code block"
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          isActive={editor.isActive('codeBlock')}
-        >
-          <i className="text-gray-900 ri-lg ri-code-box-line" />
-        </IconButton>
-      </Tooltip>
-      <Tooltip hasArrow label="Block quote">
-        <IconButton
-          size="sm"
-          variant="ghost"
-          colorScheme="purple"
-          aria-label="blockquote"
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          isActive={editor.isActive('blockquote')}
-        >
-          <i className="text-gray-900 ri-lg ri-double-quotes-l" />
-        </IconButton>
-      </Tooltip>
+      <MenuIconButton
+        label="Bulleted list"
+        onClick={() => editor.chain().focus().toggleBulletList().run()}
+        isActive={editor.isActive('bulletList')}
+        icon={<i className="text-gray-900 ri-lg ri-list-unordered" />}
+      />
+
+      <MenuIconButton
+        label="Ordered list"
+        onClick={() => editor.chain().focus().toggleOrderedList().run()}
+        isActive={editor.isActive('orderedList')}
+        icon={<i className="text-gray-900 ri-lg ri-list-ordered" />}
+      />
+      <MenuIconButton
+        label="To-do list"
+        onClick={() => editor.chain().focus().toggleTaskList().run()}
+        isActive={editor.isActive('taskList')}
+        icon={<i className="text-gray-900 ri-lg ri-list-check-2" />}
+      />
+      <MenuIconButton
+        label="Block quote"
+        onClick={() => editor.chain().focus().toggleBlockquote().run()}
+        isActive={editor.isActive('blockquote')}
+        icon={<i className="text-gray-900 ri-lg ri-double-quotes-l" />}
+      />
       <Center className="h-6 w-4">
         <Divider
           orientation="vertical"
           className="border-gray-200 opacity-100"
         />
       </Center>
-      <Tooltip hasArrow label="Add a line">
-        <IconButton
-          size="sm"
-          variant="ghost"
-          colorScheme="purple"
-          aria-label="horizontal rule"
-          onClick={() => editor.chain().focus().setHorizontalRule().run()}
-        >
-          <i className="text-gray-900 ri-lg ri-separator" />
-        </IconButton>
-      </Tooltip>
+      <MenuIconButton
+        label="Add a line"
+        onClick={() => editor.chain().focus().setHorizontalRule().run()}
+        icon={<i className="text-gray-900 ri-lg ri-separator" />}
+      />
       <Menu id="insert-menu" isLazy colorScheme="purple">
         <MenuButton variant="ghost" colorScheme="purple" as={Button}>
-          <div className="flex items-center text-gray-900">
+          <div className="flex items-center text-gray-900 gap-1">
             Insert
             <i className="ri-arrow-drop-down-line text-gray-900 ri-lg w-2"></i>
           </div>
@@ -339,12 +238,9 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
                   googleDrawingsUrlMatchRegex.test(input),
               })
             }}
-          >
-            <div className="flex items-center gap-4">
-              <i className="text-gray-900 ri-lg ri-movie-line" />
-              Video (Youtube or Vimeo)
-            </div>
-          </MenuItem>
+            icon={<i className="text-gray-900 ri-lg ri-movie-line" />}
+            label="Video (Youtube or Vimeo)"
+          />
           <MenuItem
             onClick={() => {
               setDialogProps({
@@ -386,12 +282,9 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
                   googleDrawingsUrlMatchRegex.test(input),
               })
             }}
-          >
-            <div className="flex items-center gap-4">
-              <i className="text-gray-900 ri-lg ri-drive-line" />
-              Google Doc
-            </div>
-          </MenuItem>
+            icon={<i className="text-gray-900 ri-lg ri-drive-line" />}
+            label="Google Doc"
+          />
           <MenuItem
             onClick={() => {
               setDialogProps({
@@ -406,12 +299,9 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
                 validator: (input: string) => imageUrlMatchRegex.test(input),
               })
             }}
-          >
-            <div className="flex items-center gap-4">
-              <i className="text-gray-900 ri-lg ri-image-line" />
-              Image from another site
-            </div>
-          </MenuItem>
+            icon={<i className="text-gray-900 ri-lg ri-image-line" />}
+            label="Image from another site"
+          />
           <MenuItem
             onClick={() => {
               setDialogProps({
@@ -424,12 +314,24 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
                 },
               })
             }}
-          >
-            <div className="flex items-center gap-4">
-              <i className="text-gray-900 ri-lg ri-window-line" />
-              Webpage
-            </div>
-          </MenuItem>
+            icon={<i className="text-gray-900 ri-lg ri-window-line" />}
+            label="Webpage"
+          />
+          <MenuItem
+            onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+            icon={<i className="text-gray-900 ri-lg ri-code-box-line" />}
+            label="Code block"
+          />
+          <MenuItem
+            onClick={() =>
+              editor
+                .chain()
+                .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+                .run()
+            }
+            icon={<i className="text-gray-900 ri-lg ri-grid-line" />}
+            label="Table"
+          />
         </MenuList>
       </Menu>
       <InputDialog

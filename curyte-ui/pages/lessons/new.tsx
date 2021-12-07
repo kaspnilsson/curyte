@@ -7,14 +7,20 @@ import { Lesson } from '../../interfaces/lesson'
 import { useRouter } from 'next/router'
 import * as api from '../../firebase/api'
 import LoadingSpinner from '../../components/LoadingSpinner'
+import { draftRoute, lessonRoute, loginRoute } from '../../utils/routes'
 
 const NewLessonView = () => {
   const router = useRouter()
-  const [user] = useAuthState(firebase.auth())
+  const [user, userLoading] = useAuthState(firebase.auth())
   const [loading, setLoading] = useState(false)
   const [lesson, setLesson] = useState<Lesson | undefined>()
 
   useEffect(() => {
+    if (!user && !userLoading) router.push(loginRoute)
+  })
+
+  useEffect(() => {
+    if (!user || userLoading) return
     if (router.query.copyFrom) {
       const fetchLesson = async () => {
         const l = await api.getLesson(router.query.copyFrom as string)
@@ -26,21 +32,21 @@ const NewLessonView = () => {
     } else {
       setLesson(undefined)
     }
-  }, [router.query.copyFrom])
+  }, [router.query.copyFrom, user, userLoading])
 
   const handleSubmit = async (l: Lesson) => {
     const uid = await api.publishLesson(l, l.uid)
-    router.push(`/lessons/${uid}`)
+    router.push(lessonRoute(uid))
   }
   const handleSaveDraft = async (l: Lesson) => {
     const uid = await api.createDraft(l)
-    router.push(`/lessons/edit/${uid}`)
+    router.push(draftRoute(uid))
   }
 
   return (
     <>
-      {loading && <LoadingSpinner />}
-      {!loading && (
+      {(userLoading || loading) && <LoadingSpinner />}
+      {!loading && !userLoading && (
         <EditLessonPage
           lesson={lesson}
           user={user as unknown as Author}

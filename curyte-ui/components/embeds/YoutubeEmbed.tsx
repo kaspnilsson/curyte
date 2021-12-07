@@ -60,7 +60,7 @@ export const YoutubeEmbed = Node.create({
     }?modestbranding=1`
     return [
       'div',
-      { class: 'px-2 w-full h-fit' },
+      { class: 'px-2 w-full h-fit', 'data-drag-handle': '' },
       [
         'iframe',
         {
