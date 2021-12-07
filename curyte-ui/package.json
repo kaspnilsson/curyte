@@ -56,6 +56,7 @@
     "@tiptap/extension-underline": "^2.0.0-beta.22",
     "@tiptap/react": "^2.0.0-beta.98",
     "@tiptap/starter-kit": "^2.0.0-beta.152",
+    "@tiptap/suggestion": "^2.0.0-beta.85",
     "classnames": "^2.3.1",
     "date-fns": "^2.25.0",
     "emoji-set": "^1.0.3",
@@ -80,6 +81,7 @@
     "remixicon": "^2.5.0",
     "sass": "^1.44.0",
     "styled-components": "^5.3.3",
+    "tippy.js": "^6.3.7",
     "webpack": "^5.62.1"
   },
   "devDependencies": {
