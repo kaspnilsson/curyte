@@ -125,13 +125,13 @@ const LessonHeader = ({
         )}
       </div>
       <div className="mt-1 mb-8">
-        <div className="text-2xl focus:outline-none text-gray-500">
+        <div className="text-2xl focus:outline-none text-gray-500 mb-6">
           {lesson.description}
         </div>
         {lesson.tags?.length && (
-          <div className="flex gap-2 flex-wrap items-center mt-2">
-            {lesson.tags.map((t) => (
-              <TagChip tagLabel={t} key={t} />
+          <div className="flex gap-2 flex-wrap items-center">
+            {lesson.tags.map((t, index) => (
+              <TagChip tagLabel={t} key={t + index} />
             ))}
           </div>
         )}

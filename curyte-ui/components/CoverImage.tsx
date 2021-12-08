@@ -15,22 +15,23 @@ const CoverImage = ({
   title,
   lessonId,
   src,
-  width = 1240,
-  height = 620,
+  width = 400,
+  height = 200,
 }: Props) => {
   const image = (
     <Image
       src={src}
       height={height}
       width={width}
+      objectFit="cover"
       layout="responsive"
       alt={`Cover Image for ${title}`}
-      className="shadow-small image-wrapper w-full w-fit-content h-auto my-8 rounded-xl shadow-lg border-0"
+      className="shadow-small image-wrapper w-fit-content h-auto my-8 rounded-xl shadow-lg border-0"
     />
   )
 
   return (
-    <div className="sm:mx-0 h-full w-full">
+    <div className="sm:mx-0 h-fit-content w-fit-content">
       {lessonId ? (
         <Link as={lessonRoute(lessonId)} href={lessonRouteHrefPath}>
           <a aria-label={title}>{image}</a>
