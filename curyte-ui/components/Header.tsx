@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import firebase from '../firebase/clientApp'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
@@ -15,13 +16,34 @@ type Props = {
   children: React.ReactNode
   showProgressBar?: boolean
   title: string
+  isSticky?: boolean
 }
 
-const Header = ({ children, showProgressBar, title }: Props) => {
-  const [isSticky, setSticky] = useState(false)
+const Header = ({
+  children,
+  showProgressBar,
+  title,
+  isSticky = true,
+}: Props) => {
+  const [isStuck, setStuck] = useState(false)
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
+    const handleScroll = () => {
+      if (isSticky) setStuck(document.documentElement.scrollTop > 0)
+      const winScroll =
+        document.body.scrollTop || document.documentElement.scrollTop
+      const height =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight
+      const scrolled = (winScroll / height) * 100
+      if (height > 0) {
+        setProgress(scrolled)
+      } else {
+        setProgress(0)
+      }
+    }
+
     // Add scroll event when the component is loaded
     window.addEventListener('scroll', handleScroll)
     return () => {
@@ -29,22 +51,7 @@ const Header = ({ children, showProgressBar, title }: Props) => {
       // like componentWillUnmount()
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [])
-
-  const handleScroll = () => {
-    setSticky(document.documentElement.scrollTop > 0)
-    const winScroll =
-      document.body.scrollTop || document.documentElement.scrollTop
-    const height =
-      document.documentElement.scrollHeight -
-      document.documentElement.clientHeight
-    const scrolled = (winScroll / height) * 100
-    if (height > 0) {
-      setProgress(scrolled)
-    } else {
-      setProgress(0)
-    }
-  }
+  }, [isSticky])
 
   const logOut = () => {
     firebase.auth().signOut()
@@ -78,9 +85,10 @@ const Header = ({ children, showProgressBar, title }: Props) => {
         <title>{title}</title>
       </Head>
       <div
-        className={`sticky ${
-          isSticky ? 'shadow-xl' : ''
-        } top-0 z-10 bg-white mb-4 transition-shadow`}
+        className={classNames('z-10 bg-white mb-4 transition-shadow', {
+          'sticky top-0': isSticky,
+          'shadow-xl': isSticky && isStuck,
+        })}
       >
         <Container>
           <div className="flex justify-between items-center py-4">
