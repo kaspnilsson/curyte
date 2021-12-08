@@ -24,6 +24,7 @@ const DraftPreviewView = ({ id }: Props) => {
   const [loading, setLoading] = useState(false)
   const [author, setAuthor] = useState({} as Author)
   const [draft, setDraft] = useState({} as Lesson)
+  const router = useRouter()
 
   useEffect(() => {
     if (!user || userLoading) return
@@ -43,7 +44,6 @@ const DraftPreviewView = ({ id }: Props) => {
     }
   })
 
-  const router = useRouter()
   const handleDelete = async () => {
     setSaving(true)
     await api.deleteDraft(draft.uid)

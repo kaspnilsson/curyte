@@ -14,6 +14,7 @@ const TagChip = ({ tagLabel, colorScheme = 'purple' }: Props) => {
       {tagLabel && (
         <Link passHref href={tagRouteHrefPath} as={tagRoute(tagLabel)}>
           <Tag
+            size="sm"
             colorScheme={colorScheme}
             className="cursor-pointer hover:text-black"
           >

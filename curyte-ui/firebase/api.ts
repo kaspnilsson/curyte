@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { parseISO } from 'date-fns'
+import { compareDesc, parseISO } from 'date-fns'
 import { Author, SavedLesson } from '../interfaces/author'
 import { Lesson } from '../interfaces/lesson'
 import { Tag } from '../interfaces/tag'
@@ -33,12 +33,9 @@ export async function getLessons(
     return fn.get().then((result) => {
       const mapped: Lesson[] = []
       result.docs.forEach((result) => mapped.push(result.data() as Lesson))
-      mapped.sort(
-        (a, b) =>
-          parseISO(b.created).getMilliseconds() -
-          parseISO(a.created).getMilliseconds()
+      return mapped.sort((a, b) =>
+        compareDesc(parseISO(a.created), parseISO(b.created))
       )
-      return mapped
     })
   } catch (e) {
     console.error(e)
