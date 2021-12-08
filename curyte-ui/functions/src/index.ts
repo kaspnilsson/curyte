@@ -65,16 +65,14 @@ export const createTagsForLesson = functions.firestore
           .doc(tag)
           .update({
             tagText: tag,
-            lessonIds: admin.firestore.FieldValue.arrayUnion(
-              change.data().lessonId
-            ),
+            lessonIds: admin.firestore.FieldValue.arrayUnion(change.data().uid),
           })
       } else {
         db.collection('tags')
           .doc(tag)
           .set({
             tagText: tag,
-            lessonIds: [change.data().lessonId],
+            lessonIds: [change.data().uid],
             viewCount: 0,
           })
       }
@@ -83,7 +81,7 @@ export const createTagsForLesson = functions.firestore
 
 export const deleteTagsForLesson = functions.firestore
   .document('lessons/{lessonId}')
-  .onDelete(async (change) => {
+  .onDelete(async (change: admin.firestore.QueryDocumentSnapshot) => {
     for (const tag of change.data().tags || []) {
       const old = await db.collection('tags').doc(tag).get()
       if (old.exists) {
@@ -92,7 +90,7 @@ export const deleteTagsForLesson = functions.firestore
           .update({
             tagText: tag,
             lessonIds: admin.firestore.FieldValue.arrayRemove(
-              change.data().lessonId
+              change.data().uid
             ),
           })
       } else {
