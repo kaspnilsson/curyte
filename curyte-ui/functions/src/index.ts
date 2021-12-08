@@ -57,30 +57,48 @@ export const incrementLessonSaveCount = functions.firestore
 
 export const createTagsForLesson = functions.firestore
   .document('lessons/{lessonId}')
-  .onCreate((change) => {
+  .onCreate(async (change) => {
     for (const tag of change.data().tags || []) {
-      db.collection('tags')
-        .doc(tag)
-        .update({
-          tagText: tag,
-          lessonIds: admin.firestore.FieldValue.arrayUnion(
-            change.data().lessonId
-          ),
-        })
+      const old = await db.collection('tags').doc(tag).get()
+      if (old.exists) {
+        db.collection('tags')
+          .doc(tag)
+          .update({
+            tagText: tag,
+            lessonIds: admin.firestore.FieldValue.arrayUnion(
+              change.data().lessonId
+            ),
+          })
+      } else {
+        db.collection('tags')
+          .doc(tag)
+          .set({
+            tagText: tag,
+            lessonIds: [change.data().lessonId],
+            viewCount: 0,
+          })
+      }
     }
   })
 
 export const deleteTagsForLesson = functions.firestore
   .document('lessons/{lessonId}')
-  .onCreate((change) => {
+  .onDelete(async (change) => {
     for (const tag of change.data().tags || []) {
-      db.collection('tags')
-        .doc(tag)
-        .update({
-          tagText: tag,
-          lessonIds: admin.firestore.FieldValue.arrayRemove(
-            change.data().lessonId
-          ),
-        })
+      const old = await db.collection('tags').doc(tag).get()
+      if (old.exists) {
+        db.collection('tags')
+          .doc(tag)
+          .update({
+            tagText: tag,
+            lessonIds: admin.firestore.FieldValue.arrayRemove(
+              change.data().lessonId
+            ),
+          })
+      } else {
+        db.collection('tags')
+          .doc(tag)
+          .set({ tagText: tag, lessonIds: [], viewCount: 0 })
+      }
     }
   })
