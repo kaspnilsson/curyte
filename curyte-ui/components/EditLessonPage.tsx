@@ -109,7 +109,7 @@ const EditLessonPage = ({
   if (saving) return <LoadingSpinner />
   return (
     <Layout withFooter={false} isSticky={false}>
-      <div className="flex flex-col flex-grow overflow-y-auto">
+      <div className="flex flex-col flex-grow">
         <div className="flex items-center justify-between w-full">
           <TextareaAutosize
             autoFocus
