@@ -6,6 +6,7 @@ type Props = {
   children: React.ReactNode
   headerChildren?: React.ReactNode
   withFooter?: boolean
+  isSticky?: boolean
   showProgressBar?: boolean
   title?: string
 }
@@ -14,13 +15,18 @@ const Layout = ({
   children,
   headerChildren,
   withFooter = true,
+  isSticky = true,
   showProgressBar,
   title = 'Curyte',
 }: Props) => {
   return (
     <>
       <div className="min-h-screen relative">
-        <Header showProgressBar={showProgressBar} title={title}>
+        <Header
+          showProgressBar={showProgressBar}
+          isSticky={isSticky}
+          title={title}
+        >
           {headerChildren}
         </Header>
         {/* keep pb-24 in sync with footer height */}
