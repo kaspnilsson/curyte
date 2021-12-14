@@ -41,6 +41,7 @@ const NewLessonView = () => {
   const handleSaveDraft = async (l: Lesson) => {
     const uid = await api.createDraft(l)
     router.push(draftRoute(uid))
+    return uid
   }
 
   return (

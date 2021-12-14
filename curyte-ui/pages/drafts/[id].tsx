@@ -42,6 +42,7 @@ const DraftView = ({ id }: Props) => {
   }
   const handleSaveDraft = async (l: Lesson) => {
     await api.updateDraft(l)
+    return l.uid
   }
 
   return (

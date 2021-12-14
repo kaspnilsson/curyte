@@ -122,7 +122,7 @@ const Header = ({
                     Start writing
                   </Button>
                 </Link>
-                <div className="ml-4">
+                <div className="ml-4 flex">
                   <Menu>
                     <MenuButton>
                       <Avatar
@@ -131,9 +131,9 @@ const Header = ({
                       />
                     </MenuButton>
                     <MenuList>
-                      <MenuItem onClick={() => router.push('/accounts/me')}>
-                        View account
-                      </MenuItem>
+                      <Link passHref href="/accounts/me">
+                        <MenuItem>View account</MenuItem>
+                      </Link>
                       <MenuItem onClick={() => logOut()}>Sign out</MenuItem>
                     </MenuList>
                   </Menu>

@@ -13,6 +13,7 @@ import FancyEditor from '../../components/FancyEditor'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { editLessonRoute } from '../../utils/routes'
 
 type Props = {
   lesson: Lesson
@@ -54,6 +55,11 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
                 handleDelete={
                   user && user.uid === lesson.authorId
                     ? handleDelete
+                    : undefined
+                }
+                handleEdit={
+                  user && user.uid === lesson.authorId
+                    ? () => router.push(editLessonRoute(lesson.uid))
                     : undefined
                 }
               />
