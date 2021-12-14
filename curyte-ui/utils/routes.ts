@@ -1,6 +1,9 @@
 export const lessonRoute = (uid: string) => `/lessons/${uid}`
 export const lessonRouteHrefPath = '/lessons/[id]'
 
+export const editLessonRoute = (uid: string) => `/lessons/edit/${uid}`
+export const editLessonRouteHrefPath = '/lessons/edit/[id]'
+
 export const draftRoute = (uid: string) => `/drafts/${uid}`
 export const draftRouteHrefPath = '/drafts/[id]'
 

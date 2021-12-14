@@ -211,6 +211,19 @@ export async function publishLesson(
   }
 }
 
+export async function updateLesson(lesson: Lesson): Promise<string> {
+  try {
+    assert(lesson.uid)
+    await firebase.firestore().collection('lessons').doc(lesson.uid).set(lesson)
+    return lesson.uid
+  } catch (e) {
+    console.error(lesson)
+    console.error(e)
+    debugger
+    throw e
+  }
+}
+
 export async function logLessonView(uid: string): Promise<void> {
   try {
     await firebase

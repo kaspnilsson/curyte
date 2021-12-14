@@ -22,6 +22,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import {
   BookmarkIcon,
   DocumentRemoveIcon,
+  PencilAltIcon,
   DuplicateIcon,
   MenuIcon,
   UploadIcon,
@@ -36,6 +37,7 @@ type Props = {
   coverImage?: string
   author: Author
   handleDelete?: () => void
+  handleEdit?: () => void
   handlePublish?: () => void
   isDraft: boolean
 }
@@ -44,6 +46,7 @@ const LessonHeader = ({
   author,
   lesson,
   handleDelete,
+  handleEdit,
   handlePublish,
   isDraft,
 }: Props) => {
@@ -190,6 +193,12 @@ const LessonHeader = ({
                 <MenuItem onClick={handleMakeCopy}>
                   <DuplicateIcon className="h-5 w-5 text-inherit mr-4" />
                   Make a copy
+                </MenuItem>
+              )}
+              {handleEdit && (
+                <MenuItem onClick={handleEdit}>
+                  <PencilAltIcon className="h-5 w-5 text-inherit mr-4" />
+                  Edit lesson
                 </MenuItem>
               )}
               {handleDelete && (
