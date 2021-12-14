@@ -7,7 +7,6 @@ import { Author } from '../interfaces/author'
 import Container from './Container'
 import { Button, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react'
 import Head from 'next/head'
-import router from 'next/router'
 import Avatar from './Avatar'
 import CuryteLogo from './CuryteLogo'
 import { indexRoute, loginRoute, newLessonRoute } from '../utils/routes'
@@ -44,11 +43,8 @@ const Header = ({
       }
     }
 
-    // Add scroll event when the component is loaded
     window.addEventListener('scroll', handleScroll)
     return () => {
-      // Remove scroll event after the component is unmount,
-      // like componentWillUnmount()
       window.removeEventListener('scroll', handleScroll)
     }
   }, [isSticky])
