@@ -7,7 +7,6 @@ import { Author } from '../interfaces/author'
 import Container from './Container'
 import { Button, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react'
 import Head from 'next/head'
-import router from 'next/router'
 import Avatar from './Avatar'
 import CuryteLogo from './CuryteLogo'
 import { indexRoute, loginRoute, newLessonRoute } from '../utils/routes'
@@ -44,11 +43,8 @@ const Header = ({
       }
     }
 
-    // Add scroll event when the component is loaded
     window.addEventListener('scroll', handleScroll)
     return () => {
-      // Remove scroll event after the component is unmount,
-      // like componentWillUnmount()
       window.removeEventListener('scroll', handleScroll)
     }
   }, [isSticky])
@@ -122,7 +118,7 @@ const Header = ({
                     Start writing
                   </Button>
                 </Link>
-                <div className="ml-4">
+                <div className="ml-4 flex">
                   <Menu>
                     <MenuButton>
                       <Avatar
@@ -131,9 +127,9 @@ const Header = ({
                       />
                     </MenuButton>
                     <MenuList>
-                      <MenuItem onClick={() => router.push('/accounts/me')}>
-                        View account
-                      </MenuItem>
+                      <Link passHref href="/accounts/me">
+                        <MenuItem>View account</MenuItem>
+                      </Link>
                       <MenuItem onClick={() => logOut()}>Sign out</MenuItem>
                     </MenuList>
                   </Menu>
