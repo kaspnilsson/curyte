@@ -89,7 +89,7 @@ const FancyEditor = ({ content, onUpdate, readOnly }: Props) => {
       <EditorContent className="markdown-body" editor={editor} />
       {editor && (
         <>
-          <TextBubbleMenu editor={editor} />
+          {!readOnly && <TextBubbleMenu editor={editor} />}
           <FloatingMenu editor={editor}>
             {/* {shouldShowPopover(editor) && ( */}
             <div
