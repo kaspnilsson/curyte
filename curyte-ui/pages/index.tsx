@@ -29,7 +29,7 @@ const Home = ({ lessons }: Props) => {
       <Container>
         <section className="flex-row flex items-center justify-center mt-16 mb-8">
           <h1 className="text-4xl md:text-6xl text-center font-bold tracking-tighter leading-tight">
-          byte-sized lessons, for the curious.
+            Byte-sized lessons, for the curious.
           </h1>
         </section>
         <section className="flex-col flex items-center justify-around mb-8">
