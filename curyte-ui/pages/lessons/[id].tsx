@@ -3,7 +3,7 @@ import Head from 'next/head'
 import ErrorPage from 'next/error'
 import React, { useEffect, useState } from 'react'
 import { Lesson } from '../../interfaces/lesson'
-import { GetServerSideProps } from 'next'
+import { GetStaticPaths, GetStaticProps } from 'next'
 import Layout from '../../components/Layout'
 import { Author } from '../../interfaces/author'
 import Container from '../../components/Container'
@@ -14,8 +14,9 @@ import LoadingSpinner from '../../components/LoadingSpinner'
 import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { editLessonRoute } from '../../utils/routes'
+import { ParsedUrlQuery } from 'querystring'
 
-type Props = {
+interface Props {
   lesson: Lesson
   author: Author
 }
@@ -72,14 +73,23 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const lesson = await api.getLesson(query.id as string)
+interface IParams extends ParsedUrlQuery {
+  id: string
+}
 
+export const getStaticPaths: GetStaticPaths = async () => {
+  const lessons = await api.getLessons([])
+  const paths = lessons.map(({ uid }) => ({
+    params: { id: uid },
+  }))
+  return { paths, fallback: 'blocking' }
+}
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const { id } = context.params as IParams
+  const lesson = await api.getLesson(id)
   const author = await api.getAuthor(lesson.authorId)
-
-  return {
-    props: { lesson, author },
-  }
+  return { props: { lesson, author } }
 }
 
 export default PublishedLessonView
