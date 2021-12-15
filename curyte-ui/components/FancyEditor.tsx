@@ -75,7 +75,7 @@ const FancyEditor = ({ content, onUpdate, readOnly }: Props) => {
       }),
       Placeholder.configure({
         showOnlyWhenEditable: true,
-        placeholder: 'Write something interesting...',
+        placeholder: 'What are you teaching today?',
       }),
     ],
     content,
