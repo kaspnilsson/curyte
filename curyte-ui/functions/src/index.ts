@@ -124,3 +124,14 @@ export const deleteDataForLesson = functions.firestore
         .delete()
     }
   })
+
+export const deleteDataForDraft = functions.firestore
+  .document('drafts/{draftId}')
+  .onDelete(async (change: admin.firestore.QueryDocumentSnapshot) => {
+    if (change.data().coverImageUrl) {
+      storage
+        .bucket()
+        .file(getPathStorageFromUrl(change.data().coverImageUrl))
+        .delete()
+    }
+  })
