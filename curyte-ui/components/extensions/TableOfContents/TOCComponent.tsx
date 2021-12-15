@@ -74,7 +74,6 @@ const TOCComponent = ({ editor }: Props) => {
               className={`pl-${
                 (item.level - minHeadingLevel + 1) * 3
               } hover:bg-gray-200 rounded py-1`}
-              styleType="none"
             >
               {item.text}
             </ListItem>

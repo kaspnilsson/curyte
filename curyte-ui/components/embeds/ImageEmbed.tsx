@@ -32,7 +32,7 @@ export const ImageEmbed = Node.create({
       allowFullScreen: true,
       HTMLAttributes: {
         class:
-          'image-wrapper w-full w-fit-content h-auto my-8 rounded-xl shadow-lg border-2 border-gray-200',
+          'image-wrapper w-full w-fit-content h-auto my-8 rounded-xl shadow-lg',
       },
     }
   },
