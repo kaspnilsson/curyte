@@ -23,6 +23,12 @@
     list-style-type: disc;
   }
 
+  .toc ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
   ul[data-type='taskList'] {
     padding: 0;
 

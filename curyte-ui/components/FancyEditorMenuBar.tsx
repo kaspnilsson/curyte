@@ -37,7 +37,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
   }
 
   return (
-    <div className="flex flex-wrap border-b border-t border-gray-200 mb-8 py-2 items-center gap-1 bg-white z-10 sticky top-0">
+    <div className="flex flex-wrap border-b border-t border-gray-200 mb-8 py-1 items-center gap-1 bg-white z-10 sticky top-0">
       <MenuIconButton
         label="Undo"
         onClick={() => editor.chain().focus().undo().run()}
@@ -56,7 +56,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         />
       </Center>
       <Menu id="style-menu" isLazy colorScheme="purple">
-        <MenuButton size="xs" variant="ghost" colorScheme="purple" as={Button}>
+        <MenuButton size="sm" variant="ghost" colorScheme="purple" as={Button}>
           <div className="flex items-center text-gray-900 gap-1 text-sm">
             Style
             <i className="ri-arrow-drop-down-line text-gray-900 ri-lg w-2"></i>
@@ -206,7 +206,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         icon={<i className="text-gray-900 ri-lg ri-separator" />}
       />
       <Menu id="insert-menu" isLazy colorScheme="purple">
-        <MenuButton size="xs" variant="ghost" colorScheme="purple" as={Button}>
+        <MenuButton size="sm" variant="ghost" colorScheme="purple" as={Button}>
           <div className="flex items-center text-gray-900 gap-1 text-sm">
             Insert
             <i className="ri-arrow-drop-down-line text-gray-900 ri-lg w-2"></i>
@@ -331,6 +331,11 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
             }
             icon={<i className="text-gray-900 ri-lg ri-grid-line" />}
             label="Table"
+          />
+          <MenuItem
+            onClick={() => editor.commands.addTableOfContents()}
+            icon={<i className="text-gray-900 ri-lg ri-file-list-line" />}
+            label="Table of contents"
           />
         </MenuList>
       </Menu>
