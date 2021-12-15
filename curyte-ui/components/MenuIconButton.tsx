@@ -27,7 +27,7 @@ const MenuIconButton = ({
       }
     >
       <chakra.IconButton
-        size="xs"
+        size="sm"
         variant="ghost"
         colorScheme="purple"
         aria-label={label}

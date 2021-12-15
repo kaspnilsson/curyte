@@ -27,6 +27,7 @@ import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import Underline from '@tiptap/extension-underline'
 import TextBubbleMenu from './extensions/BubbleMenu/TextBubbleMenu'
+import TableOfContents from './extensions/TableOfContents/TableOfContents'
 // import AddButton from './popovers/AddButton'
 // import DeleteButton from './popovers/DeleteButton'
 
@@ -63,6 +64,7 @@ const FancyEditor = ({ content, onUpdate, readOnly }: Props) => {
       }),
       Document,
       GoogleDriveEmbed,
+      TableOfContents,
       // Dropcursor.configure({
       //   color: '#6a7280',
       // }),
