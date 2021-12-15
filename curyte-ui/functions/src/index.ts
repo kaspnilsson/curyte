@@ -117,21 +117,21 @@ export const deleteDataForLesson = functions.firestore
           .set({ tagText: tag, lessonIds: [], viewCount: 0 })
       }
     }
-    if (change.data().coverImageUrl) {
-      storage
-        .bucket()
-        .file(getPathStorageFromUrl(change.data().coverImageUrl))
-        .delete()
-    }
+    // if (change.data().coverImageUrl) {
+    //   storage
+    //     .bucket()
+    //     .file(getPathStorageFromUrl(change.data().coverImageUrl))
+    //     .delete()
+    // }
   })
 
-export const deleteDataForDraft = functions.firestore
-  .document('drafts/{draftId}')
-  .onDelete(async (change: admin.firestore.QueryDocumentSnapshot) => {
-    if (change.data().coverImageUrl) {
-      storage
-        .bucket()
-        .file(getPathStorageFromUrl(change.data().coverImageUrl))
-        .delete()
-    }
-  })
+// export const deleteDataForDraft = functions.firestore
+//   .document('drafts/{draftId}')
+//   .onDelete(async (change: admin.firestore.QueryDocumentSnapshot) => {
+//     if (change.data().coverImageUrl) {
+//       storage
+//         .bucket()
+//         .file(getPathStorageFromUrl(change.data().coverImageUrl))
+//         .delete()
+//     }
+//   })
