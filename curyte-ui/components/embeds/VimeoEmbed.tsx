@@ -23,7 +23,7 @@ const VimeoEmbed = Node.create({
       allowFullscreen: true,
       HTMLAttributes: {
         class:
-          'iframe-wrapper w-fit h-96 my-8 mx-1 shadow-lg w-full border-2 border-gray-200 rounded-xl',
+          'iframe-wrapper w-fit h-96 my-8 mx-1 shadow-lg w-full rounded-xl',
       },
     }
   },

@@ -17,6 +17,8 @@ import { draftPreviewRoute } from '../utils/routes'
 import * as api from '../firebase/api'
 import EditableCoverImage from './EditableCoverImage'
 import { useRouter } from 'next/router'
+import useCuryteEditor from '../hooks/useCuryteEditor'
+import LessonOutline from './LessonOutline'
 
 type Props = {
   lesson?: Lesson
@@ -102,40 +104,48 @@ const EditLessonPage = ({
     setCoverImageUrl(url)
   }
 
+  const editor = useCuryteEditor({ content, onUpdate }, [lesson, onUpdate])
+
   if (saving) return <LoadingSpinner />
   return (
-    <Layout withFooter={false} isSticky={false}>
-      <div className="flex flex-col flex-grow">
-        <div className="flex items-center justify-between w-full">
+    <Layout
+      withFooter={false}
+      isSticky={false}
+      sidebar={<LessonOutline editor={editor} />}
+    >
+      <div className="flex">
+        <div className="flex flex-col flex-grow">
+          <div className="flex items-center justify-between w-full">
+            <TextareaAutosize
+              autoFocus
+              className={`${computeClassesForTitle(
+                title
+              )} focus:outline-none font-semibold flex-grow resize-none tracking-tight md:tracking-tighter leading-tight`}
+              placeholder="Enter title..."
+              value={title}
+              onChange={({ target }) => setTitle(target.value)}
+            />
+          </div>
           <TextareaAutosize
-            autoFocus
-            className={`${computeClassesForTitle(
-              title
-            )} focus:outline-none font-semibold flex-grow resize-none tracking-tight md:tracking-tighter leading-tight`}
-            placeholder="Enter title..."
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
+            className="text-2xl focus:outline-none mt-1 text-gray-500 resize-none"
+            placeholder="Enter description..."
+            value={description}
+            onChange={({ target }) => setDescription(target.value)}
           />
-        </div>
-        <TextareaAutosize
-          className="text-2xl focus:outline-none mt-1 text-gray-500 resize-none"
-          placeholder="Enter description..."
-          value={description}
-          onChange={({ target }) => setDescription(target.value)}
-        />
-        <TextareaAutosize
-          className="text-xl focus:outline-none mt-4 resize-none"
-          placeholder="Enter a comma separated list of tags..."
-          value={tagsStr}
-          onChange={({ target }) => setTagsStr(target.value)}
-        />
-        <EditableCoverImage
-          title={lesson?.title || ''}
-          src={coverImageUrl}
-          onEditUrl={onCoverImageUpload}
-        />
-        <div className="flex flex-col py-8">
-          <FancyEditor content={content} onUpdate={onUpdate} />
+          <TextareaAutosize
+            className="text-xl focus:outline-none mt-4 resize-none"
+            placeholder="Enter a comma separated list of tags..."
+            value={tagsStr}
+            onChange={({ target }) => setTagsStr(target.value)}
+          />
+          <EditableCoverImage
+            title={lesson?.title || ''}
+            src={coverImageUrl}
+            onEditUrl={onCoverImageUpload}
+          />
+          <div className="flex py-8">
+            <FancyEditor editor={editor} />
+          </div>
         </div>
       </div>
       <footer className="bg-white border-t border-accent-2 bottom-0 left-0 fixed w-full h-24 z-10">

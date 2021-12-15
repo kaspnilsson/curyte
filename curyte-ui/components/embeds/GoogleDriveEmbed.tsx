@@ -31,7 +31,7 @@ export const GoogleDriveEmbed = Node.create({
       allowFullscreen: true,
       HTMLAttributes: {
         class:
-          'googledrive-wrapper w-full h-96 my-8 shadow-lg w-full border-2 border-gray-200 rounded-xl',
+          'googledrive-wrapper w-full h-96 my-8 shadow-lg w-full rounded-xl',
       },
     }
   },

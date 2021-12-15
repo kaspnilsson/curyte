@@ -15,6 +15,8 @@ import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { editLessonRoute } from '../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
+import useCuryteEditor from '../../hooks/useCuryteEditor'
+import LessonOutline from '../../components/LessonOutline'
 
 interface Props {
   lesson: Lesson
@@ -37,13 +39,19 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
     router.push('/')
   }
 
+  const editor = useCuryteEditor({ content: lesson.content }, [lesson])
+
   if (!lesson || !lesson.title) return <ErrorPage statusCode={404} />
 
   return (
     <>
       {(loading || userLoading) && <LoadingSpinner />}
       {!(loading || userLoading) && (
-        <Layout showProgressBar title={lesson.title}>
+        <Layout
+          showProgressBar
+          title={lesson.title}
+          sidebar={<LessonOutline editor={editor} />}
+        >
           <Container>
             <article className="mb-32">
               <Head>
@@ -64,7 +72,7 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
                     : undefined
                 }
               />
-              <FancyEditor readOnly content={lesson.content} />
+              <FancyEditor readOnly editor={editor} />
             </article>
           </Container>
         </Layout>

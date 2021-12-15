@@ -87,7 +87,7 @@ const Header = ({
         })}
       >
         <Container>
-          <div className="flex justify-between items-center py-4">
+          <div className="flex justify-between items-center py-4 h-16">
             <Link href={indexRoute} passHref>
               <Button
                 variant="link"
