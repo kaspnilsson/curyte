@@ -18,7 +18,7 @@ interface Props {
 const FancyEditor = ({ editor, readOnly }: Props) => {
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex flex-col min-w-full">
         {!readOnly && <FancyEditorMenuBar editor={editor} />}
         <EditorContent className="markdown-body" editor={editor} />
         {editor && (
