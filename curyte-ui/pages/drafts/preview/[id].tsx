@@ -13,6 +13,8 @@ import LoadingSpinner from '../../../components/LoadingSpinner'
 import * as api from '../../../firebase/api'
 import FancyEditor from '../../../components/FancyEditor'
 import { lessonRoute, loginRoute } from '../../../utils/routes'
+import useCuryteEditor from '../../../hooks/useCuryteEditor'
+import LessonOutline from '../../../components/LessonOutline'
 
 type Props = {
   id: string
@@ -57,12 +59,17 @@ const DraftPreviewView = ({ id }: Props) => {
     setSaving(false)
     router.push(lessonRoute(newUid))
   }
+  const editor = useCuryteEditor({ content: draft.content }, [draft])
 
   return (
     <>
       {(loading || saving) && <LoadingSpinner />}
       {!loading && !saving && (
-        <Layout showProgressBar title={draft.title}>
+        <Layout
+          showProgressBar
+          title={draft.title}
+          sidebar={<LessonOutline editor={editor} />}
+        >
           <Container>
             <article className="mb-32">
               <Head>
@@ -77,7 +84,7 @@ const DraftPreviewView = ({ id }: Props) => {
                 }
                 handlePublish={handlePublish}
               />
-              <FancyEditor readOnly content={draft.content} />
+              <FancyEditor readOnly editor={editor} />
             </article>
           </Container>
         </Layout>

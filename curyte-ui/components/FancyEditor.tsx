@@ -1,39 +1,13 @@
-import {
-  useEditor,
-  EditorContent,
-  JSONContent,
-  FloatingMenu,
-} from '@tiptap/react'
-import Link from '@tiptap/extension-link'
-import Superscript from '@tiptap/extension-superscript'
-import Typography from '@tiptap/extension-typography'
-import Highlight from '@tiptap/extension-highlight'
-import Placeholder from '@tiptap/extension-placeholder'
-import { IFrameEmbed } from './embeds/IFrameEmbed'
-import StarterKit from '@tiptap/starter-kit'
+import { EditorContent, FloatingMenu, Editor } from '@tiptap/react'
 import React from 'react'
 import FancyEditorMenuBar from './FancyEditorMenuBar'
-import TaskList from '@tiptap/extension-task-list'
-import TaskItem from '@tiptap/extension-task-item'
-import { YoutubeEmbed } from './embeds/YoutubeEmbed'
-import { GoogleDriveEmbed } from './embeds/GoogleDriveEmbed'
-import { ImageEmbed } from './embeds/ImageEmbed'
-import VimeoEmbed from './embeds/VimeoEmbed'
-import Document from './extensions/Document'
-import Color from '@tiptap/extension-color'
-import Table from '@tiptap/extension-table'
-import TableRow from '@tiptap/extension-table-row'
-import TableCell from '@tiptap/extension-table-cell'
-import TableHeader from '@tiptap/extension-table-header'
-import Underline from '@tiptap/extension-underline'
 import TextBubbleMenu from './extensions/BubbleMenu/TextBubbleMenu'
-import TableOfContents from './extensions/TableOfContents/TableOfContents'
+
 // import AddButton from './popovers/AddButton'
 // import DeleteButton from './popovers/DeleteButton'
 
 interface Props {
-  content: JSONContent | null
-  onUpdate?: (json: JSONContent) => void
+  editor: Editor | null
   readOnly?: boolean
 }
 
@@ -41,69 +15,27 @@ interface Props {
 //   return editor.state.selection.$anchor.parent.type.name === 'paragraph'
 // }
 
-const FancyEditor = ({ content, onUpdate, readOnly }: Props) => {
-  const editor = useEditor({
-    extensions: [
-      Highlight,
-      Typography,
-      // Image,
-      // TextAlign,
-      Link,
-      Superscript,
-      Table.configure({ resizable: true }),
-      TableCell,
-      TableHeader,
-      TableRow,
-      IFrameEmbed,
-      YoutubeEmbed,
-      Color,
-      Underline,
-      VimeoEmbed,
-      StarterKit.configure({
-        document: false,
-      }),
-      Document,
-      GoogleDriveEmbed,
-      TableOfContents,
-      // Dropcursor.configure({
-      //   color: '#6a7280',
-      // }),
-      ImageEmbed,
-      TaskList,
-      TaskItem.configure({
-        nested: true,
-      }),
-      Placeholder.configure({
-        showOnlyWhenEditable: true,
-        placeholder: 'What are you teaching today?',
-      }),
-    ],
-    content,
-    editable: !readOnly,
-    onUpdate: ({ editor }) => {
-      if (onUpdate) onUpdate(editor.getJSON())
-    },
-  })
-
+const FancyEditor = ({ editor, readOnly }: Props) => {
   return (
     <>
-      {!readOnly && <FancyEditorMenuBar editor={editor} />}
-      <EditorContent className="markdown-body" editor={editor} />
-      {editor && (
-        <>
-          {!readOnly && <TextBubbleMenu editor={editor} />}
-          <FloatingMenu editor={editor}>
-            {/* {shouldShowPopover(editor) && ( */}
-            <div
-              style={{ position: 'absolute', top: -15, left: -100 }}
-              className="flex gap-1 items-center"
-            >
-              {/* <AddButton
+      <div className="flex flex-col">
+        {!readOnly && <FancyEditorMenuBar editor={editor} />}
+        <EditorContent className="markdown-body" editor={editor} />
+        {editor && (
+          <>
+            {!readOnly && <TextBubbleMenu editor={editor} />}
+            <FloatingMenu editor={editor}>
+              {/* {shouldShowPopover(editor) && ( */}
+              <div
+                style={{ position: 'absolute', top: -15, left: -100 }}
+                className="flex gap-1 items-center"
+              >
+                {/* <AddButton
       onClick={() => {
         console.error('unimplemented')
       }}
     /> */}
-              {/* <DeleteButton
+                {/* <DeleteButton
       onClick={() => {
         const { empty, anchor } = editor.state.selection
 
@@ -125,11 +57,12 @@ const FancyEditor = ({ content, onUpdate, readOnly }: Props) => {
       // editor={editor}
       // display={true || 'displaySidebar'}
     /> */}
-            </div>
-            {/* )} */}
-          </FloatingMenu>
-        </>
-      )}
+              </div>
+              {/* )} */}
+            </FloatingMenu>
+          </>
+        )}
+      </div>
     </>
   )
 }

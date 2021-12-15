@@ -37,7 +37,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
   }
 
   return (
-    <div className="flex flex-wrap border-b border-t border-gray-200 mb-8 py-1 items-center gap-1 bg-white z-10 sticky top-0">
+    <div className="flex flex-wrap border-b border-t border-gray-200 mb-4 py-1 items-center gap-1 bg-white z-10 sticky top-0">
       <MenuIconButton
         label="Undo"
         onClick={() => editor.chain().focus().undo().run()}
