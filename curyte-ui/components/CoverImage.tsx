@@ -26,12 +26,12 @@ const CoverImage = ({
       objectFit="cover"
       layout="responsive"
       alt={`Cover Image for ${title}`}
-      className="shadow-small image-wrapper w-fit-content h-auto my-8 rounded-xl shadow-lg border-0"
+      className="image-wrapper w-fit-content h-auto"
     />
   )
 
   return (
-    <div className="sm:mx-0 h-fit-content w-fit-content">
+    <div className="mx-2 h-fit-content w-fit-content overflow-hidden rounded-xl shadow-xl">
       {lessonId ? (
         <Link as={lessonRoute(lessonId)} href={lessonRouteHrefPath}>
           <a aria-label={title}>{image}</a>
