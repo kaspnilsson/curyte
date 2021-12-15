@@ -11,6 +11,7 @@ import {
 import React, { useRef, useState } from 'react'
 import UploadProgressBar from './UploadProgressBar'
 // import Resizer from 'react-image-file-resizer'
+import Compress from 'browser-image-compression'
 
 export interface ImageUploadDialogProps {
   title: string
@@ -18,6 +19,15 @@ export interface ImageUploadDialogProps {
   isOpen: boolean
   onClose: () => void
   onSuccess: (url: string) => void
+}
+
+const compressOptions = {
+  // As the key specify the maximum size
+  // Leave blank for infinity
+  maxSizeMB: 1.5,
+  // Use webworker for faster compression with
+  // the help of threads
+  useWebWorker: true,
 }
 
 // const resizeFile = (file: File): Promise<File> =>
@@ -53,8 +63,19 @@ const ImageUploadDialog = ({
     const selected = e.target.files?.item(0)
 
     if (selected) {
-      setFile(selected)
-      setError('')
+      Compress(selected, compressOptions)
+        .then((compressedBlob) => {
+          const convertedBlobFile = new File([compressedBlob], selected.name, {
+            type: selected.type,
+            lastModified: Date.now(),
+          })
+
+          setFile(convertedBlobFile)
+          setError('')
+        })
+        .catch((e) => {
+          console.error(e)
+        })
     } else {
       setFile(null)
       setError('Please select an image file (png or jpg)')

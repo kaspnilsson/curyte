@@ -42,9 +42,9 @@ export const ImageEmbed = Node.create({
       src: {
         default: null,
       },
-      frameborder: {
-        default: 0,
-      },
+      width: { default: '' },
+      height: { default: '' },
+      caption: { default: '' },
     }
   },
 
@@ -59,7 +59,7 @@ export const ImageEmbed = Node.create({
   renderHTML({ HTMLAttributes }) {
     return [
       'div',
-      { class: 'px-2 w-full h-fit', 'data-drag-handle': '' },
+      { class: 'px-2 w-full h-fit' },
       ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)],
     ]
   },
