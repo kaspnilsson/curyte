@@ -3,6 +3,7 @@ import admin from 'firebase-admin'
 
 admin.initializeApp()
 const db = admin.firestore()
+const storage = admin.storage()
 
 export const createUserDocument = functions.auth.user().onCreate((user) => {
   db.collection('users')
@@ -79,7 +80,24 @@ export const createTagsForLesson = functions.firestore
     }
   })
 
-export const deleteTagsForLesson = functions.firestore
+const getPathStorageFromUrl = (url: string) => {
+  const baseUrl =
+    'https://firebasestorage.googleapis.com/v0/b/project-80505.appspot.com/o/'
+
+  let imagePath: string = url.replace(baseUrl, '')
+
+  const indexOfEndPath = imagePath.indexOf('?')
+
+  imagePath = imagePath.substring(0, indexOfEndPath)
+
+  imagePath = imagePath.replace(/%2F/g, '/')
+
+  imagePath = imagePath.replace(/%20/g, ' ')
+
+  return imagePath
+}
+
+export const deleteDataForLesson = functions.firestore
   .document('lessons/{lessonId}')
   .onDelete(async (change: admin.firestore.QueryDocumentSnapshot) => {
     for (const tag of change.data().tags || []) {
@@ -98,5 +116,11 @@ export const deleteTagsForLesson = functions.firestore
           .doc(tag)
           .set({ tagText: tag, lessonIds: [], viewCount: 0 })
       }
+    }
+    if (change.data().coverImageUrl) {
+      storage
+        .bucket()
+        .file(getPathStorageFromUrl(change.data().coverImageUrl))
+        .delete()
     }
   })
