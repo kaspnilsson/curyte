@@ -1,7 +1,15 @@
 import { EditorState } from 'prosemirror-state'
-import { Node, mergeAttributes, nodeInputRule } from '@tiptap/core'
+import { Node, mergeAttributes, nodeInputRule, Command } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import CuryteLinkRenderer from './CuryteLinkRenderer'
+
+declare module '@tiptap/core' {
+  interface Commands {
+    curyteLink: {
+      setCuryteLink: (options: { src: string }) => Command
+    }
+  }
+}
 
 export const inputRegex = /https?:\/\/(www\.)?curyte.com\/lessons\/(.+)/g
 
@@ -15,13 +23,16 @@ const getAttributes = (match: string[]) => {
 
 export const CuryteLink = Node.create({
   name: 'curyteLink',
+  group: 'block',
   atom: true,
-  priority: 100,
-  group: 'inline list',
-  inline: true,
   selectable: true,
-  marks: '',
   draggable: true,
+
+  addOptions() {
+    return {
+      inline: false,
+    }
+  },
 
   addAttributes() {
     return {
@@ -36,13 +47,17 @@ export const CuryteLink = Node.create({
 
   renderHTML({ node, HTMLAttributes }) {
     return [
-      'a',
-      mergeAttributes(
-        { 'data-curyte-link': '' },
-        this.options.HTMLAttributes,
-        HTMLAttributes
-      ),
-      `${node.attrs.href}`,
+      'div',
+      { class: 'px-2 w-full h-fit', 'data-drag-handle': '' },
+      [
+        'a',
+        mergeAttributes(
+          { 'data-curyte-link': '' },
+          this.options.HTMLAttributes,
+          HTMLAttributes
+        ),
+        `${node.attrs.href}`,
+      ],
     ]
   },
 
@@ -62,6 +77,28 @@ export const CuryteLink = Node.create({
         getAttributes,
       }),
     ]
+  },
+
+  addCommands() {
+    return {
+      setCuryteLink:
+        (options) =>
+        ({ tr, dispatch }) => {
+          const matches = Array.from(
+            options.src.match(inputRegex)?.values() || []
+          )
+          if (!matches?.length) return false
+          const { selection } = tr
+          const attributes = getAttributes(matches)
+          const node = this.type.create(attributes)
+
+          if (dispatch) {
+            tr.replaceRangeWith(selection.from, selection.to, node)
+          }
+
+          return true
+        },
+    }
   },
 
   addPasteRules() {

@@ -1,4 +1,4 @@
-@import 'github-markdown-css/github-markdown-light.css';
+//  @import 'github-markdown-css/github-markdown-light.css';
 
 .ProseMirror {
   p.is-empty::before {
@@ -17,10 +17,6 @@
     .ProseMirror-selectednode img {
       box-shadow: var(--chakra-shadows-outline);
     }
-  }
-
-  .node-curyteLink {
-    height: 16px;
   }
 
   ul {

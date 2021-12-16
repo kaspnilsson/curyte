@@ -33,11 +33,11 @@ const UserView = ({ lessons, author }: Props) => {
         <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
           Lessons
         </h2>
-        {lessons.map((lesson) => (
-          <div className="border-b border-gray-200 pb-8 mb-8" key={lesson.uid}>
-            <LessonPreview lesson={lesson} />
-          </div>
-        ))}
+        <div className="flex flex-wrap gap-4 mb-8 justify-center">
+          {lessons.map((lesson) => (
+            <LessonPreview key={lesson.uid} lesson={lesson} />
+          ))}
+        </div>
         {!lessons?.length && 'Nothing here yet!'}
       </Container>
     </Layout>

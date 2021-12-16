@@ -40,21 +40,21 @@ const Home = ({ lessons }: Props) => {
           <Input
             type="text"
             size="lg"
+            className="mx-96"
             variant="outline"
             placeholder="Search for a lesson..."
             value={keyword}
             onChange={(e) => search(e.target.value)}
           />
         </section>
-        {result &&
-          result.map((lesson) => (
-            <div
-              className="border-b border-gray-200 pb-8 mb-8"
-              key={lesson.uid}
-            >
-              <LessonPreview lesson={lesson} />
-            </div>
-          ))}
+        {result && (
+          <div className="flex flex-wrap gap-4 mb-8 justify-center">
+            {result.map((lesson) => (
+              <LessonPreview key={lesson.uid} lesson={lesson} />
+            ))}
+          </div>
+        )}
+        {!result?.length && 'Nothing here yet! Maybe you should teach us!'}
       </Container>
     </Layout>
   )
