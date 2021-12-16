@@ -148,7 +148,7 @@ const EditLessonPage = ({
           </div>
         </div>
       </div>
-      <footer className="bg-white border-t border-accent-2 bottom-0 left-0 fixed w-full h-24 z-10">
+      <footer className="bg-white border-t border-accent-2 bottom-0 left-0 fixed w-full h-24 z-20">
         <div className="h-full m-auto w-full lg:w-2/3 flex items-center justify-end">
           {handleSaveDraft && (
             <Button
