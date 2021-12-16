@@ -22,8 +22,6 @@ import { YoutubeEmbed } from '../components/embeds/YoutubeEmbed'
 import AutoId from '../components/extensions/AutoId'
 import Link from '@tiptap/extension-link'
 import { CuryteLink } from '../components/extensions/CuryteLink/CuryteLink'
-import SlashCommands from '../components/extensions/SlashCommands/SlashCommands'
-import SlashCommandsList from '../components/extensions/SlashCommands/SlashCommandsList'
 
 interface EditorProps {
   content: JSONContent | null

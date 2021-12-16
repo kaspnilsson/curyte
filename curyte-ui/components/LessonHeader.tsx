@@ -102,27 +102,21 @@ const LessonHeader = ({
       <LessonTitle title={lesson.title} />
       <div className="flex items-center mb-4 h-min">
         {parentLesson && (
-          <div className="flex items-center h-min ">
+          <div className="flex items-center h-min">
             <span className="mr-2">➜</span>
-            <h1 className="text-xl font-bold tracking-tighter leading-tight md:leading-none text-center md:text-left mr-2">
+            <h1 className="font-bold tracking-tighter leading-tight md:leading-none text-center md:text-left mr-2">
               Copied from
             </h1>
             <LessonLink lesson={parentLesson} />
           </div>
         )}
         {parentLesson && isDraft && (
-          <Center className="h-6 w-6 mx-3">
+          <Center className="h-4 w-4 mx-2">
             <Divider orientation="vertical" />
           </Center>
         )}
         {isDraft && (
-          <Badge
-            variant="subtle"
-            size="xl"
-            colorScheme="orange"
-            fontSize="1em"
-            className=" h-min"
-          >
+          <Badge variant="subtle" colorScheme="orange" className="h-min">
             Draft
           </Badge>
         )}

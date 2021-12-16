@@ -19,7 +19,7 @@ const LessonLink = ({ lesson }: Props) => {
     >
       <Button variant="link" colorScheme="black">
         <span className="text-inherit leading-snug w-auto flex items-center m-0">
-          <DocumentTextIcon className="h-5 w-5 mr-2" />
+          <DocumentTextIcon className="h-5 w-5 mr-1" />
           {lesson.title || '(no title)'}
         </span>
       </Button>
