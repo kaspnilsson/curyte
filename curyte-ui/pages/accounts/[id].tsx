@@ -38,6 +38,7 @@ const UserView = ({ lessons, author }: Props) => {
             <LessonPreview lesson={lesson} />
           </div>
         ))}
+        {!lessons?.length && 'Nothing here yet!'}
       </Container>
     </Layout>
   )
