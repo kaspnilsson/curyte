@@ -8,18 +8,10 @@ import {
   Button,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import InputDialog, { InputDialogProps } from './InputDialog'
-import {
-  googleDocsUrlMatchRegex,
-  googleDrawingsUrlMatchRegex,
-  googleDriveUrlMatchRegex,
-  googleSheetsUrlMatchRegex,
-  googleSlidesUrlMatchRegex,
-  imageUrlMatchRegex,
-  youtubeUrlMatchRegex,
-} from './embeds/matchers'
 import MenuIconButton from './MenuIconButton'
-import MenuItem from './MenuItem'
+import StyleMenuItems from './menuItems/StyleMenuItems'
+import InsertMenuItems from './menuItems/InsertMenuItems'
+import InputDialog, { InputDialogProps } from './InputDialog'
 
 interface Props {
   editor: Editor | null
@@ -28,16 +20,20 @@ interface Props {
 const FancyEditorMenuBar = ({ editor }: Props) => {
   const [dialogProps, setDialogProps] = useState({} as InputDialogProps)
 
-  if (!editor) {
-    return null
-  }
-
-  const onDialogClose = () => {
+  const onClose = () => {
     setDialogProps({ ...dialogProps, isOpen: false })
   }
 
+  const openDialog = (input: Partial<InputDialogProps>) => {
+    setDialogProps({ ...dialogProps, ...input, onClose })
+  }
+
+  if (!editor) {
+    return null
+  }
   return (
     <div className="flex flex-wrap border-b border-t border-gray-200 mb-4 py-1 items-center gap-1 bg-white z-10 sticky top-0">
+      <InputDialog {...dialogProps} />
       <MenuIconButton
         label="Undo"
         onClick={() => editor.chain().focus().undo().run()}
@@ -63,48 +59,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
           </div>
         </MenuButton>
         <MenuList>
-          <MenuItem
-            onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 1 }).run()
-            }
-            icon={<i className="text-lg ri-h-1" />}
-            label={'Heading 1'}
-          />
-          <MenuItem
-            onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 2 }).run()
-            }
-            icon={<i className="text-lg ri-h-2" />}
-            label="Heading 2"
-          />
-          <MenuItem
-            onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 3 }).run()
-            }
-            icon={<i className="text-lg ri-h-3" />}
-            label="Heading 3"
-          />
-          <MenuItem
-            onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 4 }).run()
-            }
-            icon={<i className="text-lg ri-h-4" />}
-            label="Heading 4"
-          />
-          <MenuItem
-            onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 5 }).run()
-            }
-            icon={<i className="text-lg ri-h-5" />}
-            label="Heading 5"
-          />
-          <MenuItem
-            onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 6 }).run()
-            }
-            icon={<i className="text-lg ri-h-6" />}
-            label="Heading 6"
-          />
+          <StyleMenuItems editor={editor} />
         </MenuList>
       </Menu>
       <Center className="h-6 w-2">
@@ -213,136 +168,9 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
           </div>
         </MenuButton>
         <MenuList>
-          <MenuItem
-            onClick={() => {
-              setDialogProps({
-                isOpen: true,
-                onClose: onDialogClose,
-                title: 'Enter a video URL',
-                description: 'Paste a link from either Youtube or Vimeo.',
-                onConfirm: (src: string) => {
-                  if (youtubeUrlMatchRegex.test(src)) {
-                    editor.commands.setYoutubeVideo({
-                      src,
-                    })
-                  } else {
-                    // It's vimeo
-                    editor.commands.setVimeoVideo({
-                      src,
-                    })
-                  }
-                },
-                initialValue: '',
-                validator: (input: string) =>
-                  youtubeUrlMatchRegex.test(input) ||
-                  googleDrawingsUrlMatchRegex.test(input),
-              })
-            }}
-            icon={<i className="text-lg ri-movie-line" />}
-            label="Video (Youtube or Vimeo)"
-          />
-          <MenuItem
-            onClick={() => {
-              setDialogProps({
-                isOpen: true,
-                onClose: onDialogClose,
-                title: 'Enter a URL',
-                description: (
-                  <span>
-                    Enter the URL for a Google Drive page. Please ensure
-                    whatever you are linking has been shared publicly! For more,
-                    view
-                    <a
-                      className="ml-1 text-blue-600 hover:text-blue-800 visited:text-purple-600"
-                      href="https://support.google.com/a/users/answer/9308873?hl=en"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      the documentation from Google.
-                    </a>
-                  </span>
-                ),
-                onConfirm: (src: string) => {
-                  editor
-                    .chain()
-                    .focus()
-                    .setGoogleDrive({
-                      src: src
-                        .replace('/edit', '/preview')
-                        .replace('/pub', '/embed'),
-                    })
-                    .run()
-                },
-                initialValue: '',
-                validator: (input: string) =>
-                  googleDocsUrlMatchRegex.test(input) ||
-                  googleDriveUrlMatchRegex.test(input) ||
-                  googleSheetsUrlMatchRegex.test(input) ||
-                  googleSlidesUrlMatchRegex.test(input) ||
-                  googleDrawingsUrlMatchRegex.test(input),
-              })
-            }}
-            icon={<i className="text-lg ri-drive-line" />}
-            label="Google Doc"
-          />
-          <MenuItem
-            onClick={() => {
-              setDialogProps({
-                isOpen: true,
-                onClose: onDialogClose,
-                title: 'Enter an image URL',
-                description: 'Enter the URL to an image from another website.',
-                onConfirm: (src: string) => {
-                  editor.chain().focus().setImage({ src }).run()
-                },
-                initialValue: '',
-                validator: (input: string) => imageUrlMatchRegex.test(input),
-              })
-            }}
-            icon={<i className="text-lg ri-image-line" />}
-            label="Image from another site"
-          />
-          <MenuItem
-            onClick={() => {
-              setDialogProps({
-                isOpen: true,
-                onClose: onDialogClose,
-                title: 'Enter a URL',
-                description: 'Enter the URL for another website.',
-                onConfirm: (src: string) => {
-                  editor.chain().focus().setIFrame({ src }).run()
-                },
-              })
-            }}
-            icon={<i className="text-lg ri-window-line" />}
-            label="Webpage"
-          />
-          <MenuItem
-            onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-            icon={<i className="text-lg ri-code-box-line" />}
-            label="Code block"
-          />
-          <MenuItem
-            onClick={() =>
-              editor
-                .chain()
-                .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-                .run()
-            }
-            icon={<i className="text-lg ri-grid-line" />}
-            label="Table"
-          />
+          <InsertMenuItems editor={editor} openDialog={openDialog} />
         </MenuList>
       </Menu>
-      <InputDialog
-        title={dialogProps.title}
-        isOpen={dialogProps.isOpen}
-        description={dialogProps.description}
-        onClose={dialogProps.onClose}
-        onConfirm={dialogProps.onConfirm}
-        validator={dialogProps.validator}
-        initialValue={dialogProps.initialValue}
-      />
     </div>
   )
 }

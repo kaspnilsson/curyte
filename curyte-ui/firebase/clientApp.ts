@@ -15,7 +15,14 @@ const clientCredentials = {
 
 if (!firebase.apps.length) {
   firebase.initializeApp(clientCredentials)
-  firebase.analytics()
+}
+
+export const analytics = () => {
+  if (typeof window !== 'undefined') {
+    return firebase.analytics()
+  } else {
+    return null
+  }
 }
 
 export default firebase
