@@ -66,7 +66,7 @@ const LessonOutline = ({ editor }: Props) => {
                 <ListItem
                   className={`pl-${
                     (item.level - minHeadingLevel) * 4 + 2
-                  } hover:bg-gray-200 rounded py-1 font-semibold truncate`}
+                  } hover:bg-purple-50 rounded py-1 font-semibold truncate`}
                 >
                   {item.text}
                 </ListItem>
