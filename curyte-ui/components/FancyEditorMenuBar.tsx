@@ -58,7 +58,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
             <i className="ri-arrow-drop-down-line text-lg w-2"></i>
           </div>
         </MenuButton>
-        <MenuList>
+        <MenuList isLazy className="max-h-96 overflow-auto z-20">
           <StyleMenuItems editor={editor} />
         </MenuList>
       </Menu>
@@ -167,7 +167,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
             <i className="ri-arrow-drop-down-line text-lg w-2"></i>
           </div>
         </MenuButton>
-        <MenuList>
+        <MenuList isLazy className="max-h-96 overflow-auto z-20">
           <InsertMenuItems editor={editor} openDialog={openDialog} />
         </MenuList>
       </Menu>

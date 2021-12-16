@@ -77,7 +77,6 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
                       }
                     />
                   </div>
-                  {/* )} */}
                 </FloatingMenu>
               </>
             )}

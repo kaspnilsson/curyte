@@ -20,7 +20,7 @@ const AddButton = ({ onClick, disabled, items }: Props) => {
       >
         <i className="ri-add-circle-line text-gray-900 text-lg"></i>
       </MenuButton>
-      <MenuList className="max-h-96 overflow-auto">{items}</MenuList>
+      <MenuList className="max-h-96 overflow-auto z-20">{items}</MenuList>
     </Menu>
   )
 }

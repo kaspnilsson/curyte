@@ -3,6 +3,7 @@ import { NodeViewWrapper } from '@tiptap/react'
 import { useEffect, useState } from 'react'
 import { Lesson } from '../../../interfaces/lesson'
 import LessonLink from '../../LessonLink'
+import { Spinner } from '@chakra-ui/react'
 
 const CuryteLinkRenderer = (props: {
   node: { attrs: { lessonId: string; href: string } }
@@ -20,7 +21,8 @@ const CuryteLinkRenderer = (props: {
   return (
     <NodeViewWrapper>
       <>
-        {loading && null} {!loading && lesson && <LessonLink lesson={lesson} />}
+        {loading && <Spinner color="purple" size="xs" />}{' '}
+        {!loading && lesson && <LessonLink lesson={lesson} />}
       </>
     </NodeViewWrapper>
   )
