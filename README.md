@@ -29,4 +29,4 @@ Assumes MacOS & homebrew are installed.
 
 ## Authors
 
-kasper nilsson, marvin liyange
+kasper nilsson, marvin liyanage
