@@ -37,7 +37,7 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
               <>
                 <TableBubbleMenu editor={editor} />
                 <TextBubbleMenu editor={editor} />
-                <FloatingMenu editor={editor}>
+                <FloatingMenu editor={editor} tippyOptions={{ zIndex: 1 }}>
                   <div
                     style={{ position: 'absolute', top: -16, left: -90 }}
                     className="flex gap-1 items-center"
