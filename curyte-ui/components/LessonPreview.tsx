@@ -46,13 +46,12 @@ const LessonPreview = ({ lesson }: Props) => {
         )}
       </div>
       {lesson.coverImageUrl && (
-        <div className="flex-0 h-36 w-36">
+        <div className="flex-0">
           <CoverImage
             lessonId={lesson.uid}
             title={lesson.title}
             src={lesson.coverImageUrl}
-            width={200}
-            height={200}
+            isThumbnail
           />
         </div>
       )}

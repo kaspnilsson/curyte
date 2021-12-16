@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -7,31 +8,27 @@ type Props = {
   title: string
   src: string
   lessonId?: string
-  width?: number
-  height?: number
+  isThumbnail?: boolean
 }
 
-const CoverImage = ({
-  title,
-  lessonId,
-  src,
-  width = 400,
-  height = 200,
-}: Props) => {
+const CoverImage = ({ title, lessonId, src, isThumbnail }: Props) => {
   const image = (
     <Image
       src={src}
-      height={height}
-      width={width}
+      layout="fill"
       objectFit="cover"
-      layout="responsive"
       alt={`Cover Image for ${title}`}
-      className="image-wrapper w-fit-content h-auto"
+      className="image-wrapper w-auto h-auto"
     />
   )
 
   return (
-    <div className="mx-2 h-fit-content w-fit-content overflow-hidden rounded-xl shadow-xl">
+    <div
+      className={classNames(
+        'mx-2 overflow-hidden rounded-xl shadow-xl relative',
+        { 'h-36 w-36': isThumbnail, 'h-96 w-full': !isThumbnail }
+      )}
+    >
       {lessonId ? (
         <Link as={lessonRoute(lessonId)} href={lessonRouteHrefPath}>
           <a aria-label={title}>{image}</a>
