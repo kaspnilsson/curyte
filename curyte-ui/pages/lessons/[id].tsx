@@ -1,3 +1,4 @@
+import { NextSeo } from 'next-seo'
 import firebase from '../../firebase/clientApp'
 import Head from 'next/head'
 import ErrorPage from 'next/error'
@@ -13,7 +14,7 @@ import FancyEditor from '../../components/FancyEditor'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { editLessonRoute } from '../../utils/routes'
+import { editLessonRoute, lessonRoute } from '../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
 import useCuryteEditor from '../../hooks/useCuryteEditor'
 import LessonOutline from '../../components/LessonOutline'
@@ -43,6 +44,13 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
 
   if (!lesson || !lesson.title) return <ErrorPage statusCode={404} />
 
+  const openGraphDescription = `${lesson.description}, tags:${lesson.tags.join(
+    ', '
+  )}`
+  const openGraphImages = []
+  if (lesson.coverImageUrl) {
+    openGraphImages.push({ url: lesson.coverImageUrl })
+  }
   return (
     <>
       {(loading || userLoading) && <LoadingSpinner />}
@@ -52,6 +60,17 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
           title={lesson.title}
           sidebar={<LessonOutline editor={editor} />}
         >
+          <NextSeo
+            title={lesson.title}
+            description={openGraphDescription}
+            openGraph={{
+              url: lessonRoute(lesson.uid),
+              title: lesson.title,
+              description: openGraphDescription,
+              images: openGraphImages,
+              site_name: 'Curyte',
+            }}
+          ></NextSeo>
           <Container>
             <article className="mb-32">
               <Head>
