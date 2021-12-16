@@ -1,5 +1,10 @@
 import { EditorState } from 'prosemirror-state'
-import { Node, mergeAttributes, nodeInputRule } from '@tiptap/core'
+import {
+  Node,
+  mergeAttributes,
+  nodeInputRule,
+  markPasteRule,
+} from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import CuryteLinkRenderer from './CuryteLinkRenderer'
 
@@ -64,26 +69,6 @@ export const CuryteLink = Node.create({
   },
 
   addPasteRules() {
-    return [
-      {
-        find: inputRegex,
-        handler: ({
-          state,
-          range,
-          match,
-        }: {
-          state: EditorState
-          range: { from: number; to: number }
-          match: string[]
-        }) => {
-          const attributes = getAttributes(match)
-          const { tr } = state
-          const start = range.from
-          const end = range.to
-
-          tr.replaceWith(start, end, this.type.create(attributes))
-        },
-      },
-    ]
+    return [markPasteRule({ find: inputRegex, type: this.type, getAttributes })]
   },
 })

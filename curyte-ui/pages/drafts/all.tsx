@@ -29,7 +29,7 @@ const DraftsPage = () => {
       {!loading && (
         <>
           {drafts.map((draft) => (
-            <div className="mb-3" key={draft.uid}>
+            <div className="mb-1" key={draft.uid}>
               <DraftLink draft={draft} />
             </div>
           ))}

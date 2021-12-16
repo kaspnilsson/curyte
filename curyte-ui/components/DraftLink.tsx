@@ -17,11 +17,15 @@ const DraftLink = ({ draft }: Props) => {
       passHref
       key={draft.uid}
     >
-      <Button variant="link" colorScheme="black">
-        <h3 className="text-xl leading-snug w-auto flex items-center">
-          <DocumentTextIcon className="h-5 w-5 mr-2" />
+      <Button
+        variant="link"
+        colorScheme="black"
+        className="hover:bg-purple-50 rounded overflow-hidden"
+      >
+        <span className="tracking-tight md:tracking-tighter leading-tight w-auto flex items-center m-0 p-1">
+          <DocumentTextIcon className="h-5 w-5 mr-1" />
           {draft.title || '(no title)'}
-        </h3>
+        </span>
       </Button>
     </Link>
   )
