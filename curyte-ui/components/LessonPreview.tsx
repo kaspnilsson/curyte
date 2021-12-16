@@ -15,7 +15,7 @@ const LessonPreview = ({ lesson }: Props) => {
   return (
     <Link as={lessonRoute(lesson.uid)} href={lessonRouteHrefPath} passHref>
       <div className="group flex cursor-pointer">
-        <div className="flex-1  min-w-0 mr-4">
+        <div className="flex-1 min-w-0 mr-4">
           <h3 className="text-xl mb-3 leading-snug truncate min-w-0">
             <a className="hover:underline group-hover:underline">
               {lesson.title || '(no title)'}
@@ -45,7 +45,7 @@ const LessonPreview = ({ lesson }: Props) => {
           )}
         </div>
         {lesson.coverImageUrl && (
-          <div className="flex-0">
+          <div className="flex-0 hidden sm:inline">
             <CoverImage
               lessonId={lesson.uid}
               title={lesson.title}
