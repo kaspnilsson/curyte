@@ -5,7 +5,7 @@ import { Button } from '@chakra-ui/react'
 import { Lesson } from '../interfaces/lesson'
 import { lessonRoute, lessonRouteHrefPath } from '../utils/routes'
 
-type Props = {
+interface Props {
   lesson: Lesson
 }
 
@@ -18,10 +18,10 @@ const LessonLink = ({ lesson }: Props) => {
       key={lesson.uid}
     >
       <Button variant="link" colorScheme="black">
-        <h3 className="text-xl leading-snug w-auto flex items-center">
+        <span className="text-inherit leading-snug w-auto flex items-center m-0">
           <DocumentTextIcon className="h-5 w-5 mr-2" />
           {lesson.title || '(no title)'}
-        </h3>
+        </span>
       </Button>
     </Link>
   )

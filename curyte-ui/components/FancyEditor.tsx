@@ -2,6 +2,7 @@ import { EditorContent, FloatingMenu, Editor } from '@tiptap/react'
 import React from 'react'
 import FancyEditorMenuBar from './FancyEditorMenuBar'
 import TextBubbleMenu from './extensions/BubbleMenu/TextBubbleMenu'
+import TableBubbleMenu from './extensions/BubbleMenu/TableBubbleMenu'
 
 // import AddButton from './popovers/AddButton'
 // import DeleteButton from './popovers/DeleteButton'
@@ -24,6 +25,7 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
         {editor && (
           <>
             {!readOnly && <TextBubbleMenu editor={editor} />}
+            {!readOnly && <TableBubbleMenu editor={editor} />}
             <FloatingMenu editor={editor}>
               {/* {shouldShowPopover(editor) && ( */}
               <div

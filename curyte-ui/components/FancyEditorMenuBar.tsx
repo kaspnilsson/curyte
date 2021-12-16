@@ -41,13 +41,13 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
       <MenuIconButton
         label="Undo"
         onClick={() => editor.chain().focus().undo().run()}
-        icon={<i className="text-gray-900 ri-lg ri-arrow-go-back-line" />}
+        icon={<i className="text-lg ri-arrow-go-back-line" />}
       />
       <MenuIconButton
         label="Redo"
-        disabled={editor.can().redo()}
+        disabled={!editor.can().redo()}
         onClick={() => editor.chain().focus().redo().run()}
-        icon={<i className="text-gray-900 ri-lg ri-arrow-go-forward-line" />}
+        icon={<i className="text-lg ri-arrow-go-forward-line" />}
       />
       <Center className="h-6 w-2">
         <Divider
@@ -59,7 +59,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         <MenuButton size="sm" variant="ghost" colorScheme="purple" as={Button}>
           <div className="flex items-center text-gray-900 gap-1 text-sm">
             Style
-            <i className="ri-arrow-drop-down-line text-gray-900 ri-lg w-2"></i>
+            <i className="ri-arrow-drop-down-line text-lg w-2"></i>
           </div>
         </MenuButton>
         <MenuList>
@@ -67,42 +67,42 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 1 }).run()
             }
-            icon={<i className="text-gray-900 ri-lg ri-h-1" />}
+            icon={<i className="text-lg ri-h-1" />}
             label={'Heading 1'}
           />
           <MenuItem
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 2 }).run()
             }
-            icon={<i className="text-gray-900 ri-lg ri-h-2" />}
+            icon={<i className="text-lg ri-h-2" />}
             label="Heading 2"
           />
           <MenuItem
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 3 }).run()
             }
-            icon={<i className="text-gray-900 ri-lg ri-h-3" />}
+            icon={<i className="text-lg ri-h-3" />}
             label="Heading 3"
           />
           <MenuItem
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 4 }).run()
             }
-            icon={<i className="text-gray-900 ri-lg ri-h-4" />}
+            icon={<i className="text-lg ri-h-4" />}
             label="Heading 4"
           />
           <MenuItem
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 5 }).run()
             }
-            icon={<i className="text-gray-900 ri-lg ri-h-5" />}
+            icon={<i className="text-lg ri-h-5" />}
             label="Heading 5"
           />
           <MenuItem
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 6 }).run()
             }
-            icon={<i className="text-gray-900 ri-lg ri-h-6" />}
+            icon={<i className="text-lg ri-h-6" />}
             label="Heading 6"
           />
         </MenuList>
@@ -117,43 +117,43 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         label="Bold"
         onClick={() => editor.chain().focus().toggleBold().run()}
         isActive={editor.isActive('bold')}
-        icon={<i className="text-gray-900 ri-lg ri-bold" />}
+        icon={<i className="text-lg ri-bold" />}
       />
       <MenuIconButton
         label="Italicize"
         onClick={() => editor.chain().focus().toggleItalic().run()}
         isActive={editor.isActive('italic')}
-        icon={<i className="text-gray-900 ri-lg ri-italic" />}
+        icon={<i className="text-lg ri-italic" />}
       />
       <MenuIconButton
         label="Strikethrough"
         onClick={() => editor.chain().focus().toggleStrike().run()}
         isActive={editor.isActive('strike')}
-        icon={<i className="text-gray-900 ri-lg ri-strikethrough" />}
+        icon={<i className="text-lg ri-strikethrough" />}
       />
       <MenuIconButton
         label="Underline"
         onClick={() => editor.chain().focus().toggleUnderline().run()}
         isActive={editor.isActive('underline')}
-        icon={<i className="text-gray-900 ri-lg ri-underline" />}
+        icon={<i className="text-lg ri-underline" />}
       />
       <MenuIconButton
         label="Highlight"
         onClick={() => editor.chain().focus().toggleHighlight().run()}
         isActive={editor.isActive('highlight')}
-        icon={<i className="text-gray-900 ri-lg ri-mark-pen-line" />}
+        icon={<i className="text-lg ri-mark-pen-line" />}
       />
       <MenuIconButton
         label="Superscript"
         onClick={() => editor.chain().focus().toggleSuperscript().run()}
         isActive={editor.isActive('superscript')}
-        icon={<i className="text-gray-900 ri-lg ri-superscript" />}
+        icon={<i className="text-lg ri-superscript" />}
       />
       <MenuIconButton
         label="Code (inline)"
         onClick={() => editor.chain().focus().toggleCode().run()}
         isActive={editor.isActive('code')}
-        icon={<i className="text-gray-900 ri-lg ri-code-line" />}
+        icon={<i className="text-lg ri-code-line" />}
       />
       <MenuIconButton
         label="Clear formatting"
@@ -161,7 +161,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
           editor.chain().focus().unsetAllMarks().run()
           editor.chain().focus().clearNodes().run()
         }}
-        icon={<i className="text-gray-900 ri-lg ri-format-clear" />}
+        icon={<i className="text-lg ri-format-clear" />}
       />
       <Center className="h-6 w-4">
         <Divider
@@ -173,26 +173,26 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         label="Bulleted list"
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         isActive={editor.isActive('bulletList')}
-        icon={<i className="text-gray-900 ri-lg ri-list-unordered" />}
+        icon={<i className="text-lg ri-list-unordered" />}
       />
 
       <MenuIconButton
         label="Ordered list"
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         isActive={editor.isActive('orderedList')}
-        icon={<i className="text-gray-900 ri-lg ri-list-ordered" />}
+        icon={<i className="text-lg ri-list-ordered" />}
       />
       <MenuIconButton
         label="To-do list"
         onClick={() => editor.chain().focus().toggleTaskList().run()}
         isActive={editor.isActive('taskList')}
-        icon={<i className="text-gray-900 ri-lg ri-list-check-2" />}
+        icon={<i className="text-lg ri-list-check-2" />}
       />
       <MenuIconButton
         label="Block quote"
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
         isActive={editor.isActive('blockquote')}
-        icon={<i className="text-gray-900 ri-lg ri-double-quotes-l" />}
+        icon={<i className="text-lg ri-double-quotes-l" />}
       />
       <Center className="h-6 w-4">
         <Divider
@@ -203,13 +203,13 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
       <MenuIconButton
         label="Add a line"
         onClick={() => editor.chain().focus().setHorizontalRule().run()}
-        icon={<i className="text-gray-900 ri-lg ri-separator" />}
+        icon={<i className="text-lg ri-separator" />}
       />
       <Menu id="insert-menu" isLazy colorScheme="purple">
         <MenuButton size="sm" variant="ghost" colorScheme="purple" as={Button}>
           <div className="flex items-center text-gray-900 gap-1 text-sm">
             Insert
-            <i className="ri-arrow-drop-down-line text-gray-900 ri-lg w-2"></i>
+            <i className="ri-arrow-drop-down-line text-lg w-2"></i>
           </div>
         </MenuButton>
         <MenuList>
@@ -238,7 +238,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
                   googleDrawingsUrlMatchRegex.test(input),
               })
             }}
-            icon={<i className="text-gray-900 ri-lg ri-movie-line" />}
+            icon={<i className="text-lg ri-movie-line" />}
             label="Video (Youtube or Vimeo)"
           />
           <MenuItem
@@ -282,7 +282,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
                   googleDrawingsUrlMatchRegex.test(input),
               })
             }}
-            icon={<i className="text-gray-900 ri-lg ri-drive-line" />}
+            icon={<i className="text-lg ri-drive-line" />}
             label="Google Doc"
           />
           <MenuItem
@@ -299,7 +299,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
                 validator: (input: string) => imageUrlMatchRegex.test(input),
               })
             }}
-            icon={<i className="text-gray-900 ri-lg ri-image-line" />}
+            icon={<i className="text-lg ri-image-line" />}
             label="Image from another site"
           />
           <MenuItem
@@ -314,12 +314,12 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
                 },
               })
             }}
-            icon={<i className="text-gray-900 ri-lg ri-window-line" />}
+            icon={<i className="text-lg ri-window-line" />}
             label="Webpage"
           />
           <MenuItem
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-            icon={<i className="text-gray-900 ri-lg ri-code-box-line" />}
+            icon={<i className="text-lg ri-code-box-line" />}
             label="Code block"
           />
           <MenuItem
@@ -329,13 +329,8 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
                 .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
                 .run()
             }
-            icon={<i className="text-gray-900 ri-lg ri-grid-line" />}
+            icon={<i className="text-lg ri-grid-line" />}
             label="Table"
-          />
-          <MenuItem
-            onClick={() => editor.commands.addTableOfContents()}
-            icon={<i className="text-gray-900 ri-lg ri-file-list-line" />}
-            label="Table of contents"
           />
         </MenuList>
       </Menu>
