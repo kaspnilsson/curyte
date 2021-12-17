@@ -26,13 +26,13 @@ const Home = ({ lessons }: Props) => {
 
   return (
     <Layout>
-      <Container>
+      <Container className="flex flex-col items-center">
         <section className="flex-row flex items-center justify-center mt-16 mb-8">
           <h1 className="text-4xl md:text-6xl text-center font-bold tracking-tighter leading-tight">
             Byte-sized lessons, for the curious.
           </h1>
         </section>
-        <section className="flex-col flex items-center justify-around mb-8">
+        <section className="flex-col flex items-center justify-around mb-8 w-96">
           {/* <p className="text-center tracking-tighter mb-8 text-gray-700">
                   Because lessons can be so much more than just PDFs from the
                   90s.

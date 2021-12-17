@@ -18,26 +18,6 @@ const LessonPreview = ({ lesson, author }: Props) => {
   return (
     <Link as={lessonRoute(lesson.uid)} href={lessonRouteHrefPath} passHref>
       <div className="group flex flex-col cursor-pointer rounded-xl shadow-lg overflow-hidden w-96 border-2 border-gray-200 lesson-preview">
-        <div className="flex flex-col gap-2 p-4">
-          <Text
-            fontSize="lg"
-            className="font-bold tracking-tight md:tracking-tighter leading-tight"
-          >
-            <a className="hover:underline group-hover:underline">
-              {lesson.title || '(no title)'}
-            </a>
-          </Text>
-          <p className="text-sm leading-relaxed truncate min-w-0 text-gray-500">
-            {lesson.description}
-          </p>
-          {lesson.tags?.length && (
-            <div className="flex gap-2 items-center">
-              {lesson.tags.slice(0, 3).map((t, index) => (
-                <TagChip tagLabel={t} key={t + index} />
-              ))}
-            </div>
-          )}
-        </div>
         <div className="w-96 h-48 relative overflow-hidden">
           {lesson.coverImageUrl && (
             <Image
@@ -66,7 +46,27 @@ const LessonPreview = ({ lesson, author }: Props) => {
             </div>
           )}
         </div>
-        <div className="flex-1 min-w-0 p-4 flex flex-col gap-2">
+        <div className="flex flex-col gap-2 m-4">
+          <Text
+            fontSize="lg"
+            className="font-bold tracking-tight md:tracking-tighter leading-tight"
+          >
+            <a className="hover:underline group-hover:underline">
+              {lesson.title || '(no title)'}
+            </a>
+          </Text>
+          <p className="text-sm leading-relaxed truncate min-w-0 text-gray-500">
+            {lesson.description}
+          </p>
+          {lesson.tags?.length && (
+            <div className="flex gap-2 items-center">
+              {lesson.tags.slice(0, 3).map((t, index) => (
+                <TagChip tagLabel={t} key={t + index} />
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="flex-1 min-w-0 m-4 mt-0 flex flex-col gap-2 h-full justify-end">
           <div className="text-sm flex items-center justify-between">
             <div className="font-bold mr-4">
               {!author && lesson.authorName}
