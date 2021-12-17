@@ -17,6 +17,7 @@ import {
   MenuItem,
   MenuButton,
   Button,
+  Portal,
 } from '@chakra-ui/react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import {
@@ -182,26 +183,28 @@ const LessonHeader = ({
               icon={<MenuIcon className="h-5 w-5 text-inherit" />}
               variant="subtle"
             />
-            <MenuList>
-              {!isDraft && (
-                <MenuItem onClick={handleMakeCopy}>
-                  <DuplicateIcon className="h-5 w-5 text-inherit mr-4" />
-                  Make a copy
-                </MenuItem>
-              )}
-              {handleEdit && (
-                <MenuItem onClick={handleEdit}>
-                  <PencilAltIcon className="h-5 w-5 text-inherit mr-4" />
-                  Edit lesson
-                </MenuItem>
-              )}
-              {handleDelete && (
-                <MenuItem onClick={handleDelete}>
-                  <DocumentRemoveIcon className="h-5 w-5 text-inherit mr-4" />
-                  Delete lesson
-                </MenuItem>
-              )}
-            </MenuList>
+            <Portal>
+              <MenuList>
+                {!isDraft && (
+                  <MenuItem onClick={handleMakeCopy}>
+                    <DuplicateIcon className="h-5 w-5 text-inherit mr-4" />
+                    Make a copy
+                  </MenuItem>
+                )}
+                {handleEdit && (
+                  <MenuItem onClick={handleEdit}>
+                    <PencilAltIcon className="h-5 w-5 text-inherit mr-4" />
+                    Edit lesson
+                  </MenuItem>
+                )}
+                {handleDelete && (
+                  <MenuItem onClick={handleDelete}>
+                    <DocumentRemoveIcon className="h-5 w-5 text-inherit mr-4" />
+                    Delete lesson
+                  </MenuItem>
+                )}
+              </MenuList>
+            </Portal>
           </Menu>
         </div>
       </div>

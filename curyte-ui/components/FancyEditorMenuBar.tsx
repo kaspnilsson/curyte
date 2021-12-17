@@ -6,6 +6,7 @@ import {
   MenuList,
   MenuButton,
   Button,
+  Portal,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import MenuIconButton from './MenuIconButton'
@@ -51,16 +52,18 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
           className="border-gray-200 opacity-100"
         />
       </Center>
-      <Menu id="style-menu" isLazy colorScheme="purple">
+      <Menu id="style-menu" isLazy boundary="scrollParent" colorScheme="purple">
         <MenuButton size="sm" variant="ghost" colorScheme="purple" as={Button}>
           <div className="flex items-center text-gray-900 gap-1 text-sm">
             Style
             <i className="ri-arrow-drop-down-line text-lg w-2"></i>
           </div>
         </MenuButton>
-        <MenuList isLazy className="max-h-96 overflow-auto z-20">
-          <StyleMenuItems editor={editor} />
-        </MenuList>
+        <Portal>
+          <MenuList className="max-h-96 overflow-auto z-20">
+            <StyleMenuItems editor={editor} />
+          </MenuList>
+        </Portal>
       </Menu>
       <Center className="h-6 w-2">
         <Divider
@@ -160,16 +163,23 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         onClick={() => editor.chain().focus().setHorizontalRule().run()}
         icon={<i className="text-lg ri-separator" />}
       />
-      <Menu id="insert-menu" isLazy colorScheme="purple">
+      <Menu
+        id="insert-menu"
+        isLazy
+        boundary="scrollParent"
+        colorScheme="purple"
+      >
         <MenuButton size="sm" variant="ghost" colorScheme="purple" as={Button}>
           <div className="flex items-center text-gray-900 gap-1 text-sm">
             Insert
             <i className="ri-arrow-drop-down-line text-lg w-2"></i>
           </div>
         </MenuButton>
-        <MenuList isLazy className="max-h-96 overflow-auto z-20">
-          <InsertMenuItems editor={editor} openDialog={openDialog} />
-        </MenuList>
+        <Portal>
+          <MenuList className="max-h-96 overflow-auto z-20">
+            <InsertMenuItems editor={editor} openDialog={openDialog} />
+          </MenuList>
+        </Portal>
       </Menu>
     </div>
   )

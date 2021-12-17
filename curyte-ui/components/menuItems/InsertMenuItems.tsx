@@ -10,6 +10,7 @@ import {
   imageUrlMatchRegex,
   youtubeUrlMatchRegex,
 } from '../embeds/matchers'
+import CuryteLogo from '../CuryteLogo'
 
 interface Props {
   editor: Editor
@@ -18,6 +19,25 @@ interface Props {
 const InsertMenuItems = ({ editor, openDialog }: Props) => {
   return (
     <>
+      <MenuItem
+        onClick={() => {
+          openDialog({
+            isOpen: true,
+            title: 'Enter a lesson URL',
+            description: 'Enter the URL for a Curyte lesson.',
+            onConfirm: (src: string) => {
+              editor.commands.setCuryteLink({ src })
+            },
+            initialValue: '',
+            validator: (input: string) =>
+              youtubeUrlMatchRegex.test(input) ||
+              googleDrawingsUrlMatchRegex.test(input),
+          })
+        }}
+        icon={<CuryteLogo />}
+        label="Curyte Lesson"
+        description="Embed a Curyte lesson."
+      />
       <MenuItem
         onClick={() => {
           openDialog({

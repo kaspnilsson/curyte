@@ -2,6 +2,7 @@ import { EditorState } from 'prosemirror-state'
 import { Node, mergeAttributes, nodeInputRule, Command } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import CuryteLinkRenderer from './CuryteLinkRenderer'
+import { curyteLessonUrlMatchRegex } from '../../embeds/matchers'
 
 declare module '@tiptap/core' {
   interface Commands {
@@ -11,10 +12,9 @@ declare module '@tiptap/core' {
   }
 }
 
-export const inputRegex = /https?:\/\/(www\.)?curyte.com\/lessons\/(.+)/g
-
 const getAttributes = (match: string[]) => {
-  const [href, , lessonId] = match
+  const [href, , , lessonId] = match
+  debugger
   return {
     href,
     lessonId,
@@ -72,7 +72,7 @@ export const CuryteLink = Node.create({
   addInputRules() {
     return [
       nodeInputRule({
-        find: inputRegex,
+        find: curyteLessonUrlMatchRegex,
         type: this.type,
         getAttributes,
       }),
@@ -85,7 +85,7 @@ export const CuryteLink = Node.create({
         (options) =>
         ({ tr, dispatch }) => {
           const matches = Array.from(
-            options.src.match(inputRegex)?.values() || []
+            options.src.match(curyteLessonUrlMatchRegex)?.values() || []
           )
           if (!matches?.length) return false
           const { selection } = tr
@@ -104,7 +104,7 @@ export const CuryteLink = Node.create({
   addPasteRules() {
     return [
       {
-        find: inputRegex,
+        find: curyteLessonUrlMatchRegex,
         handler: ({
           state,
           range,
