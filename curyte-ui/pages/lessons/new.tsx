@@ -7,7 +7,7 @@ import { Lesson } from '../../interfaces/lesson'
 import { useRouter } from 'next/router'
 import * as api from '../../firebase/api'
 import LoadingSpinner from '../../components/LoadingSpinner'
-import { draftRoute, lessonRoute, loginRoute } from '../../utils/routes'
+import { lessonRoute, loginRoute } from '../../utils/routes'
 
 const NewLessonView = () => {
   const router = useRouter()
@@ -40,7 +40,6 @@ const NewLessonView = () => {
   }
   const handleSaveDraft = async (l: Lesson) => {
     const uid = await api.createDraft(l)
-    router.push(draftRoute(uid))
     return uid
   }
 

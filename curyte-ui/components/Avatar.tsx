@@ -8,7 +8,7 @@ type Props = {
   className?: string
 }
 
-const AuthorLink = ({ author, className }: Props) => {
+const Avatar = ({ author, className }: Props) => {
   return (
     <>
       {!author && null}
@@ -35,4 +35,4 @@ const AuthorLink = ({ author, className }: Props) => {
   )
 }
 
-export default AuthorLink
+export default Avatar

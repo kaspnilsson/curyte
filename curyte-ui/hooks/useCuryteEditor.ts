@@ -21,6 +21,7 @@ import Document from '../components/extensions/Document'
 import { YoutubeEmbed } from '../components/embeds/YoutubeEmbed'
 import AutoId from '../components/extensions/AutoId'
 import Link from '@tiptap/extension-link'
+import { CuryteLink } from '../components/extensions/CuryteLink/CuryteLink'
 
 interface EditorProps {
   content: JSONContent | null
@@ -48,6 +49,7 @@ const useCuryteEditor = (
         YoutubeEmbed,
         Color,
         Underline,
+        CuryteLink,
         VimeoEmbed,
         StarterKit.configure({
           document: false,

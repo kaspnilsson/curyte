@@ -29,6 +29,15 @@
     padding: 0;
   }
 
+  .lesson-preview {
+    p {
+      margin: 0;
+    }
+    a {
+      color: initial;
+    }
+  }
+
   ul[data-type='taskList'] {
     padding: 0;
 
@@ -54,6 +63,10 @@
     input[type='checkbox'] {
       cursor: pointer;
     }
+  }
+
+  table p {
+    margin: 0;
   }
 }
 
