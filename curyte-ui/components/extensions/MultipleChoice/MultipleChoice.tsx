@@ -47,7 +47,7 @@ export const MultipleChoice = Node.create({
 
   addCommands() {
     return {
-      setMultipleChoice:
+      addMultipleChoice:
         (attrs: MultipleChoiceAttrs) =>
         ({ tr, dispatch }) => {
           const { selection } = tr
