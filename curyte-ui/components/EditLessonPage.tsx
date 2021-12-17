@@ -13,7 +13,7 @@ import { computeClassesForTitle } from './LessonTitle'
 import TextareaAutosize from 'react-textarea-autosize'
 import FancyEditor from './FancyEditor'
 import { useDebounceCallback } from '@react-hook/debounce'
-import { draftPreviewRoute } from '../utils/routes'
+import { draftPreviewRoute, draftRoute } from '../utils/routes'
 import * as api from '../firebase/api'
 import EditableCoverImage from './EditableCoverImage'
 import { useRouter } from 'next/router'
@@ -80,7 +80,8 @@ const EditLessonPage = ({
     event.preventDefault()
     if (!user || !handleSaveDraft) return
     // UID set by API module
-    await handleSaveDraft(makeNewLessonLocally())
+    const uid = await handleSaveDraft(makeNewLessonLocally())
+    router.push(draftRoute(uid))
   }
 
   const localHandlePreview = async (event: SyntheticEvent) => {
@@ -114,7 +115,7 @@ const EditLessonPage = ({
       sidebar={<LessonOutline editor={editor} />}
     >
       <div className="flex">
-        <div className="flex flex-col flex-grow px-5 md:px-0">
+        <div className="flex flex-col flex-grow px-5 md:px-0 overflow-hidden">
           <div className="flex items-center justify-between w-full">
             <TextareaAutosize
               autoFocus

@@ -1,4 +1,4 @@
-//  @import 'github-markdown-css/github-markdown-light.css';
+@import 'github-markdown-css/github-markdown-light.css';
 
 .ProseMirror {
   p.is-empty::before {
@@ -27,6 +27,15 @@
     list-style-type: none;
     margin: 0;
     padding: 0;
+  }
+
+  .lesson-preview {
+    p {
+      margin: 0;
+    }
+    a {
+      color: initial;
+    }
   }
 
   ul[data-type='taskList'] {

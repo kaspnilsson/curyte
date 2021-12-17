@@ -28,7 +28,7 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
   return (
     <>
       <InputDialog {...dialogProps} />
-      <div className="flex flex-col min-w-full">
+      <div className="flex flex-col min-w-full max-w-full">
         {!readOnly && <FancyEditorMenuBar editor={editor} />}
         <EditorContent className="markdown-body" editor={editor} />
         {editor && (

@@ -2,10 +2,10 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Lesson } from '../interfaces/lesson'
 import React from 'react'
-import { Heading } from '@chakra-ui/react'
+import { Text } from '@chakra-ui/react'
 import { lessonRoute, lessonRouteHrefPath } from '../utils/routes'
 import TagChip from './TagChip'
-import { BookmarkIcon, EyeIcon } from '@heroicons/react/solid'
+import { BookmarkIcon, EyeIcon } from '@heroicons/react/outline'
 import { Author } from '../interfaces/author'
 import AuthorLink from './AuthorLink'
 
@@ -17,16 +17,16 @@ type Props = {
 const LessonPreview = ({ lesson, author }: Props) => {
   return (
     <Link as={lessonRoute(lesson.uid)} href={lessonRouteHrefPath} passHref>
-      <div className="group flex flex-col cursor-pointer rounded-xl shadow-lg overflow-hidden w-96 border-2 border-gray-200">
+      <div className="group flex flex-col cursor-pointer rounded-xl shadow-lg overflow-hidden w-96 border-2 border-gray-200 lesson-preview">
         <div className="flex flex-col gap-2 p-4">
-          <Heading
+          <Text
             fontSize="lg"
             className="font-bold tracking-tight md:tracking-tighter leading-tight"
           >
             <a className="hover:underline group-hover:underline">
               {lesson.title || '(no title)'}
             </a>
-          </Heading>
+          </Text>
           <p className="text-sm leading-relaxed truncate min-w-0 text-gray-500">
             {lesson.description}
           </p>
@@ -74,22 +74,22 @@ const LessonPreview = ({ lesson, author }: Props) => {
             </div>
             <div className="flex items-center gap-4">
               <div className="flex flex-col items-center">
-                <BookmarkIcon className="h-6 w-6 text-inherit text-purple-500" />
-                <Heading
+                <BookmarkIcon className="h-5 w-5 text-inherit text-purple-500" />
+                <Text
                   fontSize="sm"
-                  className="text-gray-500 tracking-tight md:tracking-tighter leading-tight"
+                  className="text-gray-500 proportional-nums tracking-tight md:tracking-tighter leading-tight"
                 >
                   {lesson.saveCount || 0}
-                </Heading>
+                </Text>
               </div>
               <div className="flex flex-col items-center">
-                <EyeIcon className="h-6 w-6 text-inherit text-purple-500" />
-                <Heading
+                <EyeIcon className="h-5 w-5 text-inherit text-purple-500" />
+                <Text
                   fontSize="sm"
-                  className="text-gray-500 tracking-tight md:tracking-tighter leading-tight"
+                  className="text-gray-500 proportional-nums tracking-tight md:tracking-tighter leading-tight"
                 >
                   {lesson.viewCount || 0}
-                </Heading>
+                </Text>
               </div>
             </div>
           </div>
