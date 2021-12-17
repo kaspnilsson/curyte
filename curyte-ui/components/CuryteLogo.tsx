@@ -1,11 +1,16 @@
 import Image from 'next/image'
 
-const CuryteLogo = () => (
+interface Props {
+  width?: string | number
+  height?: string | number
+}
+
+const CuryteLogo = ({ width = '26px', height = '26px' }: Props) => (
   <Image
     src="/static/curyte_logo_black.svg"
     alt="Curyte logo"
-    width="26px"
-    height="26px"
+    width={width}
+    height={height}
   />
 )
 export default CuryteLogo

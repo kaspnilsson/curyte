@@ -4,6 +4,12 @@ import { ReactNodeViewRenderer } from '@tiptap/react'
 import CuryteLinkRenderer from './CuryteLinkRenderer'
 import { curyteLessonUrlMatchRegex } from '../../embeds/matchers'
 
+// Needed for the find operations performed in this file, as Tiptap library calls matchAll() which requires a global regex
+const tiptapFindLessonMatchRegex = new RegExp(
+  curyteLessonUrlMatchRegex,
+  curyteLessonUrlMatchRegex.flags + 'g'
+)
+
 declare module '@tiptap/core' {
   interface Commands {
     curyteLink: {
@@ -14,7 +20,6 @@ declare module '@tiptap/core' {
 
 const getAttributes = (match: string[]) => {
   const [href, , , lessonId] = match
-  debugger
   return {
     href,
     lessonId,
@@ -72,7 +77,7 @@ export const CuryteLink = Node.create({
   addInputRules() {
     return [
       nodeInputRule({
-        find: curyteLessonUrlMatchRegex,
+        find: tiptapFindLessonMatchRegex,
         type: this.type,
         getAttributes,
       }),
@@ -104,7 +109,7 @@ export const CuryteLink = Node.create({
   addPasteRules() {
     return [
       {
-        find: curyteLessonUrlMatchRegex,
+        find: tiptapFindLessonMatchRegex,
         handler: ({
           state,
           range,

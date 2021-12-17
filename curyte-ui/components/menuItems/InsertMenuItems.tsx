@@ -2,6 +2,7 @@ import { Editor } from '@tiptap/react'
 import { InputDialogProps } from '../InputDialog'
 import MenuItem from '../MenuItem'
 import {
+  curyteLessonUrlMatchRegex,
   googleDocsUrlMatchRegex,
   googleDrawingsUrlMatchRegex,
   googleDriveUrlMatchRegex,
@@ -29,12 +30,12 @@ const InsertMenuItems = ({ editor, openDialog }: Props) => {
               editor.commands.setCuryteLink({ src })
             },
             initialValue: '',
-            validator: (input: string) =>
-              youtubeUrlMatchRegex.test(input) ||
-              googleDrawingsUrlMatchRegex.test(input),
+            validator: (input: string) => {
+              return curyteLessonUrlMatchRegex.test(input)
+            },
           })
         }}
-        icon={<CuryteLogo />}
+        icon={<CuryteLogo width="32px" height="32px" />}
         label="Curyte Lesson"
         description="Embed a Curyte lesson."
       />

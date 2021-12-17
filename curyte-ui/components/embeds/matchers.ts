@@ -34,7 +34,7 @@ export const vimeoUrlMatchRegex =
   /(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^/]*)\/videos\/|)(\d+)(?:|\/\?)/i
 
 export const curyteLessonUrlMatchRegex =
-  /(https?:\/\/(www\.)?)?curyte.com\/lessons\/(.+)/g
+  /(https?:\/\/(www\.)?)?curyte.com\/lessons\/(.+)/
 
 export const specialUrlMatchers = [
   imageUrlMatchRegex,
