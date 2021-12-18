@@ -22,6 +22,7 @@ import { YoutubeEmbed } from '../components/embeds/YoutubeEmbed'
 import AutoId from '../components/extensions/AutoId'
 import Link from '@tiptap/extension-link'
 import { CuryteLink } from '../components/extensions/CuryteLink/CuryteLink'
+import { MultipleChoice } from '../components/extensions/MultipleChoice/MultipleChoice'
 
 interface EditorProps {
   content: JSONContent | null
@@ -70,6 +71,7 @@ const useCuryteEditor = (
           showOnlyWhenEditable: true,
           placeholder: 'What are you teaching today?',
         }),
+        MultipleChoice,
       ],
       content,
       editable: !!onUpdate,

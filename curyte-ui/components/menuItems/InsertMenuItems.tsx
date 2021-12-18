@@ -149,6 +149,12 @@ const InsertMenuItems = ({ editor, openDialog }: Props) => {
         description="Insert a code block."
       />
       <MenuItem
+        onClick={() => editor.commands.addMultipleChoice()}
+        icon={<i className="ri-2x ri-survey-line" />}
+        label="Quiz question"
+        description="Insert a multiple choice question."
+      />
+      <MenuItem
         onClick={() =>
           editor
             .chain()

@@ -47,27 +47,11 @@ export const CuryteLink = Node.create({
   },
 
   parseHTML() {
-    return [{ tag: 'a[data-curyte-link]' }]
+    return [{ tag: 'curyte-lesson' }]
   },
 
-  renderHTML({ node, HTMLAttributes }) {
-    return [
-      'div',
-      { class: 'px-2 w-full h-fit', 'data-drag-handle': '' },
-      [
-        'a',
-        mergeAttributes(
-          { 'data-curyte-link': '' },
-          this.options.HTMLAttributes,
-          HTMLAttributes
-        ),
-        `${node.attrs.href}`,
-      ],
-    ]
-  },
-
-  renderText({ node }) {
-    return node.attrs.href
+  renderHTML({ HTMLAttributes }) {
+    return ['curyte-lesson', mergeAttributes(HTMLAttributes)]
   },
 
   addNodeView() {

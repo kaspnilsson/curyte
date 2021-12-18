@@ -12,7 +12,7 @@ import { useRouter } from 'next/router'
 import LoadingSpinner from '../../../components/LoadingSpinner'
 import * as api from '../../../firebase/api'
 import FancyEditor from '../../../components/FancyEditor'
-import { lessonRoute, loginRoute } from '../../../utils/routes'
+import { draftRoute, lessonRoute, loginRoute } from '../../../utils/routes'
 import useCuryteEditor from '../../../hooks/useCuryteEditor'
 import LessonOutline from '../../../components/LessonOutline'
 
@@ -53,6 +53,10 @@ const DraftPreviewView = ({ id }: Props) => {
     router.push('/')
   }
 
+  const handleEdit = () => {
+    router.push(draftRoute(draft.uid))
+  }
+
   const handlePublish = async () => {
     setSaving(true)
     const newUid = await api.publishLesson(draft, draft.uid)
@@ -79,6 +83,7 @@ const DraftPreviewView = ({ id }: Props) => {
                 isDraft
                 author={author}
                 lesson={draft}
+                handleEdit={handleEdit}
                 handleDelete={
                   user && user.uid === draft.authorId ? handleDelete : undefined
                 }

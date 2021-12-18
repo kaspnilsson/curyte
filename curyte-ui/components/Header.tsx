@@ -102,7 +102,7 @@ const Header = ({
                 className="flex gap-1 items-center"
               >
                 <CuryteLogo />
-                <h2 className="text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                <h2 className="text-xl md:text-2xl font-bold tracking-tight leading-tight">
                   Curyte
                 </h2>
               </Button>

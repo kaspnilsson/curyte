@@ -24,7 +24,7 @@ const CuryteLinkRenderer = (props: {
   }, [props.node.attrs.lessonId])
   return (
     <NodeViewWrapper>
-      <div contentEditable={false} className="p-2">
+      <div contentEditable={false} className="p-2" data-drag-handle="">
         {loading && <Spinner color="purple" size="xl" />}
         {!loading && lesson && (
           <LessonPreview lesson={lesson} author={author} />

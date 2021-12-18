@@ -1,4 +1,4 @@
-import { Editor, NodeViewWrapper } from '@tiptap/react'
+import { Editor, NodeViewContent, NodeViewWrapper } from '@tiptap/react'
 import { MultipleChoiceAttrs } from './MultipleChoiceAttrs'
 import MultipleChoiceEditorComponent from './MultipleChoiceEditorComponent'
 import MultipleChoiceComponent from './MutlipleChoiceComponent'
@@ -9,22 +9,33 @@ export interface MultipleChoiceRendererProps {
     attrs: MultipleChoiceAttrs
     nodeSize: number
   }
-  getPos: () => number
-  selected: boolean
   updateAttributes: (attr: MultipleChoiceAttrs) => void
 }
 
 const MultipleChoiceRenderer = ({
   editor,
-  getPos,
   node,
   updateAttributes,
-  selected,
 }: MultipleChoiceRendererProps) => (
-  <>
-    {editor.isEditable && <MultipleChoiceEditorComponent {...node.attrs} />}
-    {!editor.isEditable && <MultipleChoiceComponent {...node.attrs} />}
-  </>
+  <NodeViewWrapper>
+    <NodeViewContent>
+      <div
+        className="p-4 my-4 rounded-xl border-2 border-gray-200"
+        data-drag-handle=""
+      >
+        {editor.isEditable && (
+          <MultipleChoiceEditorComponent
+            {...node.attrs}
+            onUpdate={(attrs) => {
+              console.log(attrs)
+              updateAttributes(attrs)
+            }}
+          />
+        )}
+        {!editor.isEditable && <MultipleChoiceComponent {...node.attrs} />}
+      </div>
+    </NodeViewContent>
+  </NodeViewWrapper>
 )
 
 export default MultipleChoiceRenderer

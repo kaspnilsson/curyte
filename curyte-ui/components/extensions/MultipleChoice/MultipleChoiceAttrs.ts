@@ -4,6 +4,7 @@ export interface Option {
 }
 
 export interface MultipleChoiceAttrs {
+  question: string
   options: Option[]
   // Index of the right answer
   correctAnswer: number

@@ -33,7 +33,7 @@ const TagView = ({ lessons, tag, tagText }: Props) => {
             </h1>
             {tag && `${tag.viewCount} views`}
           </section>
-          <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+          <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight leading-tight">
             Lessons
           </h2>
           {lessons && (

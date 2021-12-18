@@ -22,7 +22,7 @@ const DraftLink = ({ draft }: Props) => {
         colorScheme="black"
         className="hover:bg-purple-50 rounded overflow-hidden"
       >
-        <span className="tracking-tight md:tracking-tighter leading-tight w-auto flex items-center m-0 p-1">
+        <span className="tracking-tight leading-tight w-auto flex items-center m-0 p-1">
           <DocumentTextIcon className="h-5 w-5 mr-1" />
           {draft.title || '(no title)'}
         </span>
