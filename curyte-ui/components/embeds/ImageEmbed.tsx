@@ -31,8 +31,7 @@ export const ImageEmbed = Node.create({
     return {
       allowFullScreen: true,
       HTMLAttributes: {
-        class:
-          'image-wrapper w-full w-fit-content h-auto my-8 rounded-xl shadow-lg',
+        class: 'image-wrapper w-full h-full min-h-96 shadow-lg rounded-xl',
       },
     }
   },
@@ -59,8 +58,15 @@ export const ImageEmbed = Node.create({
   renderHTML({ HTMLAttributes }) {
     return [
       'div',
-      { class: 'px-2 w-full h-fit' },
-      ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)],
+      { class: 'my-8 lg:max-w-[50vw] mx-auto' },
+      [
+        'div',
+        {
+          class: 'px-2 w-full h-auto relative aspect-w-16 aspect-h-9',
+          'data-drag-handle': '',
+        },
+        ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)],
+      ],
     ]
   },
 

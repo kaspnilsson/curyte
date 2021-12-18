@@ -135,7 +135,7 @@ const LessonHeader = ({
         )}
       </div>
       <div className="flex mb-6 items-center justify-between">
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center text-sm md:text-base">
           <AuthorLink author={author} />
           {lesson.created && <DateFormatter dateString={lesson.created} />}
           {!!lesson.viewCount && (
@@ -155,8 +155,8 @@ const LessonHeader = ({
               className="font-semibold flex items-center justify-between mr-2"
               onClick={handlePublish}
             >
-              <UploadIcon className="h-5 w-5 mr-2" />
-              Publish
+              <UploadIcon className="h-5 w-5" />
+              <div className="hidden md:flex ml-2">Publish</div>
             </Button>
           )}
           {!isDraft && (

@@ -175,7 +175,7 @@ const MySettingsView = () => {
                       </h3>
                       <Textarea
                         as={TextareaAutosize}
-                        className="resize-none mt-1 w-full"
+                        className="resize-none mt-1 w-full border-0"
                         placeholder="Bio"
                         value={author.bio}
                         onChange={(e) =>

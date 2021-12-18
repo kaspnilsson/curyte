@@ -21,7 +21,7 @@ const AuthorLink = ({ author }: Props) => {
             href={accountRouteHrefPath}
             passHref
           >
-            <a className="hover:underline font-bold ml-2">
+            <a className="hover:underline text-sm md:text-base font-bold ml-2">
               {author.displayName}
             </a>
           </Link>

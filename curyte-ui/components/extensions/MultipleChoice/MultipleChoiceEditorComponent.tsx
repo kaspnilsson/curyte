@@ -59,7 +59,7 @@ const MultipleChoiceEditorComponent = ({
       <TextareaAutosize
         autoFocus
         value={question}
-        className="font-bold tracking-tight leading-tight resize-none rounded text-lg w-full p-4 mx-2"
+        className="border-0 font-bold tracking-tight leading-tight resize-none rounded text-lg w-full p-4 mx-2"
         placeholder="Ask a question"
         onChange={(e) => onUpdateQuestion(e.target.value)}
       />
@@ -83,7 +83,7 @@ const MultipleChoiceEditorComponent = ({
                 <TextareaAutosize
                   value={o.explanation || ''}
                   placeholder="Add an explanation (optional)"
-                  className="text-sm w-full px-4 py-2 rounded resize-none"
+                  className="text-sm border-0 w-full px-4 py-2 rounded resize-none"
                   onChange={(e) =>
                     onUpdateOptionExplanation(e.target.value, index)
                   }

@@ -10,7 +10,7 @@ const Footer = () => {
             <h3 className="text-xl font-bold tracking-tighter leading-tight">
               Made with ❤️ in San Francisco
             </h3>
-            <h4 className="text-xl tracking-tighter leading-tight">
+            <h4 className="text-xl tracking-tighter leading-tight text-right">
               © 2021 Curyte
             </h4>
           </div>
