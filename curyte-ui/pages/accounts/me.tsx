@@ -120,7 +120,7 @@ const MySettingsView = () => {
                 <TabPanel>
                   <section className="flex flex-col my-8">
                     <div className="flex items-left justify-between flex-col">
-                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight leading-tight">
                         Lessons
                       </h2>
                       <div className="flex flex-wrap gap-4 mb-8 justify-center">
@@ -133,7 +133,7 @@ const MySettingsView = () => {
                   </section>
                   <section className="flex flex-col my-8">
                     <div className="flex items-left justify-between flex-col">
-                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight leading-tight">
                         Saved
                       </h2>
 
@@ -147,7 +147,7 @@ const MySettingsView = () => {
                   </section>
                   <section className="flex flex-col my-8">
                     <div className="flex items-left justify-between flex-col">
-                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight leading-tight">
                         Drafts
                       </h2>
                       <DraftsPage />
@@ -157,7 +157,7 @@ const MySettingsView = () => {
                 <TabPanel>
                   <section className="flex flex-col my-8">
                     <div className="flex items-center justify-between">
-                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight leading-tight">
                         Profile settings
                       </h2>
                       <Button
@@ -170,7 +170,7 @@ const MySettingsView = () => {
                       </Button>
                     </div>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                      <h3 className="font-bold tracking-tight leading-tight">
                         Bio
                       </h3>
                       <Textarea
@@ -184,7 +184,7 @@ const MySettingsView = () => {
                       />
                     </div>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                      <h3 className="font-bold tracking-tight leading-tight">
                         Username
                       </h3>
                       <Input
@@ -200,11 +200,11 @@ const MySettingsView = () => {
                     </div>
                   </section>
                   <section className="flex flex-col my-8">
-                    <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                    <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight leading-tight">
                       Email settings
                     </h2>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                      <h3 className="font-bold tracking-tight leading-tight">
                         Email address
                       </h3>
                       <Input
@@ -220,11 +220,11 @@ const MySettingsView = () => {
                     </div>
                   </section>
                   <section className="flex flex-col my-8">
-                    <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                    <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight leading-tight">
                       Links
                     </h2>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                      <h3 className="font-bold tracking-tight leading-tight">
                         Twitter
                       </h3>
                       <Input
@@ -242,7 +242,7 @@ const MySettingsView = () => {
                       />
                     </div>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                      <h3 className="font-bold tracking-tight leading-tight">
                         LinkedIn
                       </h3>
                       <Input
@@ -263,7 +263,7 @@ const MySettingsView = () => {
                       />
                     </div>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                      <h3 className="font-bold tracking-tight leading-tight">
                         Personal website
                       </h3>
                       <Input
@@ -284,7 +284,7 @@ const MySettingsView = () => {
                       />
                     </div>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                      <h3 className="font-bold tracking-tight leading-tight">
                         Public email
                       </h3>
                       <Input
@@ -305,7 +305,7 @@ const MySettingsView = () => {
                       />
                     </div>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                      <h3 className="font-bold tracking-tight leading-tight">
                         Venmo
                       </h3>
                       <Input

@@ -1,4 +1,10 @@
-import { IconButton, Menu, MenuButton, MenuList } from '@chakra-ui/react'
+import {
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  Portal,
+} from '@chakra-ui/react'
 
 interface Props {
   onClick: () => void
@@ -20,7 +26,9 @@ const AddButton = ({ onClick, disabled, items }: Props) => {
       >
         <i className="ri-add-circle-line text-gray-900 text-lg"></i>
       </MenuButton>
-      <MenuList className="max-h-96 overflow-auto z-20">{items}</MenuList>
+      <Portal>
+        <MenuList className="max-h-96 overflow-auto z-20">{items}</MenuList>
+      </Portal>
     </Menu>
   )
 }

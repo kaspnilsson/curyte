@@ -49,7 +49,8 @@ const LessonPreview = ({ lesson, author }: Props) => {
         <div className="flex flex-col gap-2 m-4">
           <Text
             fontSize="lg"
-            className="font-bold tracking-tight md:tracking-tighter leading-tight"
+            className="font-bold tracking-tight 
+            leading-tight"
           >
             <a className="hover:underline group-hover:underline">
               {lesson.title || '(no title)'}
@@ -77,7 +78,8 @@ const LessonPreview = ({ lesson, author }: Props) => {
                 <BookmarkIcon className="h-5 w-5 text-inherit text-purple-500" />
                 <Text
                   fontSize="sm"
-                  className="text-gray-500 proportional-nums tracking-tight md:tracking-tighter leading-tight"
+                  className="text-gray-500 proportional-nums tracking-tight 
+                  leading-tight"
                 >
                   {lesson.saveCount || 0}
                 </Text>
@@ -86,7 +88,8 @@ const LessonPreview = ({ lesson, author }: Props) => {
                 <EyeIcon className="h-5 w-5 text-inherit text-purple-500" />
                 <Text
                   fontSize="sm"
-                  className="text-gray-500 proportional-nums tracking-tight md:tracking-tighter leading-tight"
+                  className="text-gray-500 proportional-nums tracking-tight 
+                  leading-tight"
                 >
                   {lesson.viewCount || 0}
                 </Text>

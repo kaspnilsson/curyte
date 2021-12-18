@@ -2,6 +2,13 @@ import { EditorState } from 'prosemirror-state'
 import { Node, mergeAttributes, nodeInputRule, Command } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import CuryteLinkRenderer from './CuryteLinkRenderer'
+import { curyteLessonUrlMatchRegex } from '../../embeds/matchers'
+
+// Needed for the find operations performed in this file, as Tiptap library calls matchAll() which requires a global regex
+const tiptapFindLessonMatchRegex = new RegExp(
+  curyteLessonUrlMatchRegex,
+  curyteLessonUrlMatchRegex.flags + 'g'
+)
 
 declare module '@tiptap/core' {
   interface Commands {
@@ -11,10 +18,8 @@ declare module '@tiptap/core' {
   }
 }
 
-export const inputRegex = /https?:\/\/(www\.)?curyte.com\/lessons\/(.+)/g
-
 const getAttributes = (match: string[]) => {
-  const [href, , lessonId] = match
+  const [href, , , lessonId] = match
   return {
     href,
     lessonId,
@@ -42,27 +47,11 @@ export const CuryteLink = Node.create({
   },
 
   parseHTML() {
-    return [{ tag: 'a[data-curyte-link]' }]
+    return [{ tag: 'curyte-lesson' }]
   },
 
-  renderHTML({ node, HTMLAttributes }) {
-    return [
-      'div',
-      { class: 'px-2 w-full h-fit', 'data-drag-handle': '' },
-      [
-        'a',
-        mergeAttributes(
-          { 'data-curyte-link': '' },
-          this.options.HTMLAttributes,
-          HTMLAttributes
-        ),
-        `${node.attrs.href}`,
-      ],
-    ]
-  },
-
-  renderText({ node }) {
-    return node.attrs.href
+  renderHTML({ HTMLAttributes }) {
+    return ['curyte-lesson', mergeAttributes(HTMLAttributes)]
   },
 
   addNodeView() {
@@ -72,7 +61,7 @@ export const CuryteLink = Node.create({
   addInputRules() {
     return [
       nodeInputRule({
-        find: inputRegex,
+        find: tiptapFindLessonMatchRegex,
         type: this.type,
         getAttributes,
       }),
@@ -85,7 +74,7 @@ export const CuryteLink = Node.create({
         (options) =>
         ({ tr, dispatch }) => {
           const matches = Array.from(
-            options.src.match(inputRegex)?.values() || []
+            options.src.match(curyteLessonUrlMatchRegex)?.values() || []
           )
           if (!matches?.length) return false
           const { selection } = tr
@@ -104,7 +93,7 @@ export const CuryteLink = Node.create({
   addPasteRules() {
     return [
       {
-        find: inputRegex,
+        find: tiptapFindLessonMatchRegex,
         handler: ({
           state,
           range,

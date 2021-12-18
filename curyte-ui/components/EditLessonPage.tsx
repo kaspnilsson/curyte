@@ -14,7 +14,7 @@ import TextareaAutosize from 'react-textarea-autosize'
 import FancyEditor from './FancyEditor'
 import { useDebounceCallback } from '@react-hook/debounce'
 import { draftPreviewRoute, draftRoute } from '../utils/routes'
-import * as api from '../firebase/api'
+// import * as api from '../firebase/api'
 import EditableCoverImage from './EditableCoverImage'
 import { useRouter } from 'next/router'
 import useCuryteEditor from '../hooks/useCuryteEditor'
@@ -101,7 +101,6 @@ const EditLessonPage = ({
 
   const onCoverImageUpload = (url: string) => {
     // Unawaited
-    if (coverImageUrl) api.deleteImageAtUrl(coverImageUrl)
     setCoverImageUrl(url)
   }
 
@@ -121,7 +120,7 @@ const EditLessonPage = ({
               autoFocus
               className={`${computeClassesForTitle(
                 title
-              )} focus:outline-none font-semibold flex-grow resize-none tracking-tight md:tracking-tighter leading-tight`}
+              )} focus:outline-none font-semibold flex-grow resize-none tracking-tight leading-tight`}
               placeholder="Enter title..."
               value={title}
               onChange={({ target }) => setTitle(target.value)}

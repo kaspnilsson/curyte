@@ -2,6 +2,7 @@ import { Editor } from '@tiptap/react'
 import { InputDialogProps } from '../InputDialog'
 import MenuItem from '../MenuItem'
 import {
+  curyteLessonUrlMatchRegex,
   googleDocsUrlMatchRegex,
   googleDrawingsUrlMatchRegex,
   googleDriveUrlMatchRegex,
@@ -10,6 +11,7 @@ import {
   imageUrlMatchRegex,
   youtubeUrlMatchRegex,
 } from '../embeds/matchers'
+import CuryteLogo from '../CuryteLogo'
 
 interface Props {
   editor: Editor
@@ -18,6 +20,25 @@ interface Props {
 const InsertMenuItems = ({ editor, openDialog }: Props) => {
   return (
     <>
+      <MenuItem
+        onClick={() => {
+          openDialog({
+            isOpen: true,
+            title: 'Enter a lesson URL',
+            description: 'Enter the URL for a Curyte lesson.',
+            onConfirm: (src: string) => {
+              editor.commands.setCuryteLink({ src })
+            },
+            initialValue: '',
+            validator: (input: string) => {
+              return curyteLessonUrlMatchRegex.test(input)
+            },
+          })
+        }}
+        icon={<CuryteLogo width="32px" height="32px" />}
+        label="Curyte Lesson"
+        description="Embed a Curyte lesson."
+      />
       <MenuItem
         onClick={() => {
           openDialog({
@@ -126,6 +147,12 @@ const InsertMenuItems = ({ editor, openDialog }: Props) => {
         icon={<i className="ri-2x ri-code-box-line" />}
         label="Code block"
         description="Insert a code block."
+      />
+      <MenuItem
+        onClick={() => editor.commands.addMultipleChoice()}
+        icon={<i className="ri-2x ri-survey-line" />}
+        label="Quiz question"
+        description="Insert a multiple choice question."
       />
       <MenuItem
         onClick={() =>

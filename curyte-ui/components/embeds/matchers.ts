@@ -33,6 +33,9 @@ export const googleDrawingsUrlMatchRegex = new RegExp(
 export const vimeoUrlMatchRegex =
   /(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^/]*)\/videos\/|)(\d+)(?:|\/\?)/i
 
+export const curyteLessonUrlMatchRegex =
+  /(https?:\/\/(www\.)?)?curyte.com\/lessons\/(.+)/
+
 export const specialUrlMatchers = [
   imageUrlMatchRegex,
   youtubeUrlMatchRegex,
@@ -41,4 +44,5 @@ export const specialUrlMatchers = [
   googleSheetsUrlMatchRegex,
   googleDriveUrlMatchRegex,
   googleDrawingsUrlMatchRegex,
+  curyteLessonUrlMatchRegex,
 ]

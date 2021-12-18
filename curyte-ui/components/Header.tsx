@@ -5,7 +5,14 @@ import React, { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { Author } from '../interfaces/author'
 import Container from './Container'
-import { Button, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react'
+import {
+  Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Portal,
+} from '@chakra-ui/react'
 import Head from 'next/head'
 import Avatar from './Avatar'
 import CuryteLogo from './CuryteLogo'
@@ -95,7 +102,7 @@ const Header = ({
                 className="flex gap-1 items-center"
               >
                 <CuryteLogo />
-                <h2 className="text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                <h2 className="text-xl md:text-2xl font-bold tracking-tight leading-tight">
                   Curyte
                 </h2>
               </Button>
@@ -126,12 +133,14 @@ const Header = ({
                         className="w-10 h-10"
                       />
                     </MenuButton>
-                    <MenuList>
-                      <Link passHref href="/accounts/me">
-                        <MenuItem>View account</MenuItem>
-                      </Link>
-                      <MenuItem onClick={() => logOut()}>Sign out</MenuItem>
-                    </MenuList>
+                    <Portal>
+                      <MenuList>
+                        <Link passHref href="/accounts/me">
+                          <MenuItem>View account</MenuItem>
+                        </Link>
+                        <MenuItem onClick={() => logOut()}>Sign out</MenuItem>
+                      </MenuList>
+                    </Portal>
                   </Menu>
                 </div>
               </div>
