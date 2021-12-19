@@ -78,3 +78,8 @@ hr.chakra-divider {
 * {
   scroll-margin-top: 8rem;
 }
+
+textarea:focus {
+  box-shadow: none;
+  outline: none;
+}
