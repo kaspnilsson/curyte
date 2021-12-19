@@ -4,7 +4,7 @@ import Head from 'next/head'
 import ErrorPage from 'next/error'
 import React, { useEffect, useState } from 'react'
 import { Lesson } from '../../interfaces/lesson'
-import { GetStaticPaths, GetStaticProps } from 'next'
+import { GetServerSideProps } from 'next'
 import Layout from '../../components/Layout'
 import { Author } from '../../interfaces/author'
 import Container from '../../components/Container'
@@ -104,15 +104,22 @@ interface IParams extends ParsedUrlQuery {
   id: string
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const lessons = await api.getLessons([])
-  const paths = lessons.map(({ uid }) => ({
-    params: { id: uid },
-  }))
-  return { paths, fallback: 'blocking' }
-}
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   const lessons = await api.getLessons([])
+//   const paths = lessons.map(({ uid }) => ({
+//     params: { id: uid },
+//   }))
+//   return { paths, fallback: 'blocking' }
+// }
 
-export const getStaticProps: GetStaticProps = async (context) => {
+// export const getStaticProps: GetStaticProps = async (context) => {
+//   const { id } = context.params as IParams
+//   const lesson = await api.getLesson(id)
+//   const author = await api.getAuthor(lesson.authorId)
+//   return { props: { lesson, author } }
+// }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params as IParams
   const lesson = await api.getLesson(id)
   const author = await api.getAuthor(lesson.authorId)
