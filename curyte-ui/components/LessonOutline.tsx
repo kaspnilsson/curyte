@@ -58,7 +58,7 @@ const LessonOutline = ({ editor }: Props) => {
       {!items.length && null}
       {!!items.length && (
         <div className="toc flex flex-col mr-4 md:mt-10 truncate w-full">
-          <span className="text-gray-500 tracking-tighter text-sm font-bold leading-tight py-2 px-2">
+          <span className="text-slate-500 tracking-tighter text-sm font-bold leading-tight py-2 px-2">
             OUTLINE
           </span>
           <List listStyleType="none">

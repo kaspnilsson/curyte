@@ -96,14 +96,14 @@ const MultipleChoiceEditorComponent = ({
                 disabled={index === 0}
                 onClick={() => onDeleteOption(index)}
               >
-                <i className="ri-delete-bin-7-line text-gray-700 text-lg"></i>
+                <i className="ri-delete-bin-7-line text-slate-700 text-lg"></i>
               </IconButton>
             </div>
           ))}
           <Button
             aria-label="Delete option"
             size="sm"
-            className="text-gray-700"
+            className="text-slate-700"
             onClick={() => onAddOption()}
           >
             <div className="flex px-20 items-center gap-1">

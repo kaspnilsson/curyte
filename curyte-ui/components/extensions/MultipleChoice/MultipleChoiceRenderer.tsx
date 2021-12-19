@@ -20,7 +20,7 @@ const MultipleChoiceRenderer = ({
   <NodeViewWrapper>
     <NodeViewContent>
       <div
-        className="p-4 my-4 rounded-xl border-2 border-gray-200"
+        className="p-4 my-4 rounded-xl border-2 border-slate-200"
         data-drag-handle=""
       >
         {editor.isEditable && (
