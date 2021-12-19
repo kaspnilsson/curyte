@@ -62,7 +62,7 @@ export const ImageEmbed = Node.create({
       [
         'div',
         {
-          class: 'px-2 w-full h-auto relative aspect-w-16 aspect-h-9',
+          class: 'px-2 w-full h-auto relative aspect-w-16 aspect-h-9 not-prose',
           'data-drag-handle': '',
         },
         ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)],
