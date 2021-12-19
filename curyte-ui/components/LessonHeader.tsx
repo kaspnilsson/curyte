@@ -123,7 +123,7 @@ const LessonHeader = ({
         )}
       </div>
       <div className="mt-1 mb-8">
-        <div className="text-2xl focus:outline-none text-slate-500 mb-6">
+        <div className="text-2xl focus:outline-none text-gray-500 mb-6">
           {lesson.description}
         </div>
         {lesson.tags?.length && (

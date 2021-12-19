@@ -24,7 +24,7 @@ const AddButton = ({ onClick, disabled, items }: Props) => {
         variant="ghost"
         disabled={disabled}
       >
-        <i className="ri-add-circle-line text-slate-900 text-lg"></i>
+        <i className="ri-add-circle-line text-gray-900 text-lg"></i>
       </MenuButton>
       <Portal>
         <MenuList className="max-h-96 overflow-auto z-20">{items}</MenuList>

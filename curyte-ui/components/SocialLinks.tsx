@@ -17,7 +17,7 @@ const Socialas = ({ author }: Props) => {
             aria-label="Twitter link"
             icon={
               <svg
-                className="h-5 w-5 m-2 hover:text-slate-700"
+                className="h-5 w-5 m-2 hover:text-gray-700"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -39,7 +39,7 @@ const Socialas = ({ author }: Props) => {
             aria-label="Personal website link"
             icon={
               <svg
-                className="h-5 w-5 m-2 hover:text-slate-700"
+                className="h-5 w-5 m-2 hover:text-gray-700"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -61,7 +61,7 @@ const Socialas = ({ author }: Props) => {
             aria-label="LinkedIn link"
             icon={
               <svg
-                className="h-5 w-5 m-2 hover:text-slate-700"
+                className="h-5 w-5 m-2 hover:text-gray-700"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -87,7 +87,7 @@ const Socialas = ({ author }: Props) => {
             aria-label="Email link"
             icon={
               <svg
-                className="h-5 w-5 m-2 hover:text-slate-700"
+                className="h-5 w-5 m-2 hover:text-gray-700"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -109,7 +109,7 @@ const Socialas = ({ author }: Props) => {
             aria-label="aedIn link"
             icon={
               <svg
-                className="h-5 w-5 m-2 hover:text-slate-700"
+                className="h-5 w-5 m-2 hover:text-gray-700"
                 xmlns="http://www.w3.org/2000/svg"
                 width="516"
                 height="516"

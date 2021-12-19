@@ -25,9 +25,3 @@ export const newLessonRoute = (copyFrom?: string) => {
 
 export const tagRoute = (tag: string) => `/tags/${tag}`
 export const tagRouteHrefPath = '/tags/[tag]'
-
-export const lessonSearchRoute = (query?: string) => {
-  let out = '/lessons/search'
-  if (query) out += `?query=${query}`
-  return out
-}
