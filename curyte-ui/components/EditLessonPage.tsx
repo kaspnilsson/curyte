@@ -127,7 +127,7 @@ const EditLessonPage = ({
             />
           </div>
           <TextareaAutosize
-            className="text-2xl mt-1 text-gray-500 resize-none border-0"
+            className="text-2xl mt-1 text-slate-500 resize-none border-0"
             placeholder="Enter description..."
             value={description}
             onChange={({ target }) => setDescription(target.value)}
