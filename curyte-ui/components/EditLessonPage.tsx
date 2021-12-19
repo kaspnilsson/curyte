@@ -120,20 +120,20 @@ const EditLessonPage = ({
               autoFocus
               className={`${computeClassesForTitle(
                 title
-              )} focus:outline-none font-semibold flex-grow resize-none tracking-tight leading-tight`}
+              )} focus:outline-none font-semibold flex-grow resize-none tracking-tight leading-tight border-0`}
               placeholder="Enter title..."
               value={title}
               onChange={({ target }) => setTitle(target.value)}
             />
           </div>
           <TextareaAutosize
-            className="text-2xl focus:outline-none mt-1 text-gray-500 resize-none"
+            className="text-2xl focus:outline-none mt-1 text-gray-500 resize-none border-0"
             placeholder="Enter description..."
             value={description}
             onChange={({ target }) => setDescription(target.value)}
           />
           <TextareaAutosize
-            className="text-xl focus:outline-none mt-4 resize-none"
+            className="text-xl focus:outline-none mt-4 resize-none border-0"
             placeholder="Enter a comma separated list of tags..."
             value={tagsStr}
             onChange={({ target }) => setTagsStr(target.value)}

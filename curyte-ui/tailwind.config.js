@@ -1,14 +1,12 @@
 module.exports = {
   purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
-  darkMode: 'media',
   theme: {
     extend: {},
   },
-  variants: {
-    extend: {
-      opacity: ['disabled'],
-      visibility: ['group-hover'],
-    },
-  },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/aspect-ratio'),
+    require('@tailwindcss/line-clamp'),
+  ],
 }

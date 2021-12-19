@@ -26,7 +26,7 @@ const Home = ({ lessons }: Props) => {
 
   return (
     <Layout>
-      <Container className="flex flex-col items-center">
+      <Container className="flex flex-col items-center px-5">
         <section className="flex-row flex items-center justify-center mt-16 mb-8">
           <h1 className="text-4xl md:text-6xl text-center font-bold tracking-tighter leading-tight">
             Byte-sized lessons, for the curious.
