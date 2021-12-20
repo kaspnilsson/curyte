@@ -92,7 +92,6 @@ const ImageUploadDialog = ({
     if (imageUrlMatchRegex.test(input)) {
       setLoading(true)
       const blob = await fetch(input).then((res) => res.blob())
-      debugger
       await onDropAccepted([new File([blob], input, { type: blob.type })])
       setLoading(false)
     }
