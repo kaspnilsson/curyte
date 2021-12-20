@@ -30,3 +30,16 @@ export const event = (event: GTagEvent) => {
     console.log(`would have logged event: ${event}`)
   }
 }
+
+export const exception = (description: string, fatal = false) => {
+  if (process.env.NODE_ENV === 'production') {
+    window.gtag('event', 'exception', {
+      description,
+      fatal,
+    })
+  } else {
+    console.log(
+      `would have logged exception. description: ${description} \nfatal: ${fatal}`
+    )
+  }
+}

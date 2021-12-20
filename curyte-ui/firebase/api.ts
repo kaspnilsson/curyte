@@ -3,6 +3,7 @@ import { compareDesc, parseISO } from 'date-fns'
 import { Author, SavedLesson } from '../interfaces/author'
 import { Lesson } from '../interfaces/lesson'
 import { Tag } from '../interfaces/tag'
+import { exception } from '../utils/gtag'
 import firebase from './clientApp'
 
 export interface WhereClause {
@@ -38,8 +39,7 @@ export async function getLessons(
       )
     })
   } catch (e) {
-    console.error(e)
-    debugger
+    exception(e as string)
     throw e
   }
 }
@@ -73,8 +73,7 @@ export async function getDrafts(
       return mapped
     })
   } catch (e) {
-    console.error(e)
-    debugger
+    exception(e as string)
     throw e
   }
 }
@@ -91,8 +90,7 @@ export async function getLesson(uid: string): Promise<Lesson> {
       await firebase.firestore().collection('lessons').doc(uid).get()
     ).data() as Lesson
   } catch (e) {
-    console.error(e)
-    debugger
+    exception(e as string)
     throw e
   }
 }
@@ -110,8 +108,7 @@ export async function getDraft(uid: string): Promise<Lesson> {
       await firebase.firestore().collection('drafts').doc(uid).get()
     ).data() as Lesson
   } catch (e) {
-    console.error(e)
-    debugger
+    exception(e as string)
     throw e
   }
 }
@@ -127,8 +124,7 @@ export async function deleteLesson(uid: string): Promise<void> {
     if (!firebase.auth().currentUser) throw new Error('Not logged in')
     return await firebase.firestore().collection('lessons').doc(uid).delete()
   } catch (e) {
-    console.error(e)
-    debugger
+    exception(e as string)
     throw e
   }
 }
@@ -144,8 +140,7 @@ export async function deleteDraft(uid: string): Promise<void> {
     if (!firebase.auth().currentUser) throw new Error('Not logged in')
     return await firebase.firestore().collection('drafts').doc(uid).delete()
   } catch (e) {
-    console.error(e)
-    debugger
+    exception(e as string)
     throw e
   }
 }
@@ -163,8 +158,7 @@ export async function createDraft(draft: Lesson): Promise<string> {
     return draft.uid
   } catch (e) {
     console.error(draft)
-    console.error(e)
-    debugger
+    exception(e as string)
     throw e
   }
 }
@@ -180,8 +174,7 @@ export async function updateDraft(draft: Lesson): Promise<void> {
     await firebase.firestore().collection('drafts').doc(draft.uid).update(draft)
   } catch (e) {
     console.error(draft)
-    console.error(e)
-    debugger
+    exception(e as string)
     throw e
   }
 }
@@ -205,8 +198,7 @@ export async function publishLesson(
     return lesson.uid
   } catch (e) {
     console.error(lesson)
-    console.error(e)
-    debugger
+    exception(e as string)
     throw e
   }
 }
@@ -218,8 +210,7 @@ export async function updateLesson(lesson: Lesson): Promise<string> {
     return lesson.uid
   } catch (e) {
     console.error(lesson)
-    console.error(e)
-    debugger
+    exception(e as string)
     throw e
   }
 }
@@ -232,8 +223,7 @@ export async function logLessonView(uid: string): Promise<void> {
       .doc(uid)
       .update({ viewCount: firebase.firestore.FieldValue.increment(1) })
   } catch (e) {
-    console.error(e)
-    debugger
+    exception(e as string)
     throw e
   }
 }
@@ -250,8 +240,7 @@ export async function getAuthor(uid: string): Promise<Author> {
       await firebase.firestore().collection('users').doc(uid).get()
     ).data() as Author
   } catch (e) {
-    console.error(e)
-    debugger
+    exception(e as string)
     return {} as Author
   }
 }
@@ -264,8 +253,7 @@ export async function updateAuthor(author: Author): Promise<void> {
       .doc(author.uid)
       .set(author)
   } catch (e) {
-    console.error(e)
-    debugger
+    exception(e as string)
     throw e
   }
 }
@@ -288,8 +276,7 @@ export async function saveLessonForCurrentUser(
       .doc(computeSavedLessonUid(savedLesson))
       .set(savedLesson)
   } catch (e) {
-    console.error(e)
-    debugger
+    exception(e as string)
     throw e
   }
 }
@@ -309,8 +296,7 @@ export async function removeSavedLessonForCurrentUser(
       .doc(computeSavedLessonUid(savedLesson))
       .delete()
   } catch (e) {
-    console.error(e)
-    debugger
+    exception(e as string)
     throw e
   }
 }
@@ -333,8 +319,7 @@ export async function getCurrentUserHasSavedLesson(
         .get()
     ).exists
   } catch (e) {
-    console.error(e)
-    debugger
+    exception(e as string)
     throw e
   }
 }
@@ -345,8 +330,7 @@ export async function getTag(tagText: string): Promise<Tag> {
       await firebase.firestore().collection('tags').doc(tagText).get()
     ).data() as Tag
   } catch (e) {
-    console.error(e)
-    debugger
+    exception(e as string)
     throw e
   }
 }
@@ -362,8 +346,7 @@ export async function logTagView(tagText: string): Promise<void> {
         viewCount: firebase.firestore.FieldValue.increment(1),
       })
   } catch (e) {
-    console.error(e)
-    debugger
+    exception(e as string)
     throw e
   }
 }

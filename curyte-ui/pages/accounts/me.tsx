@@ -24,9 +24,11 @@ import * as api from '../../firebase/api'
 import DraftsPage from '../drafts/all'
 import { Lesson } from '../../interfaces/lesson'
 import LessonPreview from '../../components/LessonPreview'
+import { useErrorHandler } from 'react-error-boundary'
 
 const MySettingsView = () => {
   const router = useRouter()
+  const handleError = useErrorHandler()
 
   const [user, userLoading] = useAuthState(firebase.auth())
   const [author, setAuthor] = useState<Author | null>(null)
@@ -49,27 +51,32 @@ const MySettingsView = () => {
     if (user && !author) {
       setLoading(true)
       const fetchAuthor = async () => {
-        const author = await api.getAuthor(user.uid)
-        setAuthor(author)
-        if (author.savedLessons?.length) {
-          return api
-            .getLessons([
-              {
-                fieldPath: 'uid',
-                opStr: 'in',
-                value: author.savedLessons || [],
-              },
-            ])
-            .then((res) => {
-              res.sort(
-                (a, b) =>
-                  // author.savedLessons has oldest saves first
-                  (author.savedLessons || []).indexOf(b.uid) -
-                  (author.savedLessons || []).indexOf(a.uid)
-              )
-              setSavedLessons(res)
-            })
-        }
+        await api
+          .getAuthor(user.uid)
+          .then((author) => {
+            setAuthor(author)
+            if (author.savedLessons?.length) {
+              return api
+                .getLessons([
+                  {
+                    fieldPath: 'uid',
+                    opStr: 'in',
+                    value: author.savedLessons || [],
+                  },
+                ])
+                .then((res) => {
+                  res.sort(
+                    (a, b) =>
+                      // author.savedLessons has oldest saves first
+                      (author.savedLessons || []).indexOf(b.uid) -
+                      (author.savedLessons || []).indexOf(a.uid)
+                  )
+                  setSavedLessons(res)
+                })
+                .catch(handleError)
+            }
+          })
+          .catch(handleError)
       }
 
       const fetchLessons = async () => {
@@ -82,7 +89,7 @@ const MySettingsView = () => {
 
       Promise.all([fetchLessons(), fetchAuthor()]).then(() => setLoading(false))
     }
-  }, [author, loading, user])
+  }, [author, handleError, loading, user])
 
   const handleSave = async (event: SyntheticEvent) => {
     event.preventDefault()
