@@ -51,7 +51,7 @@ const MySettingsView = () => {
       const fetchAuthor = async () => {
         const author = await api.getAuthor(user.uid)
         setAuthor(author)
-        if (author.savedLessons.length) {
+        if (author.savedLessons?.length) {
           return api
             .getLessons([
               {
@@ -64,8 +64,8 @@ const MySettingsView = () => {
               res.sort(
                 (a, b) =>
                   // author.savedLessons has oldest saves first
-                  author.savedLessons.indexOf(b.uid) -
-                  author.savedLessons.indexOf(a.uid)
+                  (author.savedLessons || []).indexOf(b.uid) -
+                  (author.savedLessons || []).indexOf(a.uid)
               )
               setSavedLessons(res)
             })
@@ -123,12 +123,12 @@ const MySettingsView = () => {
                       <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight leading-tight">
                         Lessons
                       </h2>
+                      {!lessons.length && 'Nothing here yet!'}
                       <div className="flex flex-wrap gap-4 mb-8 justify-center">
                         {lessons.map((lesson) => (
                           <LessonPreview key={lesson.uid} lesson={lesson} />
                         ))}
                       </div>
-                      {!lessons.length && 'Nothing here yet!'}
                     </div>
                   </section>
                   <section className="flex flex-col my-8">
@@ -136,13 +136,12 @@ const MySettingsView = () => {
                       <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight leading-tight">
                         Saved
                       </h2>
-
+                      {!savedLessons.length && 'Nothing here yet!'}
                       <div className="flex flex-wrap gap-4 mb-8 justify-center">
                         {savedLessons.map((lesson) => (
                           <LessonPreview key={lesson.uid} lesson={lesson} />
                         ))}
                       </div>
-                      {!savedLessons.length && 'Nothing here yet!'}
                     </div>
                   </section>
                   <section className="flex flex-col my-8">
