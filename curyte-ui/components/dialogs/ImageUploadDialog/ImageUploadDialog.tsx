@@ -13,6 +13,7 @@ import UploadProgressBar from '../../UploadProgressBar'
 import { useDropzone } from 'react-dropzone'
 import Compress from 'browser-image-compression'
 import { imageUrlMatchRegex } from '../../embeds/matchers'
+import { exception } from '../../../utils/gtag'
 
 interface ImageUploadDialogProps {
   title: string
@@ -89,11 +90,23 @@ const ImageUploadDialog = ({
 
   const handleUrlChange = async (input: string) => {
     setUrl(input)
+    setError('')
     if (imageUrlMatchRegex.test(input)) {
       setLoading(true)
-      const blob = await fetch(input).then((res) => res.blob())
-      await onDropAccepted([new File([blob], input, { type: blob.type })])
-      setLoading(false)
+      try {
+        const blob = await fetch(input, { mode: 'cors' }).then((res) =>
+          res.blob()
+        )
+        await onDropAccepted([new File([blob], input, { type: blob.type })])
+      } catch (e) {
+        exception(e as string)
+        setError(
+          e +
+            '; Unable to fetch image from URL. Please save it and upload directly.'
+        )
+      } finally {
+        setLoading(false)
+      }
     }
   }
 
@@ -134,9 +147,15 @@ const ImageUploadDialog = ({
                   Drop a photo here, or click to select a file
                 </p>
               </div>
-              <div className="mt-4 truncate w-full">
-                {error && <div className="error">{error}</div>}
-                {file && <div>{file.name}</div>}
+              <div className="mt-4 w-full">
+                {error && (
+                  <div className="error text-red-500 font-semibold text-lg flex flex-wrap">
+                    {error}
+                  </div>
+                )}
+                {file && (
+                  <div className="truncate text-ellipsis">{file.name}</div>
+                )}
                 {file && (
                   <UploadProgressBar
                     file={file}

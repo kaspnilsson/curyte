@@ -85,3 +85,15 @@ textarea:focus {
   box-shadow: none;
   outline: none;
 }
+
+.cover-image-wrapper {
+  > span {
+    position: unset !important;
+  }
+
+  .image {
+    width: 100% !important;
+    position: relative !important;
+    height: unset !important;
+  }
+}
