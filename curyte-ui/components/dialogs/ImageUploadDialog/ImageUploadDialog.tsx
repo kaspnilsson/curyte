@@ -43,19 +43,24 @@ const ImageUploadDialog = ({
 
   const onDropAccepted = async (files: File[]) => {
     const f = files[0]
-    Compress(f, compressOptions)
-      .then((compressedBlob) => {
-        const convertedBlobFile = new File([compressedBlob], f.name, {
-          type: f.type,
-          lastModified: Date.now(),
-        })
+    if (f.type === 'image/gif') {
+      // Compress library does not support gif
+      setFile(f)
+    } else {
+      Compress(f, compressOptions)
+        .then((compressedBlob) => {
+          const convertedBlobFile = new File([compressedBlob], f.name, {
+            type: f.type,
+            lastModified: Date.now(),
+          })
 
-        setFile(convertedBlobFile)
-        setError('')
-      })
-      .catch((e) => {
-        console.error(e)
-      })
+          setFile(convertedBlobFile)
+          setError('')
+        })
+        .catch((e) => {
+          console.error(e)
+        })
+    }
   }
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -87,6 +92,7 @@ const ImageUploadDialog = ({
     if (imageUrlMatchRegex.test(input)) {
       setLoading(true)
       const blob = await fetch(input).then((res) => res.blob())
+      debugger
       await onDropAccepted([new File([blob], input, { type: blob.type })])
       setLoading(false)
     }
