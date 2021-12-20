@@ -209,7 +209,7 @@ const LessonHeader = ({
         </div>
       </div>
       {lesson.coverImageUrl && (
-        <div className="mb-8 md:mb-16 sm:mx-0">
+        <div className="mb-8 sm:mx-0">
           <CoverImage title={lesson.title} src={lesson.coverImageUrl} />
         </div>
       )}
