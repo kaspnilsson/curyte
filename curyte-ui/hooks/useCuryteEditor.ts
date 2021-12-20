@@ -9,6 +9,7 @@ import TableRow from '@tiptap/extension-table-row'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import Typography from '@tiptap/extension-typography'
+import Image from '@tiptap/extension-image'
 import Underline from '@tiptap/extension-underline'
 import { JSONContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
@@ -38,7 +39,7 @@ const useCuryteEditor = (
       extensions: [
         Highlight,
         Typography,
-        // Image,
+        Image,
         // TextAlign,
         Link,
         Superscript,
@@ -57,7 +58,6 @@ const useCuryteEditor = (
         }),
         Document,
         GoogleDriveEmbed,
-        // TableOfContents,
         // Dropcursor.configure({
         //   color: '#6a7280',
         // }),
