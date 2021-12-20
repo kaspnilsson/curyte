@@ -32,7 +32,7 @@ const Home = ({ lessons }: Props) => {
             Byte-sized lessons, for the curious.
           </h1>
         </section>
-        <section className="flex-col flex items-center justify-around mb-8 w-96">
+        <section className="flex-col flex items-center justify-around mb-8 w-full md:w-96">
           {/* <p className="text-center tracking-tighter mb-8 text-gray-700">
                   Because lessons can be so much more than just PDFs from the
                   90s.

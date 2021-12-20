@@ -17,8 +17,8 @@ type Props = {
 const LessonPreview = ({ lesson, author }: Props) => {
   return (
     <Link as={lessonRoute(lesson.uid)} href={lessonRouteHrefPath} passHref>
-      <div className="group flex flex-col cursor-pointer rounded-xl shadow-lg overflow-hidden w-96 border-2 border-gray-200 lesson-preview">
-        <div className="w-96 h-48 relative overflow-hidden">
+      <div className="group flex flex-col cursor-pointer rounded-xl shadow-lg overflow-hidden w-screen md:w-96 border-2 border-gray-200 lesson-preview">
+        <div className="w-full h-48 relative overflow-hidden">
           {lesson.coverImageUrl && (
             <Image
               src={lesson.coverImageUrl}
