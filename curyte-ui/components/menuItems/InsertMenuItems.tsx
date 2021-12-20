@@ -122,8 +122,8 @@ const InsertMenuItems = ({ editor, openDialog }: Props) => {
           }
         }}
         icon={<i className="ri-2x ri-image-line" />}
-        label="Image from another site"
-        description="Embed an image from another site."
+        label="Image"
+        description="Embed an image, either uploaded or from another site."
       />
       <MenuItem
         onClick={() => {
