@@ -12,6 +12,7 @@ interface Heading {
   level: number
   id: string
   text: string
+  isActive: boolean
 }
 
 const LessonOutline = ({ editor }: Props) => {
@@ -27,6 +28,7 @@ const LessonOutline = ({ editor }: Props) => {
           level: node.attrs.level,
           text: node.textContent,
           id: node.attrs.id,
+          isActive: false,
         })
       }
     })
@@ -57,8 +59,8 @@ const LessonOutline = ({ editor }: Props) => {
     <>
       {!items.length && null}
       {!!items.length && (
-        <div className="toc flex flex-col mr-4 md:mt-10 truncate w-full">
-          <span className="text-gray-500 tracking-tighter text-sm font-bold leading-tight py-2 px-2">
+        <div className="toc flex flex-col mr-4 md:mt-10 truncate w-full text-sm md:text-base">
+          <span className="text-gray-500 tracking-tighter font-bold leading-tight py-2 px-2">
             OUTLINE
           </span>
           <List listStyleType="none">
@@ -66,11 +68,14 @@ const LessonOutline = ({ editor }: Props) => {
               <a
                 href={`#${item.id}`}
                 key={index}
-                className="pl-2 py-2 md:py-1 flex hover:bg-purple-50 rounded"
+                className={classNames(
+                  'pl-2 py-2 md:py-1 flex hover:bg-purple-200 rounded',
+                  { 'bg-purple-500 text-white': item.isActive }
+                )}
               >
                 <ListItem
                   className={classNames(
-                    'font-semibold truncate text-lg md:text-base',
+                    'font-semibold truncate 2xl:text-lg w-full',
                     // Cannot use string concatenation to compute: https://v2.tailwindcss.com/docs/just-in-time-mode
                     {
                       'pl-0': item.level === minHeadingLevel,

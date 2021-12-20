@@ -6,6 +6,7 @@ import '../styles/app.scss'
 import { useRouter } from 'next/router'
 import { pageview } from '../utils/gtag'
 import { useEffect } from 'react'
+import { ImageUploadDialogProvider } from '../components/dialogs/ImageUploadDialog/ImageUploadDialogContext'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -21,7 +22,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   }, [router.events])
   return (
     <ChakraProvider portalZIndex={20}>
-      <Component {...pageProps} />
+      <ImageUploadDialogProvider>
+        <Component {...pageProps} />
+      </ImageUploadDialogProvider>
     </ChakraProvider>
   )
 }

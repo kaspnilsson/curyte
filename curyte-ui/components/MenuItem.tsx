@@ -18,7 +18,7 @@ const MenuItem = ({
 }: Props) => {
   return (
     <chakra.MenuItem
-      className="flex items-center gap-3 justify-items-start"
+      className="flex items-start gap-3 justify-items-center"
       onClick={onClick}
       disabled={disabled}
     >
