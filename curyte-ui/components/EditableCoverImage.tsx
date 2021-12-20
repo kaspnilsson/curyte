@@ -1,7 +1,7 @@
 import { Button } from '@chakra-ui/button'
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
+import useImageUploadDialog from '../hooks/useImageUploadDialog'
 import CoverImage from './CoverImage'
-import ImageUploadDialog from './ImageUploadDialog'
 
 type Props = {
   title: string
@@ -10,8 +10,13 @@ type Props = {
 }
 
 const EditableCoverImage = ({ title, src, onEditUrl }: Props) => {
-  const [isOpen, setIsOpen] = useState(false)
   const buttonRef = useRef<HTMLButtonElement | null>(null)
+  const { getImageSrc } = useImageUploadDialog()
+
+  const onEditImage = async () => {
+    const newSrc = await getImageSrc({ title: 'Upload a cover photo' })
+    if (newSrc) onEditUrl(newSrc)
+  }
 
   return (
     <div className="sm:mx-0 relative w-full flex items-center justify-center mt-2">
@@ -28,20 +33,11 @@ const EditableCoverImage = ({ title, src, onEditUrl }: Props) => {
         <Button
           className="m-auto invisible group-hover:visible"
           ref={buttonRef}
-          onClick={() => setIsOpen(true)}
+          onClick={onEditImage}
         >
           Upload new image
         </Button>
       </div>
-      <ImageUploadDialog
-        title="Upload a cover photo"
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        onSuccess={(src) => {
-          setIsOpen(false)
-          onEditUrl(src)
-        }}
-      />
     </div>
   )
 }

@@ -8,16 +8,18 @@ import {
   googleDriveUrlMatchRegex,
   googleSheetsUrlMatchRegex,
   googleSlidesUrlMatchRegex,
-  imageUrlMatchRegex,
   youtubeUrlMatchRegex,
 } from '../embeds/matchers'
 import CuryteLogo from '../CuryteLogo'
+import useImageUploadDialog from '../../hooks/useImageUploadDialog'
 
 interface Props {
   editor: Editor
   openDialog: (input: Partial<InputDialogProps>) => void
 }
 const InsertMenuItems = ({ editor, openDialog }: Props) => {
+  const { getImageSrc } = useImageUploadDialog()
+
   return (
     <>
       <MenuItem
@@ -111,21 +113,17 @@ const InsertMenuItems = ({ editor, openDialog }: Props) => {
         description="Embed a Google Doc."
       />
       <MenuItem
-        onClick={() => {
-          openDialog({
-            isOpen: true,
-            title: 'Enter an image URL',
-            description: 'Enter the URL to an image from another website.',
-            onConfirm: (src: string) => {
-              editor.chain().focus().setImage({ src }).run()
-            },
-            initialValue: '',
-            validator: (input: string) => imageUrlMatchRegex.test(input),
+        onClick={async () => {
+          const src = await getImageSrc({
+            title: 'Upload an image',
           })
+          if (src) {
+            editor.chain().focus().setImage({ src }).run()
+          }
         }}
         icon={<i className="ri-2x ri-image-line" />}
-        label="Image from another site"
-        description="Embed an image from another site."
+        label="Image"
+        description="Embed an image, either uploaded or from another site."
       />
       <MenuItem
         onClick={() => {

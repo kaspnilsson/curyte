@@ -18,7 +18,15 @@ const UploadProgressBar = ({ file, onSuccess, onError }: Props) => {
     }
   }, [url, error, onSuccess, onError])
 
-  return <Progress isAnimated hasStripe value={progress} colorScheme="purple" />
+  return (
+    <Progress
+      isAnimated
+      hasStripe
+      value={progress}
+      colorScheme="purple"
+      className="w-full"
+    />
+  )
 }
 
 export default UploadProgressBar

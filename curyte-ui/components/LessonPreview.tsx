@@ -75,7 +75,7 @@ const LessonPreview = ({ lesson, author }: Props) => {
             </div>
             <div className="flex items-center gap-4">
               <div className="flex flex-col items-center">
-                <BookmarkIcon className="h-5 w-5 text-inherit text-purple-500" />
+                <BookmarkIcon className="h-5 w-5 text-[#805ad5]" />
                 <Text
                   fontSize="sm"
                   className="text-slate-500 proportional-nums tracking-tight 
@@ -85,7 +85,7 @@ const LessonPreview = ({ lesson, author }: Props) => {
                 </Text>
               </div>
               <div className="flex flex-col items-center">
-                <EyeIcon className="h-5 w-5 text-inherit text-purple-500" />
+                <EyeIcon className="h-5 w-5 text-[#805ad5]" />
                 <Text
                   fontSize="sm"
                   className="text-slate-500 proportional-nums tracking-tight 

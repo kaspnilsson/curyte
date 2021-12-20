@@ -38,7 +38,6 @@ const useCuryteEditor = (
       extensions: [
         Highlight,
         Typography,
-        // Image,
         // TextAlign,
         Link,
         Superscript,
@@ -57,7 +56,6 @@ const useCuryteEditor = (
         }),
         Document,
         GoogleDriveEmbed,
-        // TableOfContents,
         // Dropcursor.configure({
         //   color: '#6a7280',
         // }),

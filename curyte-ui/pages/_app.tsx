@@ -4,8 +4,10 @@ import 'remixicon/fonts/remixicon.css'
 import '../styles/index.css'
 import '../styles/app.scss'
 import { useRouter } from 'next/router'
-import { pageview } from '../utils/gtag'
 import { useEffect } from 'react'
+import { ImageUploadDialogProvider } from '../components/dialogs/ImageUploadDialog/ImageUploadDialogContext'
+import { exception, pageview } from '../utils/gtag'
+import ErrorBoundary from '../components/ErrorBoundary'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -19,9 +21,31 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       router.events.off('routeChangeComplete', handleRouteChange)
     }
   }, [router.events])
+
+  useEffect(() => {
+    window.onerror = function (msg, source, lineNo, columnNo, error) {
+      exception(
+        'Error: ' +
+          msg +
+          '\nScript: ' +
+          source +
+          '\nLine: ' +
+          lineNo +
+          '\nColumn: ' +
+          columnNo +
+          '\nStackTrace: ' +
+          error
+      )
+      return true
+    }
+  })
   return (
     <ChakraProvider portalZIndex={20}>
-      <Component {...pageProps} />
+      <ImageUploadDialogProvider>
+        <ErrorBoundary>
+          <Component {...pageProps} />
+        </ErrorBoundary>
+      </ImageUploadDialogProvider>
     </ChakraProvider>
   )
 }
