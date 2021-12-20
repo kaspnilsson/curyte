@@ -11,8 +11,13 @@ const ErrorFallback = ({ error }: { error: Error }) => (
     <pre>{error.name}</pre>
     <pre>{error.message}</pre>
     {error.stack && <pre>{error.stack}</pre>}
-    <Link href="https://github.com/kaspnilsson/curyte-issues/issues/new?assignees=&labels=&template=bug_report.md&title=">
-      <Button colorScheme="purple">File a report</Button>
+    <Link
+      href="https://github.com/kaspnilsson/curyte-issues/issues/new?assignees=&labels=&template=bug_report.md&title="
+      target="_blank"
+    >
+      <Button colorScheme="purple" className="hover:no-underline">
+        File a report
+      </Button>
     </Link>
   </div>
 )
