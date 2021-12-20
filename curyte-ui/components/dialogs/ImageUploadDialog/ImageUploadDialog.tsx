@@ -13,6 +13,7 @@ import UploadProgressBar from '../../UploadProgressBar'
 import { useDropzone } from 'react-dropzone'
 import Compress from 'browser-image-compression'
 import { imageUrlMatchRegex } from '../../embeds/matchers'
+import { exception } from '../../../utils/gtag'
 
 interface ImageUploadDialogProps {
   title: string
@@ -98,7 +99,7 @@ const ImageUploadDialog = ({
         )
         await onDropAccepted([new File([blob], input, { type: blob.type })])
       } catch (e) {
-        console.error(e)
+        exception(e as string)
         setError(
           e +
             '; Unable to fetch image from URL. Please save it and upload directly.'
