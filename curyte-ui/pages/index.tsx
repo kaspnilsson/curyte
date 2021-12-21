@@ -41,7 +41,7 @@ const Home = () => {
         </section>
         <section className="flex-col flex items-center justify-around mb-8">
           <div className="shadow-xl shadow-purple-500/20 rounded-xl overflow-hidden mb-16 border-2 border-slate-200 lg:max-w-[60vw]">
-            <video autoPlay loop muted={true}>
+            <video autoPlay loop muted={true} playsInline>
               <source src="/static/promo.webm" />
             </video>
           </div>
@@ -76,8 +76,8 @@ const Home = () => {
             explore what everyone else is teaching.
           </p>
         </section>
-        <section className="w-full mb-16 md:mb-32 flex justify-around flex-wrap flex-col lg:flex-row gap-8">
-          <div className="flex flex-col items-center flex-1 text-base md:text-xl">
+        <section className="w-full mb-16 md:mb-32 flex justify-around flex-wrap flex-col lg:flex-row gap-8 items-center colums-lg">
+          <div className="flex flex-col items-center flex-1 text-base w-80 md:w-96 md:text-xl">
             <ul className="flex-1">
               <h3 className="text-2xl mb-4 tracking-tighter leading-tight font-bold text-center">
                 Browse
@@ -108,7 +108,7 @@ const Home = () => {
               </li>
             </ul>
           </div>
-          <div className="flex flex-col items-center flex-1">
+          <div className="flex flex-col items-center flex-1 text-base w-80 md:w-96 md:text-xl">
             <ul className="flex-1">
               <h3 className="text-2xl mb-4 tracking-tighter leading-tight font-bold text-center">
                 Build
