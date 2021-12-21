@@ -60,7 +60,7 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
                         <>
                           <Heading
                             fontSize="xs"
-                            className="text-gray-500 px-4 pt-2 tracking-tight md:tracking-tighter leading-tight"
+                            className="text-slate-500 px-4 pt-2 tracking-tight md:tracking-tighter leading-tight"
                           >
                             STYLE
                           </Heading>
@@ -68,7 +68,7 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
                           <MenuDivider />
                           <Heading
                             fontSize="xs"
-                            className="text-gray-500 px-4 pt-2 tracking-tight md:tracking-tighter leading-tight"
+                            className="text-slate-500 px-4 pt-2 tracking-tight md:tracking-tighter leading-tight"
                           >
                             INSERT
                           </Heading>

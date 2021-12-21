@@ -15,7 +15,7 @@ const DeleteButton = ({ onClick, disabled }: Props) => {
       variant="ghost"
       disabled={disabled}
     >
-      <i className="ri-delete-bin-7-line text-gray-900 text-lg"></i>
+      <i className="ri-delete-bin-7-line text-slate-900 text-lg"></i>
     </IconButton>
   )
 }
