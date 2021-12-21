@@ -4310,7 +4310,7 @@ firebase-functions@^3.16.0:
     express "^4.17.1"
     lodash "^4.17.14"
 
-firebase@9.6.1:
+firebase@^9.6.1:
   version "9.6.1"
   resolved "https://registry.yarnpkg.com/firebase/-/firebase-9.6.1.tgz#08e0fd0799f57a885f895b86a6ed2bc0083412fe"
   integrity sha512-d4wbkVMRiSREa1jfFx2z/Kq3KueEKfNWApvdrEAxvzDRN4eiFLeZSZM/MOxj7TR01e/hANnw2lrYKMUpg21ukg==
@@ -6750,10 +6750,10 @@ react-fast-compare@3.2.0:
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-3.2.0.tgz#641a9da81b6a6320f270e89724fb45a0b39e43bb"
   integrity sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==
 
-react-firebase-hooks@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/react-firebase-hooks/-/react-firebase-hooks-3.0.4.tgz#2185357d2bd6f7292552bc65f2459bbf9364e673"
-  integrity sha512-eqhj8O5t/9nzGS/DfCGQX9goqbxTP2T/qrY2B13s4rx/VIJ4Bx3WnZgqxEVA0Y/mWZBh7gOlXSPdRGbxBq5d8g==
+react-firebase-hooks@^4:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-firebase-hooks/-/react-firebase-hooks-4.0.1.tgz#5c2483b0a240eb05cb9467cb1c07b2c721bef6c2"
+  integrity sha512-JinNQRMzu905KWSCWppOZTUeOJArXvWdcTAsamjgDX/ZMF9QH5d+BZpnapEaIL70ifCDe/Ax9wzn9vlAufIymw==
 
 react-firebaseui@^6.0.0:
   version "6.0.0"
