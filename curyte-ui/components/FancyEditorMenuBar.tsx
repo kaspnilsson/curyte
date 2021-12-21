@@ -52,8 +52,8 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
           className="border-slate-200 opacity-100"
         />
       </Center>
-      <Menu id="style-menu" isLazy boundary="scrollParent" colorScheme="purple">
-        <MenuButton size="sm" variant="ghost" colorScheme="purple" as={Button}>
+      <Menu id="style-menu" isLazy boundary="scrollParent" colorScheme="indigo">
+        <MenuButton size="sm" variant="ghost" colorScheme="indigo" as={Button}>
           <div className="flex items-center text-slate-900 gap-1 text-sm">
             Style
             <i className="ri-arrow-drop-down-line text-lg w-2"></i>
@@ -167,9 +167,9 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         id="insert-menu"
         isLazy
         boundary="scrollParent"
-        colorScheme="purple"
+        colorScheme="indigo"
       >
-        <MenuButton size="sm" variant="ghost" colorScheme="purple" as={Button}>
+        <MenuButton size="sm" variant="ghost" colorScheme="indigo" as={Button}>
           <div className="flex items-center text-slate-900 gap-1 text-sm">
             Insert
             <i className="ri-arrow-drop-down-line text-lg w-2"></i>

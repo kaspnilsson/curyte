@@ -5,7 +5,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@babel/core": "^7.16.0",
@@ -14,6 +15,7 @@
     "@emotion/styled": "^11.6.0",
     "@firebase/app-compat": "0",
     "@heroicons/react": "^1.0.5",
+    "@next/bundle-analyzer": "^12.0.7",
     "@react-hook/debounce": "^4.0.0",
     "@tailwindcss/aspect-ratio": "^0.4.0",
     "@tailwindcss/forms": "^0.4.0",
@@ -90,7 +92,7 @@
     "react-textarea-autosize": "^8.3.3",
     "react-use": "^17.3.1",
     "remixicon": "^2.5.0",
-    "sass": "^1.44.0",
+    "sass": "^1.45.0",
     "styled-components": "^5.3.3",
     "tippy.js": "^6.3.7",
     "webpack": "^5.62.1"
@@ -108,6 +110,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-next": "^0.0.0",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "next-sitemap": "^1.6.203",
     "postcss": "^8.4.5",
     "prettier": "^2.5.0",
     "tailwindcss": "^3.0.7",

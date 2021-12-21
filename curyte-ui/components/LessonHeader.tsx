@@ -32,6 +32,7 @@ import { useRouter } from 'next/router'
 import { loginRoute, newLessonRoute } from '../utils/routes'
 import TagChip from './TagChip'
 import CoverImage from './CoverImage'
+import { indigo } from '../styles/theme/colors'
 
 type Props = {
   lesson: Lesson
@@ -151,7 +152,7 @@ const LessonHeader = ({
           {handlePublish && (
             <Button
               size="sm"
-              colorScheme="purple"
+              colorScheme="indigo"
               className="font-semibold flex items-center justify-between mr-2"
               onClick={handlePublish}
             >
@@ -164,13 +165,13 @@ const LessonHeader = ({
               borderRadius="full"
               size="sm"
               aria-label={isSaved ? 'Saved' : 'Save'}
-              colorScheme="purple"
+              colorScheme="indigo"
               variant="ghost"
               onClick={() => toggleSaveLesson()}
             >
               <BookmarkIcon
                 className="h-5 w-5 text-inherit"
-                style={{ fill: isSaved ? '#805AD5' : 'transparent' }}
+                style={{ fill: isSaved ? indigo[500] : 'transparent' }}
               />
             </IconButton>
           )}

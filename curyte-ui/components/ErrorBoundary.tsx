@@ -15,7 +15,7 @@ const ErrorFallback = ({ error }: { error: Error }) => (
       href="https://github.com/kaspnilsson/curyte-issues/issues/new?assignees=&labels=&template=bug_report.md&title="
       target="_blank"
     >
-      <Button colorScheme="purple" className="hover:no-underline">
+      <Button colorScheme="indigo" className="hover:no-underline">
         File a report
       </Button>
     </Link>

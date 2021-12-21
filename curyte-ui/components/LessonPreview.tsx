@@ -75,20 +75,20 @@ const LessonPreview = ({ lesson, author }: Props) => {
             </div>
             <div className="flex items-center gap-4">
               <div className="flex flex-col items-center">
-                <BookmarkIcon className="h-5 w-5 text-[#805ad5]" />
+                <BookmarkIcon className="h-5 w-5 text-indigo-700" />
                 <Text
                   fontSize="sm"
-                  className="text-slate-500 proportional-nums tracking-tight 
+                  className="text-slate-700 proportional-nums tracking-tight 
                   leading-tight"
                 >
                   {lesson.saveCount || 0}
                 </Text>
               </div>
               <div className="flex flex-col items-center">
-                <EyeIcon className="h-5 w-5 text-[#805ad5]" />
+                <EyeIcon className="h-5 w-5 text-indigo-700" />
                 <Text
                   fontSize="sm"
-                  className="text-slate-500 proportional-nums tracking-tight 
+                  className="text-slate-700 proportional-nums tracking-tight 
                   leading-tight"
                 >
                   {lesson.viewCount || 0}

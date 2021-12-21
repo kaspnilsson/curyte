@@ -155,7 +155,7 @@ const EditLessonPage = ({
               variant="link"
               size="sm"
               onClick={localHandlePreview}
-              colorScheme="purple"
+              colorScheme="indigo"
               className="disabled:opacity-50 font-semibold flex items-center justify-between mr-4"
             >
               Preview
@@ -173,7 +173,7 @@ const EditLessonPage = ({
             </Button>
           )}
           <Button
-            colorScheme="purple"
+            colorScheme="indigo"
             disabled={!canSubmit}
             className="disabled:opacity-50 font-semibold flex items-center justify-between"
             onClick={localHandleSubmit}

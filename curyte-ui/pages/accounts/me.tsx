@@ -25,6 +25,7 @@ import DraftsPage from '../drafts/all'
 import { Lesson } from '../../interfaces/lesson'
 import LessonPreview from '../../components/LessonPreview'
 import { useErrorHandler } from 'react-error-boundary'
+import { indexRoute } from '../../utils/routes'
 
 const MySettingsView = () => {
   const router = useRouter()
@@ -44,7 +45,7 @@ const MySettingsView = () => {
   }
 
   useEffect(() => {
-    if (!user && !userLoading) router.push('/')
+    if (!user && !userLoading) router.push(indexRoute)
   }, [user, userLoading, router])
 
   useEffect(() => {
@@ -104,7 +105,7 @@ const MySettingsView = () => {
     setSaving(true)
     await firebase.auth().currentUser?.delete()
     setSaving(false)
-    router.push('/')
+    router.push(indexRoute)
   }
 
   return (
@@ -118,7 +119,7 @@ const MySettingsView = () => {
             <div className="pb-4">
               <AuthorLink author={author}></AuthorLink>
             </div>
-            <Tabs colorScheme="purple">
+            <Tabs colorScheme="indigo">
               <TabList>
                 <Tab>Posts</Tab>
                 <Tab>Settings</Tab>
@@ -167,7 +168,7 @@ const MySettingsView = () => {
                         Profile settings
                       </h2>
                       <Button
-                        colorScheme="purple"
+                        colorScheme="indigo"
                         className="w-fit-content disabled:opacity-50"
                         onClick={handleSave}
                         disabled={!authorChanged}

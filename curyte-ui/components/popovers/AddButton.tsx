@@ -20,7 +20,7 @@ const AddButton = ({ onClick, disabled, items }: Props) => {
         aria-label="add"
         onClick={onClick}
         size="sm"
-        colorScheme="purple"
+        colorScheme="indigo"
         variant="ghost"
         disabled={disabled}
       >

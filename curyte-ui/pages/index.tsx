@@ -41,7 +41,7 @@ const Home = () => {
           </h1>
         </section>
         <section className="flex-col flex items-center justify-around mb-8">
-          <div className="shadow-xl shadow-purple-500/20 rounded-xl overflow-hidden mb-16 border-2 border-slate-200 lg:max-w-[60vw]">
+          <div className="shadow-xl shadow-indigo-500/20 rounded-xl overflow-hidden mb-16 border-2 border-slate-200 lg:max-w-[60vw]">
             <AutoPlaySilentVideo
               src="/static/promo.mp4"
               type="video/mp4"
@@ -50,13 +50,13 @@ const Home = () => {
           </div>
           <div className="text-center mb-8 text-4xl font-bold tracking-tighter leading-tight">
             Engaging lessons,
-            <div className="text-purple-500">digitally native.</div>
+            <div className="text-indigo-500">digitally native.</div>
           </div>
           <div className="mb-8 flex flex-col md:flex-row items-center align-center gap-4">
             <Link passHref href={lessonSearchRoute()}>
               <Button
                 className="flex-1 flex"
-                colorScheme="purple"
+                colorScheme="indigo"
                 variant="outline"
               >
                 <div className="p-4">
@@ -66,7 +66,7 @@ const Home = () => {
               </Button>
             </Link>
             <Link passHref href={newLessonRoute()}>
-              <Button className="flex-1" colorScheme="purple">
+              <Button className="flex-1" colorScheme="indigo">
                 <div className="p-4">Start writing</div>
               </Button>
             </Link>
@@ -153,13 +153,6 @@ const Home = () => {
           <div className="text-center mb-8 text-4xl font-bold tracking-tighter leading-tight">
             Get started today!
           </div>
-          {/* <div className="mb-8 flex items-center align-center gap-4">
-            <Link passHref href={newLessonRoute()}>
-              <Button className="flex-1" colorScheme="purple">
-                <div className="p-4">Start writing</div>
-              </Button>
-            </Link>
-          </div> */}
         </section>
       </Container>
     </Layout>

@@ -16,7 +16,13 @@ import {
 import Head from 'next/head'
 import Avatar from './Avatar'
 import CuryteLogo from './CuryteLogo'
-import { indexRoute, loginRoute, newLessonRoute } from '../utils/routes'
+import {
+  indexRoute,
+  lessonSearchRoute,
+  loginRoute,
+  newLessonRoute,
+} from '../utils/routes'
+import { indigo } from '../styles/theme/colors'
 
 type Props = {
   children: React.ReactNode
@@ -95,7 +101,7 @@ const Header = ({
       >
         <Container>
           <div className="flex justify-between items-center py-4 h-16">
-            <Link href={indexRoute} passHref>
+            <Link href={user ? lessonSearchRoute() : indexRoute} passHref>
               <Button
                 variant="link"
                 colorScheme="black"
@@ -120,7 +126,7 @@ const Header = ({
                 <Link href={newLessonRoute()} passHref>
                   <Button
                     className="font-semibold py-2 px-4"
-                    colorScheme="purple"
+                    colorScheme="indigo"
                   >
                     Start writing
                   </Button>
@@ -152,7 +158,7 @@ const Header = ({
             style={{
               width: `${progress}%`,
               height: '3px',
-              background: '#805AD5',
+              background: indigo[500],
               opacity: '0.8',
               marginTop: '-3px',
             }}

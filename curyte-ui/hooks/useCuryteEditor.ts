@@ -23,6 +23,7 @@ import AutoId from '../components/extensions/AutoId'
 import Link from '@tiptap/extension-link'
 import { CuryteLink } from '../components/extensions/CuryteLink/CuryteLink'
 import { MultipleChoice } from '../components/extensions/MultipleChoice/MultipleChoice'
+import { indigo } from '../styles/theme/colors'
 
 interface EditorProps {
   content: JSONContent | null
@@ -53,12 +54,12 @@ const useCuryteEditor = (
         VimeoEmbed,
         StarterKit.configure({
           document: false,
+          dropcursor: {
+            color: indigo[500],
+          },
         }),
         Document,
         GoogleDriveEmbed,
-        // Dropcursor.configure({
-        //   color: '#6a7280',
-        // }),
         ImageEmbed,
         TaskList,
         AutoId,
