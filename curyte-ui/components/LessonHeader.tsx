@@ -32,7 +32,7 @@ import { useRouter } from 'next/router'
 import { loginRoute, newLessonRoute } from '../utils/routes'
 import TagChip from './TagChip'
 import CoverImage from './CoverImage'
-import { indigo } from '../utils/theme'
+import { indigo } from '../styles/theme/colors'
 
 type Props = {
   lesson: Lesson

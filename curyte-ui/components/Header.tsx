@@ -17,7 +17,7 @@ import Head from 'next/head'
 import Avatar from './Avatar'
 import CuryteLogo from './CuryteLogo'
 import { indexRoute, loginRoute, newLessonRoute } from '../utils/routes'
-import { indigo } from '../utils/theme'
+import { indigo } from '../styles/theme/colors'
 
 type Props = {
   children: React.ReactNode

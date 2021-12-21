@@ -8,7 +8,7 @@ import { useEffect } from 'react'
 import { ImageUploadDialogProvider } from '../components/dialogs/ImageUploadDialog/ImageUploadDialogContext'
 import { exception, pageview } from '../utils/gtag'
 import ErrorBoundary from '../components/ErrorBoundary'
-import theme from '../utils/theme'
+import theme from '../styles/theme'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()

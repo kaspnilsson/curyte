@@ -23,7 +23,7 @@ import AutoId from '../components/extensions/AutoId'
 import Link from '@tiptap/extension-link'
 import { CuryteLink } from '../components/extensions/CuryteLink/CuryteLink'
 import { MultipleChoice } from '../components/extensions/MultipleChoice/MultipleChoice'
-import { indigo } from '../utils/theme'
+import { indigo } from '../styles/theme/colors'
 
 interface EditorProps {
   content: JSONContent | null

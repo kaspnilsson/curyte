@@ -1,5 +1,3 @@
-import { extendTheme } from '@chakra-ui/react'
-
 export const indigo = {
   50: '#eef2ff',
   100: '#e0e7ff',
@@ -12,11 +10,3 @@ export const indigo = {
   800: '#3730a3',
   900: '#312e81',
 }
-
-const theme = extendTheme({
-  colors: {
-    indigo,
-  },
-})
-
-export default theme
