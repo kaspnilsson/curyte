@@ -76,7 +76,7 @@ const MultipleChoiceEditorComponent = ({
                 <Input
                   value={o.text}
                   variant="filled"
-                  colorScheme="purple"
+                  colorScheme="indigo"
                   placeholder="Add an answer"
                   onChange={(e) => onUpdateOptionText(e.target.value, index)}
                 />

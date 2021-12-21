@@ -11,7 +11,7 @@ const DeleteButton = ({ onClick, disabled }: Props) => {
       aria-label="delete"
       onClick={onClick}
       size="sm"
-      colorScheme="purple"
+      colorScheme="indigo"
       variant="ghost"
       disabled={disabled}
     >

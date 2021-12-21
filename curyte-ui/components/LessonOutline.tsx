@@ -69,8 +69,8 @@ const LessonOutline = ({ editor }: Props) => {
                 href={`#${item.id}`}
                 key={index}
                 className={classNames(
-                  'pl-2 py-2 md:py-1 flex hover:bg-purple-200 rounded',
-                  { 'bg-purple-500 text-white': item.isActive }
+                  'pl-2 py-2 md:py-1 flex hover:bg-indigo-200 rounded',
+                  { 'bg-indigo-500 text-white': item.isActive }
                 )}
               >
                 <ListItem

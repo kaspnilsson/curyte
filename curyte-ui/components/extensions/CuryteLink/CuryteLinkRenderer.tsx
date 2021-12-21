@@ -29,7 +29,7 @@ const CuryteLinkRenderer = (props: {
         className="p-2 flex justify-center not-prose"
         data-drag-handle=""
       >
-        {loading && <Spinner color="purple" size="xl" />}
+        {loading && <Spinner color="indigo" size="xl" />}
         {!loading && lesson && (
           <LessonPreview lesson={lesson} author={author} />
         )}

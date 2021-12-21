@@ -8,6 +8,7 @@ import { useEffect } from 'react'
 import { ImageUploadDialogProvider } from '../components/dialogs/ImageUploadDialog/ImageUploadDialogContext'
 import { exception, pageview } from '../utils/gtag'
 import ErrorBoundary from '../components/ErrorBoundary'
+import theme from '../utils/theme'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -40,7 +41,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     }
   })
   return (
-    <ChakraProvider portalZIndex={20}>
+    <ChakraProvider portalZIndex={20} theme={theme}>
       <ImageUploadDialogProvider>
         <ErrorBoundary>
           <Component {...pageProps} />

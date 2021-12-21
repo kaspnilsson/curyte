@@ -23,7 +23,7 @@ const UploadProgressBar = ({ file, onSuccess, onError }: Props) => {
       isAnimated
       hasStripe
       value={progress}
-      colorScheme="purple"
+      colorScheme="indigo"
       className="w-full"
     />
   )
