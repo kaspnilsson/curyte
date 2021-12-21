@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import firebase from '../firebase/clientApp'
+import { auth } from '../firebase/clientApp'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -63,10 +63,10 @@ const Header = ({
   }, [isSticky])
 
   const logOut = () => {
-    firebase.auth().signOut()
+    auth.signOut()
   }
 
-  const [user] = useAuthState(firebase.auth())
+  const [user] = useAuthState(auth)
 
   return (
     <>
@@ -100,15 +100,15 @@ const Header = ({
         })}
       >
         <Container>
-          <div className="flex justify-between items-center py-4 h-16">
+          <div className="flex items-center justify-between h-16 py-4">
             <Link href={user ? lessonSearchRoute() : indexRoute} passHref>
               <Button
                 variant="link"
                 colorScheme="black"
-                className="flex gap-1 items-center"
+                className="flex items-center gap-1"
               >
                 <CuryteLogo />
-                <h2 className="text-xl md:text-2xl font-bold tracking-tight leading-tight">
+                <h2 className="text-xl font-bold leading-tight tracking-tight md:text-2xl">
                   Curyte
                 </h2>
               </Button>
@@ -125,13 +125,13 @@ const Header = ({
               <div className="flex items-center">
                 <Link href={newLessonRoute()} passHref>
                   <Button
-                    className="font-semibold py-2 px-4"
+                    className="px-4 py-2 font-semibold"
                     colorScheme="indigo"
                   >
                     Start writing
                   </Button>
                 </Link>
-                <div className="ml-4 flex">
+                <div className="flex ml-4">
                   <Menu>
                     <MenuButton>
                       <Avatar

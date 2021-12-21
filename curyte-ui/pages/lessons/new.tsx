@@ -1,61 +1,40 @@
-import firebase from '../../firebase/clientApp'
+import { auth } from '../../firebase/clientApp'
 import React, { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import EditLessonPage from '../../components/EditLessonPage'
-import { Author } from '../../interfaces/author'
 import { Lesson } from '../../interfaces/lesson'
 import { useRouter } from 'next/router'
-import * as api from '../../firebase/api'
 import LoadingSpinner from '../../components/LoadingSpinner'
-import { lessonRoute, loginRoute } from '../../utils/routes'
+import { draftRoute, loginRoute } from '../../utils/routes'
+import { getLesson, createDraft } from '../../firebase/api'
 
 const NewLessonView = () => {
   const router = useRouter()
-  const [user, userLoading] = useAuthState(firebase.auth())
+  const [user, userLoading] = useAuthState(auth)
   const [loading, setLoading] = useState(false)
-  const [lesson, setLesson] = useState<Lesson | undefined>()
-
-  useEffect(() => {
-    if (!user && !userLoading) router.push(loginRoute)
-  })
 
   useEffect(() => {
     if (!user || userLoading) return
-    if (router.query.copyFrom) {
-      const fetchLesson = async () => {
-        const l = await api.getLesson(router.query.copyFrom as string)
-        setLesson({ ...l, parentLessonId: l.uid, uid: '' })
-        setLoading(false)
+    if (!user && !userLoading) router.push(loginRoute)
+    const fetchLesson = async () => {
+      if (router.query.copyFrom) {
+        const l = await getLesson(router.query.copyFrom as string)
+        const newUid = await createDraft({
+          ...l,
+          parentLessonId: l.uid,
+          uid: '',
+        })
+        router.replace(draftRoute(newUid))
+      } else {
+        const newUid = await createDraft({} as Lesson)
+        router.replace(draftRoute(newUid))
       }
-      setLoading(true)
-      fetchLesson()
-    } else {
-      setLesson(undefined)
+      setLoading(false)
     }
-  }, [router.query.copyFrom, user, userLoading])
+    setLoading(true)
+    fetchLesson()
+  }, [router, router.query.copyFrom, user, userLoading])
 
-  const handleSubmit = async (l: Lesson) => {
-    const uid = await api.publishLesson(l, l.uid)
-    router.push(lessonRoute(uid))
-  }
-  const handleSaveDraft = async (l: Lesson) => {
-    const uid = await api.createDraft(l)
-    return uid
-  }
-
-  return (
-    <>
-      {(userLoading || loading) && <LoadingSpinner />}
-      {!loading && !userLoading && (
-        <EditLessonPage
-          lesson={lesson}
-          user={user as unknown as Author}
-          handleSubmit={handleSubmit}
-          handleSaveDraft={handleSaveDraft}
-        />
-      )}
-    </>
-  )
+  return <>{(userLoading || loading) && <LoadingSpinner />}</>
 }
 
 export default NewLessonView

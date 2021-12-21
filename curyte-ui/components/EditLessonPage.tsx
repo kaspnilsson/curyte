@@ -1,190 +1,105 @@
-import firebase from '../firebase/clientApp'
 import React, { SyntheticEvent, useState } from 'react'
-import { JSONContent } from '@tiptap/react'
 import { UploadIcon } from '@heroicons/react/solid'
-import { Button } from '@chakra-ui/react'
+import { Button, Text } from '@chakra-ui/react'
+import { Timestamp } from 'firebase/firestore'
 
-import Layout from './Layout'
 import { Lesson } from '../interfaces/lesson'
 import { Author } from '../interfaces/author'
 import LoadingSpinner from './LoadingSpinner'
-import { SaveIcon } from '@heroicons/react/outline'
-import { computeClassesForTitle } from './LessonTitle'
-import TextareaAutosize from 'react-textarea-autosize'
-import FancyEditor from './FancyEditor'
-import { useDebounceCallback } from '@react-hook/debounce'
-import { draftPreviewRoute, draftRoute } from '../utils/routes'
-// import * as api from '../firebase/api'
-import EditableCoverImage from './EditableCoverImage'
-import { useRouter } from 'next/router'
-import useCuryteEditor from '../hooks/useCuryteEditor'
-import LessonOutline from './LessonOutline'
+import LessonEditor from './LessonEditor'
+import { CheckIcon } from '@heroicons/react/outline'
 
 type Props = {
   lesson?: Lesson
   user: Author
-  handleSubmit: (l: Lesson) => Promise<void>
-  handleSaveDraft?: (l: Lesson) => Promise<string>
+  handleSubmit: () => Promise<void>
+  handleUpdate: (l: Lesson) => Promise<void>
+  handlePreview?: () => Promise<void>
 }
 
 const EditLessonPage = ({
   lesson,
   user,
   handleSubmit,
-  handleSaveDraft,
+  handleUpdate,
+  handlePreview,
 }: Props) => {
-  const router = useRouter()
-  const [title, setTitle] = useState(lesson?.title.trim() || '')
-  const [description, setDescription] = useState(
-    lesson?.description.trim() || ''
-  )
-  const [tagsStr, setTagsStr] = useState(lesson?.tags?.join(', ') || '')
-  const [content, setContent] = useState(lesson?.content || null)
-  const [coverImageUrl, setCoverImageUrl] = useState(
-    lesson?.coverImageUrl || ''
-  )
   const [saving, setSaving] = useState(false)
+  const [autosaving, setAutosaving] = useState(false)
 
-  const canSubmit = !!(title && description && content)
-
-  const makeNewLessonLocally = () => ({
-    ...lesson,
-    title,
-    tags: tagsStr.split(',').map((t) => t.trim()),
-    description,
-    authorName: user?.displayName || '',
-    authorId: user?.uid || '',
-    content,
-    created:
-      lesson?.created ||
-      firebase.firestore.Timestamp.now().toDate().toISOString(),
-    updated: firebase.firestore.Timestamp.now().toDate().toISOString(),
+  const makeNewLessonLocally = (l: Partial<Lesson>, u: Author): Lesson => ({
+    content: l.content || null,
+    description: l.description || '',
+    tags: l.tags || [],
+    title: l.title || '',
+    authorName: u?.displayName || '',
+    authorId: u?.uid || '',
+    created: l?.created || Timestamp.now().toDate().toISOString(),
+    updated: Timestamp.now().toDate().toISOString(),
     saveCount: 0,
     viewCount: 0,
-    uid: lesson?.uid || '',
-    coverImageUrl,
+    uid: l?.uid || '',
   })
 
   const localHandleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault()
-    if (!user || !content) return
     try {
       setSaving(true)
-      await handleSubmit(makeNewLessonLocally())
+      await handleSubmit()
     } finally {
       setSaving(false)
     }
   }
 
-  const localHandleSaveDraft = async (event: SyntheticEvent) => {
-    event.preventDefault()
-    if (!user || !handleSaveDraft) return
-    // UID set by API module
-    const uid = await handleSaveDraft(makeNewLessonLocally())
-    router.push(draftRoute(uid))
+  const localHandleUpdate = async (l: Partial<Lesson>) => {
+    setAutosaving(true)
+    const newLesson = makeNewLessonLocally(l, user)
+    await handleUpdate(newLesson)
+    setAutosaving(false)
   }
-
-  const localHandlePreview = async (event: SyntheticEvent) => {
-    event.preventDefault()
-    if (!user || !handleSaveDraft) return
-    try {
-      const uid = await handleSaveDraft(makeNewLessonLocally())
-      router.push(draftPreviewRoute(uid))
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  const onUpdate = useDebounceCallback((json: JSONContent) => {
-    setContent(json)
-  }, 100)
-
-  const onCoverImageUpload = (url: string) => {
-    // Unawaited
-    setCoverImageUrl(url)
-  }
-
-  const editor = useCuryteEditor({ content, onUpdate }, [lesson, onUpdate])
 
   if (saving) return <LoadingSpinner />
   return (
-    <Layout
-      withFooter={false}
-      isSticky={false}
-      sidebar={<LessonOutline editor={editor} />}
-    >
-      <div className="flex">
-        <div className="flex flex-col flex-grow px-5 md:px-0 overflow-hidden">
-          <div className="flex items-center justify-between w-full">
-            <TextareaAutosize
-              autoFocus
-              className={`${computeClassesForTitle(
-                title
-              )} font-semibold flex-grow resize-none tracking-tight leading-tight border-0`}
-              placeholder="Enter title..."
-              value={title}
-              onChange={({ target }) => setTitle(target.value)}
-            />
+    <LessonEditor lesson={lesson} handleUpdate={localHandleUpdate}>
+      <footer className="fixed bottom-0 left-0 z-20 w-full h-24 bg-white border-t border-accent-2">
+        <div className="flex items-center justify-end w-full h-full m-auto lg:w-2/3">
+          <div className="flex items-center gap-2 mx-8 mr-auto italic text-slate-500">
+            {autosaving && (
+              <>
+                {/* <Spinner color="indigo.500" size="sm" /> */}
+                <Text>Unsaved changes...</Text>
+              </>
+            )}
+            {!autosaving && (
+              <>
+                <CheckIcon className="w-5 h-5" />
+                <Text>Autosaved!</Text>
+              </>
+            )}
           </div>
-          <TextareaAutosize
-            className="text-2xl mt-1 text-slate-500 resize-none border-0"
-            placeholder="Enter description..."
-            value={description}
-            onChange={({ target }) => setDescription(target.value)}
-          />
-          <TextareaAutosize
-            className="text-xl mt-4 resize-none border-0"
-            placeholder="Enter a comma separated list of tags..."
-            value={tagsStr}
-            onChange={({ target }) => setTagsStr(target.value)}
-          />
-          <EditableCoverImage
-            title={lesson?.title || ''}
-            src={coverImageUrl}
-            onEditUrl={onCoverImageUpload}
-          />
-          <div className="flex py-8">
-            <FancyEditor editor={editor} />
-          </div>
-        </div>
-      </div>
-      <footer className="bg-white border-t border-accent-2 bottom-0 left-0 fixed w-full h-24 z-20">
-        <div className="h-full m-auto w-full lg:w-2/3 flex items-center justify-end">
-          {handleSaveDraft && (
+          {handlePreview && (
             <Button
               variant="link"
               size="sm"
-              onClick={localHandlePreview}
+              onClick={() => handlePreview()}
               colorScheme="indigo"
-              className="disabled:opacity-50 font-semibold flex items-center justify-between mr-4"
+              className="flex items-center justify-between mr-4 font-semibold disabled:opacity-50"
             >
               Preview
             </Button>
           )}
-          {handleSaveDraft && (
-            <Button
-              variant="outline"
-              className="disabled:opacity-50 font-semibold flex items-center justify-between mr-4"
-              disabled={!title}
-              onClick={localHandleSaveDraft}
-            >
-              <SaveIcon className="h-5 w-5 mr-2" />
-              Save as draft
-            </Button>
-          )}
           <Button
             colorScheme="indigo"
-            disabled={!canSubmit}
-            className="disabled:opacity-50 font-semibold flex items-center justify-between"
+            disabled={saving}
+            className="flex items-center justify-between font-semibold disabled:opacity-50"
             onClick={localHandleSubmit}
           >
-            <UploadIcon className="h-5 w-5 mr-2" />
+            <UploadIcon className="w-5 h-5 mr-2" />
             Publish
           </Button>
         </div>
       </footer>
-    </Layout>
+    </LessonEditor>
   )
 }
-
 export default EditLessonPage

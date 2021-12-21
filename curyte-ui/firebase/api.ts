@@ -1,14 +1,32 @@
 import assert from 'assert'
 import { compareDesc, parseISO } from 'date-fns'
+import {
+  FieldPath,
+  WhereFilterOp,
+  CollectionReference,
+  DocumentData,
+  Query,
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  getDoc,
+  deleteDoc,
+  setDoc,
+  increment,
+  updateDoc,
+} from 'firebase/firestore'
+import { deleteObject, ref } from 'firebase/storage'
 import { Author, SavedLesson } from '../interfaces/author'
 import { Lesson } from '../interfaces/lesson'
 import { Tag } from '../interfaces/tag'
 import { exception } from '../utils/gtag'
-import firebase from './clientApp'
+import { auth, firestore, storage } from './clientApp'
 
 export interface WhereClause {
-  fieldPath: string | firebase.firestore.FieldPath
-  opStr: firebase.firestore.WhereFilterOp
+  fieldPath: string | FieldPath
+  opStr: WhereFilterOp
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value: any
 }
@@ -23,15 +41,13 @@ export async function getLessons(
   whereClauses: WhereClause[]
 ): Promise<Lesson[]> {
   try {
-    let fn:
-      | firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
-      | firebase.firestore.Query<firebase.firestore.DocumentData> = firebase
-      .firestore()
-      .collection('lessons')
-    for (const clause of whereClauses) {
-      fn = fn.where(clause.fieldPath, clause.opStr, clause.value)
-    }
-    return fn.get().then((result) => {
+    const q: CollectionReference<DocumentData> | Query<DocumentData> = query(
+      collection(firestore, 'lessons'),
+      ...whereClauses.map(({ fieldPath, opStr, value }) =>
+        where(fieldPath, opStr, value)
+      )
+    )
+    return getDocs(q).then((result) => {
       const mapped: Lesson[] = []
       result.docs.forEach((result) => mapped.push(result.data() as Lesson))
       return mapped.sort((a, b) =>
@@ -54,15 +70,13 @@ export async function getDrafts(
   whereClauses: WhereClause[] = []
 ): Promise<Lesson[]> {
   try {
-    let fn:
-      | firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
-      | firebase.firestore.Query<firebase.firestore.DocumentData> = firebase
-      .firestore()
-      .collection('drafts')
-    for (const clause of whereClauses) {
-      fn = fn.where(clause.fieldPath, clause.opStr, clause.value)
-    }
-    return fn.get().then((result) => {
+    const q: CollectionReference<DocumentData> | Query<DocumentData> = query(
+      collection(firestore, 'drafts'),
+      ...whereClauses.map(({ fieldPath, opStr, value }) =>
+        where(fieldPath, opStr, value)
+      )
+    )
+    return getDocs(q).then((result) => {
       const mapped: Lesson[] = []
       result.docs.forEach((result) => mapped.push(result.data() as Lesson))
       mapped.sort(
@@ -87,7 +101,7 @@ export async function getDrafts(
 export async function getLesson(uid: string): Promise<Lesson> {
   try {
     return (
-      await firebase.firestore().collection('lessons').doc(uid).get()
+      await getDoc(doc(collection(firestore, 'lessons'), uid))
     ).data() as Lesson
   } catch (e) {
     exception(e as string)
@@ -103,9 +117,9 @@ export async function getLesson(uid: string): Promise<Lesson> {
  */
 export async function getDraft(uid: string): Promise<Lesson> {
   try {
-    if (!firebase.auth().currentUser) throw new Error('Not logged in')
+    if (!auth.currentUser) throw new Error('Not logged in')
     return (
-      await firebase.firestore().collection('drafts').doc(uid).get()
+      await getDoc(doc(collection(firestore, 'drafts'), uid))
     ).data() as Lesson
   } catch (e) {
     exception(e as string)
@@ -121,8 +135,8 @@ export async function getDraft(uid: string): Promise<Lesson> {
  */
 export async function deleteLesson(uid: string): Promise<void> {
   try {
-    if (!firebase.auth().currentUser) throw new Error('Not logged in')
-    return await firebase.firestore().collection('lessons').doc(uid).delete()
+    if (!auth.currentUser) throw new Error('Not logged in')
+    return await deleteDoc(doc(collection(firestore, 'lessons'), uid))
   } catch (e) {
     exception(e as string)
     throw e
@@ -137,8 +151,8 @@ export async function deleteLesson(uid: string): Promise<void> {
  */
 export async function deleteDraft(uid: string): Promise<void> {
   try {
-    if (!firebase.auth().currentUser) throw new Error('Not logged in')
-    return await firebase.firestore().collection('drafts').doc(uid).delete()
+    if (!auth.currentUser) throw new Error('Not logged in')
+    return await deleteDoc(doc(collection(firestore, 'drafts'), uid))
   } catch (e) {
     exception(e as string)
     throw e
@@ -152,9 +166,9 @@ export async function deleteDraft(uid: string): Promise<void> {
  */
 export async function createDraft(draft: Lesson): Promise<string> {
   try {
-    if (!firebase.auth().currentUser) throw new Error('Not logged in')
+    if (!auth.currentUser) throw new Error('Not logged in')
     draft.uid = Date.now().toString()
-    await firebase.firestore().collection('drafts').doc(draft.uid).set(draft)
+    await setDoc(doc(collection(firestore, 'drafts'), draft.uid), draft)
     return draft.uid
   } catch (e) {
     console.error(draft)
@@ -171,7 +185,7 @@ export async function createDraft(draft: Lesson): Promise<string> {
 export async function updateDraft(draft: Lesson): Promise<void> {
   try {
     assert(draft.uid)
-    await firebase.firestore().collection('drafts').doc(draft.uid).update(draft)
+    await setDoc(doc(collection(firestore, 'drafts'), draft.uid), draft)
   } catch (e) {
     console.error(draft)
     exception(e as string)
@@ -185,15 +199,15 @@ export async function publishLesson(
 ): Promise<string> {
   try {
     lesson.uid =
-      lesson.title
+      (lesson.title || 'lesson')
         .toLocaleLowerCase()
         .replace(/[^a-z 0-9]/g, '')
         .replace(/ /g, '-')
         .substring(0, 32) + `-${Date.now()}`
-    await firebase.firestore().collection('lessons').doc(lesson.uid).set(lesson)
+    await setDoc(doc(collection(firestore, 'lessons'), lesson.uid), lesson)
     if (draftId) {
       // Intentionally unawaited
-      firebase.firestore().collection('drafts').doc(draftId).delete()
+      deleteDoc(doc(collection(firestore, 'drafts'), draftId))
     }
     return lesson.uid
   } catch (e) {
@@ -206,7 +220,7 @@ export async function publishLesson(
 export async function updateLesson(lesson: Lesson): Promise<string> {
   try {
     assert(lesson.uid)
-    await firebase.firestore().collection('lessons').doc(lesson.uid).set(lesson)
+    await setDoc(doc(collection(firestore, 'lessons'), lesson.uid), lesson)
     return lesson.uid
   } catch (e) {
     console.error(lesson)
@@ -217,11 +231,9 @@ export async function updateLesson(lesson: Lesson): Promise<string> {
 
 export async function logLessonView(uid: string): Promise<void> {
   try {
-    await firebase
-      .firestore()
-      .collection('lessons')
-      .doc(uid)
-      .update({ viewCount: firebase.firestore.FieldValue.increment(1) })
+    updateDoc(doc(collection(firestore, 'lessons'), uid), {
+      viewCount: increment(1),
+    })
   } catch (e) {
     exception(e as string)
     throw e
@@ -237,7 +249,7 @@ export async function logLessonView(uid: string): Promise<void> {
 export async function getAuthor(uid: string): Promise<Author> {
   try {
     return (
-      await firebase.firestore().collection('users').doc(uid).get()
+      await getDoc(doc(collection(firestore, 'users'), uid))
     ).data() as Author
   } catch (e) {
     exception(e as string)
@@ -247,11 +259,7 @@ export async function getAuthor(uid: string): Promise<Author> {
 
 export async function updateAuthor(author: Author): Promise<void> {
   try {
-    return await firebase
-      .firestore()
-      .collection('users')
-      .doc(author.uid)
-      .set(author)
+    return await setDoc(doc(collection(firestore, 'users'), author.uid), author)
   } catch (e) {
     exception(e as string)
     throw e
@@ -265,16 +273,18 @@ export async function saveLessonForCurrentUser(
   lessonId: string
 ): Promise<void> {
   try {
-    if (!firebase.auth().currentUser) return
+    if (!auth.currentUser) return
     const savedLesson = {
       lessonId,
-      userId: firebase.auth().currentUser?.uid || '',
+      userId: auth.currentUser?.uid || '',
     }
-    await firebase
-      .firestore()
-      .collection('savedLessons')
-      .doc(computeSavedLessonUid(savedLesson))
-      .set(savedLesson)
+    await setDoc(
+      doc(
+        collection(firestore, 'savedLessons'),
+        computeSavedLessonUid(savedLesson)
+      ),
+      savedLesson
+    )
   } catch (e) {
     exception(e as string)
     throw e
@@ -285,16 +295,17 @@ export async function removeSavedLessonForCurrentUser(
   lessonId: string
 ): Promise<void> {
   try {
-    if (!firebase.auth().currentUser) return
+    if (!auth.currentUser) return
     const savedLesson = {
       lessonId,
-      userId: firebase.auth().currentUser?.uid || '',
+      userId: auth.currentUser?.uid || '',
     }
-    return await firebase
-      .firestore()
-      .collection('savedLessons')
-      .doc(computeSavedLessonUid(savedLesson))
-      .delete()
+    return await deleteDoc(
+      doc(
+        collection(firestore, 'savedLessons'),
+        computeSavedLessonUid(savedLesson)
+      )
+    )
   } catch (e) {
     exception(e as string)
     throw e
@@ -305,19 +316,18 @@ export async function getCurrentUserHasSavedLesson(
   lessonId: string
 ): Promise<boolean> {
   try {
-    if (!firebase.auth().currentUser) return false
+    if (!auth.currentUser) return false
     return (
-      await firebase
-        .firestore()
-        .collection('savedLessons')
-        .doc(
+      await getDoc(
+        doc(
+          collection(firestore, 'savedLessons'),
           computeSavedLessonUid({
-            userId: firebase.auth().currentUser?.uid || '',
+            userId: auth.currentUser?.uid || '',
             lessonId,
           })
         )
-        .get()
-    ).exists
+      )
+    ).exists()
   } catch (e) {
     exception(e as string)
     throw e
@@ -327,7 +337,7 @@ export async function getCurrentUserHasSavedLesson(
 export async function getTag(tagText: string): Promise<Tag> {
   try {
     return (
-      await firebase.firestore().collection('tags').doc(tagText).get()
+      await getDoc(doc(collection(firestore, 'tags'), tagText))
     ).data() as Tag
   } catch (e) {
     exception(e as string)
@@ -337,14 +347,10 @@ export async function getTag(tagText: string): Promise<Tag> {
 
 export async function logTagView(tagText: string): Promise<void> {
   try {
-    await firebase
-      .firestore()
-      .collection('tags')
-      .doc(tagText)
-      .update({
-        tag: tagText,
-        viewCount: firebase.firestore.FieldValue.increment(1),
-      })
+    updateDoc(doc(collection(firestore, 'tags'), tagText), {
+      tag: tagText,
+      viewCount: increment(1),
+    })
   } catch (e) {
     exception(e as string)
     throw e
@@ -352,5 +358,5 @@ export async function logTagView(tagText: string): Promise<void> {
 }
 
 export async function deleteImageAtUrl(url: string): Promise<void> {
-  return firebase.storage().refFromURL(url).delete()
+  return deleteObject(ref(storage, url))
 }

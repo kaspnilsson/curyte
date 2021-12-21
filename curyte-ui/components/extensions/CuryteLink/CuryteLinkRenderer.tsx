@@ -1,10 +1,10 @@
-import * as api from '../../../firebase/api'
 import { NodeViewWrapper } from '@tiptap/react'
 import { useEffect, useState } from 'react'
 import { Lesson } from '../../../interfaces/lesson'
 import { Spinner } from '@chakra-ui/react'
 import LessonPreview from '../../LessonPreview'
 import { Author } from '../../../interfaces/author'
+import { getLesson, getAuthor } from '../../../firebase/api'
 
 const CuryteLinkRenderer = (props: {
   node: { attrs: { lessonId: string; href: string } }
@@ -14,9 +14,9 @@ const CuryteLinkRenderer = (props: {
   const [author, setAuthor] = useState<Author | null>(null)
   useEffect(() => {
     const fetch = async () => {
-      const l = await api.getLesson(props.node.attrs.lessonId)
+      const l = await getLesson(props.node.attrs.lessonId)
       setLesson(l)
-      setAuthor(await api.getAuthor(l.authorId))
+      setAuthor(await getAuthor(l.authorId))
       setLoading(false)
     }
     setLoading(true)
@@ -26,7 +26,7 @@ const CuryteLinkRenderer = (props: {
     <NodeViewWrapper>
       <div
         contentEditable={false}
-        className="p-2 flex justify-center not-prose"
+        className="flex justify-center p-2 not-prose"
         data-drag-handle=""
       >
         {loading && <Spinner color="indigo" size="xl" />}

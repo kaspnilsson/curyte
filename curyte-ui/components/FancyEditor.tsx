@@ -28,10 +28,10 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
   return (
     <>
       <InputDialog {...dialogProps} />
-      <div className="flex flex-col min-w-full max-w-full">
+      <div className="flex flex-col max-w-full min-w-full">
         {!readOnly && <FancyEditorMenuBar editor={editor} />}
         <EditorContent
-          className="prose prose-sm md:prose-md lg:prose-lg max-w-none prose-indigo prose-headings:font-semibold prose-headings:tracking-tight prose-headings:leading-tight prose-headings:border-b-2 prose-headings:pb-2 prose-headings:scroll-m-28"
+          className="prose-sm prose md:prose-md lg:prose-lg max-w-none prose-indigo prose-headings:font-semibold prose-headings:tracking-tight prose-headings:leading-tight prose-headings:border-b-2 prose-headings:pb-2 prose-headings:scroll-m-28"
           editor={editor}
         />
         {editor && (
@@ -43,7 +43,7 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
                 <FloatingMenu editor={editor} tippyOptions={{ zIndex: 12 }}>
                   <div
                     style={{ position: 'absolute', top: -16, left: -90 }}
-                    className="flex gap-1 items-center"
+                    className="flex items-center gap-1"
                   >
                     <DeleteButton
                       disabled={editor.isEmpty}
@@ -60,7 +60,7 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
                         <>
                           <Heading
                             fontSize="xs"
-                            className="text-slate-500 px-4 pt-2 tracking-tight md:tracking-tighter leading-tight"
+                            className="px-4 pt-2 leading-tight tracking-tight text-slate-500 md:tracking-tighter"
                           >
                             STYLE
                           </Heading>
@@ -68,7 +68,7 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
                           <MenuDivider />
                           <Heading
                             fontSize="xs"
-                            className="text-slate-500 px-4 pt-2 tracking-tight md:tracking-tighter leading-tight"
+                            className="px-4 pt-2 leading-tight tracking-tight text-slate-500 md:tracking-tighter"
                           >
                             INSERT
                           </Heading>

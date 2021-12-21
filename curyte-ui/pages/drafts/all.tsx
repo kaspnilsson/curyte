@@ -2,12 +2,12 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import React, { useEffect, useState } from 'react'
 import { Lesson } from '../../interfaces/lesson'
 import LoadingSpinner from '../../components/LoadingSpinner'
-import * as api from '../../firebase/api'
-import firebase from '../../firebase/clientApp'
+import { auth } from '../../firebase/clientApp'
 import DraftLink from '../../components/DraftLink'
+import { getDrafts } from '../../firebase/api'
 
 const DraftsPage = () => {
-  const [user, userLoading] = useAuthState(firebase.auth())
+  const [user, userLoading] = useAuthState(auth)
   const [drafts, setDrafts] = useState<Lesson[]>([])
   const [loading, setLoading] = useState(userLoading)
 
@@ -15,12 +15,12 @@ const DraftsPage = () => {
     if (!user) return
     setLoading(true)
 
-    api
-      .getDrafts([{ fieldPath: 'authorId', opStr: '==', value: user.uid }])
-      .then((res) => {
+    getDrafts([{ fieldPath: 'authorId', opStr: '==', value: user.uid }]).then(
+      (res) => {
         setLoading(false)
         setDrafts(res)
-      })
+      }
+    )
   }, [user])
 
   return (

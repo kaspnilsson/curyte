@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
 import { Lesson } from '../../../interfaces/lesson'
-import firebase from '../../../firebase/clientApp'
+import { auth } from '../../../firebase/clientApp'
 import { GetServerSideProps } from 'next'
 import Layout from '../../../components/Layout'
 import { Author } from '../../../interfaces/author'
@@ -10,7 +10,6 @@ import LessonHeader from '../../../components/LessonHeader'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useRouter } from 'next/router'
 import LoadingSpinner from '../../../components/LoadingSpinner'
-import * as api from '../../../firebase/api'
 import FancyEditor from '../../../components/FancyEditor'
 import {
   draftRoute,
@@ -20,13 +19,19 @@ import {
 } from '../../../utils/routes'
 import useCuryteEditor from '../../../hooks/useCuryteEditor'
 import LessonOutline from '../../../components/LessonOutline'
+import {
+  getDraft,
+  getAuthor,
+  deleteDraft,
+  publishLesson,
+} from '../../../firebase/api'
 
 type Props = {
   id: string
 }
 
 const DraftPreviewView = ({ id }: Props) => {
-  const [user, userLoading] = useAuthState(firebase.auth())
+  const [user, userLoading] = useAuthState(auth)
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(false)
   const [author, setAuthor] = useState({} as Author)
@@ -36,9 +41,9 @@ const DraftPreviewView = ({ id }: Props) => {
   useEffect(() => {
     if (!user || userLoading) return
     const fetchLesson = async () => {
-      const l = await api.getDraft(id)
+      const l = await getDraft(id)
       setDraft(l)
-      setAuthor(await api.getAuthor(l.authorId))
+      setAuthor(await getAuthor(l.authorId))
       setLoading(false)
     }
     setLoading(true)
@@ -53,7 +58,7 @@ const DraftPreviewView = ({ id }: Props) => {
 
   const handleDelete = async () => {
     setSaving(true)
-    await api.deleteDraft(draft.uid)
+    await deleteDraft(draft.uid)
     setSaving(false)
     router.push(lessonSearchRoute())
   }
@@ -64,7 +69,7 @@ const DraftPreviewView = ({ id }: Props) => {
 
   const handlePublish = async () => {
     setSaving(true)
-    const newUid = await api.publishLesson(draft, draft.uid)
+    const newUid = await publishLesson(draft, draft.uid)
     setSaving(false)
     router.push(lessonRoute(newUid))
   }

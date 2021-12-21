@@ -11,7 +11,6 @@ import {
 import React, { useRef, useState } from 'react'
 import UploadProgressBar from '../../UploadProgressBar'
 import { useDropzone } from 'react-dropzone'
-import Compress from 'browser-image-compression'
 import { imageUrlMatchRegex } from '../../embeds/matchers'
 import { exception } from '../../../utils/gtag'
 
@@ -48,7 +47,10 @@ const ImageUploadDialog = ({
       // Compress library does not support gif
       setFile(f)
     } else {
-      Compress(f, compressOptions)
+      import('browser-image-compression')
+        .then((Compress) => {
+          return Compress.default(f, compressOptions)
+        })
         .then((compressedBlob) => {
           const convertedBlobFile = new File([compressedBlob], f.name, {
             type: f.type,
@@ -125,7 +127,7 @@ const ImageUploadDialog = ({
           <AlertDialogCloseButton />
           <AlertDialogBody>
             {description}
-            <div className="flex flex-col w-full items-center">
+            <div className="flex flex-col items-center w-full">
               <Input
                 disabled={loading}
                 placeholder="Paste a URL to an image"
@@ -143,13 +145,13 @@ const ImageUploadDialog = ({
                 })}
               >
                 <input {...getInputProps()} />
-                <p className="text-slate-500 text-center font-semibold">
+                <p className="font-semibold text-center text-slate-500">
                   Drop a photo here, or click to select a file
                 </p>
               </div>
-              <div className="mt-4 w-full">
+              <div className="w-full mt-4">
                 {error && (
-                  <div className="error text-red-500 font-semibold text-lg flex flex-wrap">
+                  <div className="flex flex-wrap text-lg font-semibold text-red-500 error">
                     {error}
                   </div>
                 )}

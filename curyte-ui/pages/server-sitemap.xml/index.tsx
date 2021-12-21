@@ -3,8 +3,8 @@
 
 import { getServerSideSitemap, ISitemapField } from 'next-sitemap'
 import { GetServerSideProps } from 'next'
-import * as api from '../../firebase/api'
 import { lessonRoute } from '../../utils/routes'
+import { getLessons } from '../../firebase/api'
 
 const makeAbsoluteUrl = (url: string) => `https://www.curyte.com${url}`
 
@@ -17,7 +17,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       changefreq: 'weekly',
     },
   ]
-  const lessons = await api.getLessons([])
+  const lessons = await getLessons([])
   for (const lesson of lessons) {
     const loc = makeAbsoluteUrl(lessonRoute(lesson.uid))
     fields.push({
