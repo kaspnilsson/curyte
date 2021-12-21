@@ -41,8 +41,8 @@ const Home = () => {
         </section>
         <section className="flex-col flex items-center justify-around mb-8">
           <div className="shadow-xl shadow-purple-500/20 rounded-xl overflow-hidden mb-16 border-2 border-slate-200 lg:max-w-[60vw]">
-            <video autoPlay loop muted={true} playsInline>
-              <source src="/static/promo.webm" />
+            <video autoPlay={true} loop={true} muted={true} playsInline={true}>
+              <source src="/static/promo.webm" type="video/webm" />
             </video>
           </div>
           <div className="text-center mb-8 text-4xl font-bold tracking-tighter leading-tight">
@@ -71,9 +71,11 @@ const Home = () => {
         </section>
         <section className="flex-col flex items-center justify-around mb-8">
           <p className="text-2xl md:text-3xl tracking-tighter leading-tight font-semibold">
-            Curyte is a new lesson builder & library for the remote age. Collect
-            and organize docs, share them with students and colleagues, and
-            explore what everyone else is teaching.
+            Curyte is a new lesson builder & library for the digital classroom.
+          </p>
+          <p className="text-2xl md:text-3xl tracking-tighter leading-tight font-semibold">
+            Collect and organize docs, share them with students and colleagues,
+            and explore what everyone else is teaching.
           </p>
         </section>
         <section className="w-full mb-16 md:mb-32 flex justify-around flex-wrap flex-col lg:flex-row gap-8 items-center colums-lg">
