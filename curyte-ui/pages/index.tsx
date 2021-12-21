@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { Button, Spinner } from '@chakra-ui/react'
 import * as api from '../firebase/api'
 import useAsync from '../hooks/useAsync'
+import AutoPlaySilentVideo from '../components/AutoPlaySilentVideo'
 
 const Home = () => {
   const router = useRouter()
@@ -41,9 +42,11 @@ const Home = () => {
         </section>
         <section className="flex-col flex items-center justify-around mb-8">
           <div className="shadow-xl shadow-purple-500/20 rounded-xl overflow-hidden mb-16 border-2 border-slate-200 lg:max-w-[60vw]">
-            <video autoPlay={true} loop={true} muted={true} playsInline={true}>
-              <source src="/static/promo.mp4" type="video/mp4" />
-            </video>
+            <AutoPlaySilentVideo
+              src="/static/promo.webm"
+              type="video/webm"
+              className="w-full"
+            />
           </div>
           <div className="text-center mb-8 text-4xl font-bold tracking-tighter leading-tight">
             Engaging lessons,
