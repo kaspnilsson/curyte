@@ -1,12 +1,13 @@
 import React, { SyntheticEvent, useState } from 'react'
 import { UploadIcon } from '@heroicons/react/solid'
-import { Button, Spinner, Text } from '@chakra-ui/react'
+import { Button, Portal, Spinner, Text, Tooltip } from '@chakra-ui/react'
 import { Timestamp } from 'firebase/firestore'
 
 import { Lesson } from '../interfaces/lesson'
 import { Author } from '../interfaces/author'
 import LoadingSpinner from './LoadingSpinner'
 import LessonEditor from './LessonEditor'
+import { CheckIcon } from '@heroicons/react/outline'
 
 type Props = {
   lesson?: Lesson
@@ -62,12 +63,20 @@ const EditLessonPage = ({
     <LessonEditor lesson={lesson} handleUpdate={localHandleUpdate}>
       <footer className="fixed bottom-0 left-0 z-20 w-full h-24 bg-white border-t border-accent-2">
         <div className="flex items-center justify-end w-full h-full m-auto lg:w-2/3">
-          {autosaving && (
-            <div className="flex items-center gap-2 mx-8 mr-auto">
-              <Spinner color="indigo.500" size="sm" />
-              <Text className="italic text-slate-500">Unsaved changes...</Text>
-            </div>
-          )}
+          <div className="flex items-center gap-2 mx-8 mr-auto italic text-slate-500">
+            {autosaving && (
+              <>
+                {/* <Spinner color="indigo.500" size="sm" /> */}
+                <Text>Unsaved changes...</Text>
+              </>
+            )}
+            {!autosaving && (
+              <>
+                <CheckIcon className="w-5 h-5" />
+                <Text>Autosaved!</Text>
+              </>
+            )}
+          </div>
           {handlePreview && (
             <Button
               variant="link"
