@@ -41,7 +41,7 @@ const Home = () => {
         </section>
         <section className="flex-col flex items-center justify-around mb-8">
           <div className="shadow-xl shadow-purple-500/20 rounded-xl overflow-hidden mb-16 border-2 border-slate-200 lg:max-w-[60vw]">
-            <video autoPlay loop muted>
+            <video autoPlay loop muted={true}>
               <source src="/static/promo.webm" />
             </video>
           </div>
