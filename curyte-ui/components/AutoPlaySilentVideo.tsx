@@ -13,7 +13,10 @@ export default function AutoPlaySilentVideo({
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null)
   useEffect(() => {
-    if (videoRef?.current) videoRef.current.defaultMuted = true
+    if (videoRef?.current) {
+      videoRef.current.defaultMuted = true
+      videoRef.current.play()
+    }
   })
   return (
     <video

@@ -43,8 +43,8 @@ const Home = () => {
         <section className="flex-col flex items-center justify-around mb-8">
           <div className="shadow-xl shadow-purple-500/20 rounded-xl overflow-hidden mb-16 border-2 border-slate-200 lg:max-w-[60vw]">
             <AutoPlaySilentVideo
-              src="/static/promo.webm"
-              type="video/webm"
+              src="/static/promo.mp4"
+              type="video/mp4"
               className="w-full"
             />
           </div>
