@@ -25,6 +25,7 @@ import DraftsPage from '../drafts/all'
 import { Lesson } from '../../interfaces/lesson'
 import LessonPreview from '../../components/LessonPreview'
 import { useErrorHandler } from 'react-error-boundary'
+import { indexRoute } from '../../utils/routes'
 
 const MySettingsView = () => {
   const router = useRouter()
@@ -44,7 +45,7 @@ const MySettingsView = () => {
   }
 
   useEffect(() => {
-    if (!user && !userLoading) router.push('/')
+    if (!user && !userLoading) router.push(indexRoute)
   }, [user, userLoading, router])
 
   useEffect(() => {
@@ -104,7 +105,7 @@ const MySettingsView = () => {
     setSaving(true)
     await firebase.auth().currentUser?.delete()
     setSaving(false)
-    router.push('/')
+    router.push(indexRoute)
   }
 
   return (

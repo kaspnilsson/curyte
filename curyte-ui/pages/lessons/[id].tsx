@@ -14,7 +14,11 @@ import FancyEditor from '../../components/FancyEditor'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { editLessonRoute, lessonRoute } from '../../utils/routes'
+import {
+  editLessonRoute,
+  lessonRoute,
+  lessonSearchRoute,
+} from '../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
 import useCuryteEditor from '../../hooks/useCuryteEditor'
 import LessonOutline from '../../components/LessonOutline'
@@ -37,7 +41,7 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
     setLoading(true)
     await api.deleteLesson(lesson.uid)
     setLoading(false)
-    router.push('/')
+    router.push(lessonSearchRoute())
   }
 
   const editor = useCuryteEditor({ content: lesson.content }, [lesson])
