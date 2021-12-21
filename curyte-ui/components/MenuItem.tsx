@@ -28,7 +28,7 @@ const MenuItem = ({
           <chakra.Heading fontSize="sm">{label}</chakra.Heading>
           <div className="flex-end">{shortcut || null}</div>
         </div>
-        <chakra.Text fontSize="xs" className="text-gray-500">
+        <chakra.Text fontSize="xs" className="text-slate-500">
           {description}
         </chakra.Text>
       </div>

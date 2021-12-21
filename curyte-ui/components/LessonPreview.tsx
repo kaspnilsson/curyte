@@ -17,8 +17,8 @@ type Props = {
 const LessonPreview = ({ lesson, author }: Props) => {
   return (
     <Link as={lessonRoute(lesson.uid)} href={lessonRouteHrefPath} passHref>
-      <div className="group flex flex-col cursor-pointer rounded-xl shadow-lg overflow-hidden w-screen md:w-96 border-2 border-gray-200 lesson-preview">
-        <div className="w-full h-48 relative overflow-hidden">
+      <div className="group flex flex-col cursor-pointer rounded-xl shadow-lg overflow-hidden w-96 border-2 border-slate-200 lesson-preview">
+        <div className="w-96 h-48 relative overflow-hidden">
           {lesson.coverImageUrl && (
             <Image
               src={lesson.coverImageUrl}
@@ -56,7 +56,7 @@ const LessonPreview = ({ lesson, author }: Props) => {
               {lesson.title || '(no title)'}
             </a>
           </Text>
-          <p className="text-sm leading-relaxed truncate min-w-0 text-gray-500">
+          <p className="text-sm leading-relaxed truncate min-w-0 text-slate-500">
             {lesson.description}
           </p>
           {lesson.tags?.length && (
@@ -78,7 +78,7 @@ const LessonPreview = ({ lesson, author }: Props) => {
                 <BookmarkIcon className="h-5 w-5 text-[#805ad5]" />
                 <Text
                   fontSize="sm"
-                  className="text-gray-500 proportional-nums tracking-tight 
+                  className="text-slate-500 proportional-nums tracking-tight 
                   leading-tight"
                 >
                   {lesson.saveCount || 0}
@@ -88,7 +88,7 @@ const LessonPreview = ({ lesson, author }: Props) => {
                 <EyeIcon className="h-5 w-5 text-[#805ad5]" />
                 <Text
                   fontSize="sm"
-                  className="text-gray-500 proportional-nums tracking-tight 
+                  className="text-slate-500 proportional-nums tracking-tight 
                   leading-tight"
                 >
                   {lesson.viewCount || 0}

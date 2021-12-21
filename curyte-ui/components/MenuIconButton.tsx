@@ -35,7 +35,7 @@ const MenuIconButton = ({
         isActive={isActive}
         disabled={disabled}
       >
-        <span className="text-gray-900">{icon}</span>
+        <span className="text-slate-900">{icon}</span>
       </chakra.IconButton>
     </chakra.Tooltip>
   )

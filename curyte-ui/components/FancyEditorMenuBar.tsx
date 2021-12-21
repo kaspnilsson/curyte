@@ -33,7 +33,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
     return null
   }
   return (
-    <div className="flex flex-wrap border-b border-t border-gray-200 mb-4 py-1 items-center gap-1 bg-white z-10 sticky top-0">
+    <div className="flex flex-wrap border-b border-t border-slate-200 mb-4 py-1 items-center gap-1 bg-white z-10 sticky top-0">
       <InputDialog {...dialogProps} />
       <MenuIconButton
         label="Undo"
@@ -49,12 +49,12 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
       <Center className="h-6 w-2">
         <Divider
           orientation="vertical"
-          className="border-gray-200 opacity-100"
+          className="border-slate-200 opacity-100"
         />
       </Center>
       <Menu id="style-menu" isLazy boundary="scrollParent" colorScheme="purple">
         <MenuButton size="sm" variant="ghost" colorScheme="purple" as={Button}>
-          <div className="flex items-center text-gray-900 gap-1 text-sm">
+          <div className="flex items-center text-slate-900 gap-1 text-sm">
             Style
             <i className="ri-arrow-drop-down-line text-lg w-2"></i>
           </div>
@@ -68,7 +68,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
       <Center className="h-6 w-2">
         <Divider
           orientation="vertical"
-          className="border-gray-200 opacity-100"
+          className="border-slate-200 opacity-100"
         />
       </Center>
       <MenuIconButton
@@ -124,7 +124,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
       <Center className="h-6 w-4">
         <Divider
           orientation="vertical"
-          className="border-gray-200 opacity-100"
+          className="border-slate-200 opacity-100"
         />
       </Center>
       <MenuIconButton
@@ -155,7 +155,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
       <Center className="h-6 w-4">
         <Divider
           orientation="vertical"
-          className="border-gray-200 opacity-100"
+          className="border-slate-200 opacity-100"
         />
       </Center>
       <MenuIconButton
@@ -170,7 +170,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         colorScheme="purple"
       >
         <MenuButton size="sm" variant="ghost" colorScheme="purple" as={Button}>
-          <div className="flex items-center text-gray-900 gap-1 text-sm">
+          <div className="flex items-center text-slate-900 gap-1 text-sm">
             Insert
             <i className="ri-arrow-drop-down-line text-lg w-2"></i>
           </div>
