@@ -101,7 +101,7 @@ const LessonHeader = ({
 
   return (
     <>
-      <LessonTitle title={lesson.title} />
+      <LessonTitle title={lesson?.title || '(no title)'} />
       <div className="flex items-center mb-4 h-min">
         {parentLesson && (
           <div className="flex items-center h-min">
@@ -211,7 +211,10 @@ const LessonHeader = ({
       </div>
       {lesson.coverImageUrl && (
         <div className="mb-8 sm:mx-0">
-          <CoverImage title={lesson.title} src={lesson.coverImageUrl} />
+          <CoverImage
+            title={lesson?.title || '(no title)'}
+            src={lesson.coverImageUrl}
+          />
         </div>
       )}
     </>

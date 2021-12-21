@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import firebase from '../firebase/clientApp'
 
-const useStorage = (file: File) => {
+const useFirebaseStorage = (file: File) => {
   const [progress, setProgress] = useState(0)
   const [error, setError] =
     useState<firebase.storage.FirebaseStorageError | null>(null)
@@ -29,4 +29,4 @@ const useStorage = (file: File) => {
   return { progress, url, error }
 }
 
-export default useStorage
+export default useFirebaseStorage

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import useStorage from '../hooks/useStorage'
+import useFirebaseStorage from '../hooks/useFirebaseStorage'
 import { Progress } from '@chakra-ui/progress'
 interface Props {
   file: File
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const UploadProgressBar = ({ file, onSuccess, onError }: Props) => {
-  const { progress, url, error } = useStorage(file)
+  const { progress, url, error } = useFirebaseStorage(file)
 
   useEffect(() => {
     if (url) {

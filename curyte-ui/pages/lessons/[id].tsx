@@ -48,9 +48,9 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
 
   if (!lesson || !lesson.title) return <ErrorPage statusCode={404} />
 
-  const openGraphDescription = `${lesson.description}, tags:${lesson.tags.join(
-    ', '
-  )}`
+  const openGraphDescription = `${lesson.description}, tags:${[
+    lesson.tags || [],
+  ].join(', ')}`
   const openGraphImages = []
   if (lesson.coverImageUrl) {
     openGraphImages.push({ url: lesson.coverImageUrl })

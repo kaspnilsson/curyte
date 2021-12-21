@@ -95,6 +95,7 @@
     "sass": "^1.45.0",
     "styled-components": "^5.3.3",
     "tippy.js": "^6.3.7",
+    "ts-debounce": "^4.0.0",
     "webpack": "^5.62.1"
   },
   "devDependencies": {

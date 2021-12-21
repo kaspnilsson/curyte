@@ -9,6 +9,7 @@ import * as api from '../../../firebase/api'
 import LoadingSpinner from '../../../components/LoadingSpinner'
 import { lessonRoute, loginRoute } from '../../../utils/routes'
 import { GetServerSideProps } from 'next'
+import { useToast } from '@chakra-ui/react'
 
 type Props = {
   id: string
@@ -19,26 +20,33 @@ const EditPublishedLessonView = ({ id }: Props) => {
   const [user, userLoading] = useAuthState(firebase.auth())
   const [loading, setLoading] = useState(false)
   const [lesson, setLesson] = useState<Lesson | undefined>()
-
-  useEffect(() => {
-    if (!user && !userLoading) router.push(loginRoute)
-  })
+  const toast = useToast()
 
   useEffect(() => {
     if (!user || userLoading) return
+    if (!user && !userLoading) router.push(loginRoute)
+    toast({
+      title: 'Edits made to published lessons will not be autosaved.',
+      status: 'warning',
+    })
     const fetchLesson = async () => {
       setLesson(await api.getLesson(id))
       setLoading(false)
     }
     setLoading(true)
     fetchLesson()
-  }, [id, user, userLoading])
+  }, [id, router, toast, user, userLoading])
 
-  const handleSubmit = async (l: Lesson) => {
-    const uid = await api.updateLesson(l)
+  const handleSubmit = async () => {
+    if (!lesson) return
+    const uid = await api.updateLesson(lesson)
     router.push(lessonRoute(uid))
   }
 
+  const handleUpdate = async (l: Lesson) => {
+    if (loading || !l.uid) return
+    setLesson(l)
+  }
   return (
     <>
       {(userLoading || loading) && <LoadingSpinner />}
@@ -47,6 +55,7 @@ const EditPublishedLessonView = ({ id }: Props) => {
           lesson={lesson}
           user={user as unknown as Author}
           handleSubmit={handleSubmit}
+          handleUpdate={handleUpdate}
         />
       )}
     </>

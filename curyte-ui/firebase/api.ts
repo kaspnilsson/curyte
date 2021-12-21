@@ -185,7 +185,7 @@ export async function publishLesson(
 ): Promise<string> {
   try {
     lesson.uid =
-      lesson.title
+      (lesson.title || 'lesson')
         .toLocaleLowerCase()
         .replace(/[^a-z 0-9]/g, '')
         .replace(/ /g, '-')
