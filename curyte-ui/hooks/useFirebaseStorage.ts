@@ -1,17 +1,22 @@
+import {
+  getDownloadURL,
+  ref,
+  StorageError,
+  uploadBytesResumable,
+} from 'firebase/storage'
 import { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import firebase from '../firebase/clientApp'
+import { storage } from '../firebase/clientApp'
 
 const useFirebaseStorage = (file: File) => {
   const [progress, setProgress] = useState(0)
-  const [error, setError] =
-    useState<firebase.storage.FirebaseStorageError | null>(null)
-  const [url, setUrl] = useState(null)
+  const [error, setError] = useState<StorageError | null>(null)
+  const [url, setUrl] = useState<string | null>(null)
 
   useEffect(() => {
-    const storageRef = firebase.storage().ref().child(uuidv4())
+    const storageRef = ref(storage, uuidv4())
 
-    storageRef.put(file).on(
+    uploadBytesResumable(storageRef, file).on(
       'state_changed',
       (snap) => {
         const percentage = (snap.bytesTransferred / snap.totalBytes) * 100
@@ -21,7 +26,7 @@ const useFirebaseStorage = (file: File) => {
         setError(err)
       },
       async () => {
-        setUrl(await storageRef.getDownloadURL())
+        setUrl(await getDownloadURL(storageRef))
       }
     )
   }, [file])

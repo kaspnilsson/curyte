@@ -3,8 +3,7 @@ import { Author } from '../interfaces/author'
 import AuthorLink from './AuthorLink'
 import DateFormatter from './DateFormatter'
 import LessonTitle from './LessonTitle'
-import * as api from '../firebase/api'
-import firebase from '../firebase/clientApp'
+import { auth } from '../firebase/clientApp'
 import { Lesson } from '../interfaces/lesson'
 import LessonLink from './LessonLink'
 import {
@@ -33,6 +32,12 @@ import { loginRoute, newLessonRoute } from '../utils/routes'
 import TagChip from './TagChip'
 import CoverImage from './CoverImage'
 import { indigo } from '../styles/theme/colors'
+import {
+  getCurrentUserHasSavedLesson,
+  getLesson,
+  removeSavedLessonForCurrentUser,
+  saveLessonForCurrentUser,
+} from '../firebase/api'
 
 type Props = {
   lesson: Lesson
@@ -53,7 +58,7 @@ const LessonHeader = ({
   isDraft,
 }: Props) => {
   const router = useRouter()
-  const [user, userLoading] = useAuthState(firebase.auth())
+  const [user, userLoading] = useAuthState(auth)
   const [, setLoading] = useState(false)
   const [parentLesson, setParentLesson] = useState<Lesson | null>(null)
   const [isSaved, setIsSaved] = useState(false)
@@ -63,11 +68,11 @@ const LessonHeader = ({
     setLoading(true)
     const fetchParent = async () => {
       if (lesson.parentLessonId) {
-        setParentLesson(await api.getLesson(lesson.parentLessonId))
+        setParentLesson(await getLesson(lesson.parentLessonId))
       }
     }
     const fetchIsSaved = async () => {
-      setIsSaved(await api.getCurrentUserHasSavedLesson(lesson.uid))
+      setIsSaved(await getCurrentUserHasSavedLesson(lesson.uid))
     }
     Promise.all([fetchParent(), fetchIsSaved()]).then(() => {
       setLoading(false)
@@ -83,9 +88,9 @@ const LessonHeader = ({
     setLoading(true)
     setIsSaved(!isSaved)
     if (isSaved) {
-      await api.removeSavedLessonForCurrentUser(lesson.uid)
+      await removeSavedLessonForCurrentUser(lesson.uid)
     } else {
-      await api.saveLessonForCurrentUser(lesson.uid)
+      await saveLessonForCurrentUser(lesson.uid)
     }
     setLoading(false)
   }
@@ -106,14 +111,14 @@ const LessonHeader = ({
         {parentLesson && (
           <div className="flex items-center h-min">
             <span className="mr-2">➜</span>
-            <h1 className="font-bold tracking-tighter leading-tight md:leading-none text-center md:text-left mr-2">
+            <h1 className="mr-2 font-bold leading-tight tracking-tighter text-center md:leading-none md:text-left">
               Copied from
             </h1>
             <LessonLink lesson={parentLesson} />
           </div>
         )}
         {parentLesson && isDraft && (
-          <Center className="h-4 w-4 mx-2">
+          <Center className="w-4 h-4 mx-2">
             <Divider orientation="vertical" />
           </Center>
         )}
@@ -124,40 +129,40 @@ const LessonHeader = ({
         )}
       </div>
       <div className="mt-1 mb-8">
-        <div className="text-2xl focus:outline-none text-slate-500 mb-6">
+        <div className="mb-6 text-2xl focus:outline-none text-slate-500">
           {lesson.description}
         </div>
         {lesson.tags?.length && (
-          <div className="flex gap-2 flex-wrap items-center">
+          <div className="flex flex-wrap items-center gap-2">
             {lesson.tags.map((t, index) => (
               <TagChip tagLabel={t} key={t + index} />
             ))}
           </div>
         )}
       </div>
-      <div className="flex mb-6 items-center justify-between">
-        <div className="flex gap-2 items-center text-sm md:text-base">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2 text-sm md:text-base">
           <AuthorLink author={author} />
           {lesson.created && <DateFormatter dateString={lesson.created} />}
           {!!lesson.viewCount && (
             <>
-              <Center className="h-4 w-6">
+              <Center className="w-6 h-4">
                 <Divider orientation="vertical" />
               </Center>
               {`${lesson.viewCount} views`}
             </>
           )}
         </div>
-        <div className="flex gap-1 items-center">
+        <div className="flex items-center gap-1">
           {handlePublish && (
             <Button
               size="sm"
               colorScheme="indigo"
-              className="font-semibold flex items-center justify-between mr-2"
+              className="flex items-center justify-between mr-2 font-semibold"
               onClick={handlePublish}
             >
-              <UploadIcon className="h-5 w-5" />
-              <div className="hidden md:flex ml-2">Publish</div>
+              <UploadIcon className="w-5 h-5" />
+              <div className="hidden ml-2 md:flex">Publish</div>
             </Button>
           )}
           {!isDraft && (
@@ -170,7 +175,7 @@ const LessonHeader = ({
               onClick={() => toggleSaveLesson()}
             >
               <BookmarkIcon
-                className="h-5 w-5 text-inherit"
+                className="w-5 h-5 text-inherit"
                 style={{ fill: isSaved ? indigo[500] : 'transparent' }}
               />
             </IconButton>
@@ -181,26 +186,26 @@ const LessonHeader = ({
               size="sm"
               as={IconButton}
               aria-label="Options"
-              icon={<MenuIcon className="h-5 w-5 text-inherit" />}
+              icon={<MenuIcon className="w-5 h-5 text-inherit" />}
               variant="subtle"
             />
             <Portal>
               <MenuList>
                 {!isDraft && (
                   <MenuItem onClick={handleMakeCopy}>
-                    <DuplicateIcon className="h-5 w-5 text-inherit mr-4" />
+                    <DuplicateIcon className="w-5 h-5 mr-4 text-inherit" />
                     Make a copy
                   </MenuItem>
                 )}
                 {handleEdit && (
                   <MenuItem onClick={handleEdit}>
-                    <PencilAltIcon className="h-5 w-5 text-inherit mr-4" />
+                    <PencilAltIcon className="w-5 h-5 mr-4 text-inherit" />
                     Edit lesson
                   </MenuItem>
                 )}
                 {handleDelete && (
                   <MenuItem onClick={handleDelete}>
-                    <DocumentRemoveIcon className="h-5 w-5 text-inherit mr-4" />
+                    <DocumentRemoveIcon className="w-5 h-5 mr-4 text-inherit" />
                     Delete lesson
                   </MenuItem>
                 )}

@@ -6,7 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import AuthorLink from '../../components/AuthorLink'
 import Container from '../../components/Container'
 import Layout from '../../components/Layout'
-import firebase from '../../firebase/clientApp'
+import { auth } from '../../firebase/clientApp'
 import { Author } from '../../interfaces/author'
 import {
   Tabs,
@@ -20,18 +20,18 @@ import {
 } from '@chakra-ui/react'
 import TextareaAutosize from 'react-textarea-autosize'
 import LoadingSpinner from '../../components/LoadingSpinner'
-import * as api from '../../firebase/api'
 import DraftsPage from '../drafts/all'
 import { Lesson } from '../../interfaces/lesson'
 import LessonPreview from '../../components/LessonPreview'
 import { useErrorHandler } from 'react-error-boundary'
 import { indexRoute } from '../../utils/routes'
+import { getAuthor, getLessons, updateAuthor } from '../../firebase/api'
 
 const MySettingsView = () => {
   const router = useRouter()
   const handleError = useErrorHandler()
 
-  const [user, userLoading] = useAuthState(firebase.auth())
+  const [user, userLoading] = useAuthState(auth)
   const [author, setAuthor] = useState<Author | null>(null)
   const [loading, setLoading] = useState(userLoading)
   const [saving, setSaving] = useState(false)
@@ -52,19 +52,17 @@ const MySettingsView = () => {
     if (user && !author) {
       setLoading(true)
       const fetchAuthor = async () => {
-        await api
-          .getAuthor(user.uid)
+        await getAuthor(user.uid)
           .then((author) => {
             setAuthor(author)
             if (author.savedLessons?.length) {
-              return api
-                .getLessons([
-                  {
-                    fieldPath: 'uid',
-                    opStr: 'in',
-                    value: author.savedLessons || [],
-                  },
-                ])
+              return getLessons([
+                {
+                  fieldPath: 'uid',
+                  opStr: 'in',
+                  value: author.savedLessons || [],
+                },
+              ])
                 .then((res) => {
                   res.sort(
                     (a, b) =>
@@ -81,11 +79,11 @@ const MySettingsView = () => {
       }
 
       const fetchLessons = async () => {
-        api
-          .getLessons([{ fieldPath: 'authorId', opStr: '==', value: user.uid }])
-          .then((res) => {
-            setLessons(res)
-          })
+        getLessons([
+          { fieldPath: 'authorId', opStr: '==', value: user.uid },
+        ]).then((res) => {
+          setLessons(res)
+        })
       }
 
       Promise.all([fetchLessons(), fetchAuthor()]).then(() => setLoading(false))
@@ -96,14 +94,14 @@ const MySettingsView = () => {
     event.preventDefault()
     if (!author) return
     setSaving(true)
-    await api.updateAuthor(author)
+    await updateAuthor(author)
     setSaving(false)
   }
 
   const handleDelete = async (event: SyntheticEvent) => {
     event.preventDefault()
     setSaving(true)
-    await firebase.auth().currentUser?.delete()
+    await auth.currentUser?.delete()
     setSaving(false)
     router.push(indexRoute)
   }
@@ -127,12 +125,12 @@ const MySettingsView = () => {
               <TabPanels>
                 <TabPanel>
                   <section className="flex flex-col my-8">
-                    <div className="flex items-left justify-between flex-col">
-                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight leading-tight">
+                    <div className="flex flex-col justify-between items-left">
+                      <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                         Lessons
                       </h2>
                       {!lessons.length && 'Nothing here yet!'}
-                      <div className="flex flex-wrap gap-4 mb-8 justify-center">
+                      <div className="flex flex-wrap justify-center gap-4 mb-8">
                         {lessons.map((lesson) => (
                           <LessonPreview key={lesson.uid} lesson={lesson} />
                         ))}
@@ -140,12 +138,12 @@ const MySettingsView = () => {
                     </div>
                   </section>
                   <section className="flex flex-col my-8">
-                    <div className="flex items-left justify-between flex-col">
-                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight leading-tight">
+                    <div className="flex flex-col justify-between items-left">
+                      <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                         Saved
                       </h2>
                       {!savedLessons.length && 'Nothing here yet!'}
-                      <div className="flex flex-wrap gap-4 mb-8 justify-center">
+                      <div className="flex flex-wrap justify-center gap-4 mb-8">
                         {savedLessons.map((lesson) => (
                           <LessonPreview key={lesson.uid} lesson={lesson} />
                         ))}
@@ -153,8 +151,8 @@ const MySettingsView = () => {
                     </div>
                   </section>
                   <section className="flex flex-col my-8">
-                    <div className="flex items-left justify-between flex-col">
-                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight leading-tight">
+                    <div className="flex flex-col justify-between items-left">
+                      <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                         Drafts
                       </h2>
                       <DraftsPage />
@@ -164,7 +162,7 @@ const MySettingsView = () => {
                 <TabPanel>
                   <section className="flex flex-col my-8">
                     <div className="flex items-center justify-between">
-                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight leading-tight">
+                      <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                         Profile settings
                       </h2>
                       <Button
@@ -177,12 +175,12 @@ const MySettingsView = () => {
                       </Button>
                     </div>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight leading-tight">
+                      <h3 className="font-bold leading-tight tracking-tight">
                         Bio
                       </h3>
                       <Textarea
                         as={TextareaAutosize}
-                        className="resize-none mt-1 w-full border-0"
+                        className="w-full mt-1 border-0 resize-none"
                         placeholder="Bio"
                         value={author.bio}
                         onChange={(e) =>
@@ -191,7 +189,7 @@ const MySettingsView = () => {
                       />
                     </div>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight leading-tight">
+                      <h3 className="font-bold leading-tight tracking-tight">
                         Username
                       </h3>
                       <Input
@@ -207,11 +205,11 @@ const MySettingsView = () => {
                     </div>
                   </section>
                   <section className="flex flex-col my-8">
-                    <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight leading-tight">
+                    <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                       Email settings
                     </h2>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight leading-tight">
+                      <h3 className="font-bold leading-tight tracking-tight">
                         Email address
                       </h3>
                       <Input
@@ -227,11 +225,11 @@ const MySettingsView = () => {
                     </div>
                   </section>
                   <section className="flex flex-col my-8">
-                    <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight leading-tight">
+                    <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                       Links
                     </h2>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight leading-tight">
+                      <h3 className="font-bold leading-tight tracking-tight">
                         Twitter
                       </h3>
                       <Input
@@ -249,7 +247,7 @@ const MySettingsView = () => {
                       />
                     </div>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight leading-tight">
+                      <h3 className="font-bold leading-tight tracking-tight">
                         LinkedIn
                       </h3>
                       <Input
@@ -270,7 +268,7 @@ const MySettingsView = () => {
                       />
                     </div>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight leading-tight">
+                      <h3 className="font-bold leading-tight tracking-tight">
                         Personal website
                       </h3>
                       <Input
@@ -291,7 +289,7 @@ const MySettingsView = () => {
                       />
                     </div>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight leading-tight">
+                      <h3 className="font-bold leading-tight tracking-tight">
                         Public email
                       </h3>
                       <Input
@@ -312,7 +310,7 @@ const MySettingsView = () => {
                       />
                     </div>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight leading-tight">
+                      <h3 className="font-bold leading-tight tracking-tight">
                         Venmo
                       </h3>
                       <Input

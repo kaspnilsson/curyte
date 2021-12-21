@@ -1,7 +1,7 @@
-import firebase from '../firebase/clientApp'
 import React, { SyntheticEvent, useState } from 'react'
 import { UploadIcon } from '@heroicons/react/solid'
 import { Button, Spinner, Text } from '@chakra-ui/react'
+import { Timestamp } from 'firebase/firestore'
 
 import { Lesson } from '../interfaces/lesson'
 import { Author } from '../interfaces/author'
@@ -33,9 +33,8 @@ const EditLessonPage = ({
     title: l.title || '',
     authorName: u?.displayName || '',
     authorId: u?.uid || '',
-    created:
-      l?.created || firebase.firestore.Timestamp.now().toDate().toISOString(),
-    updated: firebase.firestore.Timestamp.now().toDate().toISOString(),
+    created: l?.created || Timestamp.now().toDate().toISOString(),
+    updated: Timestamp.now().toDate().toISOString(),
     saveCount: 0,
     viewCount: 0,
     uid: l?.uid || '',

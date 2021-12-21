@@ -5,8 +5,8 @@ import Container from '../../components/Container'
 import LessonPreview from '../../components/LessonPreview'
 import { Input } from '@chakra-ui/react'
 import { useFuzzy } from '../../hooks/useFuzzy'
-import * as api from '../../firebase/api'
 import { GetServerSideProps } from 'next'
+import { getLessons } from '../../firebase/api'
 
 const fuseOptions = {
   distance: 10000,
@@ -27,13 +27,13 @@ const SearchPage = ({ lessons }: Props) => {
   return (
     <Layout>
       <Container className="flex flex-col items-center px-5">
-        <section className="flex-row flex items-center justify-center mt-16 mb-8">
-          <h1 className="text-4xl md:text-6xl text-center font-bold tracking-tighter leading-tight">
+        <section className="flex flex-row items-center justify-center mt-16 mb-8">
+          <h1 className="text-4xl font-bold leading-tight tracking-tighter text-center md:text-6xl">
             Byte-sized lessons, for the curious.
           </h1>
         </section>
-        <section className="flex-col flex items-center justify-around mb-8 w-96">
-          {/* <p className="text-center tracking-tighter mb-8 text-stone-700">
+        <section className="flex flex-col items-center justify-around mb-8 w-96">
+          {/* <p className="mb-8 tracking-tighter text-center text-stone-700">
                   Because lessons can be so much more than just PDFs from the
                   90s.
                 </p> */}
@@ -48,7 +48,7 @@ const SearchPage = ({ lessons }: Props) => {
           />
         </section>
         {result && (
-          <div className="flex flex-wrap gap-4 mb-8 justify-center">
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
             {result.map((lesson) => (
               <LessonPreview key={lesson.uid} lesson={lesson} />
             ))}
@@ -61,7 +61,7 @@ const SearchPage = ({ lessons }: Props) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const lessons = await api.getLessons([])
+  const lessons = await getLessons([])
 
   return {
     props: { lessons },

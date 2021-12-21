@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import firebase from '../../firebase/clientApp'
-import * as api from '../../firebase/api'
+import { auth } from '../../firebase/clientApp'
 import { GetServerSideProps } from 'next'
 import { Author } from '../../interfaces/author'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -11,6 +10,7 @@ import { Lesson } from '../../interfaces/lesson'
 import { debounce } from 'ts-debounce'
 
 import { lessonRoute, loginRoute, newLessonRoute } from '../../utils/routes'
+import { getDraft, publishLesson, updateDraft } from '../../firebase/api'
 
 type Props = {
   id: string
@@ -18,7 +18,7 @@ type Props = {
 
 const DraftView = ({ id }: Props) => {
   const router = useRouter()
-  const [user, userLoading] = useAuthState(firebase.auth())
+  const [user, userLoading] = useAuthState(auth)
   const [loading, setLoading] = useState(true)
   const [draft, setDraft] = useState<Lesson | undefined>()
   const [savingPromise, setSavingPromise] = useState<Promise<void> | null>(null)
@@ -32,7 +32,7 @@ const DraftView = ({ id }: Props) => {
   useEffect(() => {
     if (!user || userLoading) return
     const fetchDraft = async () => {
-      const d = await api.getDraft(id)
+      const d = await getDraft(id)
       if (!d) {
         router.replace(newLessonRoute())
       }
@@ -46,12 +46,12 @@ const DraftView = ({ id }: Props) => {
   const handleSubmit = async () => {
     if (savingPromise) await savingPromise
     if (!draft) return
-    const uid = await api.publishLesson(draft, draft.uid)
+    const uid = await publishLesson(draft, draft.uid)
     router.push(lessonRoute(uid))
   }
 
   const debouncedUpdateDraft = debounce(async (l: Lesson) => {
-    const p = api.updateDraft(l)
+    const p = updateDraft(l)
     setSavingPromise(p)
     await p
     setDraft(l)

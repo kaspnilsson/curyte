@@ -10,7 +10,7 @@ import { exception, pageview } from '../utils/gtag'
 import ErrorBoundary from '../components/ErrorBoundary'
 import theme from '../styles/theme'
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export default function CuryteApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
   useEffect(() => {
     const handleRouteChange = (url: URL) => {
@@ -40,6 +40,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       return true
     }
   })
+
   return (
     <ChakraProvider portalZIndex={20} theme={theme}>
       <ImageUploadDialogProvider>

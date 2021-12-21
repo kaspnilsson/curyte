@@ -1,5 +1,5 @@
 import { NextSeo } from 'next-seo'
-import firebase from '../../firebase/clientApp'
+import { auth } from '../../firebase/clientApp'
 import Head from 'next/head'
 import ErrorPage from 'next/error'
 import React, { useEffect, useState } from 'react'
@@ -9,7 +9,6 @@ import Layout from '../../components/Layout'
 import { Author } from '../../interfaces/author'
 import Container from '../../components/Container'
 import LessonHeader from '../../components/LessonHeader'
-import * as api from '../../firebase/api'
 import FancyEditor from '../../components/FancyEditor'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { useRouter } from 'next/router'
@@ -22,6 +21,12 @@ import {
 import { ParsedUrlQuery } from 'querystring'
 import useCuryteEditor from '../../hooks/useCuryteEditor'
 import LessonOutline from '../../components/LessonOutline'
+import {
+  logLessonView,
+  deleteLesson,
+  getLesson,
+  getAuthor,
+} from '../../firebase/api'
 
 interface Props {
   lesson: Lesson
@@ -31,15 +36,15 @@ interface Props {
 const PublishedLessonView = ({ lesson, author }: Props) => {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const [user, userLoading] = useAuthState(firebase.auth())
+  const [user, userLoading] = useAuthState(auth)
   // Log views only on render of a published lesson
   useEffect(() => {
-    api.logLessonView(lesson.uid)
+    logLessonView(lesson.uid)
   }, [lesson.uid])
 
   const handleDelete = async () => {
     setLoading(true)
-    await api.deleteLesson(lesson.uid)
+    await deleteLesson(lesson.uid)
     setLoading(false)
     router.push(lessonSearchRoute())
   }
@@ -109,7 +114,7 @@ interface IParams extends ParsedUrlQuery {
 }
 
 // export const getStaticPaths: GetStaticPaths = async () => {
-//   const lessons = await api.getLessons([])
+//   const lessons = await getLessons([])
 //   const paths = lessons.map(({ uid }) => ({
 //     params: { id: uid },
 //   }))
@@ -118,15 +123,15 @@ interface IParams extends ParsedUrlQuery {
 
 // export const getStaticProps: GetStaticProps = async (context) => {
 //   const { id } = context.params as IParams
-//   const lesson = await api.getLesson(id)
-//   const author = await api.getAuthor(lesson.authorId)
+//   const lesson = await getLesson(id)
+//   const author = await getAuthor(lesson.authorId)
 //   return { props: { lesson, author } }
 // }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params as IParams
-  const lesson = await api.getLesson(id)
-  const author = await api.getAuthor(lesson.authorId)
+  const lesson = await getLesson(id)
+  const author = await getAuthor(lesson.authorId)
   return { props: { lesson, author } }
 }
 
