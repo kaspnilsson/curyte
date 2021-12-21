@@ -1,6 +1,6 @@
 import React, { SyntheticEvent, useState } from 'react'
 import { UploadIcon } from '@heroicons/react/solid'
-import { Button, Portal, Spinner, Text, Tooltip } from '@chakra-ui/react'
+import { Button, Text } from '@chakra-ui/react'
 import { Timestamp } from 'firebase/firestore'
 
 import { Lesson } from '../interfaces/lesson'
