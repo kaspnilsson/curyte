@@ -141,11 +141,11 @@ const ImageUploadDialog = ({
               <div
                 {...getRootProps({
                   className:
-                    'dropzone w-full p-8 bg-slate-50 rounded-xl border-dashed border-2 border-slate-300 cursor-pointer hover:bg-slate-100',
+                    'dropzone w-full p-8 bg-zinc-50 rounded-xl border-dashed border-2 border-zinc-300 cursor-pointer hover:bg-zinc-100',
                 })}
               >
                 <input {...getInputProps()} />
-                <p className="font-semibold text-center text-slate-500">
+                <p className="font-semibold text-center text-zinc-500">
                   Drop a photo here, or click to select a file
                 </p>
               </div>

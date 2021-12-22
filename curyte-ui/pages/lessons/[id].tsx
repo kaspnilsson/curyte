@@ -51,7 +51,7 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
 
   const editor = useCuryteEditor({ content: lesson.content }, [lesson])
 
-  if (!lesson || !lesson.title) return <ErrorPage statusCode={404} />
+  if (!lesson) return <ErrorPage statusCode={404} />
 
   const openGraphDescription = `${lesson.description}, tags:${[
     lesson.tags || [],
@@ -130,8 +130,11 @@ interface IParams extends ParsedUrlQuery {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params as IParams
+  console.log(id)
   const lesson = await getLesson(id)
   const author = await getAuthor(lesson.authorId)
+  console.log(lesson)
+  console.log(author)
   return { props: { lesson, author } }
 }
 

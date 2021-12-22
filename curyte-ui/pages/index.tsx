@@ -29,7 +29,7 @@ const Home = () => {
   return (
     <Layout>
       <Container className="flex flex-col items-center">
-        <section className="flex flex-row items-center justify-center mt-16 mb-8">
+        <section className="flex flex-row items-center justify-center mb-8">
           <h1 className="text-6xl md:text-8xl text-center font-bold tracking-tighter leading-tight flex items-center gap-2 md:gap-4 aspect-[3/1]">
             <div className="hidden md:flex h-min-content">
               <CuryteLogo height={'97.5px'} width={'97.5px'} />
@@ -41,7 +41,7 @@ const Home = () => {
           </h1>
         </section>
         <section className="flex flex-col items-center justify-around mb-8">
-          <div className="shadow-xl shadow-indigo-500/20 rounded-xl overflow-hidden mb-16 border-2 border-slate-200 lg:max-w-[60vw]">
+          <div className="shadow-xl shadow-sky-500/20 rounded-xl overflow-hidden mb-16 border-2 border-zinc-300 lg:max-w-[60vw]">
             <AutoPlaySilentVideo
               src="/static/promo.mp4"
               type="video/mp4"
@@ -50,13 +50,13 @@ const Home = () => {
           </div>
           <div className="mb-8 text-4xl font-bold leading-tight tracking-tighter text-center">
             Engaging lessons,
-            <div className="text-indigo-500">digitally native.</div>
+            <div className="text-sky-500">digitally native.</div>
           </div>
           <div className="flex flex-col items-center gap-4 mb-8 md:flex-row align-center">
             <Link passHref href={lessonSearchRoute()}>
               <Button
                 className="flex flex-1"
-                colorScheme="indigo"
+                colorScheme="black"
                 variant="outline"
               >
                 <div className="p-4">
@@ -66,7 +66,7 @@ const Home = () => {
               </Button>
             </Link>
             <Link passHref href={newLessonRoute()}>
-              <Button className="flex-1" colorScheme="indigo">
+              <Button className="flex-1" colorScheme="black">
                 <div className="p-4">Start writing</div>
               </Button>
             </Link>
@@ -81,7 +81,7 @@ const Home = () => {
             and explore what everyone else is teaching.
           </p>
         </section>
-        <section className="flex flex-col flex-wrap items-center justify-around w-full gap-8 mb-16 md:mb-32 lg:flex-row colums-lg">
+        <section className="flex flex-col flex-wrap items-center justify-around w-full gap-8 mb-16 md:items-start md:mb-32 lg:flex-row colums-lg">
           <div className="flex flex-col items-center flex-1 text-base w-80 md:w-96 md:text-xl">
             <ul className="flex-1">
               <h3 className="mb-4 text-2xl font-bold leading-tight tracking-tighter text-center">

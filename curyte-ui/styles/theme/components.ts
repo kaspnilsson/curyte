@@ -1,5 +1,5 @@
 import { ThemeComponents } from '@chakra-ui/react'
-import { indigo } from './colors'
+import { zinc } from './colors'
 
 const components: Partial<ThemeComponents> = {
   Menu: {
@@ -7,7 +7,7 @@ const components: Partial<ThemeComponents> = {
     baseStyle: {
       item: {
         _hover: {
-          backgroundColor: indigo[100],
+          backgroundColor: zinc[100],
         },
       },
     },

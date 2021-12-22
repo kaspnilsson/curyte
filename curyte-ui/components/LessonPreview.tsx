@@ -17,8 +17,8 @@ type Props = {
 const LessonPreview = ({ lesson, author }: Props) => {
   return (
     <Link as={lessonRoute(lesson.uid)} href={lessonRouteHrefPath} passHref>
-      <div className="group flex flex-col cursor-pointer rounded-xl shadow-lg overflow-hidden w-96 border-2 border-slate-200 lesson-preview">
-        <div className="w-96 h-48 relative overflow-hidden">
+      <div className="flex flex-col overflow-hidden border-2 shadow-lg cursor-pointer group rounded-xl w-80 border-zinc-300 lesson-preview">
+        <div className="relative h-40 overflow-hidden w-80">
           {lesson.coverImageUrl && (
             <Image
               src={lesson.coverImageUrl}
@@ -30,7 +30,7 @@ const LessonPreview = ({ lesson, author }: Props) => {
           )}
           {!lesson.coverImageUrl && (
             <div
-              className="h-full w-full"
+              className="w-full h-full"
               style={{
                 background:
                   'radial-gradient(circle, rgba(255,255,255,1) 60%, rgba(233,216,253,1) 100%)',
@@ -49,47 +49,41 @@ const LessonPreview = ({ lesson, author }: Props) => {
         <div className="flex flex-col gap-2 m-4">
           <Text
             fontSize="lg"
-            className="font-bold tracking-tight 
-            leading-tight"
+            className="font-bold leading-tight tracking-tight"
           >
             <a className="hover:underline group-hover:underline">
               {lesson.title || '(no title)'}
             </a>
           </Text>
-          <p className="text-sm leading-relaxed truncate min-w-0 text-slate-500">
-            {lesson.description}
-          </p>
           {lesson.tags?.length && (
-            <div className="flex gap-2 items-center">
+            <div className="flex items-center gap-2">
               {lesson.tags.slice(0, 3).map((t, index) => (
                 <TagChip tagLabel={t} key={t + index} />
               ))}
             </div>
           )}
         </div>
-        <div className="flex-1 min-w-0 m-4 mt-0 flex flex-col gap-2 h-full justify-end">
-          <div className="text-sm flex items-center justify-between">
-            <div className="font-bold mr-4">
+        <div className="flex flex-col justify-end flex-1 h-full min-w-0 gap-2 m-4 mt-0">
+          <div className="flex items-center justify-between text-sm">
+            <div className="mr-4 font-bold">
               {!author && lesson.authorName}
               {author && <AuthorLink author={author} />}
             </div>
             <div className="flex items-center gap-4">
               <div className="flex flex-col items-center">
-                <BookmarkIcon className="h-5 w-5 text-indigo-700" />
+                <BookmarkIcon className="w-5 h-5 text-zinc-500" />
                 <Text
                   fontSize="sm"
-                  className="text-slate-700 proportional-nums tracking-tight 
-                  leading-tight"
+                  className="leading-tight tracking-tight text-zinc-500 proportional-nums"
                 >
                   {lesson.saveCount || 0}
                 </Text>
               </div>
               <div className="flex flex-col items-center">
-                <EyeIcon className="h-5 w-5 text-indigo-700" />
+                <EyeIcon className="w-5 h-5 text-zinc-500" />
                 <Text
                   fontSize="sm"
-                  className="text-slate-700 proportional-nums tracking-tight 
-                  leading-tight"
+                  className="leading-tight tracking-tight text-zinc-500 proportional-nums"
                 >
                   {lesson.viewCount || 0}
                 </Text>

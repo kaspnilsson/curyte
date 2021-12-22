@@ -19,19 +19,19 @@ const EditableCoverImage = ({ title, src, onEditUrl }: Props) => {
   }
 
   return (
-    <div className="sm:mx-0 relative w-full flex items-center justify-center mt-2">
+    <div className="relative flex items-center justify-center w-full mt-4 sm:mx-0">
       {src && <CoverImage title={title} src={src} />}
       {!src && (
-        <div className="bg-slate-50 h-32 w-full rounded-xl flex items-center justify-center">
+        <div className="flex items-center justify-center w-full h-32 border-2 border-zinc-300 rounded-xl">
           No cover image
         </div>
       )}
       <div
-        className="absolute top-0 left-0 z-10 flex w-full h-full group cursor-pointer"
+        className="absolute top-0 left-0 z-10 flex w-full h-full cursor-pointer group"
         onClick={() => buttonRef?.current?.click()}
       >
         <Button
-          className="m-auto invisible group-hover:visible"
+          className="invisible m-auto group-hover:visible"
           ref={buttonRef}
           onClick={onEditImage}
         >

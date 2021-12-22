@@ -12,17 +12,19 @@ import {
   MenuList,
   MenuItem,
   Portal,
+  IconButton,
 } from '@chakra-ui/react'
 import Head from 'next/head'
 import Avatar from './Avatar'
 import CuryteLogo from './CuryteLogo'
+import { PlusIcon } from '@heroicons/react/outline'
 import {
   indexRoute,
   lessonSearchRoute,
   loginRoute,
   newLessonRoute,
 } from '../utils/routes'
-import { indigo } from '../styles/theme/colors'
+import { sky } from '../styles/theme/colors'
 
 type Props = {
   children: React.ReactNode
@@ -94,10 +96,13 @@ const Header = ({
         <title>{title}</title>
       </Head>
       <div
-        className={classNames('z-10 bg-white mb-4 transition-shadow', {
-          'sticky top-0': isSticky,
-          'shadow-xl': isSticky && isStuck,
-        })}
+        className={classNames(
+          'z-10 bg-zinc-100 border-b-2 mb-16 transition-shadow',
+          {
+            'sticky top-0': isSticky,
+            'shadow-xl shadow-zinc-900/10': isSticky && isStuck,
+          }
+        )}
       >
         <Container>
           <div className="flex items-center justify-between h-16 py-4">
@@ -124,12 +129,15 @@ const Header = ({
             {user && (
               <div className="flex items-center">
                 <Link href={newLessonRoute()} passHref>
-                  <Button
+                  <IconButton
+                    aria-label="Start writing"
+                    isRound
+                    variant="outline"
                     className="px-4 py-2 font-semibold"
-                    colorScheme="indigo"
-                  >
-                    Start writing
-                  </Button>
+                    colorScheme="zinc"
+                    title="Start writing"
+                    icon={<PlusIcon className="w-4 h-4 text-zinc-900" />}
+                  />
                 </Link>
                 <div className="flex ml-4">
                   <Menu>
@@ -158,7 +166,7 @@ const Header = ({
             style={{
               width: `${progress}%`,
               height: '3px',
-              background: indigo[500],
+              background: sky[500],
               opacity: '0.8',
               marginTop: '-3px',
             }}

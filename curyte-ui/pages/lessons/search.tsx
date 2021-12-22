@@ -27,7 +27,7 @@ const SearchPage = ({ lessons }: Props) => {
   return (
     <Layout>
       <Container className="flex flex-col items-center px-5">
-        <section className="flex flex-row items-center justify-center mt-16 mb-8">
+        <section className="flex flex-row items-center justify-center mb-8">
           <h1 className="text-4xl font-bold leading-tight tracking-tighter text-center md:text-6xl">
             Byte-sized lessons, for the curious.
           </h1>

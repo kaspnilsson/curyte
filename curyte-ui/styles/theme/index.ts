@@ -1,10 +1,13 @@
 import { extendTheme } from '@chakra-ui/react'
-import { indigo } from './colors'
+import { black, sky, zinc } from './colors'
 import components from './components'
 
 const theme = extendTheme({
   colors: {
-    indigo,
+    sky,
+    zinc,
+    black,
+    gray: { ...zinc },
   },
   components,
 })

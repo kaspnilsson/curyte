@@ -69,20 +69,20 @@ const EditLessonPage = ({ lesson, children, handleUpdate }: Props) => {
               className={`${computeClassesForTitle(
                 title
               )} font-semibold flex-grow resize-none tracking-tight leading-tight border-0`}
-              placeholder="Enter title..."
+              placeholder="Add a title..."
               value={title}
               onChange={({ target }) => setTitle(target.value)}
             />
           </div>
           <TextareaAutosize
-            className="mt-1 text-2xl border-0 resize-none text-slate-500"
-            placeholder="Enter description..."
+            className="mt-1 text-2xl border-0 resize-none text-zinc-500"
+            placeholder="Add a learning objective..."
             value={description}
             onChange={({ target }) => setDescription(target.value)}
           />
           <TextareaAutosize
             className="mt-4 text-xl border-0 resize-none"
-            placeholder="Enter a comma separated list of tags..."
+            placeholder="Add a comma separated list of tags..."
             value={tagsStr}
             onChange={({ target }) => setTagsStr(target.value)}
           />

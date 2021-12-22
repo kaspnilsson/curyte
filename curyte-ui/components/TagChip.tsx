@@ -8,7 +8,7 @@ interface Props {
   colorScheme?: string
 }
 
-const TagChip = ({ tagLabel, colorScheme = 'indigo' }: Props) => {
+const TagChip = ({ tagLabel, colorScheme = 'zinc' }: Props) => {
   return (
     <>
       {tagLabel && (

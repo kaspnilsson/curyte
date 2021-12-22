@@ -33,7 +33,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
     return null
   }
   return (
-    <div className="flex flex-wrap border-b border-t border-slate-200 mb-4 py-1 items-center gap-1 bg-white z-10 sticky top-0">
+    <div className="sticky top-0 z-10 flex flex-wrap items-center gap-1 py-1 mb-4 bg-white border-t border-b border-zinc-300">
       <InputDialog {...dialogProps} />
       <MenuIconButton
         label="Undo"
@@ -46,29 +46,29 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         onClick={() => editor.chain().focus().redo().run()}
         icon={<i className="text-lg ri-arrow-go-forward-line" />}
       />
-      <Center className="h-6 w-2">
+      <Center className="w-2 h-6">
         <Divider
           orientation="vertical"
-          className="border-slate-200 opacity-100"
+          className="opacity-100 border-zinc-300"
         />
       </Center>
-      <Menu id="style-menu" isLazy boundary="scrollParent" colorScheme="indigo">
-        <MenuButton size="sm" variant="ghost" colorScheme="indigo" as={Button}>
-          <div className="flex items-center text-slate-900 gap-1 text-sm">
+      <Menu id="style-menu" isLazy boundary="scrollParent" colorScheme="zinc">
+        <MenuButton size="sm" variant="ghost" colorScheme="zinc" as={Button}>
+          <div className="flex items-center gap-1 text-sm text-zinc-900">
             Style
-            <i className="ri-arrow-drop-down-line text-lg w-2"></i>
+            <i className="w-2 text-lg ri-arrow-drop-down-line"></i>
           </div>
         </MenuButton>
         <Portal>
-          <MenuList className="max-h-96 overflow-auto z-20">
+          <MenuList className="z-20 overflow-auto max-h-96">
             <StyleMenuItems editor={editor} />
           </MenuList>
         </Portal>
       </Menu>
-      <Center className="h-6 w-2">
+      <Center className="w-2 h-6">
         <Divider
           orientation="vertical"
-          className="border-slate-200 opacity-100"
+          className="opacity-100 border-zinc-300"
         />
       </Center>
       <MenuIconButton
@@ -121,10 +121,10 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         }}
         icon={<i className="text-lg ri-format-clear" />}
       />
-      <Center className="h-6 w-4">
+      <Center className="w-4 h-6">
         <Divider
           orientation="vertical"
-          className="border-slate-200 opacity-100"
+          className="opacity-100 border-zinc-300"
         />
       </Center>
       <MenuIconButton
@@ -152,10 +152,10 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         isActive={editor.isActive('blockquote')}
         icon={<i className="text-lg ri-double-quotes-l" />}
       />
-      <Center className="h-6 w-4">
+      <Center className="w-4 h-6">
         <Divider
           orientation="vertical"
-          className="border-slate-200 opacity-100"
+          className="opacity-100 border-zinc-300"
         />
       </Center>
       <MenuIconButton
@@ -163,20 +163,15 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         onClick={() => editor.chain().focus().setHorizontalRule().run()}
         icon={<i className="text-lg ri-separator" />}
       />
-      <Menu
-        id="insert-menu"
-        isLazy
-        boundary="scrollParent"
-        colorScheme="indigo"
-      >
-        <MenuButton size="sm" variant="ghost" colorScheme="indigo" as={Button}>
-          <div className="flex items-center text-slate-900 gap-1 text-sm">
+      <Menu id="insert-menu" isLazy boundary="scrollParent" colorScheme="zinc">
+        <MenuButton size="sm" variant="ghost" colorScheme="zinc" as={Button}>
+          <div className="flex items-center gap-1 text-sm text-zinc-900">
             Insert
-            <i className="ri-arrow-drop-down-line text-lg w-2"></i>
+            <i className="w-2 text-lg ri-arrow-drop-down-line"></i>
           </div>
         </MenuButton>
         <Portal>
-          <MenuList className="max-h-96 overflow-auto z-20">
+          <MenuList className="z-20 overflow-auto max-h-96">
             <InsertMenuItems editor={editor} openDialog={openDialog} />
           </MenuList>
         </Portal>

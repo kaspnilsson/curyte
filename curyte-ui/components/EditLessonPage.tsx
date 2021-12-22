@@ -61,12 +61,11 @@ const EditLessonPage = ({
   if (saving) return <LoadingSpinner />
   return (
     <LessonEditor lesson={lesson} handleUpdate={localHandleUpdate}>
-      <footer className="fixed bottom-0 left-0 z-20 w-full h-24 bg-white border-t border-accent-2">
+      <footer className="fixed bottom-0 left-0 z-20 w-full h-16 bg-white border-t border-accent-2">
         <div className="flex items-center justify-end w-full h-full m-auto lg:w-2/3">
-          <div className="flex items-center gap-2 mx-8 mr-auto italic text-slate-500">
+          <div className="flex items-center gap-2 mx-8 mr-auto italic text-zinc-500">
             {autosaving && (
               <>
-                {/* <Spinner color="indigo.500" size="sm" /> */}
                 <Text>Unsaved changes...</Text>
               </>
             )}
@@ -82,14 +81,14 @@ const EditLessonPage = ({
               variant="link"
               size="sm"
               onClick={() => handlePreview()}
-              colorScheme="indigo"
+              colorScheme="zinc"
               className="flex items-center justify-between mr-4 font-semibold disabled:opacity-50"
             >
               Preview
             </Button>
           )}
           <Button
-            colorScheme="indigo"
+            colorScheme="black"
             disabled={saving}
             className="flex items-center justify-between font-semibold disabled:opacity-50"
             onClick={localHandleSubmit}

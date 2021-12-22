@@ -31,7 +31,7 @@ import { useRouter } from 'next/router'
 import { loginRoute, newLessonRoute } from '../utils/routes'
 import TagChip from './TagChip'
 import CoverImage from './CoverImage'
-import { indigo } from '../styles/theme/colors'
+import { black } from '../styles/theme/colors'
 import {
   getCurrentUserHasSavedLesson,
   getLesson,
@@ -129,7 +129,7 @@ const LessonHeader = ({
         )}
       </div>
       <div className="mt-1 mb-8">
-        <div className="mb-6 text-2xl focus:outline-none text-slate-500">
+        <div className="mb-6 text-2xl focus:outline-none text-zinc-500">
           {lesson.description}
         </div>
         {lesson.tags?.length && (
@@ -157,7 +157,7 @@ const LessonHeader = ({
           {handlePublish && (
             <Button
               size="sm"
-              colorScheme="indigo"
+              colorScheme="black"
               className="flex items-center justify-between mr-2 font-semibold"
               onClick={handlePublish}
             >
@@ -170,13 +170,11 @@ const LessonHeader = ({
               borderRadius="full"
               size="sm"
               aria-label={isSaved ? 'Saved' : 'Save'}
-              colorScheme="indigo"
-              variant="ghost"
               onClick={() => toggleSaveLesson()}
             >
               <BookmarkIcon
                 className="w-5 h-5 text-inherit"
-                style={{ fill: isSaved ? indigo[500] : 'transparent' }}
+                style={{ fill: isSaved ? black[900] : 'transparent' }}
               />
             </IconButton>
           )}
@@ -187,7 +185,6 @@ const LessonHeader = ({
               as={IconButton}
               aria-label="Options"
               icon={<MenuIcon className="w-5 h-5 text-inherit" />}
-              variant="subtle"
             />
             <Portal>
               <MenuList>

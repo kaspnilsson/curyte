@@ -20,10 +20,10 @@ const DraftLink = ({ draft }: Props) => {
       <Button
         variant="link"
         colorScheme="black"
-        className="hover:bg-indigo-200 rounded overflow-hidden"
+        className="overflow-hidden rounded hover:bg-zinc-200"
       >
-        <span className="tracking-tight leading-tight w-auto flex items-center m-0 p-1">
-          <DocumentTextIcon className="h-5 w-5 mr-1" />
+        <span className="flex items-center w-auto p-1 m-0 leading-tight tracking-tight">
+          <DocumentTextIcon className="w-5 h-5 mr-1" />
           {draft.title || '(no title)'}
         </span>
       </Button>
