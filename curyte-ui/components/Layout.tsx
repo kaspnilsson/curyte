@@ -34,13 +34,13 @@ const Layout = ({
         <div className="flex flex-col max-w-full md:flex-row">
           {sidebar && (
             <>
-              <div className="relative flex self-start w-1/6 pl-4 mb-8 md:flex-col md:sticky md:top-16 min-w-80">
+              <div className="relative flex self-start w-full px-4 mb-8 md:w-1/6 md:flex-col md:sticky md:top-16 min-w-80">
                 {sidebar}
               </div>
               {/* keep pb-24 in sync with footer height */}
               <main className="w-full pb-24 m-auto 2xl:w-2/3">{children}</main>
               {/* empty sidebar to ensure content is centered */}
-              <div className="w-1/6 pr-4 min-w-80"></div>
+              <div className="pr-4 md:w-1/6 min-w-80"></div>
             </>
           )}
           {!sidebar && <main className="w-full pb-24 m-auto">{children}</main>}

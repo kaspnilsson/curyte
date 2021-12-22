@@ -26,7 +26,7 @@ const TagView = ({ lessons, tag, tagText }: Props) => {
   return (
     <>
       <Layout showProgressBar title={tagText}>
-        <Container className="mx-5">
+        <Container className="px-5">
           <section className="flex flex-col mb-12">
             <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
               {`# ${tagText}`}
