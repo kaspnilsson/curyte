@@ -79,11 +79,11 @@ const LessonOutline = ({ editor }: Props) => {
                     // Cannot use string concatenation to compute: https://v2.tailwindcss.com/docs/just-in-time-mode
                     {
                       'pl-0': item.level === minHeadingLevel,
-                      'pl-4': item.level === minHeadingLevel + 1,
-                      'pl-8': item.level === minHeadingLevel + 2,
-                      'pl-12': item.level === minHeadingLevel + 3,
-                      'pl-16': item.level === minHeadingLevel + 4,
-                      'pl-20': item.level === minHeadingLevel + 5,
+                      'pl-3': item.level === minHeadingLevel + 1,
+                      'pl-6': item.level === minHeadingLevel + 2,
+                      'pl-9': item.level === minHeadingLevel + 3,
+                      'pl-12': item.level === minHeadingLevel + 4,
+                      'pl-16': item.level === minHeadingLevel + 5,
                     }
                   )}
                 >

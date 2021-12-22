@@ -4,10 +4,10 @@ import { GetServerSideProps } from 'next'
 import Layout from '../../components/Layout'
 import { Author } from '../../interfaces/author'
 import Container from '../../components/Container'
-import LessonPreview from '../../components/LessonPreview'
 import SocialLinks from '../../components/SocialLinks'
 import Avatar from '../../components/Avatar'
 import { getAuthor, getLessons } from '../../firebase/api'
+import LessonList from '../../components/LessonList'
 
 type Props = {
   lessons: Lesson[]
@@ -17,7 +17,7 @@ type Props = {
 const UserView = ({ lessons, author }: Props) => {
   return (
     <Layout>
-      <Container>
+      <Container className="px-5">
         <section className="flex my-8">
           <div className="flex-grow">
             <div className="text-4xl font-bold leading-tight tracking-tight">
@@ -33,11 +33,11 @@ const UserView = ({ lessons, author }: Props) => {
         <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
           Lessons
         </h2>
-        <div className="flex flex-wrap justify-center gap-4 mb-8">
-          {lessons.map((lesson) => (
-            <LessonPreview key={lesson.uid} lesson={lesson} />
-          ))}
-        </div>
+        {!!lessons.length && (
+          <div className="flex flex-wrap justify-center gap-4 mb-8 -mx-8">
+            <LessonList lessons={lessons} />
+          </div>
+        )}
         {!lessons?.length && 'Nothing here yet!'}
       </Container>
     </Layout>

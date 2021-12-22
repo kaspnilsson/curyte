@@ -55,7 +55,7 @@ const LessonPreview = ({ lesson, author }: Props) => {
               {lesson.title || '(no title)'}
             </a>
           </Text>
-          {lesson.tags?.length && (
+          {!!lesson.tags?.length && (
             <div className="flex items-center gap-2">
               {lesson.tags.slice(0, 3).map((t, index) => (
                 <TagChip tagLabel={t} key={t + index} />

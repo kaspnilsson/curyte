@@ -81,7 +81,7 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
             }}
           ></NextSeo>
           <Container>
-            <article className="mb-32">
+            <article className="px-4 mb-32">
               <Head>
                 <title>{lesson.title}</title>
               </Head>

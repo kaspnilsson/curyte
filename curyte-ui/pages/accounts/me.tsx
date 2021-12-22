@@ -22,10 +22,10 @@ import TextareaAutosize from 'react-textarea-autosize'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import DraftsPage from '../drafts/all'
 import { Lesson } from '../../interfaces/lesson'
-import LessonPreview from '../../components/LessonPreview'
 import { useErrorHandler } from 'react-error-boundary'
 import { indexRoute } from '../../utils/routes'
 import { getAuthor, getLessons, updateAuthor } from '../../firebase/api'
+import LessonList from '../../components/LessonList'
 
 const MySettingsView = () => {
   const router = useRouter()
@@ -113,7 +113,7 @@ const MySettingsView = () => {
       {author && !loading && (
         <Layout>
           {saving && <LoadingSpinner />}
-          <Container>
+          <Container className="px-5">
             <div className="pb-4">
               <AuthorLink author={author}></AuthorLink>
             </div>
@@ -124,17 +124,17 @@ const MySettingsView = () => {
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  <section className="flex flex-col my-8">
+                  <section className="flex flex-col mb-8">
                     <div className="flex flex-col justify-between items-left">
                       <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                         Lessons
                       </h2>
                       {!lessons.length && 'Nothing here yet!'}
-                      <div className="flex flex-wrap justify-center gap-4 mb-8">
-                        {lessons.map((lesson) => (
-                          <LessonPreview key={lesson.uid} lesson={lesson} />
-                        ))}
-                      </div>
+                      {!!lessons.length && (
+                        <div className="-mx-8">
+                          <LessonList lessons={lessons} />
+                        </div>
+                      )}
                     </div>
                   </section>
                   <section className="flex flex-col my-8">
@@ -143,11 +143,11 @@ const MySettingsView = () => {
                         Saved
                       </h2>
                       {!savedLessons.length && 'Nothing here yet!'}
-                      <div className="flex flex-wrap justify-center gap-4 mb-8">
-                        {savedLessons.map((lesson) => (
-                          <LessonPreview key={lesson.uid} lesson={lesson} />
-                        ))}
-                      </div>
+                      {!!savedLessons.length && (
+                        <div className="-mx-8">
+                          <LessonList lessons={savedLessons} />
+                        </div>
+                      )}
                     </div>
                   </section>
                   <section className="flex flex-col my-8">

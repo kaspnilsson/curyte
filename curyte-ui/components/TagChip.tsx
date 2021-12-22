@@ -19,7 +19,7 @@ const TagChip = ({ tagLabel, colorScheme = 'zinc' }: Props) => {
             className="cursor-pointer hover:text-black"
           >
             <i className="ri-hashtag"></i>
-            <TagLabel>{tagLabel}</TagLabel>
+            <TagLabel className="hover:underline">{tagLabel}</TagLabel>
           </Tag>
         </Link>
       )}

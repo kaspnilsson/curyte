@@ -13,6 +13,7 @@ import {
   MenuItem,
   Portal,
   IconButton,
+  Tooltip,
 } from '@chakra-ui/react'
 import Head from 'next/head'
 import Avatar from './Avatar'
@@ -25,6 +26,7 @@ import {
   newLessonRoute,
 } from '../utils/routes'
 import { sky } from '../styles/theme/colors'
+import { useRouter } from 'next/router'
 
 type Props = {
   children: React.ReactNode
@@ -41,6 +43,7 @@ const Header = ({
 }: Props) => {
   const [isStuck, setStuck] = useState(false)
   const [progress, setProgress] = useState(0)
+  const router = useRouter()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -96,16 +99,13 @@ const Header = ({
         <title>{title}</title>
       </Head>
       <div
-        className={classNames(
-          'z-10 bg-white border-b-2 mb-16 transition-shadow',
-          {
-            'sticky top-0': isSticky,
-            'shadow-xl shadow-zinc-900/10': isSticky && isStuck,
-          }
-        )}
+        className={classNames('z-10 bg-white mb-12 transition-shadow', {
+          'sticky top-0': isSticky,
+          'shadow-xl shadow-zinc-900/10': isSticky && isStuck,
+        })}
       >
         <Container>
-          <div className="flex items-center justify-between h-16 py-4">
+          <div className="flex items-center justify-between h-16 px-5 py-4">
             <Link href={user ? lessonSearchRoute() : indexRoute} passHref>
               <Button
                 variant="link"
@@ -128,24 +128,24 @@ const Header = ({
             )}
             {user && (
               <div className="flex items-center gap-2">
-                <Link href={lessonSearchRoute()} passHref>
+                <Tooltip label="Search lessons">
                   <IconButton
                     aria-label="Search lessons"
+                    onClick={() => router.push(lessonSearchRoute())}
                     isRound
-                    colorScheme="black"
                     title="Start writing"
-                    icon={<SearchIcon className="w-4 h-4 text-white" />}
+                    icon={<SearchIcon className="w-4 h-4 text-zinc-900" />}
                   />
-                </Link>
-                <Link href={newLessonRoute()} passHref>
+                </Tooltip>
+                <Tooltip label="Start writing">
                   <IconButton
                     aria-label="Start writing"
                     isRound
-                    colorScheme="black"
                     title="Start writing"
-                    icon={<PlusIcon className="w-4 h-4 text-white" />}
+                    onClick={() => router.push(newLessonRoute())}
+                    icon={<PlusIcon className="w-4 h-4 text-zinc-900" />}
                   />
-                </Link>
+                </Tooltip>
                 <div className="flex">
                   <Menu>
                     <MenuButton>
