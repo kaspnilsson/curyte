@@ -39,6 +39,7 @@ const EditLessonPage = ({
     saveCount: 0,
     viewCount: 0,
     uid: l?.uid || '',
+    coverImageUrl: l?.coverImageUrl || '',
   })
 
   const localHandleSubmit = async (event: SyntheticEvent) => {
