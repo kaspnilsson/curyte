@@ -6,13 +6,13 @@
 //   const emojis = EmojiSet.getAll(true)
 //   console.log(emojis)
 //   return (
-//     <div className="flex flex-wrap w-full max-w-sm px-2 py-3 overflow-y-scroll bg-white border border-slate-600 rounded shadow-xl h-60 ">
+//     <div className="flex flex-wrap w-full max-w-sm px-2 py-3 overflow-y-scroll bg-white border border-zinc-600 rounded shadow-xl h-60 ">
 //       {emojis.map((emoji) => {
 //         return (
 //           <button
 //             key={emoji}
 //             onClick={() => setEmoji(emoji)}
-//             className="p-2 m-1 rounded-sm hover:bg-slate-100"
+//             className="p-2 m-1 rounded-sm hover:bg-zinc-100"
 //           >
 //             {emoji}
 //           </button>

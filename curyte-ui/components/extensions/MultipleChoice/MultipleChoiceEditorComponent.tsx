@@ -59,7 +59,7 @@ const MultipleChoiceEditorComponent = ({
       <TextareaAutosize
         autoFocus
         value={question}
-        className="border-0 font-bold tracking-tight leading-tight resize-none rounded text-lg w-full p-4 mx-2"
+        className="w-full p-4 mx-2 text-lg font-bold leading-tight tracking-tight border-0 rounded resize-none"
         placeholder="Ask a question"
         onChange={(e) => onUpdateQuestion(e.target.value)}
       />
@@ -68,22 +68,22 @@ const MultipleChoiceEditorComponent = ({
         value={correctAnswer}
         onChange={(value) => onUpdateCorrectAnswer(Number(value))}
       >
-        <Stack className="gap-4 items-center">
+        <Stack className="items-center gap-4">
           {options.map((o, index) => (
-            <div className="flex gap-2 items-center w-full" key={index}>
+            <div className="flex items-center w-full gap-2" key={index}>
               <Radio value={index} colorScheme="green"></Radio>
-              <div className="flex-1 gap-2 flex flex-col">
+              <div className="flex flex-col flex-1 gap-2">
                 <Input
                   value={o.text}
                   variant="filled"
-                  colorScheme="indigo"
+                  colorScheme="zinc"
                   placeholder="Add an answer"
                   onChange={(e) => onUpdateOptionText(e.target.value, index)}
                 />
                 <TextareaAutosize
                   value={o.explanation || ''}
                   placeholder="Add an explanation (optional)"
-                  className="text-sm border-0 w-full px-4 py-2 rounded resize-none"
+                  className="w-full px-4 py-2 text-sm border-0 rounded resize-none"
                   onChange={(e) =>
                     onUpdateOptionExplanation(e.target.value, index)
                   }
@@ -96,18 +96,18 @@ const MultipleChoiceEditorComponent = ({
                 disabled={index === 0}
                 onClick={() => onDeleteOption(index)}
               >
-                <i className="ri-delete-bin-7-line text-slate-700 text-lg"></i>
+                <i className="text-lg ri-delete-bin-7-line text-zinc-700"></i>
               </IconButton>
             </div>
           ))}
           <Button
             aria-label="Delete option"
             size="sm"
-            className="text-slate-700"
+            className="text-zinc-700"
             onClick={() => onAddOption()}
           >
-            <div className="flex px-20 items-center gap-1">
-              <i className="ri-add-line text-lg"></i>
+            <div className="flex items-center gap-1 px-20">
+              <i className="text-lg ri-add-line"></i>
               Add another option
             </div>
           </Button>

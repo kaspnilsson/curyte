@@ -1,6 +1,6 @@
 .ProseMirror {
   p.is-empty::before {
-    color: var(--chakra-colors-slate-400);
+    color: var(--chakra-colors-zinc-400);
     content: attr(data-placeholder);
     float: left;
     pointer-events: none;

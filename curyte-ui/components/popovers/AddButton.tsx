@@ -20,14 +20,14 @@ const AddButton = ({ onClick, disabled, items }: Props) => {
         aria-label="add"
         onClick={onClick}
         size="sm"
-        colorScheme="indigo"
+        colorScheme="zinc"
         variant="ghost"
         disabled={disabled}
       >
-        <i className="ri-add-circle-line text-slate-900 text-lg"></i>
+        <i className="text-lg ri-add-circle-line text-zinc-900"></i>
       </MenuButton>
       <Portal>
-        <MenuList className="max-h-96 overflow-auto z-20">{items}</MenuList>
+        <MenuList className="z-20 overflow-auto max-h-96">{items}</MenuList>
       </Portal>
     </Menu>
   )

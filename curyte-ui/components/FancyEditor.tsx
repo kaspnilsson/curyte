@@ -31,7 +31,7 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
       <div className="flex flex-col max-w-full min-w-full">
         {!readOnly && <FancyEditorMenuBar editor={editor} />}
         <EditorContent
-          className="prose-sm prose md:prose-md lg:prose-lg max-w-none prose-indigo prose-headings:font-semibold prose-headings:tracking-tight prose-headings:leading-tight prose-headings:border-b-2 prose-headings:pb-2 prose-headings:scroll-m-28"
+          className="prose-sm prose md:prose-md lg:prose-lg max-w-none prose-zinc prose-headings:font-semibold prose-headings:tracking-tight prose-headings:leading-tight prose-headings:border-b-2 prose-headings:pb-2 prose-headings:scroll-m-28"
           editor={editor}
         />
         {editor && (
@@ -60,7 +60,7 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
                         <>
                           <Heading
                             fontSize="xs"
-                            className="px-4 pt-2 leading-tight tracking-tight text-slate-500 md:tracking-tighter"
+                            className="px-4 pt-2 leading-tight tracking-tight text-zinc-500 md:tracking-tighter"
                           >
                             STYLE
                           </Heading>
@@ -68,7 +68,7 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
                           <MenuDivider />
                           <Heading
                             fontSize="xs"
-                            className="px-4 pt-2 leading-tight tracking-tight text-slate-500 md:tracking-tighter"
+                            className="px-4 pt-2 leading-tight tracking-tight text-zinc-500 md:tracking-tighter"
                           >
                             INSERT
                           </Heading>

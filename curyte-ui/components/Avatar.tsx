@@ -16,7 +16,7 @@ const Avatar = ({ author, className }: Props) => {
         <Image
           src={author.photoURL}
           borderRadius="full"
-          className={'shadow-xl ' + className}
+          className={'shadow-xl shadow-zinc-900/10 ' + className}
           alt={author.displayName}
         />
       ) : (
@@ -24,7 +24,7 @@ const Avatar = ({ author, className }: Props) => {
           borderRadius="full"
           size="lg"
           variant="solid"
-          className={'shadow-xl ' + className}
+          className={'shadow-xl shadow-zinc-900/10 ' + className}
         >
           {author.displayName
             ? author.displayName.substring(0, 2).toLocaleUpperCase()

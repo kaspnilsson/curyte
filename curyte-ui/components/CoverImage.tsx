@@ -11,7 +11,7 @@ type Props = {
 
 const CoverImage = ({ title, lessonId, src }: Props) => {
   const image = (
-    <div className="cover-image-wrapper w-full">
+    <div className="w-full cover-image-wrapper">
       <Image
         src={src}
         layout="fill"
@@ -23,7 +23,7 @@ const CoverImage = ({ title, lessonId, src }: Props) => {
   )
 
   return (
-    <div className="mx-2 overflow-hidden rounded-xl shadow-xl relative w-full h-full max-h-[50vh] flex items-center">
+    <div className="mx-2 overflow-hidden rounded-xl shadow-xl shadow-zinc-900/10 relative w-full h-full max-h-[50vh] flex items-center">
       {lessonId ? (
         <Link as={lessonRoute(lessonId)} href={lessonRouteHrefPath}>
           <a aria-label={title}>{image}</a>

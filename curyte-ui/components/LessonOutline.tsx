@@ -59,8 +59,8 @@ const LessonOutline = ({ editor }: Props) => {
     <>
       {!items.length && null}
       {!!items.length && (
-        <div className="toc flex flex-col mr-4 md:mt-10 truncate w-full text-sm md:text-base">
-          <span className="text-slate-500 tracking-tighter font-bold leading-tight py-2 px-2">
+        <div className="flex flex-col w-full mr-4 text-sm truncate toc md:mt-10 md:text-base">
+          <span className="px-2 py-2 font-bold leading-tight tracking-tighter text-zinc-500">
             OUTLINE
           </span>
           <List listStyleType="none">
@@ -69,8 +69,8 @@ const LessonOutline = ({ editor }: Props) => {
                 href={`#${item.id}`}
                 key={index}
                 className={classNames(
-                  'pl-2 py-2 md:py-1 flex hover:bg-indigo-200 rounded',
-                  { 'bg-indigo-500 text-white': item.isActive }
+                  'pl-2 py-2 md:py-1 flex hover:bg-zinc-200 rounded',
+                  { 'bg-zinc-500 text-white': item.isActive }
                 )}
               >
                 <ListItem

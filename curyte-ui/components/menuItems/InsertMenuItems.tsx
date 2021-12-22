@@ -79,7 +79,7 @@ const InsertMenuItems = ({ editor, openDialog }: Props) => {
                 Enter the URL for a Google Drive page. Please ensure whatever
                 you are linking has been shared publicly! For more, view
                 <a
-                  className="ml-1 text-blue-600 hover:text-blue-800 visited:text-indigo-600"
+                  className="ml-1 text-zinc-700 hover:text-zinc-900 visited:text-zinc-500"
                   href="https://support.google.com/a/users/answer/9308873?hl=en"
                   target="_blank"
                   rel="noreferrer"

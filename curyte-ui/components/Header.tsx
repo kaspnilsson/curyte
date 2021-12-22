@@ -12,17 +12,19 @@ import {
   MenuList,
   MenuItem,
   Portal,
+  IconButton,
 } from '@chakra-ui/react'
 import Head from 'next/head'
 import Avatar from './Avatar'
 import CuryteLogo from './CuryteLogo'
+import { PlusIcon, SearchIcon } from '@heroicons/react/outline'
 import {
   indexRoute,
   lessonSearchRoute,
   loginRoute,
   newLessonRoute,
 } from '../utils/routes'
-import { indigo } from '../styles/theme/colors'
+import { sky } from '../styles/theme/colors'
 
 type Props = {
   children: React.ReactNode
@@ -94,10 +96,13 @@ const Header = ({
         <title>{title}</title>
       </Head>
       <div
-        className={classNames('z-10 bg-white mb-4 transition-shadow', {
-          'sticky top-0': isSticky,
-          'shadow-xl': isSticky && isStuck,
-        })}
+        className={classNames(
+          'z-10 bg-white border-b-2 mb-16 transition-shadow',
+          {
+            'sticky top-0': isSticky,
+            'shadow-xl shadow-zinc-900/10': isSticky && isStuck,
+          }
+        )}
       >
         <Container>
           <div className="flex items-center justify-between h-16 py-4">
@@ -122,16 +127,26 @@ const Header = ({
               </Link>
             )}
             {user && (
-              <div className="flex items-center">
-                <Link href={newLessonRoute()} passHref>
-                  <Button
-                    className="px-4 py-2 font-semibold"
-                    colorScheme="indigo"
-                  >
-                    Start writing
-                  </Button>
+              <div className="flex items-center gap-2">
+                <Link href={lessonSearchRoute()} passHref>
+                  <IconButton
+                    aria-label="Search lessons"
+                    isRound
+                    colorScheme="black"
+                    title="Start writing"
+                    icon={<SearchIcon className="w-4 h-4 text-white" />}
+                  />
                 </Link>
-                <div className="flex ml-4">
+                <Link href={newLessonRoute()} passHref>
+                  <IconButton
+                    aria-label="Start writing"
+                    isRound
+                    colorScheme="black"
+                    title="Start writing"
+                    icon={<PlusIcon className="w-4 h-4 text-white" />}
+                  />
+                </Link>
+                <div className="flex">
                   <Menu>
                     <MenuButton>
                       <Avatar
@@ -158,7 +173,7 @@ const Header = ({
             style={{
               width: `${progress}%`,
               height: '3px',
-              background: indigo[500],
+              background: sky[500],
               opacity: '0.8',
               marginTop: '-3px',
             }}
