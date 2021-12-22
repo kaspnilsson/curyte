@@ -50,7 +50,7 @@ const DraftsPage = () => {
       {!loading && (
         <>
           {drafts.map((draft) => (
-            <div className="flex items-center mb-1 group" key={draft.uid}>
+            <div className="flex items-center gap-1 mb-1 group" key={draft.uid}>
               <DraftLink draft={draft} />
               <Tooltip label="Delete draft">
                 <IconButton
