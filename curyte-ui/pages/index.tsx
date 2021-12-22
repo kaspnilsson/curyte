@@ -41,7 +41,7 @@ const Home = () => {
           </h1>
         </section>
         <section className="flex flex-col items-center justify-around mb-8">
-          <div className="shadow-xl shadow-sky-500/20 rounded-xl overflow-hidden mb-16 border-2 border-zinc-300 lg:max-w-[60vw]">
+          <div className="shadow-xl shadow-sky-500/20 rounded-xl overflow-hidden mb-16 border-2 border-zinc-200 lg:max-w-[60vw]">
             <AutoPlaySilentVideo
               src="/static/promo.mp4"
               type="video/mp4"

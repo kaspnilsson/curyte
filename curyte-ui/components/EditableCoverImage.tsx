@@ -22,7 +22,7 @@ const EditableCoverImage = ({ title, src, onEditUrl }: Props) => {
     <div className="relative flex items-center justify-center w-full mt-4 sm:mx-0">
       {src && <CoverImage title={title} src={src} />}
       {!src && (
-        <div className="flex items-center justify-center w-full h-32 border-2 border-zinc-300 rounded-xl">
+        <div className="flex items-center justify-center w-full h-32 border-2 border-zinc-200 rounded-xl">
           No cover image
         </div>
       )}

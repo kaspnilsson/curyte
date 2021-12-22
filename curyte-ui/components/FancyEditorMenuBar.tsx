@@ -33,7 +33,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
     return null
   }
   return (
-    <div className="sticky top-0 z-10 flex flex-wrap items-center gap-1 py-1 mb-4 bg-white border-t border-b border-zinc-300">
+    <div className="sticky top-0 z-10 flex flex-wrap items-center gap-1 py-1 mb-4 bg-white border-t border-b border-zinc-200">
       <InputDialog {...dialogProps} />
       <MenuIconButton
         label="Undo"
@@ -49,7 +49,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
       <Center className="w-2 h-6">
         <Divider
           orientation="vertical"
-          className="opacity-100 border-zinc-300"
+          className="opacity-100 border-zinc-200"
         />
       </Center>
       <Menu id="style-menu" isLazy boundary="scrollParent" colorScheme="zinc">
@@ -68,7 +68,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
       <Center className="w-2 h-6">
         <Divider
           orientation="vertical"
-          className="opacity-100 border-zinc-300"
+          className="opacity-100 border-zinc-200"
         />
       </Center>
       <MenuIconButton
@@ -124,7 +124,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
       <Center className="w-4 h-6">
         <Divider
           orientation="vertical"
-          className="opacity-100 border-zinc-300"
+          className="opacity-100 border-zinc-200"
         />
       </Center>
       <MenuIconButton
@@ -155,7 +155,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
       <Center className="w-4 h-6">
         <Divider
           orientation="vertical"
-          className="opacity-100 border-zinc-300"
+          className="opacity-100 border-zinc-200"
         />
       </Center>
       <MenuIconButton

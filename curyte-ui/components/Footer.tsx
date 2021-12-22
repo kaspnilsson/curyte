@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <>
       {/* keep h-24 in sync with main padding */}
-      <footer className="absolute bottom-0 flex w-full h-16 border-t-2 bg-zinc-100 border-zinc-300">
+      <footer className="absolute bottom-0 flex w-full h-16 bg-white border-t-2 border-zinc-200">
         <Container>
           <div className="flex items-center justify-between h-full">
             <h3 className="flex items-center gap-1 text-xl font-bold leading-tight tracking-tighter">

@@ -17,7 +17,7 @@ import {
 import Head from 'next/head'
 import Avatar from './Avatar'
 import CuryteLogo from './CuryteLogo'
-import { PlusIcon } from '@heroicons/react/outline'
+import { PlusIcon, SearchIcon } from '@heroicons/react/outline'
 import {
   indexRoute,
   lessonSearchRoute,
@@ -97,7 +97,7 @@ const Header = ({
       </Head>
       <div
         className={classNames(
-          'z-10 bg-zinc-100 border-b-2 mb-16 transition-shadow',
+          'z-10 bg-white border-b-2 mb-16 transition-shadow',
           {
             'sticky top-0': isSticky,
             'shadow-xl shadow-zinc-900/10': isSticky && isStuck,
@@ -127,19 +127,26 @@ const Header = ({
               </Link>
             )}
             {user && (
-              <div className="flex items-center">
+              <div className="flex items-center gap-2">
+                <Link href={lessonSearchRoute()} passHref>
+                  <IconButton
+                    aria-label="Search lessons"
+                    isRound
+                    colorScheme="black"
+                    title="Start writing"
+                    icon={<SearchIcon className="w-4 h-4 text-white" />}
+                  />
+                </Link>
                 <Link href={newLessonRoute()} passHref>
                   <IconButton
                     aria-label="Start writing"
                     isRound
-                    variant="outline"
-                    className="px-4 py-2 font-semibold"
-                    colorScheme="zinc"
+                    colorScheme="black"
                     title="Start writing"
-                    icon={<PlusIcon className="w-4 h-4 text-zinc-900" />}
+                    icon={<PlusIcon className="w-4 h-4 text-white" />}
                   />
                 </Link>
-                <div className="flex ml-4">
+                <div className="flex">
                   <Menu>
                     <MenuButton>
                       <Avatar
