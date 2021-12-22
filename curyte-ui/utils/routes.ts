@@ -27,7 +27,7 @@ export const tagRoute = (tag: string) => `/tags/${tag}`
 export const tagRouteHrefPath = '/tags/[tag]'
 
 export const lessonSearchRoute = (query?: string) => {
-  let out = '/lessons/search'
+  let out = '/lessons'
   if (query) out += `?query=${query}`
   return out
 }

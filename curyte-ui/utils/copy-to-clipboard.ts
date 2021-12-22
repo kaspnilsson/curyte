@@ -1,5 +1,4 @@
 const copyToClipboard = (data: string): void => {
-  debugger
   const listener = (e: ClipboardEvent) => {
     if (!e.clipboardData) return
     e.clipboardData.setData('text/plain', data)
