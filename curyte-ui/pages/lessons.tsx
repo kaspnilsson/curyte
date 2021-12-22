@@ -1,12 +1,12 @@
 import React from 'react'
-import { Lesson } from '../../interfaces/lesson'
-import Layout from '../../components/Layout'
-import Container from '../../components/Container'
-import LessonPreview from '../../components/LessonPreview'
+import { Lesson } from '../interfaces/lesson'
+import Layout from '../components/Layout'
+import Container from '../components/Container'
+import LessonPreview from '../components/LessonPreview'
 import { Input } from '@chakra-ui/react'
-import { useFuzzy } from '../../hooks/useFuzzy'
+import { useFuzzy } from '../hooks/useFuzzy'
 import { GetServerSideProps } from 'next'
-import { getLessons } from '../../firebase/api'
+import { getLessons } from '../firebase/api'
 
 const fuseOptions = {
   distance: 10000,
