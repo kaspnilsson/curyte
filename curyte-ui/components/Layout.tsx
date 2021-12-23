@@ -10,6 +10,7 @@ type Props = {
   showProgressBar?: boolean
   title?: string
   sidebar?: React.ReactNode
+  className?: string
 }
 
 const Layout = ({
