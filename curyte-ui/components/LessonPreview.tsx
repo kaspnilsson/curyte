@@ -33,7 +33,7 @@ const LessonPreview = ({ lesson, author }: Props) => {
               className="w-full h-full"
               style={{
                 background:
-                  'radial-gradient(circle, rgba(255,255,255,1) 60%, rgba(233,216,253,1) 100%)',
+                  'radial-gradient(circle, rgba(255,255,255,1) 60%, rgba(113,113,122,1) 100%)',
               }}
             >
               <Image
@@ -55,7 +55,7 @@ const LessonPreview = ({ lesson, author }: Props) => {
               {lesson.title || '(no title)'}
             </a>
           </Text>
-          {lesson.tags?.length && (
+          {!!lesson.tags?.length && (
             <div className="flex items-center gap-2">
               {lesson.tags.slice(0, 3).map((t, index) => (
                 <TagChip tagLabel={t} key={t + index} />

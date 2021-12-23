@@ -59,8 +59,8 @@ const LessonOutline = ({ editor }: Props) => {
     <>
       {!items.length && null}
       {!!items.length && (
-        <div className="flex flex-col w-full mr-4 text-sm truncate toc md:mt-10 md:text-base">
-          <span className="px-2 py-2 font-bold leading-tight tracking-tighter text-zinc-500">
+        <div className="flex flex-col w-full truncate toc md:mt-10">
+          <span className="px-2 py-2 text-xs font-bold leading-tight tracking-tighter text-zinc-500 lg:text-sm">
             OUTLINE
           </span>
           <List listStyleType="none">
@@ -75,15 +75,15 @@ const LessonOutline = ({ editor }: Props) => {
               >
                 <ListItem
                   className={classNames(
-                    'font-semibold truncate 2xl:text-lg w-full',
+                    'font-semibold truncate 2xl:text-lg w-full leading-tight tracking-tighter text-base lg:text-md',
                     // Cannot use string concatenation to compute: https://v2.tailwindcss.com/docs/just-in-time-mode
                     {
                       'pl-0': item.level === minHeadingLevel,
-                      'pl-4': item.level === minHeadingLevel + 1,
-                      'pl-8': item.level === minHeadingLevel + 2,
-                      'pl-12': item.level === minHeadingLevel + 3,
-                      'pl-16': item.level === minHeadingLevel + 4,
-                      'pl-20': item.level === minHeadingLevel + 5,
+                      'pl-3': item.level === minHeadingLevel + 1,
+                      'pl-6': item.level === minHeadingLevel + 2,
+                      'pl-9': item.level === minHeadingLevel + 3,
+                      'pl-12': item.level === minHeadingLevel + 4,
+                      'pl-16': item.level === minHeadingLevel + 5,
                     }
                   )}
                 >

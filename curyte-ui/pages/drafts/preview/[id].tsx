@@ -85,7 +85,7 @@ const DraftPreviewView = ({ id }: Props) => {
           sidebar={<LessonOutline editor={editor} />}
         >
           <Container>
-            <article className="mb-32">
+            <article className="px-4 mb-32">
               <Head>
                 <title>{draft.title}</title>
               </Head>

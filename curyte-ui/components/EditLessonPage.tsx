@@ -59,6 +59,8 @@ const EditLessonPage = ({
     setAutosaving(false)
   }
 
+  const canPublish = lesson && lesson.content && lesson.title
+
   if (saving) return <LoadingSpinner />
   return (
     <LessonEditor lesson={lesson} handleUpdate={localHandleUpdate}>
@@ -90,7 +92,7 @@ const EditLessonPage = ({
           )}
           <Button
             colorScheme="black"
-            disabled={saving}
+            disabled={saving || !canPublish}
             className="flex items-center justify-between font-semibold disabled:opacity-50"
             onClick={localHandleSubmit}
           >

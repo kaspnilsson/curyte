@@ -5,7 +5,7 @@ interface Props {
   height?: string | number
 }
 
-const CuryteLogo = ({ width = '26px', height = '26px' }: Props) => (
+const CuryteLogo = ({ width = '20px', height = '20px' }: Props) => (
   <Image
     src="/static/curyte_logo_black.svg"
     alt="Curyte logo"

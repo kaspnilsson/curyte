@@ -6,8 +6,8 @@ import Container from '../../components/Container'
 import { Tag } from '../../interfaces/tag'
 import { auth } from '../../firebase/clientApp'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import LessonPreview from '../../components/LessonPreview'
 import { getLessons, getTag, logTagView } from '../../firebase/api'
+import LessonList from '../../components/LessonList'
 
 type Props = {
   tagText: string
@@ -26,7 +26,7 @@ const TagView = ({ lessons, tag, tagText }: Props) => {
   return (
     <>
       <Layout showProgressBar title={tagText}>
-        <Container>
+        <Container className="px-5">
           <section className="flex flex-col mb-12">
             <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
               {`# ${tagText}`}
@@ -37,10 +37,8 @@ const TagView = ({ lessons, tag, tagText }: Props) => {
             Lessons
           </h2>
           {lessons && (
-            <div className="flex flex-wrap justify-center gap-4 mb-8">
-              {lessons.map((lesson) => (
-                <LessonPreview key={lesson.uid} lesson={lesson} />
-              ))}
+            <div className="-ml-8">
+              <LessonList lessons={lessons} />
             </div>
           )}
           {!lessons?.length && 'No lessons yet!'}
