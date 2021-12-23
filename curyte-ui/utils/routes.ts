@@ -14,6 +14,7 @@ export const accountRoute = (uid: string) => `/accounts/${uid}`
 export const accountRouteHrefPath = '/accounts/[id]'
 
 export const loginRoute = '/login'
+export const signupRoute = '/signup'
 
 export const indexRoute = '/'
 

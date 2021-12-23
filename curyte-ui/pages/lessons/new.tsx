@@ -13,8 +13,11 @@ const NewLessonView = () => {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (!user || userLoading) return
-    if (!user && !userLoading) router.push(loginRoute)
+    if (userLoading) return
+    if (!user) {
+      router.push(loginRoute)
+      return
+    }
     const fetchLesson = async () => {
       if (router.query.copyFrom) {
         const l = await getLesson(router.query.copyFrom as string)

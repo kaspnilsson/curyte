@@ -24,6 +24,7 @@ import {
   lessonSearchRoute,
   loginRoute,
   newLessonRoute,
+  signupRoute,
 } from '../utils/routes'
 import { sky } from '../styles/theme/colors'
 import { useRouter } from 'next/router'
@@ -122,9 +123,14 @@ const Header = ({
               {children}
             </div>
             {!user && (
-              <Link passHref href={loginRoute}>
-                <Button variant="outline">Log in</Button>
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link passHref href={loginRoute}>
+                  <Button variant="outline">Log in</Button>
+                </Link>
+                <Link passHref href={signupRoute}>
+                  <Button colorScheme="black">Sign up</Button>
+                </Link>
+              </div>
             )}
             {user && (
               <div className="flex items-center gap-2">
