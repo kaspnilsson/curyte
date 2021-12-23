@@ -33,7 +33,7 @@ const LessonPreview = ({ lesson, author }: Props) => {
               className="w-full h-full"
               style={{
                 background:
-                  'radial-gradient(circle, rgba(255,255,255,1) 60%, rgba(233,216,253,1) 100%)',
+                  'radial-gradient(circle, rgba(255,255,255,1) 60%, rgba(113,113,122,1) 100%)',
               }}
             >
               <Image
