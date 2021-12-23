@@ -43,7 +43,7 @@ const SearchPage = ({ lessons }: Props) => {
             onChange={(e) => search(e.target.value)}
           />
         </section>
-        {result && <LessonList lessons={result} />}
+        {result && <LessonList lessons={result} allowWrap />}
         {!result?.length && 'Nothing here yet! Maybe you should teach us!'}
       </Container>
     </Layout>
