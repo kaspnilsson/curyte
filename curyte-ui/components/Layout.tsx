@@ -20,10 +20,11 @@ const Layout = ({
   showProgressBar,
   sidebar,
   title = 'Curyte',
+  className = '',
 }: Props) => {
   return (
     <>
-      <div className="relative min-h-screen">
+      <div className={'relative min-h-screen ' + className}>
         <Header
           showProgressBar={showProgressBar}
           isSticky={isSticky}
