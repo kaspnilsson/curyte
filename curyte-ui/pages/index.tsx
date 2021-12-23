@@ -32,10 +32,10 @@ const Home = () => {
         <section className="flex flex-row items-center justify-center mb-8">
           <h1 className="text-6xl md:text-8xl text-center font-bold tracking-tighter leading-tight flex items-center gap-2 md:gap-4 aspect-[3/1]">
             <div className="hidden md:flex h-min-content">
-              <CuryteLogo height={'97.5px'} width={'97.5px'} />
+              <CuryteLogo height={'80px'} width={'80px'} />
             </div>
             <div className="flex md:hidden h-min-content">
-              <CuryteLogo height={'71px'} width={'71px'} />
+              <CuryteLogo height={'54px'} width={'54px'} />
             </div>
             Curyte
           </h1>
