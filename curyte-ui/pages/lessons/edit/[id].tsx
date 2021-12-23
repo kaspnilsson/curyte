@@ -23,8 +23,11 @@ const EditPublishedLessonView = ({ id }: Props) => {
   const toast = useToast()
 
   useEffect(() => {
-    if (!user || userLoading) return
-    if (!user && !userLoading) router.push(loginRoute)
+    if (userLoading) return
+    if (!user && !userLoading) {
+      router.push(loginRoute)
+      return
+    }
     toast({
       title: 'Edits made to published lessons will not be autosaved.',
       status: 'warning',
