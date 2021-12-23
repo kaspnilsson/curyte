@@ -137,15 +137,19 @@ const Header = ({
                     icon={<SearchIcon className="w-4 h-4 text-zinc-900" />}
                   />
                 </Tooltip>
-                <Tooltip label="Start writing">
-                  <IconButton
-                    aria-label="Start writing"
-                    isRound
-                    title="Start writing"
-                    onClick={() => router.push(newLessonRoute())}
-                    icon={<PlusIcon className="w-4 h-4 text-zinc-900" />}
-                  />
-                </Tooltip>
+                <div className="relative">
+                  <div className="rounded-full animated-border animate-spin-slow"></div>
+                  <Tooltip label="Start writing">
+                    <IconButton
+                      aria-label="Start writing"
+                      isRound
+                      className="opacity-100"
+                      title="Start writing"
+                      onClick={() => router.push(newLessonRoute())}
+                      icon={<PlusIcon className="w-4 h-4 text-zinc-900" />}
+                    />
+                  </Tooltip>
+                </div>
                 <div className="flex">
                   <Menu>
                     <MenuButton>

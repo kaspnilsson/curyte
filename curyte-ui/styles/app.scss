@@ -97,3 +97,14 @@ textarea:focus {
     height: unset !important;
   }
 }
+
+.animated-border {
+  background: conic-gradient(red, orange, yellow, green, blue, red);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2px;
+  margin: -2px;
+}
