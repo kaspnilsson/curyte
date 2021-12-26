@@ -15,7 +15,7 @@ const NewLessonView = () => {
   useEffect(() => {
     if (userLoading) return
     if (!user) {
-      router.push(loginRoute)
+      router.push(loginRoute(router.asPath))
       return
     }
     const fetchLesson = async () => {

@@ -25,7 +25,7 @@ const EditPublishedLessonView = ({ id }: Props) => {
   useEffect(() => {
     if (userLoading) return
     if (!user && !userLoading) {
-      router.push(loginRoute)
+      router.push(loginRoute(router.asPath))
       return
     }
     toast({

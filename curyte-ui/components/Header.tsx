@@ -124,10 +124,10 @@ const Header = ({
             </div>
             {!user && (
               <div className="flex items-center gap-2">
-                <Link passHref href={loginRoute}>
+                <Link passHref href={loginRoute()}>
                   <Button variant="outline">Log in</Button>
                 </Link>
-                <Link passHref href={signupRoute}>
+                <Link passHref href={signupRoute()}>
                   <Button colorScheme="black">Sign up</Button>
                 </Link>
               </div>

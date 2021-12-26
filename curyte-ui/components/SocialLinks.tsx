@@ -7,17 +7,26 @@ type Props = {
   author: Author
 }
 
+const prefixUrlIfNeeded = (url: string) => {
+  if (!url.startsWith('http')) url = `http://${url}`
+  return url
+}
+
 const Socialas = ({ author }: Props) => {
   return (
     <div className="flex items-center">
       {author.links?.twitter && (
-        <a target="_blank" href={author.links.twitter} rel="noreferrer">
+        <a
+          target="_blank"
+          href={prefixUrlIfNeeded(author.links.twitter)}
+          rel="noreferrer"
+        >
           <IconButton
             variant="link"
             aria-label="Twitter link"
             icon={
               <svg
-                className="h-5 w-5 m-2 hover:text-zinc-700"
+                className="w-5 h-5 m-2 hover:text-zinc-700"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -33,13 +42,17 @@ const Socialas = ({ author }: Props) => {
         </a>
       )}
       {author.links?.personalSite && (
-        <a target="_blank" href={author.links.personalSite} rel="noreferrer">
+        <a
+          target="_blank"
+          href={prefixUrlIfNeeded(author.links.personalSite)}
+          rel="noreferrer"
+        >
           <IconButton
             variant="link"
             aria-label="Personal website link"
             icon={
               <svg
-                className="h-5 w-5 m-2 hover:text-zinc-700"
+                className="w-5 h-5 m-2 hover:text-zinc-700"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -55,13 +68,17 @@ const Socialas = ({ author }: Props) => {
         </a>
       )}
       {author.links?.linkedin && (
-        <a target="_blank" href={author.links.linkedin} rel="noreferrer">
+        <a
+          target="_blank"
+          href={prefixUrlIfNeeded(author.links.linkedin)}
+          rel="noreferrer"
+        >
           <IconButton
             variant="link"
             aria-label="LinkedIn link"
             icon={
               <svg
-                className="h-5 w-5 m-2 hover:text-zinc-700"
+                className="w-5 h-5 m-2 hover:text-zinc-700"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -79,7 +96,7 @@ const Socialas = ({ author }: Props) => {
       {author.links?.publicEmail && (
         <a
           target="_blank"
-          href={'mailto:' + author.links.publicEmail}
+          href={`mailto:${author.links.publicEmail}`}
           rel="noreferrer"
         >
           <IconButton
@@ -87,7 +104,7 @@ const Socialas = ({ author }: Props) => {
             aria-label="Email link"
             icon={
               <svg
-                className="h-5 w-5 m-2 hover:text-zinc-700"
+                className="w-5 h-5 m-2 hover:text-zinc-700"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -103,13 +120,17 @@ const Socialas = ({ author }: Props) => {
         </a>
       )}
       {author.links?.venmo && (
-        <a target="_blank" href={author.links.venmo} rel="noreferrer">
+        <a
+          target="_blank"
+          href={prefixUrlIfNeeded(author.links.venmo)}
+          rel="noreferrer"
+        >
           <IconButton
             variant="link"
             aria-label="aedIn link"
             icon={
               <svg
-                className="h-5 w-5 m-2 hover:text-zinc-700"
+                className="w-5 h-5 m-2 hover:text-zinc-700"
                 xmlns="http://www.w3.org/2000/svg"
                 width="516"
                 height="516"
