@@ -24,6 +24,7 @@ import Link from '@tiptap/extension-link'
 import { CuryteLink } from '../components/extensions/CuryteLink/CuryteLink'
 import { MultipleChoice } from '../components/extensions/MultipleChoice/MultipleChoice'
 import { zinc } from '../styles/theme/colors'
+import { TrailingNode } from '../components/extensions/TrailingNode'
 
 interface EditorProps {
   content: JSONContent | null
@@ -63,6 +64,7 @@ const useCuryteEditor = (
         ImageEmbed,
         TaskList,
         AutoId,
+        TrailingNode,
         TaskItem.configure({
           nested: true,
         }),
