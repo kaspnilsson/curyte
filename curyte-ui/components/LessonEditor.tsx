@@ -17,7 +17,7 @@ type Props = {
   handleUpdate: (l: Partial<Lesson>) => void
 }
 
-const EditLessonPage = ({ lesson, children, handleUpdate }: Props) => {
+const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
   const [title, setTitle] = useState(lesson?.title?.trim() || '')
   const [description, setDescription] = useState(
     lesson?.description?.trim() || ''
@@ -101,4 +101,4 @@ const EditLessonPage = ({ lesson, children, handleUpdate }: Props) => {
   )
 }
 
-export default EditLessonPage
+export default LessonEditor
