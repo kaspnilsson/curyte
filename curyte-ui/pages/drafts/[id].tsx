@@ -25,7 +25,7 @@ const DraftView = ({ id }: Props) => {
 
   useEffect(() => {
     if (!user && !userLoading) {
-      router.push(loginRoute)
+      router.push(loginRoute(router.asPath))
       return
     }
   })

@@ -13,8 +13,21 @@ export const draftPreviewRouteHrefPath = '/drafts/preview/[id]'
 export const accountRoute = (uid: string) => `/accounts/${uid}`
 export const accountRouteHrefPath = '/accounts/[id]'
 
-export const loginRoute = '/login'
-export const signupRoute = '/signup'
+export const loginRoute = (referrer = '') => {
+  let out = '/login'
+  if (referrer) {
+    out = `${out}?referrer=${referrer}`
+  }
+  return out
+}
+
+export const signupRoute = (referrer = '') => {
+  let out = '/signup'
+  if (referrer) {
+    out = `${out}?referrer=${referrer}`
+  }
+  return out
+}
 
 export const indexRoute = '/'
 

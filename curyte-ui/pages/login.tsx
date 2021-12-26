@@ -5,18 +5,23 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import { auth } from '../firebase/clientApp'
 import { Box } from '@chakra-ui/react'
 import { GoogleAuthProvider, EmailAuthProvider } from 'firebase/auth'
-
-// Configure FirebaseUI.
-const uiConfig = {
-  // Redirect to / after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-  signInSuccessUrl: '/',
-  signInOptions: [
-    GoogleAuthProvider.PROVIDER_ID,
-    EmailAuthProvider.PROVIDER_ID,
-  ],
-}
+import { useRouter } from 'next/router'
 
 const Login = () => {
+  const router = useRouter()
+  const signInSuccessWithAuthResult = () => {
+    router.push(router.query.referrer ? (router.query.referrer as string) : '/')
+    return false
+  }
+  const uiConfig = {
+    signInOptions: [
+      GoogleAuthProvider.PROVIDER_ID,
+      EmailAuthProvider.PROVIDER_ID,
+    ],
+    signInFlow: 'popup',
+    callbacks: { signInSuccessWithAuthResult },
+  }
+
   return (
     <Layout>
       <Container>

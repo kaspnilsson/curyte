@@ -82,7 +82,7 @@ const LessonHeader = ({
   const toggleSaveLesson = async () => {
     if (!user) {
       // logged out!
-      router.push(loginRoute)
+      router.push(loginRoute(router.asPath))
       return
     }
     setLoading(true)
@@ -98,7 +98,7 @@ const LessonHeader = ({
   const handleMakeCopy = async () => {
     if (!user) {
       // logged out!
-      router.push(loginRoute)
+      router.push(loginRoute(router.asPath))
       return
     }
     router.push(newLessonRoute(lesson.uid))
