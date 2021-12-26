@@ -40,6 +40,10 @@ const DraftPreviewView = ({ id }: Props) => {
 
   useEffect(() => {
     if (!user || userLoading) return
+    if (!user && !userLoading) {
+      router.push(loginRoute)
+      return
+    }
     const fetchLesson = async () => {
       const l = await getDraft(id)
       setDraft(l)
@@ -48,13 +52,7 @@ const DraftPreviewView = ({ id }: Props) => {
     }
     setLoading(true)
     fetchLesson()
-  }, [id, user, userLoading])
-
-  useEffect(() => {
-    if (!user && !userLoading) {
-      router.push(loginRoute)
-    }
-  })
+  }, [id, router, user, userLoading])
 
   const handleDelete = async () => {
     setSaving(true)
