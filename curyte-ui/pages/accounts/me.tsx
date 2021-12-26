@@ -230,7 +230,7 @@ const MySettingsView = () => {
                     </h2>
                     <div className="my-2">
                       <h3 className="font-bold leading-tight tracking-tight">
-                        Twitter
+                        Twitter profile URL
                       </h3>
                       <Input
                         type="text"
@@ -248,7 +248,7 @@ const MySettingsView = () => {
                     </div>
                     <div className="my-2">
                       <h3 className="font-bold leading-tight tracking-tight">
-                        LinkedIn
+                        LinkedIn profile URL
                       </h3>
                       <Input
                         type="text"
@@ -269,7 +269,7 @@ const MySettingsView = () => {
                     </div>
                     <div className="my-2">
                       <h3 className="font-bold leading-tight tracking-tight">
-                        Personal website
+                        Personal website URL
                       </h3>
                       <Input
                         type="text"
@@ -311,7 +311,7 @@ const MySettingsView = () => {
                     </div>
                     <div className="my-2">
                       <h3 className="font-bold leading-tight tracking-tight">
-                        Venmo
+                        Venmo URL
                       </h3>
                       <Input
                         type="text"
