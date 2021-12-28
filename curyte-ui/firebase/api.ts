@@ -20,6 +20,7 @@ import {
 import { deleteObject, ref } from 'firebase/storage'
 import { Author, SavedLesson } from '../interfaces/author'
 import { Lesson } from '../interfaces/lesson'
+import { Path } from '../interfaces/path'
 import { Tag } from '../interfaces/tag'
 import { exception } from '../utils/gtag'
 import { auth, firestore, storage } from './clientApp'
@@ -167,7 +168,7 @@ export async function deleteDraft(uid: string): Promise<void> {
 export async function createDraft(draft: Lesson): Promise<string> {
   try {
     if (!auth.currentUser) throw new Error('Not logged in')
-    draft.uid = Date.now().toString()
+    draft.uid = `${auth.currentUser.uid}-${Date.now().toString()}`
     await setDoc(doc(collection(firestore, 'drafts'), draft.uid), draft)
     return draft.uid
   } catch (e) {
@@ -357,6 +358,69 @@ export async function logTagView(tagText: string): Promise<void> {
   }
 }
 
+/**
+ * Deletes an image at a URL.
+ * @param url
+ * @returns
+ */
 export async function deleteImageAtUrl(url: string): Promise<void> {
   return deleteObject(ref(storage, url))
+}
+
+export async function createPath(path: Path): Promise<string> {
+  try {
+    if (!auth.currentUser) throw new Error('Not logged in')
+    path.uid = `${auth.currentUser.uid}-${Date.now().toString()}`
+    await setDoc(doc(collection(firestore, 'paths'), path.uid), path)
+    return path.uid
+  } catch (e) {
+    console.error(path)
+    exception(e as string)
+    throw e
+  }
+}
+
+export async function updatePath(path: Path) {
+  try {
+    assert(path.uid)
+    await setDoc(doc(collection(firestore, 'paths'), path.uid), path)
+  } catch (e) {
+    console.error(path)
+    exception(e as string)
+    throw e
+  }
+}
+
+/**
+ * Gets a path from firestore.
+ *
+ * @param uid the ID of the path to fetch
+ * @returns
+ */
+export async function getPath(uid: string): Promise<Path> {
+  try {
+    if (!auth.currentUser) throw new Error('Not logged in')
+    return (
+      await getDoc(doc(collection(firestore, 'paths'), uid))
+    ).data() as Path
+  } catch (e) {
+    exception(e as string)
+    throw e
+  }
+}
+
+/**
+ * Deletes a path from firestore.
+ *
+ * @param uid the ID of the path to delete
+ * @returns
+ */
+export async function deletePath(uid: string): Promise<void> {
+  try {
+    if (!auth.currentUser) throw new Error('Not logged in')
+    return await deleteDoc(doc(collection(firestore, 'paths'), uid))
+  } catch (e) {
+    exception(e as string)
+    throw e
+  }
 }
