@@ -54,9 +54,6 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
                       }}
                     />
                     <AddButton
-                      onClick={() => {
-                        console.error('not done')
-                      }}
                       items={
                         <>
                           <Heading

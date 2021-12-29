@@ -20,14 +20,13 @@ const MultipleChoiceRenderer = ({
   <NodeViewWrapper>
     <NodeViewContent>
       <div
-        className="p-4 my-4 rounded-xl border-2 border-zinc-200"
+        className="p-4 my-4 border-2 rounded-xl border-zinc-200"
         data-drag-handle=""
       >
         {editor.isEditable && (
           <MultipleChoiceEditorComponent
             {...node.attrs}
             onUpdate={(attrs) => {
-              console.log(attrs)
               updateAttributes(attrs)
             }}
           />
