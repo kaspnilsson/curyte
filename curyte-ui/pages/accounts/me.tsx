@@ -74,7 +74,10 @@ const MySettingsView = () => {
       }
 
       const fetchLessons = async () => {
-        getLessons([where('authorId', '==', user.uid)]).then((res) => {
+        getLessons([
+          where('authorId', '==', user.uid),
+          where('private', '==', false),
+        ]).then((res) => {
           setLessons(res)
         })
       }

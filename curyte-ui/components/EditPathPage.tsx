@@ -18,6 +18,7 @@ import { v4 as uuidv4 } from 'uuid'
 import UnitEditor from './UnitEditor'
 import { Lesson } from '../interfaces/lesson'
 import { getLessons } from '../firebase/api'
+import { where } from 'firebase/firestore'
 
 interface Props {
   path: Path
@@ -58,13 +59,7 @@ const EditPathPage = ({ path, user, handleUpdate }: Props) => {
 
     if (toFetch.length) {
       const fetchLessons = async () => {
-        const newLessons = await getLessons([
-          {
-            fieldPath: 'uid',
-            opStr: 'in',
-            value: toFetch,
-          },
-        ])
+        const newLessons = await getLessons([where('uid', 'in', toFetch)])
         const clone = { ...lessonsByUid }
         for (const lesson of newLessons) {
           clone[lesson.uid] = lesson

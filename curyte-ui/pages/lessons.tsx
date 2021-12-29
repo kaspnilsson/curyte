@@ -28,7 +28,10 @@ const SearchPage = ({ lessons }: Props) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const lessons = await getLessons([where('featured', '==', true)])
+  const lessons = await getLessons([
+    where('featured', '==', true),
+    where('private', '==', false),
+  ])
 
   return {
     props: { lessons },
