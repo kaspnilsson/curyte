@@ -54,7 +54,10 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const [tag = null, lessons = null] = await Promise.all([
     getTag(query.tag as string),
     // Could also use the lesson IDs from the tag directly
-    getLessons([where('tags', 'array-contains', query.tag as string)]),
+    getLessons([
+      where('tags', 'array-contains', query.tag as string),
+      where('private', '==', false),
+    ]),
   ])
   return {
     props: { tag, lessons, tagText },

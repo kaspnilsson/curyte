@@ -48,7 +48,10 @@ const UserView = ({ lessons, author }: Props) => {
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const author = await getAuthor(query.id as string)
 
-  const lessons = await getLessons([where('authorId', '==', author.uid)])
+  const lessons = await getLessons([
+    where('authorId', '==', author.uid),
+    where('private', '==', false),
+  ])
   return {
     props: { lessons, author },
   }
