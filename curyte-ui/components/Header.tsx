@@ -18,10 +18,6 @@ import {
   InputGroup,
   InputLeftElement,
   useDisclosure,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalOverlay,
 } from '@chakra-ui/react'
 import Head from 'next/head'
 import Avatar from './Avatar'
@@ -36,7 +32,7 @@ import {
 } from '../utils/routes'
 import { sky } from '../styles/theme/colors'
 import { useRouter } from 'next/router'
-import Search from './Search'
+import LessonSearchModal from './LessonSearchModal'
 
 type Props = {
   showProgressBar?: boolean
@@ -211,14 +207,7 @@ const Header = ({
             }}
           />
         )}
-        <Modal isOpen={isOpen} onClose={onClose} size="xl">
-          <ModalOverlay />
-          <ModalContent maxW="80vw" maxH="80vh" className="overflow-auto">
-            <ModalBody>
-              <Search />
-            </ModalBody>
-          </ModalContent>
-        </Modal>
+        <LessonSearchModal isOpen={isOpen} onClose={onClose} />
       </div>
     </>
   )
