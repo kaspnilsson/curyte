@@ -46,6 +46,7 @@ type Props = {
   handleDelete?: () => void
   handleEdit?: () => void
   handlePublish?: () => void
+  handleToggleFeatured?: () => void
   isDraft: boolean
 }
 
@@ -55,6 +56,7 @@ const LessonHeader = ({
   handleDelete,
   handleEdit,
   handlePublish,
+  handleToggleFeatured,
   isDraft,
 }: Props) => {
   const router = useRouter()
@@ -198,6 +200,12 @@ const LessonHeader = ({
                   <MenuItem onClick={handleEdit}>
                     <PencilAltIcon className="w-5 h-5 mr-4 text-inherit" />
                     Edit lesson
+                  </MenuItem>
+                )}
+                {handleToggleFeatured && (
+                  <MenuItem onClick={handleToggleFeatured}>
+                    <PencilAltIcon className="w-5 h-5 mr-4 text-inherit" />
+                    {lesson.featured ? 'Unfeature' : 'Feature'} lesson
                   </MenuItem>
                 )}
                 {handleDelete && (

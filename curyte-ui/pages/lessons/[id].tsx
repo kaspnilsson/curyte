@@ -27,6 +27,7 @@ import {
   getLesson,
   getAuthor,
 } from '../../firebase/api'
+import { userIsAdmin } from '../../utils/hacks'
 
 interface Props {
   lesson: Lesson
@@ -59,6 +60,10 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
   const openGraphImages = []
   if (lesson.coverImageUrl) {
     openGraphImages.push({ url: lesson.coverImageUrl })
+  }
+
+  const handleToggleFeatured = () => {
+    setLessonFeatured()
   }
   return (
     <>
@@ -97,6 +102,11 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
                 handleEdit={
                   user && user.uid === lesson.authorId
                     ? () => router.push(editLessonRoute(lesson.uid))
+                    : undefined
+                }
+                handleToggleFeatured={
+                  user && userIsAdmin(user.uid)
+                    ? handleToggleFeatured
                     : undefined
                 }
               />

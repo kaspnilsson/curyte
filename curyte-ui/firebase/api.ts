@@ -229,6 +229,21 @@ export async function updateLesson(lesson: Lesson): Promise<string> {
   }
 }
 
+export async function setLessonFeatured(
+  uid: string,
+  featured: boolean
+): Promise<void> {
+  try {
+    assert(uid)
+    await updateDoc(doc(collection(firestore, 'lessons'), uid), {
+      featured,
+    })
+  } catch (e) {
+    exception(e as string)
+    throw e
+  }
+}
+
 export async function logLessonView(uid: string): Promise<void> {
   try {
     updateDoc(doc(collection(firestore, 'lessons'), uid), {
