@@ -57,7 +57,7 @@ const DraftView = ({ id }: Props) => {
     await p
     setDraft(l)
     setSavingPromise(null)
-  }, 100)
+  }, 500)
 
   const handleUpdate = async (l: Lesson) => {
     if (loading || !l.uid) return

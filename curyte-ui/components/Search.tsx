@@ -18,35 +18,44 @@ import {
   SearchBoxProvided,
 } from 'react-instantsearch-core'
 import { SearchIcon } from '@heroicons/react/outline'
+import { debounce } from 'ts-debounce'
 const searchClient = algoliasearch(
   'J2RQN6DLHP',
   'fad56d06d43541b6bdf0e83a4bdc12f5'
 )
 
-const SearchBox = ({
-  currentRefinement,
-  isSearchStalled,
-  refine,
-}: SearchBoxProvided) => (
-  <InputGroup className="w-full" size="lg">
-    <InputLeftElement>
-      <SearchIcon className="w-5 h-5 text-zinc-500" />
-    </InputLeftElement>
-    <Input
-      placeholder="Search..."
-      variant="filled"
-      autoFocus
-      colorScheme="black"
-      value={currentRefinement}
-      onChange={(e) => refine(e.currentTarget.value)}
-    />
-    {isSearchStalled && (
-      <InputRightElement>
-        <Spinner></Spinner>
-      </InputRightElement>
-    )}
-  </InputGroup>
-)
+const SearchBox = ({ isSearchStalled, refine }: SearchBoxProvided) => {
+  const [query, setQuery] = useState('')
+
+  const debouncedRefine = debounce((q: string) => {
+    refine(q)
+  }, 500)
+
+  const refineQuery = (q: string) => {
+    setQuery(q)
+    debouncedRefine(q)
+  }
+  return (
+    <InputGroup className="w-full" size="lg">
+      <InputLeftElement>
+        <SearchIcon className="w-5 h-5 text-zinc-500" />
+      </InputLeftElement>
+      <Input
+        placeholder="Search..."
+        variant="filled"
+        autoFocus
+        colorScheme="black"
+        value={query}
+        onChange={(e) => refineQuery(e.currentTarget.value)}
+      />
+      {isSearchStalled && (
+        <InputRightElement>
+          <Spinner></Spinner>
+        </InputRightElement>
+      )}
+    </InputGroup>
+  )
+}
 
 // 2. Connect the component using the connector
 const CustomSearchBox = connectSearchBox(SearchBox)
