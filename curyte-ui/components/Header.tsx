@@ -130,7 +130,7 @@ const Header = ({
               </Button>
             </Link>
             {withSearch && (
-              <div className="mx-4 md:mx-8" onClick={onOpen}>
+              <div className="flex-1 mx-4 md:mx-8 lg:mx-24" onClick={onOpen}>
                 <InputGroup className="w-96" size="lg">
                   <InputLeftElement>
                     <SearchIcon className="w-5 h-5 text-zinc-500" />

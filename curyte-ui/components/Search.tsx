@@ -51,20 +51,30 @@ const SearchBox = ({
 // 2. Connect the component using the connector
 const CustomSearchBox = connectSearchBox(SearchBox)
 
+interface CustomHitsProps extends Partial<InfiniteHitsProvided> {
+  onSelect?: (l: Lesson) => void
+}
+
 const Hits = ({
   hits,
   hasPrevious,
   refinePrevious,
   hasMore,
   refineNext,
-}: InfiniteHitsProvided) => {
+  onSelect,
+}: CustomHitsProps) => {
   return (
     <div className="flex flex-col items-center">
-      <div className="flex flex-wrap justify-center w-full gap-4 mt-8">
-        {hits.map((lesson: Lesson) => (
-          <LessonPreview lesson={lesson} key={lesson.uid} />
-        ))}
-        {!hits.length && 'None found!'}
+      <div className="flex flex-wrap justify-center w-full gap-4 pt-4 mt-4 border-t-2 border-zinc-200">
+        {hits &&
+          hits.map((lesson: Lesson) => (
+            <LessonPreview
+              onClick={onSelect}
+              lesson={lesson}
+              key={lesson.uid}
+            />
+          ))}
+        {!hits?.length && 'None found!'}
       </div>
       <div className="items-center mt-8">
         <Button isDisabled={!hasPrevious} onClick={refinePrevious}>
@@ -77,13 +87,13 @@ const Hits = ({
     </div>
   )
 }
-const CustomHits = connectInfiniteHits(Hits)
+const CustomHits = connectInfiniteHits<CustomHitsProps, Lesson>(Hits)
 
 interface SearchProps {
   onSelect?: (l: Lesson) => void
 }
 
-const Search = ({}: SearchProps) => {
+const Search = ({ onSelect }: SearchProps) => {
   const [query, setQuery] = useState('')
   return (
     <div>
@@ -96,7 +106,7 @@ const Search = ({}: SearchProps) => {
       >
         <Configure hitsPerPage={9} />
         <CustomSearchBox />
-        {query && <CustomHits />}
+        {query && <CustomHits onSelect={onSelect} />}
       </InstantSearch>
     </div>
   )
