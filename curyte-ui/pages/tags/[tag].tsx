@@ -8,6 +8,7 @@ import { auth } from '../../firebase/clientApp'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getLessons, getTag, logTagView } from '../../firebase/api'
 import LessonList from '../../components/LessonList'
+import { where } from 'firebase/firestore'
 
 type Props = {
   tagText: string
@@ -53,13 +54,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const [tag = null, lessons = null] = await Promise.all([
     getTag(query.tag as string),
     // Could also use the lesson IDs from the tag directly
-    getLessons([
-      {
-        fieldPath: 'tags',
-        opStr: 'array-contains',
-        value: query.tag as string,
-      },
-    ]),
+    getLessons([where('tags', 'array-contains', query.tag as string)]),
   ])
   return {
     props: { tag, lessons, tagText },

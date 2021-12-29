@@ -1,14 +1,15 @@
 import { useAuthState } from 'react-firebase-hooks/auth'
 import React, { useEffect, useState } from 'react'
-import { Lesson } from '../../interfaces/lesson'
-import LoadingSpinner from '../../components/LoadingSpinner'
-import { auth } from '../../firebase/clientApp'
-import DraftLink from '../../components/DraftLink'
-import { deleteDraft, getDrafts } from '../../firebase/api'
+import { Lesson } from '../interfaces/lesson'
+import LoadingSpinner from './LoadingSpinner'
+import { auth } from '../firebase/clientApp'
 import { Tooltip, IconButton, useToast } from '@chakra-ui/react'
 import { TrashIcon } from '@heroicons/react/outline'
+import { where } from 'firebase/firestore'
+import { deleteLesson, getLessons } from '../firebase/api'
+import LessonLink from './LessonLink'
 
-const DraftsPage = () => {
+const DraftsList = () => {
   const toast = useToast()
   const [user, userLoading] = useAuthState(auth)
   const [drafts, setDrafts] = useState<Lesson[]>([])
@@ -18,18 +19,19 @@ const DraftsPage = () => {
     if (!user) return
     setLoading(true)
 
-    getDrafts([{ fieldPath: 'authorId', opStr: '==', value: user.uid }]).then(
-      (res) => {
-        setLoading(false)
-        setDrafts(res)
-      }
-    )
+    getLessons([
+      where('authorId', '==', user.uid),
+      where('private', '==', true),
+    ]).then((res) => {
+      setLoading(false)
+      setDrafts(res)
+    })
   }, [user])
 
   const localDeleteDraft = async (uid: string) => {
     setLoading(true)
     try {
-      await deleteDraft(uid)
+      await deleteLesson(uid)
 
       setDrafts(drafts.filter((d) => d.uid !== uid))
       toast({ title: 'Draft deleted!', status: 'success' })
@@ -51,7 +53,7 @@ const DraftsPage = () => {
         <>
           {drafts.map((draft) => (
             <div className="flex items-center gap-1 mb-1 group" key={draft.uid}>
-              <DraftLink draft={draft} />
+              <LessonLink lesson={draft} />
               <Tooltip label="Delete draft">
                 <IconButton
                   aria-label="Delete draft"
@@ -72,4 +74,4 @@ const DraftsPage = () => {
   )
 }
 
-export default DraftsPage
+export default DraftsList

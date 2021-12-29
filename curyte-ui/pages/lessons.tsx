@@ -5,6 +5,7 @@ import Container from '../components/Container'
 import { GetServerSideProps } from 'next'
 import { getLessons } from '../firebase/api'
 import LessonList from '../components/LessonList'
+import { where } from 'firebase/firestore'
 
 interface Props {
   lessons: Lesson[]
@@ -27,13 +28,7 @@ const SearchPage = ({ lessons }: Props) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const lessons = await getLessons([
-    {
-      fieldPath: 'featured',
-      opStr: '==',
-      value: true,
-    },
-  ])
+  const lessons = await getLessons([where('featured', '==', true)])
 
   return {
     props: { lessons },

@@ -97,7 +97,6 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
                 <title>{lesson.title}</title>
               </Head>
               <LessonHeader
-                isDraft={false}
                 author={author}
                 lesson={lesson}
                 handleDelete={
@@ -130,7 +129,7 @@ interface IParams extends ParsedUrlQuery {
 }
 
 // export const getStaticPaths: GetStaticPaths = async () => {
-//   const lessons = await getLessons([])
+//   const lessons = await getLessons([where('private', '==', false)])
 //   const paths = lessons.map(({ uid }) => ({
 //     params: { id: uid },
 //   }))
