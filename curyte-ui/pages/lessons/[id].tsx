@@ -26,8 +26,10 @@ import {
   deleteLesson,
   getLesson,
   getAuthor,
+  setLessonFeatured,
 } from '../../firebase/api'
 import { userIsAdmin } from '../../utils/hacks'
+import { useToast } from '@chakra-ui/react'
 
 interface Props {
   lesson: Lesson
@@ -38,6 +40,7 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [user, userLoading] = useAuthState(auth)
+  const toast = useToast()
   // Log views only on render of a published lesson
   useEffect(() => {
     logLessonView(lesson.uid)
@@ -62,8 +65,11 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
     openGraphImages.push({ url: lesson.coverImageUrl })
   }
 
-  const handleToggleFeatured = () => {
-    setLessonFeatured()
+  const handleToggleFeatured = async () => {
+    await setLessonFeatured(lesson.uid, !lesson.featured)
+    toast({
+      title: `Lesson featured state set to ${!lesson.featured}`,
+    })
   }
   return (
     <>

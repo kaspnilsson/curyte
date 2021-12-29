@@ -64,6 +64,7 @@ const LessonHeader = ({
   const [, setLoading] = useState(false)
   const [parentLesson, setParentLesson] = useState<Lesson | null>(null)
   const [isSaved, setIsSaved] = useState(false)
+  const [featured, setFeatured] = useState(lesson.featured || false)
 
   useEffect(() => {
     if (!user || userLoading) return
@@ -203,9 +204,18 @@ const LessonHeader = ({
                   </MenuItem>
                 )}
                 {handleToggleFeatured && (
-                  <MenuItem onClick={handleToggleFeatured}>
-                    <PencilAltIcon className="w-5 h-5 mr-4 text-inherit" />
-                    {lesson.featured ? 'Unfeature' : 'Feature'} lesson
+                  <MenuItem
+                    onClick={() => {
+                      setFeatured(!featured)
+                      handleToggleFeatured()
+                    }}
+                  >
+                    {featured ? (
+                      <i className="mr-4 text-lg ri-lightbulb-flash-line text-inherit" />
+                    ) : (
+                      <i className="mr-4 text-lg ri-lightbulb-flash-fill text-inherit" />
+                    )}
+                    {featured ? 'Unfeature' : 'Feature'} lesson
                   </MenuItem>
                 )}
                 {handleDelete && (
