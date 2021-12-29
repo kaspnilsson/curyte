@@ -14,6 +14,14 @@ import {
   Portal,
   IconButton,
   Tooltip,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  useDisclosure,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalOverlay,
 } from '@chakra-ui/react'
 import Head from 'next/head'
 import Avatar from './Avatar'
@@ -28,21 +36,23 @@ import {
 } from '../utils/routes'
 import { sky } from '../styles/theme/colors'
 import { useRouter } from 'next/router'
+import Search from './Search'
 
 type Props = {
-  children: React.ReactNode
   showProgressBar?: boolean
   title: string
   isSticky?: boolean
+  withSearch?: boolean
 }
 
 const Header = ({
-  children,
   showProgressBar,
   title,
   isSticky = true,
+  withSearch = true,
 }: Props) => {
   const [isStuck, setStuck] = useState(false)
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const [progress, setProgress] = useState(0)
   const router = useRouter()
 
@@ -119,9 +129,21 @@ const Header = ({
                 </h2>
               </Button>
             </Link>
-            <div className="flex flex-grow mx-4 md:mx-8 lg:mx-24">
-              {children}
-            </div>
+            {withSearch && (
+              <div className="mx-4 md:mx-8" onClick={onOpen}>
+                <InputGroup className="w-96" size="lg">
+                  <InputLeftElement>
+                    <SearchIcon className="w-5 h-5 text-zinc-500" />
+                  </InputLeftElement>
+                  <Input
+                    isReadOnly
+                    placeholder="Search lessons..."
+                    variant="filled"
+                    colorScheme="black"
+                  ></Input>
+                </InputGroup>
+              </div>
+            )}
             {!user && (
               <div className="flex items-center gap-2">
                 <Link passHref href={loginRoute()}>
@@ -134,7 +156,7 @@ const Header = ({
             )}
             {user && (
               <div className="flex items-center gap-2">
-                <Tooltip label="Search lessons">
+                {/* <Tooltip label="Search lessons">
                   <IconButton
                     aria-label="Search lessons"
                     onClick={() => router.push(lessonSearchRoute())}
@@ -142,7 +164,7 @@ const Header = ({
                     title="Start writing"
                     icon={<SearchIcon className="w-4 h-4 text-zinc-900" />}
                   />
-                </Tooltip>
+                </Tooltip> */}
                 <div className="relative">
                   <div className="rounded-full animated-border animate-spin-slow"></div>
                   <Tooltip label="Start writing">
@@ -189,6 +211,14 @@ const Header = ({
             }}
           />
         )}
+        <Modal isOpen={isOpen} onClose={onClose} size="xl">
+          <ModalOverlay />
+          <ModalContent maxW="80vw" maxH="80vh" className="overflow-auto">
+            <ModalBody>
+              <Search />
+            </ModalBody>
+          </ModalContent>
+        </Modal>
       </div>
     </>
   )

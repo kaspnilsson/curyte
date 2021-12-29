@@ -58,6 +58,7 @@ const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
   return (
     <Layout
       withFooter={false}
+      withSearch={false}
       isSticky={false}
       sidebar={<LessonOutline editor={editor} />}
     >

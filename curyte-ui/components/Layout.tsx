@@ -4,18 +4,18 @@ import Header from './Header'
 
 type Props = {
   children: React.ReactNode
-  headerChildren?: React.ReactNode
   withFooter?: boolean
   isSticky?: boolean
   showProgressBar?: boolean
   title?: string
   sidebar?: React.ReactNode
   className?: string
+  withSearch?: boolean
 }
 
 const Layout = ({
   children,
-  headerChildren,
+  withSearch = true,
   withFooter = true,
   isSticky = true,
   showProgressBar,
@@ -29,10 +29,9 @@ const Layout = ({
         <Header
           showProgressBar={showProgressBar}
           isSticky={isSticky}
+          withSearch={withSearch}
           title={title}
-        >
-          {headerChildren}
-        </Header>
+        ></Header>
         <div className="flex flex-col max-w-full md:flex-row">
           {sidebar && (
             <>
