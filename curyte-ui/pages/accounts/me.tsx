@@ -20,12 +20,13 @@ import {
 } from '@chakra-ui/react'
 import TextareaAutosize from 'react-textarea-autosize'
 import LoadingSpinner from '../../components/LoadingSpinner'
-import DraftsPage from '../drafts/all'
+import DraftsList from '../../components/DraftsList'
 import { Lesson } from '../../interfaces/lesson'
 import { useErrorHandler } from 'react-error-boundary'
 import { indexRoute } from '../../utils/routes'
 import { getAuthor, getLessons, updateAuthor } from '../../firebase/api'
 import LessonList from '../../components/LessonList'
+import { where } from 'firebase/firestore'
 
 const MySettingsView = () => {
   const router = useRouter()
@@ -56,13 +57,7 @@ const MySettingsView = () => {
           .then((author) => {
             setAuthor(author)
             if (author.savedLessons?.length) {
-              return getLessons([
-                {
-                  fieldPath: 'uid',
-                  opStr: 'in',
-                  value: author.savedLessons || [],
-                },
-              ])
+              return getLessons([where('uid', 'in', author.savedLessons || [])])
                 .then((res) => {
                   res.sort(
                     (a, b) =>
@@ -80,7 +75,8 @@ const MySettingsView = () => {
 
       const fetchLessons = async () => {
         getLessons([
-          { fieldPath: 'authorId', opStr: '==', value: user.uid },
+          where('authorId', '==', user.uid),
+          where('private', '==', false),
         ]).then((res) => {
           setLessons(res)
         })
@@ -155,7 +151,7 @@ const MySettingsView = () => {
                       <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                         Drafts
                       </h2>
-                      <DraftsPage />
+                      <DraftsList />
                     </div>
                   </section>
                 </TabPanel>

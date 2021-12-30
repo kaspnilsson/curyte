@@ -8,6 +8,7 @@ import SocialLinks from '../../components/SocialLinks'
 import Avatar from '../../components/Avatar'
 import { getAuthor, getLessons } from '../../firebase/api'
 import LessonList from '../../components/LessonList'
+import { where } from 'firebase/firestore'
 
 type Props = {
   lessons: Lesson[]
@@ -48,7 +49,8 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const author = await getAuthor(query.id as string)
 
   const lessons = await getLessons([
-    { opStr: '==', value: author.uid, fieldPath: 'authorId' },
+    where('authorId', '==', author.uid),
+    where('private', '==', false),
   ])
   return {
     props: { lessons, author },

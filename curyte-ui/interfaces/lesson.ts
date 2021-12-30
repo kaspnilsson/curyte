@@ -15,4 +15,5 @@ export declare interface Lesson {
   tags?: string[]
   coverImageUrl?: string
   featured?: boolean
+  private?: boolean
 }

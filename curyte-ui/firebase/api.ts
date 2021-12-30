@@ -1,5 +1,6 @@
 import assert from 'assert'
 import { compareDesc, parseISO } from 'date-fns'
+import { v4 as uuidv4 } from 'uuid'
 import {
   FieldPath,
   WhereFilterOp,
@@ -9,13 +10,13 @@ import {
   collection,
   getDocs,
   query,
-  where,
   doc,
   getDoc,
   deleteDoc,
   setDoc,
   increment,
   updateDoc,
+  QueryConstraint,
 } from 'firebase/firestore'
 import { deleteObject, ref } from 'firebase/storage'
 import { Author, SavedLesson } from '../interfaces/author'
@@ -38,14 +39,12 @@ export interface WhereClause {
  * @returns
  */
 export async function getLessons(
-  whereClauses: WhereClause[]
+  queryConstraints: QueryConstraint[]
 ): Promise<Lesson[]> {
   try {
     const q: CollectionReference<DocumentData> | Query<DocumentData> = query(
       collection(firestore, 'lessons'),
-      ...whereClauses.map(({ fieldPath, opStr, value }) =>
-        where(fieldPath, opStr, value)
-      )
+      ...queryConstraints
     )
     return getDocs(q).then((result) => {
       const mapped: Lesson[] = []
@@ -53,38 +52,6 @@ export async function getLessons(
       return mapped.sort((a, b) =>
         compareDesc(parseISO(a.created), parseISO(b.created))
       )
-    })
-  } catch (e) {
-    exception(e as string)
-    throw e
-  }
-}
-
-/**
- * Gets lessons from firestore by applying clauses.
- *
- * @param whereClauses
- * @returns
- */
-export async function getDrafts(
-  whereClauses: WhereClause[] = []
-): Promise<Lesson[]> {
-  try {
-    const q: CollectionReference<DocumentData> | Query<DocumentData> = query(
-      collection(firestore, 'drafts'),
-      ...whereClauses.map(({ fieldPath, opStr, value }) =>
-        where(fieldPath, opStr, value)
-      )
-    )
-    return getDocs(q).then((result) => {
-      const mapped: Lesson[] = []
-      result.docs.forEach((result) => mapped.push(result.data() as Lesson))
-      mapped.sort(
-        (a, b) =>
-          parseISO(b.created).getMilliseconds() -
-          parseISO(a.created).getMilliseconds()
-      )
-      return mapped
     })
   } catch (e) {
     exception(e as string)
@@ -110,24 +77,6 @@ export async function getLesson(uid: string): Promise<Lesson> {
 }
 
 /**
- * Gets a lesson from firestore.
- *
- * @param uid the ID of the lesson to fetch
- * @returns
- */
-export async function getDraft(uid: string): Promise<Lesson> {
-  try {
-    if (!auth.currentUser) throw new Error('Not logged in')
-    return (
-      await getDoc(doc(collection(firestore, 'drafts'), uid))
-    ).data() as Lesson
-  } catch (e) {
-    exception(e as string)
-    throw e
-  }
-}
-
-/**
  * Deletes a lesson from firestore.
  *
  * @param uid the ID of the lesson to fetch
@@ -144,71 +93,15 @@ export async function deleteLesson(uid: string): Promise<void> {
 }
 
 /**
- * Deletes a lesson from firestore.
- *
- * @param uid the ID of the lesson to fetch
+ * Creates a new lesson.
+ * @param lesson
  * @returns
  */
-export async function deleteDraft(uid: string): Promise<void> {
+export async function createLesson(lesson: Lesson): Promise<string> {
   try {
     if (!auth.currentUser) throw new Error('Not logged in')
-    return await deleteDoc(doc(collection(firestore, 'drafts'), uid))
-  } catch (e) {
-    exception(e as string)
-    throw e
-  }
-}
-
-/**
- * Updates a lesson. Creates a new lesson if no UID is provided.
- * @param draft
- * @returns
- */
-export async function createDraft(draft: Lesson): Promise<string> {
-  try {
-    if (!auth.currentUser) throw new Error('Not logged in')
-    draft.uid = Date.now().toString()
-    await setDoc(doc(collection(firestore, 'drafts'), draft.uid), draft)
-    return draft.uid
-  } catch (e) {
-    console.error(draft)
-    exception(e as string)
-    throw e
-  }
-}
-
-/**
- * Updates a lesson. Creates a new lesson if no UID is provided.
- * @param draft
- * @returns
- */
-export async function updateDraft(draft: Lesson): Promise<void> {
-  try {
-    assert(draft.uid)
-    await setDoc(doc(collection(firestore, 'drafts'), draft.uid), draft)
-  } catch (e) {
-    console.error(draft)
-    exception(e as string)
-    throw e
-  }
-}
-
-export async function publishLesson(
-  lesson: Lesson,
-  draftId?: string
-): Promise<string> {
-  try {
-    lesson.uid =
-      (lesson.title || 'lesson')
-        .toLocaleLowerCase()
-        .replace(/[^a-z 0-9]/g, '')
-        .replace(/ /g, '-')
-        .substring(0, 32) + `-${Date.now()}`
+    lesson.uid = uuidv4()
     await setDoc(doc(collection(firestore, 'lessons'), lesson.uid), lesson)
-    if (draftId) {
-      // Intentionally unawaited
-      deleteDoc(doc(collection(firestore, 'drafts'), draftId))
-    }
     return lesson.uid
   } catch (e) {
     console.error(lesson)
@@ -216,6 +109,23 @@ export async function publishLesson(
     throw e
   }
 }
+
+// export async function publishLesson(lesson: Lesson): Promise<string> {
+//   try {
+//     lesson.uid =
+//       (lesson.title || 'lesson')
+//         .toLocaleLowerCase()
+//         .replace(/[^a-z 0-9]/g, '')
+//         .replace(/ /g, '-')
+//         .substring(0, 32) + `-${Date.now()}`
+//     await setDoc(doc(collection(firestore, 'lessons'), lesson.uid), lesson)
+//     return lesson.uid
+//   } catch (e) {
+//     console.error(lesson)
+//     exception(e as string)
+//     throw e
+//   }
+// }
 
 export async function updateLesson(lesson: Lesson): Promise<string> {
   try {

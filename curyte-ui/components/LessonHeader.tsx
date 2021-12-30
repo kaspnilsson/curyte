@@ -47,7 +47,6 @@ type Props = {
   handleEdit?: () => void
   handlePublish?: () => void
   handleToggleFeatured?: () => void
-  isDraft: boolean
 }
 
 const LessonHeader = ({
@@ -57,7 +56,6 @@ const LessonHeader = ({
   handleEdit,
   handlePublish,
   handleToggleFeatured,
-  isDraft,
 }: Props) => {
   const router = useRouter()
   const [user, userLoading] = useAuthState(auth)
@@ -120,14 +118,14 @@ const LessonHeader = ({
             <LessonLink lesson={parentLesson} />
           </div>
         )}
-        {parentLesson && isDraft && (
+        {parentLesson && lesson.private && (
           <Center className="w-4 h-4 mx-2">
             <Divider orientation="vertical" />
           </Center>
         )}
-        {isDraft && (
+        {lesson.private && (
           <Badge variant="subtle" colorScheme="orange" className="h-min">
-            Draft
+            Private
           </Badge>
         )}
       </div>
@@ -168,7 +166,7 @@ const LessonHeader = ({
               <div className="hidden ml-2 md:flex">Publish</div>
             </Button>
           )}
-          {!isDraft && (
+          {!lesson.private && (
             <IconButton
               borderRadius="full"
               size="sm"
@@ -191,7 +189,7 @@ const LessonHeader = ({
             />
             <Portal>
               <MenuList>
-                {!isDraft && (
+                {!lesson.private && (
                   <MenuItem onClick={handleMakeCopy}>
                     <DuplicateIcon className="w-5 h-5 mr-4 text-inherit" />
                     Make a copy
