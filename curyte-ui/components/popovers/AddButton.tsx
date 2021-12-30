@@ -7,18 +7,16 @@ import {
 } from '@chakra-ui/react'
 
 interface Props {
-  onClick: () => void
   disabled?: boolean
   items: React.ReactNode
 }
 
-const AddButton = ({ onClick, disabled, items }: Props) => {
+const AddButton = ({ disabled, items }: Props) => {
   return (
     <Menu isLazy>
       <MenuButton
         as={IconButton}
         aria-label="add"
-        onClick={onClick}
         size="sm"
         colorScheme="zinc"
         variant="ghost"
