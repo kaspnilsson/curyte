@@ -41,3 +41,6 @@ export const lessonSearchRoute = (query?: string) => {
 }
 
 export const newPathRoute = '/paths/new'
+
+export const editPathRoute = (uid: string) => `/paths/edit/${uid}`
+export const editPathRouteHrefPath = '/paths/edit/[id]'

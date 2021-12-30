@@ -149,6 +149,17 @@ export async function logLessonView(uid: string): Promise<void> {
   }
 }
 
+export async function logPathView(uid: string): Promise<void> {
+  try {
+    updateDoc(doc(collection(firestore, 'paths'), uid), {
+      viewCount: increment(1),
+    })
+  } catch (e) {
+    exception(e as string)
+    throw e
+  }
+}
+
 /**
  * Gets an author from Firestore.
  *
@@ -278,7 +289,7 @@ export async function deleteImageAtUrl(url: string): Promise<void> {
 export async function createPath(path: Path): Promise<string> {
   try {
     if (!auth.currentUser) throw new Error('Not logged in')
-    path.uid = `${auth.currentUser.uid}-${Date.now().toString()}`
+    path.uid = uuidv4()
     await setDoc(doc(collection(firestore, 'paths'), path.uid), path)
     return path.uid
   } catch (e) {

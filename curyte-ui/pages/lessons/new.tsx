@@ -39,7 +39,7 @@ const NewLessonView = () => {
     createNewDraft()
   }, [router, router.query.copyFrom, user, userLoading])
 
-  return <LoadingSpinner />
+  return <LoadingSpinner message="Building lesson..." />
 }
 
 export default NewLessonView

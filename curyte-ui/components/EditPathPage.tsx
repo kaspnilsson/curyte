@@ -5,7 +5,7 @@ import { computeClassesForTitle } from './LessonTitle'
 import TextareaAutosize from 'react-textarea-autosize'
 import { useEffect, useState } from 'react'
 import Container from './Container'
-import { Accordion, Button } from '@chakra-ui/react'
+import { Accordion, Button, Heading, Spinner } from '@chakra-ui/react'
 import { PlusIcon } from '@heroicons/react/outline'
 import {
   DragDropContext,
@@ -19,14 +19,16 @@ import UnitEditor from './UnitEditor'
 import { Lesson } from '../interfaces/lesson'
 import { getLessons } from '../firebase/api'
 import { where } from 'firebase/firestore'
+import classNames from 'classnames'
 
 interface Props {
   path: Path
   user: Author
+  saving?: boolean
   handleUpdate: (p: Path) => Promise<void>
 }
 
-const EditPathPage = ({ path, user, handleUpdate }: Props) => {
+const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
   const [title, setTitle] = useState(path.title?.trim() || '')
   const [units, setUnits] = useState(path.units || [])
   const [lessonsByUid, setLessonsByUid] = useState<{ [uid: string]: Lesson }>(
@@ -37,9 +39,13 @@ const EditPathPage = ({ path, user, handleUpdate }: Props) => {
     setUnits([...units, { uid: uuidv4() } as Unit])
   }
 
-  const onDragEnd = (result: DropResult) => {
+  const onDragEnd = async (result: DropResult) => {
     if (!result.destination) return
-    console.error('todo')
+    const newUnits = [...units]
+    const [reorderedItem] = newUnits.splice(result.source.index, 1)
+    newUnits.splice(result.destination.index, 0, reorderedItem)
+    setUnits(newUnits)
+    await handleUpdate({ ...path, units: newUnits })
   }
 
   const onUnitUpdate = async (unit: Unit, index: number) => {
@@ -71,70 +77,84 @@ const EditPathPage = ({ path, user, handleUpdate }: Props) => {
   }, [lessonsByUid, units])
 
   return (
-    <Layout>
+    <Layout sidebar={<div></div>}>
       <Container className="px-5">
         <div className="flex">
-          <div className="flex flex-col flex-grow overflow-hidden">
+          <div className="flex flex-col flex-grow gap-2 overflow-hidden">
             <div className="flex items-center justify-between w-full">
               <TextareaAutosize
                 autoFocus
                 className={`${computeClassesForTitle(
                   title
-                )} font-semibold flex-grow resize-none tracking-tight leading-tight border-0`}
+                )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0 mx-4 mb-4`}
                 placeholder="Add a title to your path..."
                 value={title}
                 onChange={({ target }) => setTitle(target.value)}
               />
             </div>
-            <div className="flex flex-col gap-8 py-8">
-              <DragDropContext onDragEnd={onDragEnd}>
-                <div>
-                  <Droppable droppableId="units">
-                    {(provided: DroppableProvided) => (
-                      <Accordion
-                        allowMultiple
-                        allowToggle
-                        className="my-8 units"
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                      >
-                        {units.map((u, index) => (
-                          <Draggable
-                            key={u.uid}
-                            draggableId={u.uid}
-                            index={index}
-                          >
-                            {(provided) => (
-                              <span
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                              >
-                                <UnitEditor
-                                  unit={u}
-                                  lessonsByUid={lessonsByUid}
-                                  user={user}
-                                  onUpdate={(u) => onUnitUpdate(u, index)}
-                                />
-                              </span>
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
-                      </Accordion>
-                    )}
-                  </Droppable>
-                  <Button
-                    className="flex items-center gap-1 w-fit-content"
-                    colorScheme="black"
-                    onClick={() => addUnit()}
-                  >
-                    <PlusIcon className="w-4 h-4" />
-                    Add unit
-                  </Button>
+            <Heading
+              className="flex items-center justify-between mx-4 font-bold leading-tight tracking-tight"
+              fontSize="3xl"
+            >
+              Units
+              {saving && (
+                <div className="flex items-center gap-2 text-base">
+                  Saving...
+                  <Spinner />
                 </div>
-              </DragDropContext>
-            </div>
+              )}
+            </Heading>
+            <DragDropContext onDragEnd={onDragEnd}>
+              <div>
+                <Droppable droppableId="units">
+                  {(provided: DroppableProvided) => (
+                    <Accordion
+                      allowMultiple
+                      allowToggle
+                      className=" units"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      {units.map((u, index) => (
+                        <Draggable
+                          key={u.uid}
+                          draggableId={u.uid}
+                          index={index}
+                        >
+                          {(provided, snapshot) => (
+                            <span
+                              className={classNames({
+                                'bg-zinc-50 shadow-xl rounded-xl':
+                                  snapshot.isDragging,
+                              })}
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <UnitEditor
+                                unit={u}
+                                lessonsByUid={lessonsByUid}
+                                user={user}
+                                onUpdate={(u) => onUnitUpdate(u, index)}
+                              />
+                            </span>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </Accordion>
+                  )}
+                </Droppable>
+                <Button
+                  className="flex items-center gap-1 mx-4 my-8 w-fit-content"
+                  colorScheme="black"
+                  onClick={() => addUnit()}
+                >
+                  <PlusIcon className="w-4 h-4" />
+                  Add unit
+                </Button>
+              </div>
+            </DragDropContext>
           </div>
         </div>
       </Container>

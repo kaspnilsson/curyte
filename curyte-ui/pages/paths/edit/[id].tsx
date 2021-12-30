@@ -65,7 +65,7 @@ const EditPathView = ({ id }: Props) => {
     await p
     setPath(l)
     setSavingPromise(null)
-  }, 100)
+  }, 500)
 
   const handleUpdate = async (l: Path) => {
     if (loading || !l.uid) return
@@ -80,6 +80,7 @@ const EditPathView = ({ id }: Props) => {
       {!loading && path && (
         <EditPathPage
           path={path}
+          saving={!!savingPromise}
           user={user as unknown as Author}
           handleUpdate={handleUpdate}
         />
