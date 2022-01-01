@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import { JSONContent } from '@tiptap/react'
 
 import Layout from './Layout'
@@ -17,7 +17,11 @@ type Props = {
   handleUpdate: (l: Partial<Lesson>) => void
 }
 
+const prepareTagStr = (str?: string): string[] =>
+  (str || '').split(', ').map((s) => s.replace('#', '').trim())
+
 const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
+  console.log(lesson)
   const [title, setTitle] = useState(lesson?.title?.trim() || '')
   const [description, setDescription] = useState(
     lesson?.description?.trim() || ''
@@ -30,30 +34,18 @@ const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
 
   const handleContentUpdate = useDebounceCallback((json: JSONContent) => {
     setContent(json)
+    handleUpdate({ ...lesson, content: json })
   }, 100)
 
   const onCoverImageUpload = (url: string) => {
-    // Unawaited
     setCoverImageUrl(url)
+    handleUpdate({ ...lesson, coverImageUrl: url })
   }
 
   const editor = useCuryteEditor({ content, onUpdate: handleContentUpdate }, [
     lesson?.uid,
     handleContentUpdate,
   ])
-
-  useEffect(() => {
-    handleUpdate({
-      ...lesson,
-      title,
-      description,
-      tags: tagsStr.split(', '),
-      content,
-      coverImageUrl,
-    })
-    // Disable exhaustive deps so that we dont recompute lesson constantly
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [content, coverImageUrl, description, tagsStr, title, lesson?.uid])
 
   return (
     <Layout
@@ -72,20 +64,32 @@ const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
               )} font-semibold flex-grow resize-none tracking-tight leading-tight border-0`}
               placeholder="Add a title..."
               value={title}
-              onChange={({ target }) => setTitle(target.value)}
+              onChange={({ target }) => {
+                setTitle(target.value)
+                handleUpdate({ ...lesson, title: target.value })
+              }}
             />
           </div>
           <TextareaAutosize
             className="mt-1 text-2xl border-0 resize-none text-zinc-500"
             placeholder="Add a learning objective..."
             value={description}
-            onChange={({ target }) => setDescription(target.value)}
+            onChange={({ target }) => {
+              setDescription(target.value)
+              handleUpdate({ ...lesson, description: target.value })
+            }}
           />
           <TextareaAutosize
             className="mt-4 text-xl border-0 resize-none"
             placeholder="Add a comma separated list of tags..."
             value={tagsStr}
-            onChange={({ target }) => setTagsStr(target.value)}
+            onChange={({ target }) => {
+              setTagsStr(target.value)
+              handleUpdate({
+                ...lesson,
+                tags: prepareTagStr(target.value),
+              })
+            }}
           />
           <EditableCoverImage
             title={lesson?.title || ''}
