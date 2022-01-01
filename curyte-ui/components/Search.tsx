@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { FormEvent, useState } from 'react'
 import algoliasearch from 'algoliasearch/lite'
 import { InstantSearch, connectSearchBox } from 'react-instantsearch-dom'
 import { Lesson } from '../interfaces/lesson'
@@ -9,7 +9,6 @@ import {
   InputGroup,
   InputLeftElement,
   InputRightElement,
-  Spinner,
 } from '@chakra-ui/react'
 import {
   Configure,
@@ -18,42 +17,45 @@ import {
   SearchBoxProvided,
 } from 'react-instantsearch-core'
 import { SearchIcon } from '@heroicons/react/outline'
-import { debounce } from 'ts-debounce'
 const searchClient = algoliasearch(
   'J2RQN6DLHP',
   'fad56d06d43541b6bdf0e83a4bdc12f5'
 )
 
-const SearchBox = ({ isSearchStalled, refine }: SearchBoxProvided) => {
+const SearchBox = ({ refine }: SearchBoxProvided) => {
   const [query, setQuery] = useState('')
-
-  const debouncedRefine = debounce((q: string) => {
-    refine(q)
-  }, 500)
 
   const refineQuery = (q: string) => {
     setQuery(q)
-    debouncedRefine(q)
   }
+
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    refine(query)
+  }
+
   return (
-    <InputGroup className="w-full" size="lg">
-      <InputLeftElement>
-        <SearchIcon className="w-5 h-5 text-zinc-500" />
-      </InputLeftElement>
-      <Input
-        placeholder="Search..."
-        variant="filled"
-        autoFocus
-        colorScheme="black"
-        value={query}
-        onChange={(e) => refineQuery(e.currentTarget.value)}
-      />
-      {isSearchStalled && (
+    <form onSubmit={onSubmit}>
+      <InputGroup className="w-full" size="lg">
+        <InputLeftElement>
+          <SearchIcon className="w-5 h-5 text-zinc-500" />
+        </InputLeftElement>
+        <Input
+          placeholder="Search..."
+          variant="filled"
+          autoFocus
+          colorScheme="black"
+          value={query}
+          onSubmit={onSubmit}
+          onChange={(e) => refineQuery(e.currentTarget.value)}
+        />
         <InputRightElement>
-          <Spinner></Spinner>
+          <Button colorScheme="black" className="mr-2" size="sm" type="submit">
+            Go
+          </Button>
         </InputRightElement>
-      )}
-    </InputGroup>
+      </InputGroup>
+    </form>
   )
 }
 
