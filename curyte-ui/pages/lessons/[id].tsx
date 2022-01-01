@@ -26,7 +26,10 @@ import {
   deleteLesson,
   getLesson,
   getAuthor,
+  setLessonFeatured,
 } from '../../firebase/api'
+import { userIsAdmin } from '../../utils/hacks'
+import { useToast } from '@chakra-ui/react'
 
 interface Props {
   lesson: Lesson
@@ -37,6 +40,7 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [user, userLoading] = useAuthState(auth)
+  const toast = useToast()
   // Log views only on render of a published lesson
   useEffect(() => {
     logLessonView(lesson.uid)
@@ -59,6 +63,13 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
   const openGraphImages = []
   if (lesson.coverImageUrl) {
     openGraphImages.push({ url: lesson.coverImageUrl })
+  }
+
+  const handleToggleFeatured = async () => {
+    await setLessonFeatured(lesson.uid, !lesson.featured)
+    toast({
+      title: `Lesson featured state set to ${!lesson.featured}`,
+    })
   }
   return (
     <>
@@ -86,7 +97,6 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
                 <title>{lesson.title}</title>
               </Head>
               <LessonHeader
-                isDraft={false}
                 author={author}
                 lesson={lesson}
                 handleDelete={
@@ -97,6 +107,11 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
                 handleEdit={
                   user && user.uid === lesson.authorId
                     ? () => router.push(editLessonRoute(lesson.uid))
+                    : undefined
+                }
+                handleToggleFeatured={
+                  user && userIsAdmin(user.uid)
+                    ? handleToggleFeatured
                     : undefined
                 }
               />
@@ -114,7 +129,7 @@ interface IParams extends ParsedUrlQuery {
 }
 
 // export const getStaticPaths: GetStaticPaths = async () => {
-//   const lessons = await getLessons([])
+//   const lessons = await getLessons([where('private', '==', false)])
 //   const paths = lessons.map(({ uid }) => ({
 //     params: { id: uid },
 //   }))

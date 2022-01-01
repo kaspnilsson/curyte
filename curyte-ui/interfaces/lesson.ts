@@ -14,4 +14,6 @@ export declare interface Lesson {
   content: JSONContent | null
   tags?: string[]
   coverImageUrl?: string
+  featured?: boolean
+  private?: boolean
 }
