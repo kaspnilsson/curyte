@@ -25,7 +25,7 @@ const AuthorLink = ({ author }: Props) => {
             passHref
           >
             <a className="ml-2 text-sm font-bold hover:underline md:text-base">
-              {author.displayName}
+              {author.displayName || '(no name)'}
             </a>
           </Link>
         </div>
