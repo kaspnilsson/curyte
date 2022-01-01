@@ -64,14 +64,7 @@ interface CustomHitsProps extends Partial<InfiniteHitsProvided> {
   onSelect?: (l: Lesson) => void
 }
 
-const Hits = ({
-  hits,
-  hasPrevious,
-  refinePrevious,
-  hasMore,
-  refineNext,
-  onSelect,
-}: CustomHitsProps) => {
+const Hits = ({ hits, hasMore, refineNext, onSelect }: CustomHitsProps) => {
   return (
     <div className="flex flex-col items-center">
       <div className="flex flex-wrap justify-center w-full gap-4 pt-4 mt-4 border-t-2 border-zinc-200">
@@ -86,9 +79,6 @@ const Hits = ({
         {!hits?.length && 'None found!'}
       </div>
       <div className="items-center mt-8">
-        <Button isDisabled={!hasPrevious} onClick={refinePrevious}>
-          Show previous
-        </Button>
         <Button isDisabled={!hasMore} onClick={refineNext}>
           Show more
         </Button>
