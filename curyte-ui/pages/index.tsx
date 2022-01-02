@@ -7,19 +7,17 @@ import { useRouter } from 'next/router'
 import { auth } from '../firebase/clientApp'
 import { lessonSearchRoute, newLessonRoute } from '../utils/routes'
 import Link from 'next/link'
-import { Button, Spinner } from '@chakra-ui/react'
-import useAsync from '../hooks/useAsync'
+import { Button } from '@chakra-ui/react'
 import AutoPlaySilentVideo from '../components/AutoPlaySilentVideo'
-import { getLessons } from '../firebase/api'
 
 const Home = () => {
   const router = useRouter()
   const [user] = useAuthState(auth)
 
-  const { data, loading } = useAsync(
-    () => getLessons([]).then((lessons) => lessons.length),
-    []
-  )
+  // const { data, loading } = useAsync(
+  //   () => getLessons([]).then((lessons) => lessons.length),
+  //   []
+  // )
   useEffect(() => {
     if (user && process.env.NODE_ENV === 'production') {
       router.replace(lessonSearchRoute())
@@ -41,7 +39,7 @@ const Home = () => {
           </h1>
         </section>
         <section className="flex flex-col items-center justify-around mb-8">
-          <div className="shadow-xl shadow-sky-500/20 rounded-xl overflow-hidden mb-16 border-2 border-zinc-200 lg:max-w-[60vw]">
+          <div className="shadow-xl shadow-sky-500/20 rounded-xl overflow-hidden mb-16 border-2 border-zinc-200 lg:max-w-[60vw] hidden md:inline">
             <AutoPlaySilentVideo
               src="/static/promo.mp4"
               type="video/mp4"
@@ -53,7 +51,7 @@ const Home = () => {
             <div className="text-sky-500">digitally native.</div>
           </div>
           <div className="flex flex-col items-center gap-4 mb-8 md:flex-row align-center">
-            <Link passHref href={lessonSearchRoute()}>
+            {/* <Link passHref href={lessonSearchRoute()}>
               <Button
                 className="flex flex-1"
                 colorScheme="black"
@@ -64,7 +62,7 @@ const Home = () => {
                   lessons
                 </div>
               </Button>
-            </Link>
+            </Link> */}
             <Link passHref href={newLessonRoute()}>
               <Button className="flex-1" colorScheme="black">
                 <div className="p-4">Start writing</div>

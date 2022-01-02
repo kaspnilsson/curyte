@@ -172,6 +172,24 @@ const MySettingsView = () => {
                     </div>
                     <div className="my-2">
                       <h3 className="font-bold leading-tight tracking-tight">
+                        Name
+                      </h3>
+                      <Input
+                        type="text"
+                        size="lg"
+                        variant="outline"
+                        placeholder="Full name"
+                        value={author.displayName}
+                        onChange={(e) =>
+                          modifyAuthor({
+                            ...author,
+                            displayName: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="my-2">
+                      <h3 className="font-bold leading-tight tracking-tight">
                         Bio
                       </h3>
                       <Textarea
@@ -181,21 +199,6 @@ const MySettingsView = () => {
                         value={author.bio}
                         onChange={(e) =>
                           modifyAuthor({ ...author, bio: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="my-2">
-                      <h3 className="font-bold leading-tight tracking-tight">
-                        Username
-                      </h3>
-                      <Input
-                        type="text"
-                        size="lg"
-                        variant="outline"
-                        placeholder="Username"
-                        value={author.username}
-                        onChange={(e) =>
-                          modifyAuthor({ ...author, username: e.target.value })
                         }
                       />
                     </div>
