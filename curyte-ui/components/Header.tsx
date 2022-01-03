@@ -114,16 +114,20 @@ const Header = ({
         <Container>
           <div className="flex items-center justify-between h-16 px-5 py-4">
             <Link href={user ? lessonSearchRoute() : indexRoute} passHref>
-              <Button
-                variant="link"
-                colorScheme="black"
-                className="flex items-center gap-1"
-              >
-                <CuryteLogo />
-                <h2 className="text-xl font-bold leading-tight tracking-tight md:text-2xl">
+                    <IconButton
+                      aria-label="Home"
+                      isRound
+                      className="opacity-100"
+                      title="Home"
+                      icon={<CuryteLogo className="w-4 h-4 text-zinc-900" />}>
+                </IconButton>
+            </Link>
+            <Link href={user ? lessonSearchRoute() : indexRoute} passHref>
+            <div className="flex px-2">
+            <h2 className="text-xl font-bold leading-tight tracking-tight md:text-2xl">
                   Curyte
-                </h2>
-              </Button>
+            </h2>
+            </div>
             </Link>
             {withSearch && (
               <div className="flex-1 mx-4 md:mx-8 lg:mx-24" onClick={onOpen}>
