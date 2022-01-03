@@ -15,14 +15,17 @@ const AuthorLink = ({ author }: Props) => {
       {!author && null}
       {author && (
         <div className="flex items-center">
-          <Avatar author={author} className="shadow-xl w-8 h-8" />
+          <Avatar
+            author={author}
+            className="w-8 h-8 shadow-xl shadow-zinc-900/10"
+          />
           <Link
             as={accountRoute(author.uid)}
             href={accountRouteHrefPath}
             passHref
           >
-            <a className="hover:underline font-bold ml-2">
-              {author.displayName}
+            <a className="ml-2 text-sm font-bold hover:underline md:text-base">
+              {author.displayName || '(no name)'}
             </a>
           </Link>
         </div>

@@ -2,35 +2,38 @@ import Layout from '../components/Layout'
 import React from 'react'
 import Container from '../components/Container'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-import firebase from '../firebase/clientApp'
+import { auth } from '../firebase/clientApp'
 import { Box } from '@chakra-ui/react'
-
-// Configure FirebaseUI.
-const uiConfig = {
-  // Redirect to / after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-  signInSuccessUrl: '/',
-  signInOptions: [
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    firebase.auth.EmailAuthProvider.PROVIDER_ID,
-  ],
-}
+import { GoogleAuthProvider, EmailAuthProvider } from 'firebase/auth'
+import { useRouter } from 'next/router'
 
 const Login = () => {
+  const router = useRouter()
+  const signInSuccessWithAuthResult = () => {
+    router.push(router.query.referrer ? (router.query.referrer as string) : '/')
+    return false
+  }
+  const uiConfig = {
+    signInOptions: [
+      GoogleAuthProvider.PROVIDER_ID,
+      EmailAuthProvider.PROVIDER_ID,
+    ],
+    signInFlow: 'popup',
+    callbacks: { signInSuccessWithAuthResult },
+  }
+
   return (
     <Layout>
       <Container>
         <Box
           rounded={'lg'}
-          className="w-96 m-auto p-8 flex flex-col items-center"
+          className="flex flex-col items-center p-8 m-auto w-96"
           boxShadow={'lg'}
         >
-          <h2 className="text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight mb-4">
+          <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
             Login
           </h2>
-          <StyledFirebaseAuth
-            uiConfig={uiConfig}
-            firebaseAuth={firebase.auth()}
-          />
+          <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
         </Box>
       </Container>
     </Layout>

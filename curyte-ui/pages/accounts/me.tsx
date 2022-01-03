@@ -6,7 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import AuthorLink from '../../components/AuthorLink'
 import Container from '../../components/Container'
 import Layout from '../../components/Layout'
-import firebase from '../../firebase/clientApp'
+import { auth } from '../../firebase/clientApp'
 import { Author } from '../../interfaces/author'
 import {
   Tabs,
@@ -20,15 +20,19 @@ import {
 } from '@chakra-ui/react'
 import TextareaAutosize from 'react-textarea-autosize'
 import LoadingSpinner from '../../components/LoadingSpinner'
-import * as api from '../../firebase/api'
-import DraftsPage from '../drafts/all'
+import DraftsList from '../../components/DraftsList'
 import { Lesson } from '../../interfaces/lesson'
-import LessonPreview from '../../components/LessonPreview'
+import { useErrorHandler } from 'react-error-boundary'
+import { indexRoute } from '../../utils/routes'
+import { getAuthor, getLessons, updateAuthor } from '../../firebase/api'
+import LessonList from '../../components/LessonList'
+import { where } from 'firebase/firestore'
 
 const MySettingsView = () => {
   const router = useRouter()
+  const handleError = useErrorHandler()
 
-  const [user, userLoading] = useAuthState(firebase.auth())
+  const [user, userLoading] = useAuthState(auth)
   const [author, setAuthor] = useState<Author | null>(null)
   const [loading, setLoading] = useState(userLoading)
   const [saving, setSaving] = useState(false)
@@ -42,62 +46,60 @@ const MySettingsView = () => {
   }
 
   useEffect(() => {
-    if (!user && !userLoading) router.push('/')
+    if (!user && !userLoading) router.push(indexRoute)
   }, [user, userLoading, router])
 
   useEffect(() => {
     if (user && !author) {
       setLoading(true)
       const fetchAuthor = async () => {
-        const author = await api.getAuthor(user.uid)
-        setAuthor(author)
-        if (author.savedLessons.length) {
-          return api
-            .getLessons([
-              {
-                fieldPath: 'uid',
-                opStr: 'in',
-                value: author.savedLessons || [],
-              },
-            ])
-            .then((res) => {
-              res.sort(
-                (a, b) =>
-                  // author.savedLessons has oldest saves first
-                  author.savedLessons.indexOf(b.uid) -
-                  author.savedLessons.indexOf(a.uid)
-              )
-              setSavedLessons(res)
-            })
-        }
+        await getAuthor(user.uid)
+          .then((author) => {
+            setAuthor(author)
+            if (author.savedLessons?.length) {
+              return getLessons([where('uid', 'in', author.savedLessons || [])])
+                .then((res) => {
+                  res.sort(
+                    (a, b) =>
+                      // author.savedLessons has oldest saves first
+                      (author.savedLessons || []).indexOf(b.uid) -
+                      (author.savedLessons || []).indexOf(a.uid)
+                  )
+                  setSavedLessons(res)
+                })
+                .catch(handleError)
+            }
+          })
+          .catch(handleError)
       }
 
       const fetchLessons = async () => {
-        api
-          .getLessons([{ fieldPath: 'authorId', opStr: '==', value: user.uid }])
-          .then((res) => {
-            setLessons(res)
-          })
+        getLessons([
+          where('authorId', '==', user.uid),
+          where('private', '==', false),
+        ]).then((res) => {
+          setLessons(res)
+        })
       }
 
       Promise.all([fetchLessons(), fetchAuthor()]).then(() => setLoading(false))
     }
-  }, [author, loading, user])
+  }, [author, handleError, loading, user])
 
   const handleSave = async (event: SyntheticEvent) => {
     event.preventDefault()
     if (!author) return
     setSaving(true)
-    await api.updateAuthor(author)
+    await updateAuthor(author)
     setSaving(false)
   }
 
   const handleDelete = async (event: SyntheticEvent) => {
     event.preventDefault()
     setSaving(true)
-    await firebase.auth().currentUser?.delete()
+    await auth.currentUser?.delete()
     setSaving(false)
-    router.push('/')
+    router.push(indexRoute)
   }
 
   return (
@@ -107,66 +109,60 @@ const MySettingsView = () => {
       {author && !loading && (
         <Layout>
           {saving && <LoadingSpinner />}
-          <Container>
+          <Container className="px-5">
             <div className="pb-4">
               <AuthorLink author={author}></AuthorLink>
             </div>
-            <Tabs colorScheme="purple">
+            <Tabs colorScheme="zinc">
               <TabList>
                 <Tab>Posts</Tab>
                 <Tab>Settings</Tab>
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  <section className="flex flex-col my-8">
-                    <div className="flex items-left justify-between flex-col">
-                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                  <section className="flex flex-col mb-8">
+                    <div className="flex flex-col justify-between items-left">
+                      <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                         Lessons
                       </h2>
-                      {lessons.map((lesson) => (
-                        <div
-                          className="border-b border-gray-200 pb-2 mb-2"
-                          key={lesson.uid}
-                        >
-                          <LessonPreview lesson={lesson} />
-                        </div>
-                      ))}
                       {!lessons.length && 'Nothing here yet!'}
+                      {!!lessons.length && (
+                        <div className="-mx-8">
+                          <LessonList lessons={lessons} />
+                        </div>
+                      )}
                     </div>
                   </section>
                   <section className="flex flex-col my-8">
-                    <div className="flex items-left justify-between flex-col">
-                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                    <div className="flex flex-col justify-between items-left">
+                      <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                         Saved
                       </h2>
-                      {savedLessons.map((lesson) => (
-                        <div
-                          className="border-b border-gray-200 pb-2 mb-2"
-                          key={lesson.uid}
-                        >
-                          <LessonPreview lesson={lesson} />
-                        </div>
-                      ))}
                       {!savedLessons.length && 'Nothing here yet!'}
+                      {!!savedLessons.length && (
+                        <div className="-mx-8">
+                          <LessonList lessons={savedLessons} />
+                        </div>
+                      )}
                     </div>
                   </section>
                   <section className="flex flex-col my-8">
-                    <div className="flex items-left justify-between flex-col">
-                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                    <div className="flex flex-col justify-between items-left">
+                      <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                         Drafts
                       </h2>
-                      <DraftsPage />
+                      <DraftsList />
                     </div>
                   </section>
                 </TabPanel>
                 <TabPanel>
                   <section className="flex flex-col my-8">
                     <div className="flex items-center justify-between">
-                      <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                      <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                         Profile settings
                       </h2>
                       <Button
-                        colorScheme="purple"
+                        colorScheme="black"
                         className="w-fit-content disabled:opacity-50"
                         onClick={handleSave}
                         disabled={!authorChanged}
@@ -175,12 +171,30 @@ const MySettingsView = () => {
                       </Button>
                     </div>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                      <h3 className="font-bold leading-tight tracking-tight">
+                        Name
+                      </h3>
+                      <Input
+                        type="text"
+                        size="lg"
+                        variant="outline"
+                        placeholder="Full name"
+                        value={author.displayName}
+                        onChange={(e) =>
+                          modifyAuthor({
+                            ...author,
+                            displayName: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="my-2">
+                      <h3 className="font-bold leading-tight tracking-tight">
                         Bio
                       </h3>
                       <Textarea
                         as={TextareaAutosize}
-                        className="resize-none mt-1 w-full"
+                        className="w-full mt-1 border-0 resize-none"
                         placeholder="Bio"
                         value={author.bio}
                         onChange={(e) =>
@@ -188,28 +202,13 @@ const MySettingsView = () => {
                         }
                       />
                     </div>
-                    <div className="my-2">
-                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
-                        Username
-                      </h3>
-                      <Input
-                        type="text"
-                        size="lg"
-                        variant="outline"
-                        placeholder="Username"
-                        value={author.username}
-                        onChange={(e) =>
-                          modifyAuthor({ ...author, username: e.target.value })
-                        }
-                      />
-                    </div>
                   </section>
                   <section className="flex flex-col my-8">
-                    <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                    <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                       Email settings
                     </h2>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                      <h3 className="font-bold leading-tight tracking-tight">
                         Email address
                       </h3>
                       <Input
@@ -225,12 +224,12 @@ const MySettingsView = () => {
                     </div>
                   </section>
                   <section className="flex flex-col my-8">
-                    <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                    <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                       Links
                     </h2>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
-                        Twitter
+                      <h3 className="font-bold leading-tight tracking-tight">
+                        Twitter profile URL
                       </h3>
                       <Input
                         type="text"
@@ -247,8 +246,8 @@ const MySettingsView = () => {
                       />
                     </div>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
-                        LinkedIn
+                      <h3 className="font-bold leading-tight tracking-tight">
+                        LinkedIn profile URL
                       </h3>
                       <Input
                         type="text"
@@ -268,8 +267,8 @@ const MySettingsView = () => {
                       />
                     </div>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
-                        Personal website
+                      <h3 className="font-bold leading-tight tracking-tight">
+                        Personal website URL
                       </h3>
                       <Input
                         type="text"
@@ -289,7 +288,7 @@ const MySettingsView = () => {
                       />
                     </div>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
+                      <h3 className="font-bold leading-tight tracking-tight">
                         Public email
                       </h3>
                       <Input
@@ -310,8 +309,8 @@ const MySettingsView = () => {
                       />
                     </div>
                     <div className="my-2">
-                      <h3 className="font-bold tracking-tight md:tracking-tighter leading-tight">
-                        Venmo
+                      <h3 className="font-bold leading-tight tracking-tight">
+                        Venmo URL
                       </h3>
                       <Input
                         type="text"

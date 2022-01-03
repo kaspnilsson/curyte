@@ -8,7 +8,7 @@ interface Props {
   colorScheme?: string
 }
 
-const TagChip = ({ tagLabel, colorScheme = 'purple' }: Props) => {
+const TagChip = ({ tagLabel, colorScheme = 'zinc' }: Props) => {
   return (
     <>
       {tagLabel && (
@@ -18,8 +18,7 @@ const TagChip = ({ tagLabel, colorScheme = 'purple' }: Props) => {
             colorScheme={colorScheme}
             className="cursor-pointer hover:text-black"
           >
-            <i className="ri-hashtag"></i>
-            <TagLabel>{tagLabel}</TagLabel>
+            <TagLabel className="hover:underline">{tagLabel}</TagLabel>
           </Tag>
         </Link>
       )}

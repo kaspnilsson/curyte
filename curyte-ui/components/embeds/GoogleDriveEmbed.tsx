@@ -31,7 +31,7 @@ export const GoogleDriveEmbed = Node.create({
       allowFullscreen: true,
       HTMLAttributes: {
         class:
-          'googledrive-wrapper w-full h-96 my-8 shadow-lg w-full rounded-xl',
+          'googledrive-wrapper w-full h-full shadow-lg rounded-xl min-h-96',
       },
     }
   },
@@ -66,8 +66,18 @@ export const GoogleDriveEmbed = Node.create({
   renderHTML({ HTMLAttributes }) {
     return [
       'div',
-      { class: 'px-2 w-full h-fit', 'data-drag-handle': '' },
-      ['iframe', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)],
+      { class: 'my-8 lg:max-w-[50vw] mx-auto' },
+      [
+        'div',
+        {
+          class: 'px-2 w-full h-auto relative aspect-w-16 aspect-h-9',
+          'data-drag-handle': '',
+        },
+        [
+          'iframe',
+          mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
+        ],
+      ],
     ]
   },
 

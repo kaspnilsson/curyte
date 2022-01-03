@@ -28,43 +28,43 @@ const TextBubbleMenu = ({ editor }: Props) => {
         label="Bold"
         onClick={() => editor.chain().focus().toggleBold().run()}
         isActive={editor.isActive('bold')}
-        icon={<i className="text-gray-900 ri-lg ri-bold" />}
+        icon={<i className="text-lg ri-bold" />}
       />
       <MenuIconButton
         label="Italicize"
         onClick={() => editor.chain().focus().toggleItalic().run()}
         isActive={editor.isActive('italic')}
-        icon={<i className="text-gray-900 ri-lg ri-italic" />}
+        icon={<i className="text-lg ri-italic" />}
       />
       <MenuIconButton
         label="Strikethrough"
         onClick={() => editor.chain().focus().toggleStrike().run()}
         isActive={editor.isActive('strike')}
-        icon={<i className="text-gray-900 ri-lg ri-strikethrough" />}
+        icon={<i className="text-lg ri-strikethrough" />}
       />
       <MenuIconButton
         label="Underline"
         onClick={() => editor.chain().focus().toggleUnderline().run()}
         isActive={editor.isActive('underline')}
-        icon={<i className="text-gray-900 ri-lg ri-underline" />}
+        icon={<i className="text-lg ri-underline" />}
       />
       <MenuIconButton
         label="Highlight"
         onClick={() => editor.chain().focus().toggleHighlight().run()}
         isActive={editor.isActive('highlight')}
-        icon={<i className="text-gray-900 ri-lg ri-mark-pen-line" />}
+        icon={<i className="text-lg ri-mark-pen-line" />}
       />
       <MenuIconButton
         label="Superscript"
         onClick={() => editor.chain().focus().toggleSuperscript().run()}
         isActive={editor.isActive('superscript')}
-        icon={<i className="text-gray-900 ri-lg ri-superscript" />}
+        icon={<i className="text-lg ri-superscript" />}
       />
       <MenuIconButton
         label="Code (inline)"
         onClick={() => editor.chain().focus().toggleCode().run()}
         isActive={editor.isActive('code')}
-        icon={<i className="text-gray-900 ri-lg ri-code-line" />}
+        icon={<i className="text-lg ri-code-line" />}
       />
       <MenuIconButton
         label="Clear formatting"
@@ -72,7 +72,7 @@ const TextBubbleMenu = ({ editor }: Props) => {
           editor.chain().focus().unsetAllMarks().run()
           editor.chain().focus().clearNodes().run()
         }}
-        icon={<i className="text-gray-900 ri-lg ri-format-clear" />}
+        icon={<i className="text-lg ri-format-clear" />}
       />
     </BubbleMenu>
   )

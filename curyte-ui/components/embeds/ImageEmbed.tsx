@@ -11,7 +11,7 @@ export interface ImageOptions {
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
-    image: {
+    imageFromAnotherSite: {
       /**
        * Add an image
        */
@@ -31,8 +31,7 @@ export const ImageEmbed = Node.create({
     return {
       allowFullScreen: true,
       HTMLAttributes: {
-        class:
-          'image-wrapper w-full w-fit-content h-auto my-8 rounded-xl shadow-lg',
+        class: 'image-wrapper w-auto h-full min-h-96 shadow-lg rounded-xl',
       },
     }
   },
@@ -42,9 +41,9 @@ export const ImageEmbed = Node.create({
       src: {
         default: null,
       },
-      frameborder: {
-        default: 0,
-      },
+      width: { default: '' },
+      height: { default: '' },
+      caption: { default: '' },
     }
   },
 
@@ -59,8 +58,15 @@ export const ImageEmbed = Node.create({
   renderHTML({ HTMLAttributes }) {
     return [
       'div',
-      { class: 'px-2 w-full h-fit', 'data-drag-handle': '' },
-      ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)],
+      { class: 'my-8 lg:max-w-[50vw] mx-auto' },
+      [
+        'div',
+        {
+          class: 'px-2 w-full h-auto relative not-prose flex justify-center',
+          'data-drag-handle': '',
+        },
+        ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)],
+      ],
     ]
   },
 

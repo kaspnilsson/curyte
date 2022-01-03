@@ -7,31 +7,23 @@ type Props = {
   title: string
   src: string
   lessonId?: string
-  width?: number
-  height?: number
 }
 
-const CoverImage = ({
-  title,
-  lessonId,
-  src,
-  width = 400,
-  height = 200,
-}: Props) => {
+const CoverImage = ({ title, lessonId, src }: Props) => {
   const image = (
-    <Image
-      src={src}
-      height={height}
-      width={width}
-      objectFit="cover"
-      layout="responsive"
-      alt={`Cover Image for ${title}`}
-      className="image-wrapper w-fit-content h-auto"
-    />
+    <div className="w-full cover-image-wrapper">
+      <Image
+        src={src}
+        layout="fill"
+        alt={`Cover Image for ${title}`}
+        objectFit="contain"
+        className="image"
+      />
+    </div>
   )
 
   return (
-    <div className="mx-2 h-fit-content w-fit-content overflow-hidden rounded-xl shadow-xl">
+    <div className="mx-2 overflow-hidden rounded-xl shadow-xl shadow-zinc-900/10 relative w-full h-full max-h-[50vh] flex items-center">
       {lessonId ? (
         <Link as={lessonRoute(lessonId)} href={lessonRouteHrefPath}>
           <a aria-label={title}>{image}</a>

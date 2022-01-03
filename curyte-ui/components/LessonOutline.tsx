@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import { List, ListItem } from '@chakra-ui/react'
 import { Editor } from '@tiptap/react'
 import { useCallback, useEffect, useState } from 'react'
@@ -11,6 +12,7 @@ interface Heading {
   level: number
   id: string
   text: string
+  isActive: boolean
 }
 
 const LessonOutline = ({ editor }: Props) => {
@@ -26,6 +28,7 @@ const LessonOutline = ({ editor }: Props) => {
           level: node.attrs.level,
           text: node.textContent,
           id: node.attrs.id,
+          isActive: false,
         })
       }
     })
@@ -56,17 +59,33 @@ const LessonOutline = ({ editor }: Props) => {
     <>
       {!items.length && null}
       {!!items.length && (
-        <div className="toc flex flex-col mr-4 mt-10 truncate">
-          <span className="text-gray-500 tracking-tighter text-sm font-bold leading-tight py-2 px-2">
+        <div className="flex flex-col w-full truncate toc md:mt-10">
+          <span className="px-2 py-2 text-xs font-bold leading-tight tracking-tighter text-zinc-500 lg:text-sm">
             OUTLINE
           </span>
           <List listStyleType="none">
             {items.map((item, index) => (
-              <a href={`#${item.id}`} key={index}>
+              <a
+                href={`#${item.id}`}
+                key={index}
+                className={classNames(
+                  'pl-2 py-2 md:py-1 flex hover:bg-zinc-200 rounded',
+                  { 'bg-zinc-500 text-white': item.isActive }
+                )}
+              >
                 <ListItem
-                  className={`pl-${
-                    (item.level - minHeadingLevel) * 4 + 2
-                  } hover:bg-gray-200 rounded py-1 font-semibold truncate`}
+                  className={classNames(
+                    'font-semibold truncate 2xl:text-lg w-full leading-tight tracking-tighter text-base lg:text-md',
+                    // Cannot use string concatenation to compute: https://v2.tailwindcss.com/docs/just-in-time-mode
+                    {
+                      'pl-0': item.level === minHeadingLevel,
+                      'pl-3': item.level === minHeadingLevel + 1,
+                      'pl-6': item.level === minHeadingLevel + 2,
+                      'pl-9': item.level === minHeadingLevel + 3,
+                      'pl-12': item.level === minHeadingLevel + 4,
+                      'pl-16': item.level === minHeadingLevel + 5,
+                    }
+                  )}
                 >
                   {item.text}
                 </ListItem>

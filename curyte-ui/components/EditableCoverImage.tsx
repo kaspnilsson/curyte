@@ -1,7 +1,8 @@
 import { Button } from '@chakra-ui/button'
-import React, { useRef, useState } from 'react'
+import classNames from 'classnames'
+import React, { useRef } from 'react'
+import useImageUploadDialog from '../hooks/useImageUploadDialog'
 import CoverImage from './CoverImage'
-import ImageUploadDialog from './ImageUploadDialog'
 
 type Props = {
   title: string
@@ -10,38 +11,35 @@ type Props = {
 }
 
 const EditableCoverImage = ({ title, src, onEditUrl }: Props) => {
-  const [isOpen, setIsOpen] = useState(false)
   const buttonRef = useRef<HTMLButtonElement | null>(null)
+  const { getImageSrc } = useImageUploadDialog()
+
+  const onEditImage = async () => {
+    const newSrc = await getImageSrc({ title: 'Upload a cover photo' })
+    if (newSrc) onEditUrl(newSrc)
+  }
 
   return (
-    <div className="sm:mx-0 relative w-full flex items-center justify-center mt-2">
+    <div className="relative flex items-center justify-center w-full mt-4 sm:mx-0">
       {src && <CoverImage title={title} src={src} />}
       {!src && (
-        <div className="bg-gray-50 h-32 w-full rounded-xl flex items-center justify-center">
-          No cover image
-        </div>
+        <div className="flex items-center justify-center w-full h-32 border-2 border-zinc-200 rounded-xl"></div>
       )}
       <div
-        className="absolute top-0 left-0 z-10 flex w-full h-full group cursor-pointer"
+        className="absolute top-0 left-0 z-10 flex w-full h-full cursor-pointer group"
         onClick={() => buttonRef?.current?.click()}
       >
         <Button
-          className="m-auto invisible group-hover:visible"
+          className={classNames('m-auto', {
+            'invisible group-hover:visible': !!src,
+          })}
           ref={buttonRef}
-          onClick={() => setIsOpen(true)}
+          onClick={onEditImage}
         >
-          Upload new image
+          {!src && 'Add cover'}
+          {!!src && 'Change cover'}
         </Button>
       </div>
-      <ImageUploadDialog
-        title="Upload a cover photo"
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        onSuccess={(src) => {
-          setIsOpen(false)
-          onEditUrl(src)
-        }}
-      />
     </div>
   )
 }

@@ -1,31 +1,56 @@
 import classNames from 'classnames'
-import firebase from '../firebase/clientApp'
+import { auth } from '../firebase/clientApp'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { Author } from '../interfaces/author'
 import Container from './Container'
-import { Button, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react'
+import {
+  Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Portal,
+  IconButton,
+  Tooltip,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  useDisclosure,
+} from '@chakra-ui/react'
 import Head from 'next/head'
 import Avatar from './Avatar'
 import CuryteLogo from './CuryteLogo'
-import { indexRoute, loginRoute, newLessonRoute } from '../utils/routes'
+import { PlusIcon, SearchIcon } from '@heroicons/react/outline'
+import {
+  indexRoute,
+  lessonSearchRoute,
+  loginRoute,
+  newLessonRoute,
+  signupRoute,
+} from '../utils/routes'
+import { sky } from '../styles/theme/colors'
+import { useRouter } from 'next/router'
+import LessonSearchModal from './LessonSearchModal'
 
 type Props = {
-  children: React.ReactNode
   showProgressBar?: boolean
   title: string
   isSticky?: boolean
+  withSearch?: boolean
 }
 
 const Header = ({
-  children,
   showProgressBar,
   title,
   isSticky = true,
+  withSearch = true,
 }: Props) => {
   const [isStuck, setStuck] = useState(false)
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const [progress, setProgress] = useState(0)
+  const router = useRouter()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,10 +75,10 @@ const Header = ({
   }, [isSticky])
 
   const logOut = () => {
-    firebase.auth().signOut()
+    auth.signOut()
   }
 
-  const [user] = useAuthState(firebase.auth())
+  const [user] = useAuthState(auth)
 
   return (
     <>
@@ -81,44 +106,75 @@ const Header = ({
         <title>{title}</title>
       </Head>
       <div
-        className={classNames('z-10 bg-white mb-4 transition-shadow', {
+        className={classNames('z-10 bg-white mb-12 transition-shadow', {
           'sticky top-0': isSticky,
-          'shadow-xl': isSticky && isStuck,
+          'shadow-xl shadow-zinc-900/10': isSticky && isStuck,
         })}
       >
         <Container>
-          <div className="flex justify-between items-center py-4 h-16">
-            <Link href={indexRoute} passHref>
+          <div className="flex items-center justify-between h-16 px-5 py-4">
+            <Link href={user ? lessonSearchRoute() : indexRoute} passHref>
               <Button
                 variant="link"
                 colorScheme="black"
-                className="flex gap-1 items-center"
+                className="flex items-center gap-1"
               >
                 <CuryteLogo />
-                <h2 className="text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+                <h2 className="text-xl font-bold leading-tight tracking-tight md:text-2xl">
                   Curyte
                 </h2>
               </Button>
             </Link>
-            <div className="flex flex-grow mx-4 md:mx-8 lg:mx-24">
-              {children}
-            </div>
+            {withSearch && (
+              <div className="flex-1 mx-4 md:mx-8 lg:mx-24" onClick={onOpen}>
+                <InputGroup className="w-96" size="lg">
+                  <InputLeftElement>
+                    <SearchIcon className="w-5 h-5 text-zinc-500" />
+                  </InputLeftElement>
+                  <Input
+                    isReadOnly
+                    placeholder="Search lessons..."
+                    variant="filled"
+                    colorScheme="black"
+                  ></Input>
+                </InputGroup>
+              </div>
+            )}
             {!user && (
-              <Link passHref href={loginRoute}>
-                <Button variant="outline">Log in</Button>
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link passHref href={loginRoute()}>
+                  <Button variant="outline">Log in</Button>
+                </Link>
+                <Link passHref href={signupRoute()}>
+                  <Button colorScheme="black">Sign up</Button>
+                </Link>
+              </div>
             )}
             {user && (
-              <div className="flex items-center">
-                <Link href={newLessonRoute()} passHref>
-                  <Button
-                    className="font-semibold py-2 px-4"
-                    colorScheme="purple"
-                  >
-                    Start writing
-                  </Button>
-                </Link>
-                <div className="ml-4 flex">
+              <div className="flex items-center gap-2">
+                {/* <Tooltip label="Search lessons">
+                  <IconButton
+                    aria-label="Search lessons"
+                    onClick={() => router.push(lessonSearchRoute())}
+                    isRound
+                    title="Start writing"
+                    icon={<SearchIcon className="w-4 h-4 text-zinc-900" />}
+                  />
+                </Tooltip> */}
+                <div className="relative">
+                  <div className="rounded-full animated-border animate-spin-slow"></div>
+                  <Tooltip label="Start writing">
+                    <IconButton
+                      aria-label="Start writing"
+                      isRound
+                      className="opacity-100"
+                      title="Start writing"
+                      onClick={() => router.push(newLessonRoute())}
+                      icon={<PlusIcon className="w-4 h-4 text-zinc-900" />}
+                    />
+                  </Tooltip>
+                </div>
+                <div className="flex">
                   <Menu>
                     <MenuButton>
                       <Avatar
@@ -126,12 +182,14 @@ const Header = ({
                         className="w-10 h-10"
                       />
                     </MenuButton>
-                    <MenuList>
-                      <Link passHref href="/accounts/me">
-                        <MenuItem>View account</MenuItem>
-                      </Link>
-                      <MenuItem onClick={() => logOut()}>Sign out</MenuItem>
-                    </MenuList>
+                    <Portal>
+                      <MenuList>
+                        <Link passHref href="/accounts/me">
+                          <MenuItem>View account</MenuItem>
+                        </Link>
+                        <MenuItem onClick={() => logOut()}>Sign out</MenuItem>
+                      </MenuList>
+                    </Portal>
                   </Menu>
                 </div>
               </div>
@@ -143,12 +201,13 @@ const Header = ({
             style={{
               width: `${progress}%`,
               height: '3px',
-              background: '#805AD5',
+              background: sky[500],
               opacity: '0.8',
               marginTop: '-3px',
             }}
           />
         )}
+        <LessonSearchModal isOpen={isOpen} onClose={onClose} />
       </div>
     </>
   )

@@ -3,11 +3,12 @@ import { Lesson } from '../../interfaces/lesson'
 import { GetServerSideProps } from 'next'
 import Layout from '../../components/Layout'
 import Container from '../../components/Container'
-import * as api from '../../firebase/api'
 import { Tag } from '../../interfaces/tag'
-import firebase from '../../firebase/clientApp'
+import { auth } from '../../firebase/clientApp'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import LessonPreview from '../../components/LessonPreview'
+import { getLessons, getTag, logTagView } from '../../firebase/api'
+import LessonList from '../../components/LessonList'
+import { where } from 'firebase/firestore'
 
 type Props = {
   tagText: string
@@ -17,34 +18,30 @@ type Props = {
 
 const TagView = ({ lessons, tag, tagText }: Props) => {
   // Log views only on render of a published lesson
-  const [user, userLoading] = useAuthState(firebase.auth())
+  const [user, userLoading] = useAuthState(auth)
   useEffect(() => {
     if (!user || userLoading || !tag) return
-    api.logTagView(tagText)
+    logTagView(tagText)
   }, [tag, tagText, user, userLoading])
 
   return (
     <>
       <Layout showProgressBar title={tagText}>
-        <Container>
-          <section className="flex-col flex mb-12">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-tight">
+        <Container className="px-5">
+          <section className="flex flex-col mb-12">
+            <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
               {`# ${tagText}`}
             </h1>
             {tag && `${tag.viewCount} views`}
           </section>
-          <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight md:tracking-tighter leading-tight">
+          <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
             Lessons
           </h2>
-          {lessons &&
-            lessons.map((lesson) => (
-              <div
-                className="border-b border-gray-200 pb-8 mb-8"
-                key={lesson.uid}
-              >
-                <LessonPreview lesson={lesson} />
-              </div>
-            ))}
+          {lessons && (
+            <div className="-ml-8">
+              <LessonList lessons={lessons} />
+            </div>
+          )}
           {!lessons?.length && 'No lessons yet!'}
         </Container>
       </Layout>
@@ -55,14 +52,11 @@ const TagView = ({ lessons, tag, tagText }: Props) => {
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const tagText = query.tag as string
   const [tag = null, lessons = null] = await Promise.all([
-    api.getTag(query.tag as string),
+    getTag(query.tag as string),
     // Could also use the lesson IDs from the tag directly
-    api.getLessons([
-      {
-        fieldPath: 'tags',
-        opStr: 'array-contains',
-        value: query.tag as string,
-      },
+    getLessons([
+      where('tags', 'array-contains', query.tag as string),
+      where('private', '==', false),
     ]),
   ])
   return {

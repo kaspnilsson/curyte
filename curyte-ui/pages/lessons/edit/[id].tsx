@@ -1,53 +1,105 @@
-import firebase from '../../../firebase/clientApp'
 import React, { useEffect, useState } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import EditLessonPage from '../../../components/EditLessonPage'
-import { Author } from '../../../interfaces/author'
-import { Lesson } from '../../../interfaces/lesson'
-import { useRouter } from 'next/router'
-import * as api from '../../../firebase/api'
-import LoadingSpinner from '../../../components/LoadingSpinner'
-import { lessonRoute, loginRoute } from '../../../utils/routes'
+import { auth } from '../../../firebase/clientApp'
 import { GetServerSideProps } from 'next'
+import { Author } from '../../../interfaces/author'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { useRouter } from 'next/router'
+import EditLessonPage from '../../../components/EditLessonPage'
+import LoadingSpinner from '../../../components/LoadingSpinner'
+import { Lesson } from '../../../interfaces/lesson'
+import { debounce } from 'ts-debounce'
+
+import { loginRoute, newLessonRoute } from '../../../utils/routes'
+import { getLesson, updateLesson } from '../../../firebase/api'
+import { Portal, useToast } from '@chakra-ui/react'
+import { Confetti } from '../../../components/Confetti'
 
 type Props = {
   id: string
 }
 
-const EditPublishedLessonView = ({ id }: Props) => {
+const LessonView = ({ id }: Props) => {
   const router = useRouter()
-  const [user, userLoading] = useAuthState(firebase.auth())
-  const [loading, setLoading] = useState(false)
+  const toast = useToast()
+  const [user, userLoading] = useAuthState(auth)
+  const [loading, setLoading] = useState(true)
   const [lesson, setLesson] = useState<Lesson | undefined>()
+  const [isFiringConfetti, setIsFiringConfetti] = useState(false)
+  const [savingPromise, setSavingPromise] = useState<Promise<unknown> | null>(
+    null
+  )
 
   useEffect(() => {
-    if (!user && !userLoading) router.push(loginRoute)
+    if (!user && !userLoading) {
+      router.push(loginRoute(router.asPath))
+      return
+    }
   })
 
   useEffect(() => {
     if (!user || userLoading) return
     const fetchLesson = async () => {
-      setLesson(await api.getLesson(id))
+      const d = await getLesson(id)
+      if (!d) {
+        router.replace(newLessonRoute())
+      }
+      setLesson(d)
       setLoading(false)
     }
     setLoading(true)
     fetchLesson()
-  }, [id, user, userLoading])
+  }, [id, router, user, userLoading])
 
-  const handleSubmit = async (l: Lesson) => {
-    const uid = await api.updateLesson(l)
-    router.push(lessonRoute(uid))
+  const handleTogglePrivate = async () => {
+    if (savingPromise) await savingPromise
+    if (!lesson) return
+    const l = { ...lesson, private: !lesson.private }
+    const p = updateLesson(l)
+    setSavingPromise(p)
+    await p
+    setLesson(l)
+    setSavingPromise(null)
+
+    if (l.private) {
+      toast({
+        title: 'Lesson set to private.',
+      })
+    } else {
+      // celebrate!
+      setIsFiringConfetti(true)
+      setTimeout(() => setIsFiringConfetti(false), 300)
+    }
+  }
+
+  const debouncedUpdateLesson = debounce(async (l: Lesson) => {
+    const p = updateLesson(l)
+    setSavingPromise(p)
+    await p
+    setLesson(l)
+    setSavingPromise(null)
+  }, 500)
+
+  const handleUpdate = async (l: Lesson) => {
+    if (loading || !l.uid) return
+    if (savingPromise) await savingPromise
+    await debouncedUpdateLesson(l)
   }
 
   return (
     <>
-      {(userLoading || loading) && <LoadingSpinner />}
-      {!loading && !userLoading && (
-        <EditLessonPage
-          lesson={lesson}
-          user={user as unknown as Author}
-          handleSubmit={handleSubmit}
-        />
+      {loading && <LoadingSpinner />}
+      {!loading && (
+        <>
+          <EditLessonPage
+            lesson={lesson}
+            user={user as unknown as Author}
+            handleTogglePrivate={handleTogglePrivate}
+            handleUpdate={handleUpdate}
+          />
+          <Portal>
+            <Confetti isFiring={isFiringConfetti} />
+          </Portal>
+        </>
       )}
     </>
   )
@@ -59,4 +111,4 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   }
 }
 
-export default EditPublishedLessonView
+export default LessonView

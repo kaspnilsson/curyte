@@ -16,9 +16,9 @@ const LessonTitle = ({ title }: Props) => {
       <h1
         className={`${computeClassesForTitle(
           title
-        )} font-bold tracking-tighter leading-tight md:leading-none text-center md:text-left`}
+        )} font-bold tracking-tighter leading-tight md:leading-none text-left`}
       >
-        {title}
+        {title || '(no title)'}
       </h1>
     </div>
   )

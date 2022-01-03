@@ -20,7 +20,7 @@ const MenuIconButton = ({
     <chakra.Tooltip
       hasArrow
       label={
-        <div className="flex gap-1 items-center">
+        <div className="flex items-center gap-1">
           {label}
           {shortcut || null}
         </div>
@@ -29,13 +29,13 @@ const MenuIconButton = ({
       <chakra.IconButton
         size="sm"
         variant="ghost"
-        colorScheme="purple"
+        colorScheme="zinc"
         aria-label={label}
         onClick={onClick}
         isActive={isActive}
         disabled={disabled}
       >
-        {icon}
+        <span className="text-zinc-900">{icon}</span>
       </chakra.IconButton>
     </chakra.Tooltip>
   )

@@ -3,8 +3,7 @@ import { Author } from '../interfaces/author'
 import AuthorLink from './AuthorLink'
 import DateFormatter from './DateFormatter'
 import LessonTitle from './LessonTitle'
-import * as api from '../firebase/api'
-import firebase from '../firebase/clientApp'
+import { auth } from '../firebase/clientApp'
 import { Lesson } from '../interfaces/lesson'
 import LessonLink from './LessonLink'
 import {
@@ -17,6 +16,7 @@ import {
   MenuItem,
   MenuButton,
   Button,
+  Portal,
 } from '@chakra-ui/react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import {
@@ -31,6 +31,13 @@ import { useRouter } from 'next/router'
 import { loginRoute, newLessonRoute } from '../utils/routes'
 import TagChip from './TagChip'
 import CoverImage from './CoverImage'
+import { black } from '../styles/theme/colors'
+import {
+  getCurrentUserHasSavedLesson,
+  getLesson,
+  removeSavedLessonForCurrentUser,
+  saveLessonForCurrentUser,
+} from '../firebase/api'
 
 type Props = {
   lesson: Lesson
@@ -39,7 +46,7 @@ type Props = {
   handleDelete?: () => void
   handleEdit?: () => void
   handlePublish?: () => void
-  isDraft: boolean
+  handleToggleFeatured?: () => void
 }
 
 const LessonHeader = ({
@@ -48,24 +55,25 @@ const LessonHeader = ({
   handleDelete,
   handleEdit,
   handlePublish,
-  isDraft,
+  handleToggleFeatured,
 }: Props) => {
   const router = useRouter()
-  const [user, userLoading] = useAuthState(firebase.auth())
+  const [user, userLoading] = useAuthState(auth)
   const [, setLoading] = useState(false)
   const [parentLesson, setParentLesson] = useState<Lesson | null>(null)
   const [isSaved, setIsSaved] = useState(false)
+  const [featured, setFeatured] = useState(lesson.featured || false)
 
   useEffect(() => {
     if (!user || userLoading) return
     setLoading(true)
     const fetchParent = async () => {
       if (lesson.parentLessonId) {
-        setParentLesson(await api.getLesson(lesson.parentLessonId))
+        setParentLesson(await getLesson(lesson.parentLessonId))
       }
     }
     const fetchIsSaved = async () => {
-      setIsSaved(await api.getCurrentUserHasSavedLesson(lesson.uid))
+      setIsSaved(await getCurrentUserHasSavedLesson(lesson.uid))
     }
     Promise.all([fetchParent(), fetchIsSaved()]).then(() => {
       setLoading(false)
@@ -75,15 +83,15 @@ const LessonHeader = ({
   const toggleSaveLesson = async () => {
     if (!user) {
       // logged out!
-      router.push(loginRoute)
+      router.push(loginRoute(router.asPath))
       return
     }
     setLoading(true)
     setIsSaved(!isSaved)
     if (isSaved) {
-      await api.removeSavedLessonForCurrentUser(lesson.uid)
+      await removeSavedLessonForCurrentUser(lesson.uid)
     } else {
-      await api.saveLessonForCurrentUser(lesson.uid)
+      await saveLessonForCurrentUser(lesson.uid)
     }
     setLoading(false)
   }
@@ -91,7 +99,7 @@ const LessonHeader = ({
   const handleMakeCopy = async () => {
     if (!user) {
       // logged out!
-      router.push(loginRoute)
+      router.push(loginRoute(router.asPath))
       return
     }
     router.push(newLessonRoute(lesson.uid))
@@ -99,83 +107,75 @@ const LessonHeader = ({
 
   return (
     <>
-      <LessonTitle title={lesson.title} />
+      <LessonTitle title={lesson?.title || '(no title)'} />
       <div className="flex items-center mb-4 h-min">
         {parentLesson && (
-          <div className="flex items-center h-min ">
+          <div className="flex items-center h-min">
             <span className="mr-2">➜</span>
-            <h1 className="text-xl font-bold tracking-tighter leading-tight md:leading-none text-center md:text-left mr-2">
+            <h1 className="mr-2 font-bold leading-tight tracking-tighter text-center md:leading-none md:text-left">
               Copied from
             </h1>
             <LessonLink lesson={parentLesson} />
           </div>
         )}
-        {parentLesson && isDraft && (
-          <Center className="h-6 w-6 mx-3">
+        {parentLesson && lesson.private && (
+          <Center className="w-4 h-4 mx-2">
             <Divider orientation="vertical" />
           </Center>
         )}
-        {isDraft && (
-          <Badge
-            variant="subtle"
-            size="xl"
-            colorScheme="orange"
-            fontSize="1em"
-            className=" h-min"
-          >
-            Draft
+        {lesson.private && (
+          <Badge variant="subtle" colorScheme="orange" className="h-min">
+            Private
           </Badge>
         )}
       </div>
       <div className="mt-1 mb-8">
-        <div className="text-2xl focus:outline-none text-gray-500 mb-6">
+        <div className="mb-6 text-2xl focus:outline-none text-zinc-500">
           {lesson.description}
         </div>
-        {lesson.tags?.length && (
-          <div className="flex gap-2 flex-wrap items-center">
+        {!!lesson.tags?.length && (
+          <div className="flex flex-wrap items-center gap-2">
             {lesson.tags.map((t, index) => (
               <TagChip tagLabel={t} key={t + index} />
             ))}
           </div>
         )}
       </div>
-      <div className="flex mb-6 items-center justify-between">
-        <div className="flex gap-2 items-center">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2 text-sm md:text-base">
           <AuthorLink author={author} />
           {lesson.created && <DateFormatter dateString={lesson.created} />}
           {!!lesson.viewCount && (
             <>
-              <Center className="h-4 w-6">
+              <Center className="w-6 h-4">
                 <Divider orientation="vertical" />
               </Center>
               {`${lesson.viewCount} views`}
             </>
           )}
         </div>
-        <div className="flex gap-1 items-center">
+        <div className="flex items-center gap-1">
           {handlePublish && (
             <Button
               size="sm"
-              colorScheme="purple"
-              className="font-semibold flex items-center justify-between mr-2"
+              colorScheme="black"
+              className="flex items-center justify-between mr-2 font-semibold"
               onClick={handlePublish}
             >
-              <UploadIcon className="h-5 w-5 mr-2" />
-              Publish
+              <UploadIcon className="w-5 h-5" />
+              <div className="hidden ml-2 md:flex">Publish</div>
             </Button>
           )}
-          {!isDraft && (
+          {!lesson.private && (
             <IconButton
               borderRadius="full"
               size="sm"
               aria-label={isSaved ? 'Saved' : 'Save'}
-              colorScheme="purple"
-              variant="ghost"
               onClick={() => toggleSaveLesson()}
             >
               <BookmarkIcon
-                className="h-5 w-5 text-inherit"
-                style={{ fill: isSaved ? '#805AD5' : 'transparent' }}
+                className="w-5 h-5 text-inherit"
+                style={{ fill: isSaved ? black[900] : 'transparent' }}
               />
             </IconButton>
           )}
@@ -185,35 +185,54 @@ const LessonHeader = ({
               size="sm"
               as={IconButton}
               aria-label="Options"
-              icon={<MenuIcon className="h-5 w-5 text-inherit" />}
-              variant="subtle"
+              icon={<MenuIcon className="w-5 h-5 text-inherit" />}
             />
-            <MenuList>
-              {!isDraft && (
-                <MenuItem onClick={handleMakeCopy}>
-                  <DuplicateIcon className="h-5 w-5 text-inherit mr-4" />
-                  Make a copy
-                </MenuItem>
-              )}
-              {handleEdit && (
-                <MenuItem onClick={handleEdit}>
-                  <PencilAltIcon className="h-5 w-5 text-inherit mr-4" />
-                  Edit lesson
-                </MenuItem>
-              )}
-              {handleDelete && (
-                <MenuItem onClick={handleDelete}>
-                  <DocumentRemoveIcon className="h-5 w-5 text-inherit mr-4" />
-                  Delete lesson
-                </MenuItem>
-              )}
-            </MenuList>
+            <Portal>
+              <MenuList>
+                {!lesson.private && (
+                  <MenuItem onClick={handleMakeCopy}>
+                    <DuplicateIcon className="w-5 h-5 mr-4 text-inherit" />
+                    Make a copy
+                  </MenuItem>
+                )}
+                {handleEdit && (
+                  <MenuItem onClick={handleEdit}>
+                    <PencilAltIcon className="w-5 h-5 mr-4 text-inherit" />
+                    Edit lesson
+                  </MenuItem>
+                )}
+                {handleToggleFeatured && (
+                  <MenuItem
+                    onClick={() => {
+                      setFeatured(!featured)
+                      handleToggleFeatured()
+                    }}
+                  >
+                    {featured ? (
+                      <i className="mr-4 text-lg ri-lightbulb-flash-line text-inherit" />
+                    ) : (
+                      <i className="mr-4 text-lg ri-lightbulb-flash-fill text-inherit" />
+                    )}
+                    {featured ? 'Unfeature' : 'Feature'} lesson
+                  </MenuItem>
+                )}
+                {handleDelete && (
+                  <MenuItem onClick={handleDelete}>
+                    <DocumentRemoveIcon className="w-5 h-5 mr-4 text-inherit" />
+                    Delete lesson
+                  </MenuItem>
+                )}
+              </MenuList>
+            </Portal>
           </Menu>
         </div>
       </div>
       {lesson.coverImageUrl && (
-        <div className="mb-8 md:mb-16 sm:mx-0">
-          <CoverImage title={lesson.title} src={lesson.coverImageUrl} />
+        <div className="mb-8 sm:mx-0">
+          <CoverImage
+            title={lesson?.title || '(no title)'}
+            src={lesson.coverImageUrl}
+          />
         </div>
       )}
     </>

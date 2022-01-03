@@ -59,7 +59,7 @@ const InputDialog = ({
               errorBorderColor="red"
               isInvalid={!validator(value)}
               size="lg"
-              colorScheme="purple"
+              colorScheme="zinc"
               variant="outline"
               placeholder="Enter a value..."
               value={value}
@@ -75,7 +75,7 @@ const InputDialog = ({
             </Button>
             <Button
               className="ml-2"
-              colorScheme="purple"
+              colorScheme="black"
               onClick={() => {
                 localOnClose()
                 onConfirm(value)

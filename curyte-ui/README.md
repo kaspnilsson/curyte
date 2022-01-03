@@ -2,6 +2,16 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+### Environment variables
+
+Configuring the project requires setting a few environment variables. Create a file called `.env.local` in the same directory as this README, then contact Kasper for the contents.
+
+### Installing dependencies
+
+Run `yarn install` to install all of the dependencies for the project.
+
+### Running locally
+
 First, run the development server:
 
 ```bash

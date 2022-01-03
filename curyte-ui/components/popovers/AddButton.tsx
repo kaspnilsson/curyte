@@ -1,14 +1,33 @@
-import { IconButton } from '@chakra-ui/button'
+import {
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  Portal,
+} from '@chakra-ui/react'
 
 interface Props {
-  onClick: () => void
+  disabled?: boolean
+  items: React.ReactNode
 }
 
-const AddButton = ({ onClick }: Props) => {
+const AddButton = ({ disabled, items }: Props) => {
   return (
-    <IconButton aria-label="add" onClick={onClick} size="xs" variant="ghost">
-      <i className="ri-add-line"></i>
-    </IconButton>
+    <Menu isLazy>
+      <MenuButton
+        as={IconButton}
+        aria-label="add"
+        size="sm"
+        colorScheme="zinc"
+        variant="ghost"
+        disabled={disabled}
+      >
+        <i className="text-lg ri-add-circle-line text-zinc-900"></i>
+      </MenuButton>
+      <Portal>
+        <MenuList className="z-20 overflow-auto max-h-96">{items}</MenuList>
+      </Portal>
+    </Menu>
   )
 }
 

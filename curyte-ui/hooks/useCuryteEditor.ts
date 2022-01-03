@@ -21,6 +21,10 @@ import Document from '../components/extensions/Document'
 import { YoutubeEmbed } from '../components/embeds/YoutubeEmbed'
 import AutoId from '../components/extensions/AutoId'
 import Link from '@tiptap/extension-link'
+import { CuryteLink } from '../components/extensions/CuryteLink/CuryteLink'
+import { MultipleChoice } from '../components/extensions/MultipleChoice/MultipleChoice'
+import { zinc } from '../styles/theme/colors'
+import { TrailingNode } from '../components/extensions/TrailingNode'
 
 interface EditorProps {
   content: JSONContent | null
@@ -36,7 +40,6 @@ const useCuryteEditor = (
       extensions: [
         Highlight,
         Typography,
-        // Image,
         // TextAlign,
         Link,
         Superscript,
@@ -48,19 +51,20 @@ const useCuryteEditor = (
         YoutubeEmbed,
         Color,
         Underline,
+        CuryteLink,
         VimeoEmbed,
         StarterKit.configure({
           document: false,
+          dropcursor: {
+            color: zinc[500],
+          },
         }),
         Document,
         GoogleDriveEmbed,
-        // TableOfContents,
-        // Dropcursor.configure({
-        //   color: '#6a7280',
-        // }),
         ImageEmbed,
         TaskList,
         AutoId,
+        TrailingNode,
         TaskItem.configure({
           nested: true,
         }),
@@ -68,6 +72,7 @@ const useCuryteEditor = (
           showOnlyWhenEditable: true,
           placeholder: 'What are you teaching today?',
         }),
+        MultipleChoice,
       ],
       content,
       editable: !!onUpdate,

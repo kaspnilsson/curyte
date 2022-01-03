@@ -22,8 +22,7 @@ export const YoutubeEmbed = Node.create({
       inline: false,
       allowFullscreen: true,
       HTMLAttributes: {
-        class:
-          'iframe-wrapper w-fit h-96 my-8 mx-1 shadow-lg w-full rounded-xl',
+        class: 'iframe-wrapper w-full h-full shadow-lg rounded-xl min-h-96',
       },
     }
   },
@@ -58,15 +57,23 @@ export const YoutubeEmbed = Node.create({
     const src = `https://www.youtube.com/embed/${
       HTMLAttributes.src.match(youtubeUrlMatchRegex)[1]
     }?modestbranding=1`
+
     return [
       'div',
-      { class: 'px-2 w-full h-fit', 'data-drag-handle': '' },
+      { class: 'my-8 lg:max-w-[50vw] mx-auto' },
       [
-        'iframe',
+        'div',
         {
-          ...mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
-          src,
+          class: 'px-2 w-full h-auto relative aspect-w-16 aspect-h-9',
+          'data-drag-handle': '',
         },
+        [
+          'iframe',
+          {
+            ...mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
+            src,
+          },
+        ],
       ],
     ]
   },

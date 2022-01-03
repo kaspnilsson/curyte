@@ -5,7 +5,7 @@ import { Button } from '@chakra-ui/react'
 import { Lesson } from '../interfaces/lesson'
 import { lessonRoute, lessonRouteHrefPath } from '../utils/routes'
 
-type Props = {
+interface Props {
   lesson: Lesson
 }
 
@@ -17,11 +17,15 @@ const LessonLink = ({ lesson }: Props) => {
       passHref
       key={lesson.uid}
     >
-      <Button variant="link" colorScheme="black">
-        <h3 className="text-xl leading-snug w-auto flex items-center">
-          <DocumentTextIcon className="h-5 w-5 mr-2" />
+      <Button
+        variant="link"
+        colorScheme="black"
+        className="overflow-hidden rounded hover:bg-zinc-200"
+      >
+        <span className="flex items-center w-auto p-1 m-0 leading-tight tracking-tight text-inherit">
+          <DocumentTextIcon className="w-5 h-5 mr-1" />
           {lesson.title || '(no title)'}
-        </h3>
+        </span>
       </Button>
     </Link>
   )
