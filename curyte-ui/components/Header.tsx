@@ -123,7 +123,7 @@ const Header = ({
                 </IconButton>
             </Link>
             <Link href={user ? lessonSearchRoute() : indexRoute} passHref>
-            <div className="flex px-2">
+            <div className="cursor-pointer flex px-2">
             <h2 className="text-xl font-bold leading-tight tracking-tight md:text-2xl">
                   Curyte
             </h2>
