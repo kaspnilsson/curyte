@@ -25,6 +25,7 @@ import { CuryteLink } from '../components/extensions/CuryteLink/CuryteLink'
 import { MultipleChoice } from '../components/extensions/MultipleChoice/MultipleChoice'
 import { zinc } from '../styles/theme/colors'
 import { TrailingNode } from '../components/extensions/TrailingNode'
+import PasteHandler from '../components/extensions/HandlePaste/HandlePaste'
 
 interface EditorProps {
   content: JSONContent | null
@@ -51,6 +52,7 @@ const useCuryteEditor = (
         YoutubeEmbed,
         Color,
         Underline,
+        PasteHandler,
         CuryteLink,
         VimeoEmbed,
         StarterKit.configure({

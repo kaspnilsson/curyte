@@ -16,6 +16,10 @@ declare module '@tiptap/core' {
        * Add an image
        */
       setImage: (options: { src: string }) => ReturnType
+      /**
+       * Add an image
+       */
+      setImageByFile: (options: { img: File }) => ReturnType
     }
   }
 }
@@ -86,6 +90,18 @@ export const ImageEmbed = Node.create({
 
   addCommands() {
     return {
+      setImage:
+        (options: { src: string }) =>
+        ({ tr, dispatch }) => {
+          const { selection } = tr
+          const node = this.type.create(options)
+
+          if (dispatch) {
+            tr.replaceRangeWith(selection.from, selection.to, node)
+          }
+
+          return true
+        },
       setImage:
         (options: { src: string }) =>
         ({ tr, dispatch }) => {
