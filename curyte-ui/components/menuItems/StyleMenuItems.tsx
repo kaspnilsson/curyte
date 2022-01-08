@@ -25,11 +25,32 @@ const StyleMenuItems = ({ editor }: Props) => (
       description="Small section heading."
     />
     <MenuItem
+      onClick={() => editor.chain().focus().toggleStrike().run()}
+      icon={<i className="ri-2x ri-strikethrough" />}
+      label="Strikethrough"
+      isActive={editor.isActive('strike')}
+      description="Crossed out text."
+    />
+    <MenuItem
+      onClick={() => editor.chain().focus().toggleSuperscript().run()}
+      icon={<i className="ri-2x ri-superscript" />}
+      label="Superscript"
+      isActive={editor.isActive('superscript')}
+      description="Small superscripted text."
+    />
+    <MenuItem
+      onClick={() => editor.chain().focus().toggleSubscript().run()}
+      icon={<i className="ri-2x ri-subscript" />}
+      label="Subscript"
+      isActive={editor.isActive('subscript')}
+      description="Small subscripted text."
+    />
+    {/* <MenuItem
       onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
       icon={<i className="ri-2x ri-h-4" />}
       label="Heading 4"
       description="Very small section heading."
-    />
+    /> */}
     {/* <MenuItem
       onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
       icon={<i className="ri-2x ri-h-5" />}

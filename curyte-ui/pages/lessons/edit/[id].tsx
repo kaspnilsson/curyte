@@ -39,11 +39,11 @@ const LessonView = ({ id }: Props) => {
   useEffect(() => {
     if (!user || userLoading) return
     const fetchLesson = async () => {
-      const d = await getLesson(id)
-      if (!d) {
+      const l = await getLesson(id)
+      if (!l) {
         router.replace(newLessonRoute())
       }
-      setLesson(d)
+      setLesson(l)
       setLoading(false)
     }
     setLoading(true)

@@ -10,9 +10,9 @@ import {
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import MenuIconButton from './MenuIconButton'
-import StyleMenuItems from './menuItems/StyleMenuItems'
 import InsertMenuItems from './menuItems/InsertMenuItems'
 import InputDialog, { InputDialogProps } from './InputDialog'
+import StyleMenuButton from './StyleMenuButton'
 
 interface Props {
   editor: Editor | null
@@ -52,25 +52,6 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
           className="opacity-100 border-zinc-200"
         />
       </Center>
-      <Menu id="style-menu" isLazy boundary="scrollParent" colorScheme="zinc">
-        <MenuButton size="sm" variant="ghost" colorScheme="zinc" as={Button}>
-          <div className="flex items-center gap-1 text-sm text-zinc-900">
-            Style
-            <i className="w-2 text-lg ri-arrow-drop-down-line"></i>
-          </div>
-        </MenuButton>
-        <Portal>
-          <MenuList className="z-20 overflow-auto max-h-96">
-            <StyleMenuItems editor={editor} />
-          </MenuList>
-        </Portal>
-      </Menu>
-      <Center className="w-2 h-6">
-        <Divider
-          orientation="vertical"
-          className="opacity-100 border-zinc-200"
-        />
-      </Center>
       <MenuIconButton
         label="Bold"
         onClick={() => editor.chain().focus().toggleBold().run()}
@@ -84,12 +65,6 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         icon={<i className="text-lg ri-italic" />}
       />
       <MenuIconButton
-        label="Strikethrough"
-        onClick={() => editor.chain().focus().toggleStrike().run()}
-        isActive={editor.isActive('strike')}
-        icon={<i className="text-lg ri-strikethrough" />}
-      />
-      <MenuIconButton
         label="Underline"
         onClick={() => editor.chain().focus().toggleUnderline().run()}
         isActive={editor.isActive('underline')}
@@ -100,12 +75,6 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         onClick={() => editor.chain().focus().toggleHighlight().run()}
         isActive={editor.isActive('highlight')}
         icon={<i className="text-lg ri-mark-pen-line" />}
-      />
-      <MenuIconButton
-        label="Superscript"
-        onClick={() => editor.chain().focus().toggleSuperscript().run()}
-        isActive={editor.isActive('superscript')}
-        icon={<i className="text-lg ri-superscript" />}
       />
       <MenuIconButton
         label="Code (inline)"
@@ -121,6 +90,13 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         }}
         icon={<i className="text-lg ri-format-clear" />}
       />
+      <Center className="w-2 h-6">
+        <Divider
+          orientation="vertical"
+          className="opacity-100 border-zinc-200"
+        />
+      </Center>
+      <StyleMenuButton editor={editor} />
       <Center className="w-4 h-6">
         <Divider
           orientation="vertical"
