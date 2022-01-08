@@ -1,5 +1,5 @@
 import React, { SyntheticEvent, useState } from 'react'
-import { UploadIcon } from '@heroicons/react/solid'
+import { UploadIcon, LockClosedIcon } from '@heroicons/react/solid'
 import { Button, Text } from '@chakra-ui/react'
 import { Timestamp } from 'firebase/firestore'
 
@@ -12,7 +12,7 @@ import { CheckIcon } from '@heroicons/react/outline'
 type Props = {
   lesson?: Lesson
   user: Author
-  handleSubmit: () => Promise<void>
+  handleTogglePrivate: () => Promise<void>
   handleUpdate: (l: Lesson) => Promise<void>
   handlePreview?: () => Promise<void>
 }
@@ -20,7 +20,7 @@ type Props = {
 const EditLessonPage = ({
   lesson,
   user,
-  handleSubmit,
+  handleTogglePrivate,
   handleUpdate,
   handlePreview,
 }: Props) => {
@@ -28,6 +28,7 @@ const EditLessonPage = ({
   const [autosaving, setAutosaving] = useState(false)
 
   const makeNewLessonLocally = (l: Partial<Lesson>, u: Author): Lesson => ({
+    ...lesson,
     content: l.content || null,
     description: l.description || '',
     tags: l.tags || [],
@@ -46,7 +47,7 @@ const EditLessonPage = ({
     event.preventDefault()
     try {
       setSaving(true)
-      await handleSubmit()
+      await handleTogglePrivate()
     } finally {
       setSaving(false)
     }
@@ -65,7 +66,7 @@ const EditLessonPage = ({
   return (
     <LessonEditor lesson={lesson} handleUpdate={localHandleUpdate}>
       <footer className="fixed bottom-0 left-0 z-20 w-full h-16 bg-white border-t border-accent-2">
-        <div className="flex items-center justify-end w-full h-full px-5 m-auto lg:w-2/3">
+        <div className="flex items-center justify-end w-full h-full px-5 m-auto md:px-0 md:w-2/3">
           <div className="flex items-center gap-2 mr-auto italic text-zinc-500">
             {autosaving && (
               <>
@@ -90,15 +91,27 @@ const EditLessonPage = ({
               Preview
             </Button>
           )}
-          <Button
-            colorScheme="black"
-            disabled={saving || !canPublish}
-            className="flex items-center justify-between font-semibold disabled:opacity-50"
-            onClick={localHandleSubmit}
-          >
-            <UploadIcon className="w-5 h-5 mr-2" />
-            Publish
-          </Button>
+          {lesson?.private && (
+            <Button
+              colorScheme="black"
+              disabled={saving || !canPublish}
+              className="flex items-center justify-between font-semibold disabled:opacity-50"
+              onClick={localHandleSubmit}
+            >
+              <UploadIcon className="w-5 h-5 mr-2" />
+              Publish
+            </Button>
+          )}
+          {!lesson?.private && (
+            <Button
+              colorScheme="black"
+              className="flex items-center justify-between font-semibold disabled:opacity-50"
+              onClick={localHandleSubmit}
+            >
+              <LockClosedIcon className="w-5 h-5 mr-2" />
+              Make private
+            </Button>
+          )}
         </div>
       </footer>
     </LessonEditor>
