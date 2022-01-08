@@ -167,23 +167,25 @@ const UnitEditor = ({
                         </span>
                         <Tooltip label="Edit lesson">
                           <IconButton
+                            variant="ghost"
                             colorScheme="black"
                             size="sm"
                             rounded="full"
-                            className="self-end"
+                            className="self-end hover:bg-zinc-200"
                             aria-label="Edit lesson"
-                            icon={<PencilAltIcon className="w-4 h-4" />}
+                            icon={<PencilAltIcon className="w-5 h-5" />}
                             onClick={() => onEditLesson(id)}
                           />
                         </Tooltip>
                         <Tooltip label="Remove lesson">
                           <IconButton
+                            variant="ghost"
                             colorScheme="black"
                             size="sm"
                             rounded="full"
-                            className="self-end"
+                            className="self-end hover:bg-zinc-200"
                             aria-label="Delete lesson"
-                            icon={<TrashIcon className="w-4 h-4" />}
+                            icon={<TrashIcon className="w-5 h-5" />}
                             onClick={() => onDeleteLesson(id)}
                           />
                         </Tooltip>
