@@ -1,6 +1,5 @@
 import { NextSeo } from 'next-seo'
 import { auth } from '../../firebase/clientApp'
-import Head from 'next/head'
 import ErrorPage from 'next/error'
 import React, { useEffect, useState } from 'react'
 import { Lesson } from '../../interfaces/lesson'
@@ -8,115 +7,115 @@ import { GetServerSideProps } from 'next'
 import Layout from '../../components/Layout'
 import { Author } from '../../interfaces/author'
 import Container from '../../components/Container'
-import LessonHeader from '../../components/LessonHeader'
-import FancyEditor from '../../components/FancyEditor'
 import LoadingSpinner from '../../components/LoadingSpinner'
-import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import {
-  editLessonRoute,
-  lessonRoute,
-  lessonSearchRoute,
-} from '../../utils/routes'
+import { pathRoute } from '../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
-import useCuryteEditor from '../../hooks/useCuryteEditor'
-import LessonOutline from '../../components/LessonOutline'
-import {
-  logPathView,
-  deleteLesson,
-  getLesson,
-  getAuthor,
-  setLessonFeatured,
-} from '../../firebase/api'
-import { userIsAdmin } from '../../utils/hacks'
-import { useToast } from '@chakra-ui/react'
+import { logPathView, getAuthor, getPath, getLessons } from '../../firebase/api'
+import { Center, Divider, Heading } from '@chakra-ui/react'
+import { where } from 'firebase/firestore'
+import { Path } from '../../interfaces/path'
+import { title } from 'process'
+import { computeClassesForTitle } from '../../components/LessonTitle'
+import UnitOutline from '../../components/UnitOutline'
+import AuthorLink from '../../components/AuthorLink'
 
 interface Props {
-  lesson: Lesson
+  lessonsMap: { [uid: string]: Lesson }
+  path: Path
   author: Author
 }
 
-const PublishedPathView = ({ lesson, author }: Props) => {
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  const [user, userLoading] = useAuthState(auth)
-  const toast = useToast()
+const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
+  const [loading] = useState(false)
+  const [, userLoading] = useAuthState(auth)
   // Log views only on render of a published path
   useEffect(() => {
-    logPathView(lesson.uid)
-  }, [lesson.uid])
+    if (!path.published) return
+    logPathView(path.uid)
+  }, [path])
 
-  const handleDelete = async () => {
-    setLoading(true)
-    await deleteLesson(lesson.uid)
-    setLoading(false)
-    router.push(lessonSearchRoute())
-  }
+  // const handleDelete = async () => {
+  //   setLoading(true)
+  //   await deleteLesson(lesson.uid)
+  //   setLoading(false)
+  //   router.push(lessonSearchRoute())
+  // }
 
-  const editor = useCuryteEditor({ content: lesson.content }, [lesson])
+  if (!path) return <ErrorPage statusCode={404} />
 
-  if (!lesson) return <ErrorPage statusCode={404} />
+  // const openGraphDescription = `${lesson.description}, tags:${[
+  //   lesson.tags || [],
+  // ].join(', ')}`
+  // const openGraphImages = []
+  // if (lesson.coverImageUrl) {
+  //   openGraphImages.push({ url: lesson.coverImageUrl })
+  // }
 
-  const openGraphDescription = `${lesson.description}, tags:${[
-    lesson.tags || [],
-  ].join(', ')}`
-  const openGraphImages = []
-  if (lesson.coverImageUrl) {
-    openGraphImages.push({ url: lesson.coverImageUrl })
-  }
-
-  const handleToggleFeatured = async () => {
-    await setLessonFeatured(lesson.uid, !lesson.featured)
-    toast({
-      title: `Lesson featured state set to ${!lesson.featured}`,
-    })
-  }
+  // const handleToggleFeatured = async () => {
+  //   await setLessonFeatured(lesson.uid, !lesson.featured)
+  //   toast({
+  //     title: `Lesson featured state set to ${!lesson.featured}`,
+  //   })
+  // }
   return (
     <>
       {(loading || userLoading) && <LoadingSpinner />}
       {!(loading || userLoading) && (
-        <Layout
-          showProgressBar
-          title={lesson.title}
-          sidebar={<LessonOutline editor={editor} />}
-        >
+        <Layout title={path.title} sidebar={<div></div>}>
           <NextSeo
-            title={lesson.title}
-            description={openGraphDescription}
+            title={path.title}
+            // description={openGraphDescription}
             openGraph={{
-              url: lessonRoute(lesson.uid),
-              title: lesson.title,
-              description: openGraphDescription,
-              images: openGraphImages,
+              url: pathRoute(path.uid),
+              title: path.title,
+              // description: openGraphDescription,
+              // images: openGraphImages,
               site_name: 'Curyte',
             }}
           ></NextSeo>
-          <Container>
-            <article className="px-4 mb-32">
-              <Head>
-                <title>{lesson.title}</title>
-              </Head>
-              <LessonHeader
-                author={author}
-                lesson={lesson}
-                handleDelete={
-                  user && user.uid === lesson.authorId
-                    ? handleDelete
-                    : undefined
-                }
-                handleEdit={
-                  user && user.uid === lesson.authorId
-                    ? () => router.push(editLessonRoute(lesson.uid))
-                    : undefined
-                }
-                handleToggleFeatured={
-                  user && userIsAdmin(user.uid)
-                    ? handleToggleFeatured
-                    : undefined
-                }
-              />
-              <FancyEditor readOnly editor={editor} />
-            </article>
+          <Container className="px-5">
+            <div className="flex">
+              <div className="flex flex-col flex-grow gap-2 overflow-hidden">
+                <div className="flex items-center justify-between w-full">
+                  <div
+                    className={`${computeClassesForTitle(
+                      title
+                    )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0 mx-4 mb-4`}
+                  >
+                    {path.title || '(no title)'}
+                  </div>
+                </div>
+                <div className="flex items-center justify-between px-4 mb-6">
+                  <div className="flex items-center gap-2 text-sm md:text-base">
+                    <AuthorLink author={author} />
+                    {!!path.viewCount && (
+                      <>
+                        <Center className="w-6 h-4">
+                          <Divider orientation="vertical" />
+                        </Center>
+                        {`${path.viewCount} views`}
+                      </>
+                    )}
+                  </div>
+                </div>
+                <Heading
+                  className="flex items-center justify-between mx-4 font-bold leading-tight tracking-tight"
+                  fontSize="3xl"
+                >
+                  Units
+                </Heading>
+                {path.units?.map((u, index) => (
+                  <UnitOutline
+                    unit={u}
+                    key={index}
+                    unitIndex={index}
+                    lessonsMap={lessonsMap}
+                  />
+                ))}
+                {!path.units?.length && 'No units'}
+              </div>
+            </div>
           </Container>
         </Layout>
       )}
@@ -147,9 +146,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params as IParams
 
   // TODO - fetch path and path lessons & authors to render cards
-  const lesson = await getLesson(id)
-  const author = await getAuthor(lesson.authorId)
-  return { props: { lesson, author } }
+  const path = await getPath(id)
+  const author = await getAuthor(path.authorId)
+  const lessonIds = []
+  for (const u of path.units || []) {
+    lessonIds.push(...(u.lessonIds || []))
+  }
+  const lessons = await getLessons([where('uid', 'in', lessonIds)])
+  const lessonsMap: { [uid: string]: Lesson } = {}
+  for (const l of lessons) {
+    lessonsMap[l.uid] = l
+  }
+  return { props: { path, author, lessonsMap } }
 }
 
 export default PublishedPathView

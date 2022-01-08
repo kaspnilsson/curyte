@@ -318,7 +318,6 @@ export async function updatePath(path: Path) {
  */
 export async function getPath(uid: string): Promise<Path> {
   try {
-    if (!auth.currentUser) throw new Error('Not logged in')
     return (
       await getDoc(doc(collection(firestore, 'paths'), uid))
     ).data() as Path

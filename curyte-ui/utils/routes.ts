@@ -44,3 +44,6 @@ export const newPathRoute = '/paths/new'
 
 export const editPathRoute = (uid: string) => `/paths/edit/${uid}`
 export const editPathRouteHrefPath = '/paths/edit/[id]'
+
+export const pathRoute = (uid: string) => `/paths/${uid}`
+export const pathRouteHrefPath = '/paths/[id]'

@@ -1,9 +1,4 @@
 import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
   Button,
   Heading,
   IconButton,
@@ -27,6 +22,7 @@ import {
   DroppableProvided,
   Draggable,
   DropResult,
+  DraggableProvidedDragHandleProps,
 } from 'react-beautiful-dnd'
 import { createLesson } from '../firebase/api'
 import { Author } from '../interfaces/author'
@@ -42,9 +38,18 @@ interface Props {
   user: Author
   lessonsByUid: { [uid: string]: Lesson }
   onUpdate: (u: Unit) => Promise<void>
+  onDelete: () => Promise<void>
+  parentDragHandleProps?: DraggableProvidedDragHandleProps
 }
 
-const UnitEditor = ({ unit, user, onUpdate, lessonsByUid }: Props) => {
+const UnitEditor = ({
+  unit,
+  user,
+  onUpdate,
+  onDelete,
+  lessonsByUid,
+  parentDragHandleProps,
+}: Props) => {
   const [loading, setLoading] = useState(false)
   const [title, setTitle] = useState(unit.title?.trim() || '')
   const [lessonIds, setLessonIds] = useState(unit.lessonIds || [])
@@ -90,118 +95,127 @@ const UnitEditor = ({ unit, user, onUpdate, lessonsByUid }: Props) => {
   }
 
   const onDeleteLesson = (uid: string) => {
-    setLessonIds(lessonIds.filter((id) => id !== uid))
+    const newLessonIds = lessonIds.filter((id) => id !== uid)
+    setLessonIds(newLessonIds)
+    onUpdate({ ...unit, lessonIds: newLessonIds })
   }
 
   return (
     <>
-      <AccordionItem>
-        <AccordionButton>
-          <div className="flex items-center w-full gap-2">
-            <GripIcon className="w-8 h-8 p-1 text-zinc-500"></GripIcon>
-            <Input
-              type="text"
-              size="lg"
-              value={title}
-              onChange={(e) => onTitleUpdate(e.target.value)}
-              colorScheme="zinc"
-              placeholder="Unit title..."
-              className="flex-1 flex-grow font-semibold tracking-tight resize-none leading-tighter"
-            ></Input>
-            <AccordionIcon />
+      <div className="flex items-center w-full gap-2 p-4">
+        <Input
+          type="text"
+          size="lg"
+          value={title}
+          onChange={(e) => onTitleUpdate(e.target.value)}
+          colorScheme="zinc"
+          placeholder="Unit title..."
+          className="flex-1 flex-grow font-semibold tracking-tight resize-none leading-tighter"
+        ></Input>
+        <Tooltip label="Remove unit">
+          <IconButton
+            colorScheme="black"
+            variant="ghost"
+            aria-label="Delete lesson"
+            icon={<TrashIcon className="w-6 h-6" />}
+            onClick={() => onDelete()}
+          />
+        </Tooltip>
+        {parentDragHandleProps && (
+          <div
+            {...parentDragHandleProps}
+            className="p-2 rounded hover:bg-zinc-100"
+          >
+            <GripIcon className="w-6 h-6 text-zinc-500"></GripIcon>
           </div>
-        </AccordionButton>
-        <AccordionPanel>
-          <DragDropContext onDragEnd={onDragEnd}>
-            <div className="relative">
-              <Heading
-                className="font-bold leading-tight tracking-tight"
-                fontSize="xl"
+        )}
+      </div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="relative p-4">
+          <Heading
+            className="font-bold leading-tight tracking-tight"
+            fontSize="xl"
+          >
+            Lessons
+          </Heading>
+          {loading && <LoadingSpinner />}
+          <Droppable droppableId="lessons">
+            {(provided: DroppableProvided) => (
+              <div
+                className="my-4 lessons"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
               >
-                Lessons
-              </Heading>
-              {loading && <LoadingSpinner />}
-              <Droppable droppableId="lessons">
-                {(provided: DroppableProvided) => (
-                  <Accordion
-                    allowMultiple
-                    allowToggle
-                    className="my-4 lessons"
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                  >
-                    {lessonIds.map((id, index) => (
-                      <Draggable key={id} draggableId={id} index={index}>
-                        {(provided, snapshot) => (
-                          <span
-                            className={classNames(
-                              'flex items-center w-full gap-2 px-4 py-2 rounded hover:bg-zinc-100',
-                              { 'bg-zinc-50 shadow-xl': snapshot.isDragging }
-                            )}
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <GripIcon className="w-6 h-6 p-1 text-zinc-500"></GripIcon>
-                            <span className="flex flex-1 gap-2 font-semibold leading-tight tracking-tight">
-                              <div>{index + 1}.</div>
-                              {lessonsByUid[id]
-                                ? lessonsByUid[id].title || '(no title)'
-                                : id}
-                            </span>
-                            <Tooltip label="Edit lesson">
-                              <IconButton
-                                colorScheme="black"
-                                size="sm"
-                                rounded="full"
-                                className="self-end"
-                                aria-label="Edit lesson"
-                                icon={<PencilAltIcon className="w-4 h-4" />}
-                                onClick={() => onEditLesson(id)}
-                              />
-                            </Tooltip>
-                            <Tooltip label="Remove">
-                              <IconButton
-                                colorScheme="black"
-                                size="sm"
-                                rounded="full"
-                                className="self-end"
-                                aria-label="Delete lesson"
-                                icon={<TrashIcon className="w-4 h-4" />}
-                                onClick={() => onDeleteLesson(id)}
-                              />
-                            </Tooltip>
-                          </span>
+                {lessonIds.map((id, index) => (
+                  <Draggable key={id} draggableId={id} index={index}>
+                    {(provided, snapshot) => (
+                      <span
+                        className={classNames(
+                          'flex items-center w-full gap-2 px-4 py-2 rounded hover:bg-zinc-100',
+                          { 'bg-zinc-50 shadow-xl': snapshot.isDragging }
                         )}
-                      </Draggable>
-                    ))}
-                    {!lessonIds?.length && 'No lessons in this unit'}
-                    {provided.placeholder}
-                  </Accordion>
-                )}
-              </Droppable>
-              <div className="flex gap-2">
-                <Button
-                  className="flex items-center gap-1 w-fit-content"
-                  colorScheme="black"
-                  onClick={() => createNewLesson()}
-                >
-                  <PlusIcon className="w-4 h-4" />
-                  Create new lesson
-                </Button>
-                <Button
-                  className="flex items-center gap-1 w-fit-content"
-                  colorScheme="black"
-                  onClick={onOpen}
-                >
-                  <SearchIcon className="w-4 h-4" />
-                  Add existing lesson
-                </Button>
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <GripIcon className="w-6 h-6 p-1 text-zinc-500"></GripIcon>
+                        <span className="flex flex-1 gap-2 font-semibold leading-tight tracking-tight">
+                          <div>{index + 1}.</div>
+                          {lessonsByUid[id]
+                            ? lessonsByUid[id].title || '(no title)'
+                            : id}
+                        </span>
+                        <Tooltip label="Edit lesson">
+                          <IconButton
+                            colorScheme="black"
+                            size="sm"
+                            rounded="full"
+                            className="self-end"
+                            aria-label="Edit lesson"
+                            icon={<PencilAltIcon className="w-4 h-4" />}
+                            onClick={() => onEditLesson(id)}
+                          />
+                        </Tooltip>
+                        <Tooltip label="Remove lesson">
+                          <IconButton
+                            colorScheme="black"
+                            size="sm"
+                            rounded="full"
+                            className="self-end"
+                            aria-label="Delete lesson"
+                            icon={<TrashIcon className="w-4 h-4" />}
+                            onClick={() => onDeleteLesson(id)}
+                          />
+                        </Tooltip>
+                      </span>
+                    )}
+                  </Draggable>
+                ))}
+                {!lessonIds?.length && 'No lessons in this unit'}
+                {provided.placeholder}
               </div>
-            </div>
-          </DragDropContext>
-        </AccordionPanel>
-      </AccordionItem>
+            )}
+          </Droppable>
+          <div className="flex gap-2">
+            <Button
+              className="flex items-center gap-1 w-fit-content"
+              colorScheme="black"
+              onClick={() => createNewLesson()}
+            >
+              <PlusIcon className="w-4 h-4" />
+              Create new lesson
+            </Button>
+            <Button
+              className="flex items-center gap-1 w-fit-content"
+              colorScheme="black"
+              onClick={onOpen}
+            >
+              <SearchIcon className="w-4 h-4" />
+              Add existing lesson
+            </Button>
+          </div>
+        </div>
+      </DragDropContext>
       <LessonSearchModal
         isOpen={isOpen}
         onClose={onClose}

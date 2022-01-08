@@ -5,7 +5,7 @@ import { computeClassesForTitle } from './LessonTitle'
 import TextareaAutosize from 'react-textarea-autosize'
 import { useEffect, useState } from 'react'
 import Container from './Container'
-import { Accordion, Button, Heading, Spinner } from '@chakra-ui/react'
+import { Button, Heading, Spinner } from '@chakra-ui/react'
 import { PlusIcon } from '@heroicons/react/outline'
 import {
   DragDropContext,
@@ -55,6 +55,18 @@ const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
     await handleUpdate({ ...path, units: unitsClone })
   }
 
+  const onUnitDelete = async (index: number) => {
+    const unitsClone = [...units]
+    unitsClone.splice(index, 1)
+    setUnits(unitsClone)
+    await handleUpdate({ ...path, units: unitsClone })
+  }
+
+  const handleTitleChange = async (title: string) => {
+    setTitle(title)
+    await handleUpdate({ ...path, title })
+  }
+
   useEffect(() => {
     const toFetch: string[] = []
     for (const unit of units) {
@@ -89,7 +101,7 @@ const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
                 )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0 mx-4 mb-4`}
                 placeholder="Add a title to your path..."
                 value={title}
-                onChange={({ target }) => setTitle(target.value)}
+                onChange={({ target }) => handleTitleChange(target.value)}
               />
             </div>
             <Heading
@@ -108,9 +120,7 @@ const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
               <div>
                 <Droppable droppableId="units">
                   {(provided: DroppableProvided) => (
-                    <Accordion
-                      allowMultiple
-                      allowToggle
+                    <div
                       className=" units"
                       {...provided.droppableProps}
                       ref={provided.innerRef}
@@ -129,20 +139,21 @@ const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
                               })}
                               ref={provided.innerRef}
                               {...provided.draggableProps}
-                              {...provided.dragHandleProps}
                             >
                               <UnitEditor
                                 unit={u}
                                 lessonsByUid={lessonsByUid}
                                 user={user}
                                 onUpdate={(u) => onUnitUpdate(u, index)}
+                                onDelete={() => onUnitDelete(index)}
+                                parentDragHandleProps={provided.dragHandleProps}
                               />
                             </span>
                           )}
                         </Draggable>
                       ))}
                       {provided.placeholder}
-                    </Accordion>
+                    </div>
                   )}
                 </Droppable>
                 <Button
