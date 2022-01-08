@@ -17,7 +17,7 @@ type Props = {
 
 const UserView = ({ lessons, author }: Props) => {
   return (
-    <Layout>
+    <Layout title={author.displayName || 'Author page'}>
       <Container className="px-5">
         <section className="flex my-8">
           <div className="flex-grow">
@@ -28,7 +28,7 @@ const UserView = ({ lessons, author }: Props) => {
             <SocialLinks author={author} />
           </div>
           <div className="flex-none ml-12">
-            <Avatar author={author} className="w-32 h-32" />
+            <Avatar author={author} size="2xl" />
           </div>
         </section>
         <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">

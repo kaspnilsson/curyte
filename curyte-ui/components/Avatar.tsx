@@ -6,21 +6,19 @@ import React from 'react'
 type Props = {
   author: Author
   className?: string
+  size?: '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
 }
 
-const CuryteAvatar = ({ author, className }: Props) => {
+const CuryteAvatar = ({ author, className, size = 'md' }: Props) => {
+  if (!author) return null
   return (
-    <>
-      {!author && null}
-      {author && (
-        <Avatar
-          src={author.photoURL}
-          name={author.displayName}
-          className={'shadow-xl shadow-zinc-900/10 ' + className}
-          alt={author.displayName}
-        />
-      )}
-    </>
+    <Avatar
+      src={author.photoURL}
+      name={author.displayName}
+      className={'shadow-xl shadow-zinc-900/10 ' + className}
+      alt={author.displayName}
+      size={size}
+    />
   )
 }
 
