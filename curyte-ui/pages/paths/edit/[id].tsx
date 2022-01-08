@@ -13,6 +13,7 @@ import { getPath, updatePath } from '../../../firebase/api'
 import { Path } from '../../../interfaces/path'
 import EditPathPage from '../../../components/EditPathPage'
 import { exception } from '../../../utils/gtag'
+import { Timestamp } from 'firebase/firestore'
 
 type Props = {
   id: string
@@ -59,11 +60,16 @@ const EditPathView = ({ id }: Props) => {
   //     router.push(lessonRoute(uid))
   //   }
 
-  const debouncedUpdatePath = debounce(async (l: Path) => {
-    const p = updatePath(l)
-    setSavingPromise(p)
-    await p
-    setPath(l)
+  const debouncedUpdatePath = debounce(async (p: Path) => {
+    p = {
+      ...p,
+      created: p?.created || Timestamp.now().toDate().toISOString(),
+      updated: Timestamp.now().toDate().toISOString(),
+    }
+    const pathPromise = updatePath(p)
+    setSavingPromise(pathPromise)
+    await pathPromise
+    setPath(p)
     setSavingPromise(null)
   }, 500)
 

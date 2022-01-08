@@ -1,14 +1,11 @@
 import { NextSeo } from 'next-seo'
-import { auth } from '../../firebase/clientApp'
 import ErrorPage from 'next/error'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Lesson } from '../../interfaces/lesson'
 import { GetServerSideProps } from 'next'
 import Layout from '../../components/Layout'
 import { Author } from '../../interfaces/author'
 import Container from '../../components/Container'
-import LoadingSpinner from '../../components/LoadingSpinner'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { pathRoute } from '../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
 import { logPathView, getAuthor, getPath, getLessons } from '../../firebase/api'
@@ -19,6 +16,7 @@ import { title } from 'process'
 import { computeClassesForTitle } from '../../components/LessonTitle'
 import UnitOutline from '../../components/UnitOutline'
 import AuthorLink from '../../components/AuthorLink'
+import PathActions from '../../components/PathActions'
 
 interface Props {
   lessonsMap: { [uid: string]: Lesson }
@@ -27,8 +25,6 @@ interface Props {
 }
 
 const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
-  const [loading] = useState(false)
-  const [, userLoading] = useAuthState(auth)
   // Log views only on render of a published path
   useEffect(() => {
     if (!path.published) return
@@ -59,67 +55,65 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
   //   })
   // }
   return (
-    <>
-      {(loading || userLoading) && <LoadingSpinner />}
-      {!(loading || userLoading) && (
-        <Layout title={path.title} sidebar={<div></div>}>
-          <NextSeo
-            title={path.title}
-            // description={openGraphDescription}
-            openGraph={{
-              url: pathRoute(path.uid),
-              title: path.title,
-              // description: openGraphDescription,
-              // images: openGraphImages,
-              site_name: 'Curyte',
-            }}
-          ></NextSeo>
-          <Container className="px-5">
-            <div className="flex">
-              <div className="flex flex-col flex-grow gap-2 overflow-hidden">
-                <div className="flex items-center justify-between w-full">
-                  <div
-                    className={`${computeClassesForTitle(
-                      title
-                    )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0 mx-4 mb-4`}
-                  >
-                    {path.title || '(no title)'}
-                  </div>
-                </div>
-                <div className="flex items-center justify-between px-4 mb-6">
-                  <div className="flex items-center gap-2 text-sm md:text-base">
-                    <AuthorLink author={author} />
-                    {!!path.viewCount && (
-                      <>
-                        <Center className="w-6 h-4">
-                          <Divider orientation="vertical" />
-                        </Center>
-                        {`${path.viewCount} views`}
-                      </>
-                    )}
-                  </div>
-                </div>
-                <Heading
-                  className="flex items-center justify-between mx-4 font-bold leading-tight tracking-tight"
-                  fontSize="3xl"
-                >
-                  Units
-                </Heading>
-                {path.units?.map((u, index) => (
-                  <UnitOutline
-                    unit={u}
-                    key={index}
-                    unitIndex={index}
-                    lessonsMap={lessonsMap}
-                  />
-                ))}
-                {!path.units?.length && 'No units'}
+    <Layout title={path.title} sidebar={<div></div>}>
+      <NextSeo
+        title={path.title}
+        // description={openGraphDescription}
+        openGraph={{
+          url: pathRoute(path.uid),
+          title: path.title,
+          // description: openGraphDescription,
+          // images: openGraphImages,
+          site_name: 'Curyte',
+        }}
+      ></NextSeo>
+      <Container className="px-5">
+        <div className="flex">
+          <div className="flex flex-col flex-grow gap-2 overflow-hidden">
+            <div className="flex items-center justify-between w-full">
+              <div
+                className={`${computeClassesForTitle(
+                  title
+                )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0 mx-4 mb-4`}
+              >
+                {path.title || '(no title)'}
               </div>
             </div>
-          </Container>
-        </Layout>
-      )}
-    </>
+            <div className="flex flex-wrap items-center justify-between gap-2 px-4 mb-6">
+              <div className="flex items-center gap-2 text-sm md:text-base">
+                <AuthorLink author={author} />
+                {!!path.viewCount && (
+                  <>
+                    <Center className="w-6 h-4">
+                      <Divider orientation="vertical" />
+                    </Center>
+                    {`${path.viewCount} views`}
+                  </>
+                )}
+              </div>
+              <div className="flex items-center gap-1">
+                <PathActions path={path} isReadOnlyView />
+              </div>
+            </div>
+            <Heading
+              className="flex items-center justify-between mx-4 font-bold leading-tight tracking-tight"
+              fontSize="3xl"
+            >
+              Units
+            </Heading>
+            {path.units?.map((u, index) => (
+              <UnitOutline
+                unit={u}
+                key={index}
+                unitIndex={index}
+                lessonsMap={lessonsMap}
+              />
+            ))}
+            {!path.units?.length && 'No units'}
+          </div>
+        </div>
+      </Container>
+    </Layout>
   )
 }
 
@@ -152,7 +146,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   for (const u of path.units || []) {
     lessonIds.push(...(u.lessonIds || []))
   }
-  const lessons = await getLessons([where('uid', 'in', lessonIds)])
+  let lessons: Lesson[] = []
+  if (lessonIds.length) {
+    lessons = await getLessons([where('uid', 'in', lessonIds)])
+  }
   const lessonsMap: { [uid: string]: Lesson } = {}
   for (const l of lessons) {
     lessonsMap[l.uid] = l

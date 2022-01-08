@@ -5,6 +5,8 @@ export declare interface Path {
   units?: Unit[]
   published?: boolean
   viewCount?: number
+  created?: string
+  updated?: string
 }
 
 export declare interface Unit {

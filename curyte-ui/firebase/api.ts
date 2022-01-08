@@ -51,7 +51,7 @@ export async function getLessons(
       const mapped: Lesson[] = []
       result.docs.forEach((result) => mapped.push(result.data() as Lesson))
       return mapped.sort((a, b) =>
-        compareDesc(parseISO(a.created), parseISO(b.created))
+        compareDesc(parseISO(a.created || ''), parseISO(b.created || ''))
       )
     })
   } catch (e) {
@@ -305,6 +305,32 @@ export async function updatePath(path: Path) {
     await setDoc(doc(collection(firestore, 'paths'), path.uid), path)
   } catch (e) {
     console.error(path)
+    exception(e as string)
+    throw e
+  }
+}
+
+/**
+ * Gets paths from firestore by applying clauses.
+ *
+ * @param whereClauses
+ * @returns
+ */
+export async function getPaths(
+  queryConstraints: QueryConstraint[]
+): Promise<Path[]> {
+  try {
+    const q: CollectionReference<DocumentData> | Query<DocumentData> = query(
+      collection(firestore, 'paths'),
+      ...queryConstraints
+    )
+    return getDocs(q).then((result) => {
+      const mapped: Path[] = []
+      result.docs.forEach((result) => mapped.push(result.data() as Path))
+      // TODO: sort
+      return mapped
+    })
+  } catch (e) {
     exception(e as string)
     throw e
   }

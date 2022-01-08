@@ -30,6 +30,7 @@ export const newLessonRoute = (copyFrom?: string) => {
   if (copyFrom) out += `?copyFrom=${copyFrom}`
   return out
 }
+export const newLessonRouteHref = '/lessons/new'
 
 export const tagRoute = (tag: string) => `/tags/${tag}`
 export const tagRouteHrefPath = '/tags/[tag]'

@@ -20,6 +20,7 @@ import { Lesson } from '../interfaces/lesson'
 import { getLessons } from '../firebase/api'
 import { where } from 'firebase/firestore'
 import classNames from 'classnames'
+import PathActions from './PathActions'
 
 interface Props {
   path: Path
@@ -103,6 +104,9 @@ const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
                 value={title}
                 onChange={({ target }) => handleTitleChange(target.value)}
               />
+            </div>
+            <div className="flex gap-2 mx-4 mb-6">
+              <PathActions path={path} />
             </div>
             <Heading
               className="flex items-center justify-between mx-4 font-bold leading-tight tracking-tight"

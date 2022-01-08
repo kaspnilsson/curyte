@@ -6,6 +6,7 @@ import LoadingSpinner from '../../components/LoadingSpinner'
 import { loginRoute, editPathRoute } from '../../utils/routes'
 import { createPath } from '../../firebase/api'
 import { Path } from '../../interfaces/path'
+import { Timestamp } from 'firebase/firestore'
 
 const NewPathView = () => {
   const router = useRouter()
@@ -18,7 +19,11 @@ const NewPathView = () => {
       return
     }
     const createNewPath = async () => {
-      const newUid = await createPath({ authorId: user.uid } as Path)
+      const newUid = await createPath({
+        authorId: user.uid,
+        created: Timestamp.now().toDate().toISOString(),
+        updated: Timestamp.now().toDate().toISOString(),
+      } as Path)
       router.replace(editPathRoute(newUid))
     }
     createNewPath()
