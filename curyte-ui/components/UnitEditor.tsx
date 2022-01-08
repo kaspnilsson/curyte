@@ -59,7 +59,10 @@ const UnitEditor = ({
 
   const createNewLesson = async () => {
     setLoading(true)
-    const uid = await createLesson({ authorId: user.uid } as Lesson)
+    const uid = await createLesson({
+      authorId: user.uid,
+      private: true,
+    } as Lesson)
     const newLessonIds = [...lessonIds, uid]
     setLessonIds(newLessonIds)
     await onUpdate({ ...unit, lessonIds: newLessonIds })
@@ -102,7 +105,7 @@ const UnitEditor = ({
 
   return (
     <>
-      <div className="flex items-center w-full gap-2 p-4">
+      <div className="flex items-center w-full gap-2 pb-4">
         <Input
           type="text"
           size="lg"
@@ -131,7 +134,7 @@ const UnitEditor = ({
         )}
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="relative p-4">
+        <div className="py-4">
           <Heading
             className="font-bold leading-tight tracking-tight"
             fontSize="xl"
@@ -151,8 +154,13 @@ const UnitEditor = ({
                     {(provided, snapshot) => (
                       <span
                         className={classNames(
-                          'flex items-center w-full gap-2 px-4 py-2 rounded hover:bg-zinc-100',
-                          { 'bg-zinc-50 shadow-xl': snapshot.isDragging }
+                          'flex items-center w-full gap-2 px-4 py-2 rounded',
+                          {
+                            'hover:bg-zinc-100': lessonsByUid[id],
+                            'bg-zinc-50 shadow-xl':
+                              lessonsByUid[id] && snapshot.isDragging,
+                            'bg-red-200': !lessonsByUid[id],
+                          }
                         )}
                         ref={provided.innerRef}
                         {...provided.draggableProps}
@@ -160,10 +168,17 @@ const UnitEditor = ({
                       >
                         <GripIcon className="w-6 h-6 p-1 text-zinc-500"></GripIcon>
                         <span className="flex flex-1 gap-2 font-semibold leading-tight tracking-tight">
-                          <div>{index + 1}.</div>
-                          {lessonsByUid[id]
-                            ? lessonsByUid[id].title || '(no title)'
-                            : id}
+                          {lessonsByUid[id] && (
+                            <>
+                              <div>{index + 1}.</div>
+                              {lessonsByUid[id].title || '(no title)'}
+                            </>
+                          )}
+                          {!lessonsByUid[id] && (
+                            <span className="text-red-700">
+                              Lesson not found
+                            </span>
+                          )}
                         </span>
                         <Tooltip label="Edit lesson">
                           <IconButton
@@ -198,7 +213,7 @@ const UnitEditor = ({
               </div>
             )}
           </Droppable>
-          <div className="flex gap-2">
+          <div className="flex gap-2 pb-2">
             <Button
               className="flex items-center gap-1 w-fit-content"
               colorScheme="black"

@@ -74,7 +74,7 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
               <div
                 className={`${computeClassesForTitle(
                   title
-                )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0 mx-4 mb-4`}
+                )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0  mb-4`}
               >
                 {path.title || '(no title)'}
               </div>
@@ -96,7 +96,7 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
               </div>
             </div>
             <Heading
-              className="flex items-center justify-between mx-4 font-bold leading-tight tracking-tight"
+              className="flex items-center justify-between font-bold leading-tight tracking-tight"
               fontSize="3xl"
             >
               Units
@@ -109,7 +109,9 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
                 lessonsMap={lessonsMap}
               />
             ))}
-            {!path.units?.length && 'No units'}
+            {!path.units?.length && (
+              <span className="px-4 text-zinc-700">(no units)</span>
+            )}
           </div>
         </div>
       </Container>

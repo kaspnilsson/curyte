@@ -35,6 +35,7 @@ const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
   const [lessonsByUid, setLessonsByUid] = useState<{ [uid: string]: Lesson }>(
     {}
   )
+  const [lessonsLoading, setLessonsLoading] = useState(false)
 
   const addUnit = () => {
     setUnits([...units, { uid: uuidv4() } as Unit])
@@ -77,6 +78,7 @@ const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
     }
 
     if (toFetch.length) {
+      setLessonsLoading(true)
       const fetchLessons = async () => {
         const newLessons = await getLessons([where('uid', 'in', toFetch)])
         const clone = { ...lessonsByUid }
@@ -84,96 +86,105 @@ const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
           clone[lesson.uid] = lesson
         }
         setLessonsByUid(clone)
+        setLessonsLoading(false)
       }
       fetchLessons()
     }
   }, [lessonsByUid, units])
 
   return (
-    <Layout sidebar={<div></div>}>
-      <Container className="px-5">
-        <div className="flex">
-          <div className="flex flex-col flex-grow gap-2 overflow-hidden">
-            <div className="flex items-center justify-between w-full">
-              <TextareaAutosize
-                autoFocus
-                className={`${computeClassesForTitle(
-                  title
-                )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0 mx-4 mb-4`}
-                placeholder="Add a title to your path..."
-                value={title}
-                onChange={({ target }) => handleTitleChange(target.value)}
-              />
-            </div>
-            <div className="flex gap-2 mx-4 mb-6">
-              <PathActions path={path} />
-            </div>
-            <Heading
-              className="flex items-center justify-between mx-4 font-bold leading-tight tracking-tight"
-              fontSize="3xl"
-            >
-              Units
-              {saving && (
-                <div className="flex items-center gap-2 text-base">
-                  Saving...
-                  <Spinner />
-                </div>
-              )}
-            </Heading>
-            <DragDropContext onDragEnd={onDragEnd}>
-              <div>
-                <Droppable droppableId="units">
-                  {(provided: DroppableProvided) => (
-                    <div
-                      className=" units"
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                    >
-                      {units.map((u, index) => (
-                        <Draggable
-                          key={u.uid}
-                          draggableId={u.uid}
-                          index={index}
-                        >
-                          {(provided, snapshot) => (
-                            <span
-                              className={classNames({
-                                'bg-zinc-50 shadow-xl rounded-xl':
-                                  snapshot.isDragging,
-                              })}
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                            >
-                              <UnitEditor
-                                unit={u}
-                                lessonsByUid={lessonsByUid}
-                                user={user}
-                                onUpdate={(u) => onUnitUpdate(u, index)}
-                                onDelete={() => onUnitDelete(index)}
-                                parentDragHandleProps={provided.dragHandleProps}
-                              />
-                            </span>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-                <Button
-                  className="flex items-center gap-1 mx-4 my-8 w-fit-content"
-                  colorScheme="black"
-                  onClick={() => addUnit()}
-                >
-                  <PlusIcon className="w-4 h-4" />
-                  Add unit
-                </Button>
+    <>
+      {lessonsLoading && <Spinner />}
+      <Layout sidebar={<div></div>}>
+        <Container className="px-5">
+          <div className="flex">
+            <div className="flex flex-col flex-grow gap-2 overflow-hidden">
+              <div className="flex items-center justify-between w-full">
+                <TextareaAutosize
+                  autoFocus
+                  className={`${computeClassesForTitle(
+                    title
+                  )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0  mb-4`}
+                  placeholder="Add a title to your path..."
+                  value={title}
+                  onChange={({ target }) => handleTitleChange(target.value)}
+                />
               </div>
-            </DragDropContext>
+              <div className="flex gap-2 mb-6">
+                <PathActions path={path} />
+              </div>
+              <Heading
+                className="flex items-center justify-between font-bold leading-tight tracking-tight"
+                fontSize="3xl"
+              >
+                Units
+                {saving && (
+                  <div className="flex items-center gap-2 text-base">
+                    Saving...
+                    <Spinner />
+                  </div>
+                )}
+              </Heading>
+              {!units.length && (
+                <span className="text-zinc-700">(no units)</span>
+              )}
+              <DragDropContext onDragEnd={onDragEnd}>
+                <div>
+                  <Droppable droppableId="units">
+                    {(provided: DroppableProvided) => (
+                      <div
+                        className=" units"
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                      >
+                        {units.map((u, index) => (
+                          <Draggable
+                            key={u.uid}
+                            draggableId={u.uid}
+                            index={index}
+                          >
+                            {(provided, snapshot) => (
+                              <span
+                                className={classNames({
+                                  'bg-zinc-50 shadow-xl rounded-xl p-4':
+                                    snapshot.isDragging,
+                                })}
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                              >
+                                <UnitEditor
+                                  unit={u}
+                                  lessonsByUid={lessonsByUid}
+                                  user={user}
+                                  onUpdate={(u) => onUnitUpdate(u, index)}
+                                  onDelete={() => onUnitDelete(index)}
+                                  parentDragHandleProps={
+                                    provided.dragHandleProps
+                                  }
+                                />
+                              </span>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                  <Button
+                    className="flex items-center gap-1 my-8 w-fit-content"
+                    colorScheme="black"
+                    onClick={() => addUnit()}
+                  >
+                    <PlusIcon className="w-4 h-4" />
+                    Add unit
+                  </Button>
+                </div>
+              </DragDropContext>
+            </div>
           </div>
-        </div>
-      </Container>
-    </Layout>
+        </Container>
+      </Layout>
+    </>
   )
 }
 

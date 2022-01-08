@@ -7,7 +7,7 @@ import { deletePath } from '../firebase/api'
 import { auth } from '../firebase/clientApp'
 import { Path } from '../interfaces/path'
 import { userIsAdmin } from '../utils/hacks'
-import { editPathRoute, lessonSearchRoute, pathRoute } from '../utils/routes'
+import { editPathRoute, myAccountRoute, pathRoute } from '../utils/routes'
 
 interface Props {
   path: Path
@@ -25,7 +25,7 @@ const PathActions = ({ path, isReadOnlyView }: Props) => {
       setLoading(true)
       await deletePath(path.uid)
 
-      router.push(lessonSearchRoute())
+      router.push(myAccountRoute)
     } finally {
       setLoading(false)
     }

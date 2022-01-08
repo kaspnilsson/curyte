@@ -27,6 +27,7 @@ import {
   indexRoute,
   lessonSearchRoute,
   loginRoute,
+  myAccountRoute,
   newLessonRoute,
   signupRoute,
 } from '../utils/routes'
@@ -184,7 +185,7 @@ const Header = ({
                     </MenuButton>
                     <Portal>
                       <MenuList>
-                        <Link passHref href="/accounts/me">
+                        <Link passHref href={myAccountRoute}>
                           <MenuItem>View account</MenuItem>
                         </Link>
                         <MenuItem onClick={() => logOut()}>Sign out</MenuItem>
