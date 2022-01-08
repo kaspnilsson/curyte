@@ -119,6 +119,7 @@ const UnitEditor = ({
           <IconButton
             colorScheme="black"
             variant="ghost"
+            borderRadius="full"
             aria-label="Delete lesson"
             icon={<TrashIcon className="w-6 h-6" />}
             onClick={() => onDelete()}
@@ -182,8 +183,6 @@ const UnitEditor = ({
                         </span>
                         <Tooltip label="Edit lesson">
                           <IconButton
-                            variant="ghost"
-                            colorScheme="black"
                             size="sm"
                             rounded="full"
                             className="self-end hover:bg-zinc-200"
@@ -194,8 +193,6 @@ const UnitEditor = ({
                         </Tooltip>
                         <Tooltip label="Remove lesson">
                           <IconButton
-                            variant="ghost"
-                            colorScheme="black"
                             size="sm"
                             rounded="full"
                             className="self-end hover:bg-zinc-200"
