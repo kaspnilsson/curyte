@@ -60,20 +60,20 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
                             fontSize="xs"
                             className="px-4 pt-2 leading-tight tracking-tight text-zinc-500 md:tracking-tighter"
                           >
-                            STYLE
-                          </Heading>
-                          <StyleMenuItems editor={editor} />
-                          <MenuDivider />
-                          <Heading
-                            fontSize="xs"
-                            className="px-4 pt-2 leading-tight tracking-tight text-zinc-500 md:tracking-tighter"
-                          >
                             INSERT
                           </Heading>
                           <InsertMenuItems
                             editor={editor}
                             openDialog={openDialog}
                           />
+                          <MenuDivider />
+                          <Heading
+                            fontSize="xs"
+                            className="px-4 pt-2 leading-tight tracking-tight text-zinc-500 md:tracking-tighter"
+                          >
+                            STYLE
+                          </Heading>
+                          <StyleMenuItems editor={editor} />
                         </>
                       }
                     />
