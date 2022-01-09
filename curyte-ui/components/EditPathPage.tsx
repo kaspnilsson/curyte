@@ -13,13 +13,13 @@ import {
   DroppableProvided,
   DropResult,
 } from 'react-beautiful-dnd'
-import { v4 as uuidv4 } from 'uuid'
 import UnitEditor from './UnitEditor'
 import { Lesson } from '../interfaces/lesson'
 import { getLessons } from '../firebase/api'
 import { where } from 'firebase/firestore'
 import classNames from 'classnames'
 import PathActions from './PathActions'
+import { uuid } from '../utils/uuid'
 
 interface Props {
   path: Path
@@ -37,7 +37,7 @@ const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
   const [lessonsLoading, setLessonsLoading] = useState(false)
 
   const addUnit = () => {
-    setUnits([...units, { uid: uuidv4() } as Unit])
+    setUnits([...units, { uid: uuid() } as Unit])
   }
 
   const onDragEnd = async (result: DropResult) => {

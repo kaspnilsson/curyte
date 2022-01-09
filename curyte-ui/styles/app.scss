@@ -1,5 +1,5 @@
 .ProseMirror {
-  p.is-empty::before {
+  .is-empty::before {
     color: var(--chakra-colors-zinc-400);
     content: attr(data-placeholder);
     float: left;
@@ -111,4 +111,8 @@ textarea:focus {
 
 .details-content div > :first-child {
   margin-top: 0;
+}
+
+.details-content div > :last-child {
+  margin-bottom: 0;
 }

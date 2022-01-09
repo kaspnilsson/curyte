@@ -144,17 +144,19 @@ const LessonHeader = ({
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2 text-sm md:text-base">
           <AuthorLink author={author} />
-          {lesson.created && <DateFormatter dateString={lesson.created} />}
-          {!!lesson.viewCount && (
-            <>
-              <Center className="w-6 h-4">
-                <Divider orientation="vertical" />
-              </Center>
-              {`${lesson.viewCount} views`}
-            </>
-          )}
         </div>
         <div className="flex items-center gap-1">
+          <div className="flex items-center mr-4">
+            {lesson.created && <DateFormatter dateString={lesson.created} />}
+            {!!lesson.viewCount && (
+              <>
+                <Center className="w-6 h-4">
+                  <Divider orientation="vertical" />
+                </Center>
+                {`${lesson.viewCount} views`}
+              </>
+            )}
+          </div>
           {handlePublish && (
             <Button
               size="sm"

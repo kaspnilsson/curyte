@@ -28,6 +28,7 @@ import { zinc } from '../styles/theme/colors'
 import { TrailingNode } from '../components/extensions/TrailingNode'
 import Details from '../components/extensions/Details/Details'
 import DetailsContent from '../components/extensions/Details/DetailsContent'
+import { getCurrentlySelectedNodes } from '../utils/prosemirror'
 
 interface EditorProps {
   content: JSONContent | null
@@ -75,7 +76,27 @@ const useCuryteEditor = (
         }),
         Placeholder.configure({
           showOnlyWhenEditable: true,
-          placeholder: 'What are you teaching today?',
+          placeholder: ({ editor, node, pos }) => {
+            if (node.type.name === 'heading') {
+              if (pos === 0) return 'Add your first section header...'
+              if (node.attrs.level === 1) return 'Add section header...'
+              return 'Add section subheader...'
+            }
+            if (node.type.name === 'paragraph') {
+              const nodes = getCurrentlySelectedNodes(
+                editor.state.doc.resolve(pos)
+              )
+              for (const n of nodes) {
+                if (n.type.name === 'table') {
+                  return ''
+                }
+              }
+              return 'Type anywhere or use [ insert ] to add new elements.'
+            }
+            return ''
+          },
+          showOnlyCurrent: false,
+          includeChildren: true,
         }),
         MultipleChoice,
       ],

@@ -10,6 +10,7 @@ import { useDebounceCallback } from '@react-hook/debounce'
 import EditableCoverImage from './EditableCoverImage'
 import useCuryteEditor from '../hooks/useCuryteEditor'
 import LessonOutline from './LessonOutline'
+import { uuid } from '../utils/uuid'
 
 type Props = {
   lesson?: Lesson
@@ -26,7 +27,18 @@ const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
     lesson?.description?.trim() || ''
   )
   const [tagsStr, setTagsStr] = useState(lesson?.tags?.join(', ') || '')
-  const [content, setContent] = useState(lesson?.content || null)
+  const [content, setContent] = useState(
+    lesson?.content || {
+      type: 'doc',
+      content: [
+        {
+          type: 'heading',
+          attrs: { id: uuid(), level: 1 },
+        },
+        { type: 'paragraph' },
+      ],
+    }
+  )
   const [coverImageUrl, setCoverImageUrl] = useState(
     lesson?.coverImageUrl || ''
   )

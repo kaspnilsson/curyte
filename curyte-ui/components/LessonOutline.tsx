@@ -87,7 +87,7 @@ const LessonOutline = ({ editor }: Props) => {
                     }
                   )}
                 >
-                  {item.text}
+                  {item.text || <span className="italic">(no text)</span>}
                 </ListItem>
               </a>
             ))}
