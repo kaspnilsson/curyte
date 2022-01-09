@@ -102,7 +102,7 @@ const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
                 autoFocus
                 className={`${computeClassesForTitle(
                   title
-                )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0  mb-4`}
+                )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0 mb-4`}
                 placeholder="Add a title to your path..."
                 value={title}
                 onChange={({ target }) => handleTitleChange(target.value)}

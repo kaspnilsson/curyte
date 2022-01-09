@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import Layout from '../components/Layout'
-import Container from '../components/Container'
 import CuryteLogo from '../components/CuryteLogo'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useRouter } from 'next/router'
