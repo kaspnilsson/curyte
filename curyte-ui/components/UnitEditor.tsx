@@ -1,8 +1,7 @@
+import TextareaAutosize from 'react-textarea-autosize'
 import {
   Button,
-  Heading,
   IconButton,
-  Input,
   Tooltip,
   useDisclosure,
   useToast,
@@ -105,43 +104,36 @@ const UnitEditor = ({
 
   return (
     <>
-      <div className="flex items-center w-full gap-2 pb-4">
-        <Input
-          type="text"
-          size="lg"
+      <div className="flex items-center w-full gap-2 pt-2">
+        <TextareaAutosize
           value={title}
           onChange={(e) => onTitleUpdate(e.target.value)}
-          colorScheme="zinc"
-          placeholder="Unit title..."
-          className="flex-1 flex-grow font-semibold tracking-tight resize-none leading-tighter"
-        ></Input>
+          placeholder="Add a unit title..."
+          className="flex-1 flex-grow text-xl font-semibold tracking-tight bg-transparent border-0 resize-none leading-tighter"
+        />
         <Tooltip label="Remove unit">
           <IconButton
+            borderRadius="full"
             colorScheme="black"
             variant="ghost"
-            borderRadius="full"
             aria-label="Delete lesson"
             icon={<TrashIcon className="w-6 h-6" />}
             onClick={() => onDelete()}
           />
         </Tooltip>
         {parentDragHandleProps && (
-          <div
-            {...parentDragHandleProps}
-            className="p-2 rounded hover:bg-zinc-100"
-          >
-            <GripIcon className="w-6 h-6 text-zinc-500"></GripIcon>
-          </div>
+          <Tooltip label="Reorder unit">
+            <div
+              {...parentDragHandleProps}
+              className="p-2 rounded-full hover:bg-zinc-100"
+            >
+              <GripIcon className="w-6 h-6 text-zinc-900"></GripIcon>
+            </div>
+          </Tooltip>
         )}
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="py-4">
-          <Heading
-            className="font-bold leading-tight tracking-tight"
-            fontSize="xl"
-          >
-            Lessons
-          </Heading>
           {loading && <LoadingSpinner />}
           <Droppable droppableId="lessons">
             {(provided: DroppableProvided) => (
@@ -185,7 +177,9 @@ const UnitEditor = ({
                           <IconButton
                             size="sm"
                             rounded="full"
-                            className="self-end hover:bg-zinc-200"
+                            className="self-end "
+                            colorScheme="black"
+                            variant="ghost"
                             aria-label="Edit lesson"
                             icon={<PencilAltIcon className="w-5 h-5" />}
                             onClick={() => onEditLesson(id)}
@@ -195,7 +189,9 @@ const UnitEditor = ({
                           <IconButton
                             size="sm"
                             rounded="full"
-                            className="self-end hover:bg-zinc-200"
+                            className="self-end "
+                            colorScheme="black"
+                            variant="ghost"
                             aria-label="Delete lesson"
                             icon={<TrashIcon className="w-5 h-5" />}
                             onClick={() => onDeleteLesson(id)}
@@ -210,7 +206,7 @@ const UnitEditor = ({
               </div>
             )}
           </Droppable>
-          <div className="flex gap-2 pb-2">
+          <div className="flex gap-2 pb-4">
             <Button
               className="flex items-center gap-1 w-fit-content"
               colorScheme="black"

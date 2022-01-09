@@ -9,7 +9,7 @@ import Container from '../../components/Container'
 import { pathRoute } from '../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
 import { logPathView, getAuthor, getPath, getLessons } from '../../firebase/api'
-import { Center, Divider, Heading } from '@chakra-ui/react'
+import { Center, Divider } from '@chakra-ui/react'
 import { where } from 'firebase/firestore'
 import { Path } from '../../interfaces/path'
 import { title } from 'process'
@@ -30,13 +30,6 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
     if (!path.published) return
     logPathView(path.uid)
   }, [path])
-
-  // const handleDelete = async () => {
-  //   setLoading(true)
-  //   await deleteLesson(lesson.uid)
-  //   setLoading(false)
-  //   router.push(lessonSearchRoute())
-  // }
 
   if (!path) return <ErrorPage statusCode={404} />
 
@@ -95,12 +88,6 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
                 <PathActions path={path} isReadOnlyView />
               </div>
             </div>
-            <Heading
-              className="flex items-center justify-between font-bold leading-tight tracking-tight"
-              fontSize="3xl"
-            >
-              Units
-            </Heading>
             {path.units?.map((u, index) => (
               <UnitOutline
                 unit={u}
