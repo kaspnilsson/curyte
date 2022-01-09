@@ -7,7 +7,6 @@ import { Lesson } from '../../interfaces/lesson'
 import { GetServerSideProps } from 'next'
 import Layout from '../../components/Layout'
 import { Author } from '../../interfaces/author'
-import Container from '../../components/Container'
 import LessonHeader from '../../components/LessonHeader'
 import FancyEditor from '../../components/FancyEditor'
 import LoadingSpinner from '../../components/LoadingSpinner'
@@ -91,33 +90,27 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
               site_name: 'Curyte',
             }}
           ></NextSeo>
-          <Container>
-            <article className="px-4 mb-32">
-              <Head>
-                <title>{lesson.title}</title>
-              </Head>
-              <LessonHeader
-                author={author}
-                lesson={lesson}
-                handleDelete={
-                  user && user.uid === lesson.authorId
-                    ? handleDelete
-                    : undefined
-                }
-                handleEdit={
-                  user && user.uid === lesson.authorId
-                    ? () => router.push(editLessonRoute(lesson.uid))
-                    : undefined
-                }
-                handleToggleFeatured={
-                  user && userIsAdmin(user.uid)
-                    ? handleToggleFeatured
-                    : undefined
-                }
-              />
-              <FancyEditor readOnly editor={editor} />
-            </article>
-          </Container>
+          <article className="mb-32">
+            <Head>
+              <title>{lesson.title}</title>
+            </Head>
+            <LessonHeader
+              author={author}
+              lesson={lesson}
+              handleDelete={
+                user && user.uid === lesson.authorId ? handleDelete : undefined
+              }
+              handleEdit={
+                user && user.uid === lesson.authorId
+                  ? () => router.push(editLessonRoute(lesson.uid))
+                  : undefined
+              }
+              handleToggleFeatured={
+                user && userIsAdmin(user.uid) ? handleToggleFeatured : undefined
+              }
+            />
+            <FancyEditor readOnly editor={editor} />
+          </article>
         </Layout>
       )}
     </>

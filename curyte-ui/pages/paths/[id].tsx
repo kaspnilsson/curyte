@@ -5,7 +5,6 @@ import { Lesson } from '../../interfaces/lesson'
 import { GetServerSideProps } from 'next'
 import Layout from '../../components/Layout'
 import { Author } from '../../interfaces/author'
-import Container from '../../components/Container'
 import { pathRoute } from '../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
 import { logPathView, getAuthor, getPath, getLessons } from '../../firebase/api'
@@ -67,54 +66,52 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
           site_name: 'Curyte',
         }}
       ></NextSeo>
-      <Container className="px-5">
-        <div className="flex">
-          <div className="flex flex-col flex-grow gap-2 overflow-hidden">
-            <div className="flex items-center justify-between w-full">
-              <div
-                className={`${computeClassesForTitle(
-                  title
-                )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0  mb-4`}
-              >
-                {path.title || '(no title)'}
-              </div>
-            </div>
-            <div className="flex flex-wrap items-center justify-between gap-2 px-4 mb-6">
-              <div className="flex items-center gap-2 text-sm md:text-base">
-                <AuthorLink author={author} />
-                {!!path.viewCount && (
-                  <>
-                    <Center className="w-6 h-4">
-                      <Divider orientation="vertical" />
-                    </Center>
-                    {`${path.viewCount} views`}
-                  </>
-                )}
-              </div>
-              <div className="flex items-center gap-1">
-                <PathActions path={path} isReadOnlyView />
-              </div>
-            </div>
-            <Heading
-              className="flex items-center justify-between font-bold leading-tight tracking-tight"
-              fontSize="3xl"
+      <div className="flex">
+        <div className="flex flex-col flex-grow gap-2 overflow-hidden">
+          <div className="flex items-center justify-between w-full">
+            <div
+              className={`${computeClassesForTitle(
+                title
+              )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0  mb-4`}
             >
-              Units
-            </Heading>
-            {path.units?.map((u, index) => (
-              <UnitOutline
-                unit={u}
-                key={index}
-                unitIndex={index}
-                lessonsMap={lessonsMap}
-              />
-            ))}
-            {!path.units?.length && (
-              <span className="px-4 text-zinc-700">(no units)</span>
-            )}
+              {path.title || '(no title)'}
+            </div>
           </div>
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-6">
+            <div className="flex items-center gap-2 text-sm md:text-base">
+              <AuthorLink author={author} />
+              {!!path.viewCount && (
+                <>
+                  <Center className="w-6 h-4">
+                    <Divider orientation="vertical" />
+                  </Center>
+                  {`${path.viewCount} views`}
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-1">
+              <PathActions path={path} isReadOnlyView />
+            </div>
+          </div>
+          <Heading
+            className="flex items-center justify-between font-bold leading-tight tracking-tight"
+            fontSize="3xl"
+          >
+            Units
+          </Heading>
+          {path.units?.map((u, index) => (
+            <UnitOutline
+              unit={u}
+              key={index}
+              unitIndex={index}
+              lessonsMap={lessonsMap}
+            />
+          ))}
+          {!path.units?.length && (
+            <span className="text-zinc-700">(no units)</span>
+          )}
         </div>
-      </Container>
+      </div>
     </Layout>
   )
 }

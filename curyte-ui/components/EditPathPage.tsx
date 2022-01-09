@@ -4,7 +4,6 @@ import Layout from './Layout'
 import { computeClassesForTitle } from './LessonTitle'
 import TextareaAutosize from 'react-textarea-autosize'
 import { useEffect, useState } from 'react'
-import Container from './Container'
 import { Button, Heading, Spinner } from '@chakra-ui/react'
 import { PlusIcon } from '@heroicons/react/outline'
 import {
@@ -96,93 +95,87 @@ const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
     <>
       {lessonsLoading && <Spinner />}
       <Layout sidebar={<div></div>}>
-        <Container className="px-5">
-          <div className="flex">
-            <div className="flex flex-col flex-grow gap-2 overflow-hidden">
-              <div className="flex items-center justify-between w-full">
-                <TextareaAutosize
-                  autoFocus
-                  className={`${computeClassesForTitle(
-                    title
-                  )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0  mb-4`}
-                  placeholder="Add a title to your path..."
-                  value={title}
-                  onChange={({ target }) => handleTitleChange(target.value)}
-                />
-              </div>
-              <div className="flex gap-2 mb-6">
-                <PathActions path={path} />
-              </div>
-              <Heading
-                className="flex items-center justify-between font-bold leading-tight tracking-tight"
-                fontSize="3xl"
-              >
-                Units
-                {saving && (
-                  <div className="flex items-center gap-2 text-base">
-                    Saving...
-                    <Spinner />
-                  </div>
-                )}
-              </Heading>
-              {!units.length && (
-                <span className="text-zinc-700">(no units)</span>
-              )}
-              <DragDropContext onDragEnd={onDragEnd}>
-                <div>
-                  <Droppable droppableId="units">
-                    {(provided: DroppableProvided) => (
-                      <div
-                        className=" units"
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                      >
-                        {units.map((u, index) => (
-                          <Draggable
-                            key={u.uid}
-                            draggableId={u.uid}
-                            index={index}
-                          >
-                            {(provided, snapshot) => (
-                              <span
-                                className={classNames({
-                                  'bg-zinc-50 shadow-xl rounded-xl p-4':
-                                    snapshot.isDragging,
-                                })}
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                              >
-                                <UnitEditor
-                                  unit={u}
-                                  lessonsByUid={lessonsByUid}
-                                  user={user}
-                                  onUpdate={(u) => onUnitUpdate(u, index)}
-                                  onDelete={() => onUnitDelete(index)}
-                                  parentDragHandleProps={
-                                    provided.dragHandleProps
-                                  }
-                                />
-                              </span>
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                  <Button
-                    className="flex items-center gap-1 my-8 w-fit-content"
-                    colorScheme="black"
-                    onClick={() => addUnit()}
-                  >
-                    <PlusIcon className="w-4 h-4" />
-                    Add unit
-                  </Button>
-                </div>
-              </DragDropContext>
+        <div className="flex">
+          <div className="flex flex-col flex-grow gap-2 overflow-hidden">
+            <div className="flex items-center justify-between w-full">
+              <TextareaAutosize
+                autoFocus
+                className={`${computeClassesForTitle(
+                  title
+                )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0  mb-4`}
+                placeholder="Add a title to your path..."
+                value={title}
+                onChange={({ target }) => handleTitleChange(target.value)}
+              />
             </div>
+            <div className="flex gap-2 mb-6">
+              <PathActions path={path} />
+            </div>
+            <Heading
+              className="flex items-center justify-between font-bold leading-tight tracking-tight"
+              fontSize="3xl"
+            >
+              Units
+              {saving && (
+                <div className="flex items-center gap-2 text-base">
+                  Saving...
+                  <Spinner />
+                </div>
+              )}
+            </Heading>
+            {!units.length && <span className="text-zinc-700">(no units)</span>}
+            <DragDropContext onDragEnd={onDragEnd}>
+              <div>
+                <Droppable droppableId="units">
+                  {(provided: DroppableProvided) => (
+                    <div
+                      className=" units"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      {units.map((u, index) => (
+                        <Draggable
+                          key={u.uid}
+                          draggableId={u.uid}
+                          index={index}
+                        >
+                          {(provided, snapshot) => (
+                            <span
+                              className={classNames({
+                                'bg-zinc-50 shadow-xl rounded-xl p-4':
+                                  snapshot.isDragging,
+                              })}
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                            >
+                              <UnitEditor
+                                unit={u}
+                                lessonsByUid={lessonsByUid}
+                                user={user}
+                                onUpdate={(u) => onUnitUpdate(u, index)}
+                                onDelete={() => onUnitDelete(index)}
+                                parentDragHandleProps={provided.dragHandleProps}
+                              />
+                            </span>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+                <Button
+                  className="flex items-center gap-1 my-8 w-fit-content"
+                  colorScheme="black"
+                  onClick={() => addUnit()}
+                >
+                  <PlusIcon className="w-4 h-4" />
+                  Add unit
+                </Button>
+              </div>
+            </DragDropContext>
           </div>
-        </Container>
+        </div>
       </Layout>
     </>
   )

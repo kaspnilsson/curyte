@@ -54,7 +54,7 @@ const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
       sidebar={<LessonOutline editor={editor} />}
     >
       <div className="flex">
-        <div className="flex flex-col flex-grow px-5 overflow-hidden md:px-0">
+        <div className="flex flex-col flex-grow overflow-hidden">
           <div className="flex items-center justify-between w-full">
             <TextareaAutosize
               autoFocus
