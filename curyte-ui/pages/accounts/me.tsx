@@ -167,20 +167,18 @@ const MySettingsView = () => {
                     </div>
                   </section>
                   <section className="flex flex-col mb-8">
-                    <div className="flex flex-col items-start justify-between">
+                    <div className="flex flex-col items-start justify-between gap-2">
                       <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                         Paths
                       </h2>
                       {!paths.length && (
-                        <div className="flex flex-col items-start gap-2">
-                          Nothing here yet!
-                          <Link as={newPathRoute} href={newPathRoute} passHref>
-                            <Button colorScheme="black">Create a path</Button>
-                          </Link>
-                        </div>
+                        <div className="">Nothing here yet!</div>
                       )}
                       {!!paths.length &&
                         paths.map((p) => <PathPreview path={p} key={p.uid} />)}
+                      <Link as={newPathRoute} href={newPathRoute} passHref>
+                        <Button colorScheme="black">Create a path</Button>
+                      </Link>
                     </div>
                   </section>
                   <section className="flex flex-col my-8">
