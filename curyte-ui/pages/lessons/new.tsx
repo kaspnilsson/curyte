@@ -1,5 +1,5 @@
 import { auth } from '../../firebase/clientApp'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { Lesson } from '../../interfaces/lesson'
 import { useRouter } from 'next/router'
@@ -10,7 +10,6 @@ import { getLesson, createLesson } from '../../firebase/api'
 const NewLessonView = () => {
   const router = useRouter()
   const [user, userLoading] = useAuthState(auth)
-  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (userLoading) return
@@ -18,7 +17,7 @@ const NewLessonView = () => {
       router.push(loginRoute(router.asPath))
       return
     }
-    const fetchLesson = async () => {
+    const createNewDraft = async () => {
       if (router.query.copyFrom) {
         const l = await getLesson(router.query.copyFrom as string)
         const newUid = await createLesson({
@@ -36,13 +35,11 @@ const NewLessonView = () => {
         } as Lesson)
         router.replace(editLessonRoute(newUid))
       }
-      setLoading(false)
     }
-    setLoading(true)
-    fetchLesson()
+    createNewDraft()
   }, [router, router.query.copyFrom, user, userLoading])
 
-  return <>{(userLoading || loading) && <LoadingSpinner />}</>
+  return <LoadingSpinner message="Building lesson..." />
 }
 
 export default NewLessonView

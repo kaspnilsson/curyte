@@ -23,10 +23,23 @@ import LoadingSpinner from '../../components/LoadingSpinner'
 import DraftsList from '../../components/DraftsList'
 import { Lesson } from '../../interfaces/lesson'
 import { useErrorHandler } from 'react-error-boundary'
-import { indexRoute } from '../../utils/routes'
-import { getAuthor, getLessons, updateAuthor } from '../../firebase/api'
+import {
+  indexRoute,
+  newLessonRoute,
+  newLessonRouteHref,
+  newPathRoute,
+} from '../../utils/routes'
+import {
+  getAuthor,
+  getLessons,
+  getPaths,
+  updateAuthor,
+} from '../../firebase/api'
 import LessonList from '../../components/LessonList'
 import { where } from 'firebase/firestore'
+import { Path } from '../../interfaces/path'
+import PathPreview from '../../components/PathPreview'
+import Link from 'next/link'
 
 const MySettingsView = () => {
   const router = useRouter()
@@ -37,6 +50,7 @@ const MySettingsView = () => {
   const [loading, setLoading] = useState(userLoading)
   const [saving, setSaving] = useState(false)
   const [lessons, setLessons] = useState<Lesson[]>([])
+  const [paths, setPaths] = useState<Path[]>([])
   const [savedLessons, setSavedLessons] = useState<Lesson[]>([])
   const [authorChanged, setAuthorChanged] = useState(false)
 
@@ -82,7 +96,15 @@ const MySettingsView = () => {
         })
       }
 
-      Promise.all([fetchLessons(), fetchAuthor()]).then(() => setLoading(false))
+      const fetchPaths = async () => {
+        getPaths([where('authorId', '==', user.uid)]).then((res) =>
+          setPaths(res)
+        )
+      }
+
+      Promise.all([fetchLessons(), fetchAuthor(), fetchPaths()]).then(() =>
+        setLoading(false)
+      )
     }
   }, [author, handleError, loading, user])
 
@@ -125,7 +147,18 @@ const MySettingsView = () => {
                       <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                         Lessons
                       </h2>
-                      {!lessons.length && 'Nothing here yet!'}
+                      {!lessons.length && (
+                        <div className="flex flex-col items-start gap-2">
+                          Nothing here yet!
+                          <Link
+                            as={newLessonRoute()}
+                            href={newLessonRouteHref}
+                            passHref
+                          >
+                            <Button colorScheme="black">Create a lesson</Button>
+                          </Link>
+                        </div>
+                      )}
                       {!!lessons.length && (
                         <div className="-mx-8">
                           <LessonList lessons={lessons} />
@@ -133,12 +166,27 @@ const MySettingsView = () => {
                       )}
                     </div>
                   </section>
+                  <section className="flex flex-col mb-8">
+                    <div className="flex flex-col items-start justify-between gap-2">
+                      <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+                        Paths
+                      </h2>
+                      {!paths.length && (
+                        <div className="">Nothing here yet!</div>
+                      )}
+                      {!!paths.length &&
+                        paths.map((p) => <PathPreview path={p} key={p.uid} />)}
+                      <Link as={newPathRoute} href={newPathRoute} passHref>
+                        <Button colorScheme="black">Create a path</Button>
+                      </Link>
+                    </div>
+                  </section>
                   <section className="flex flex-col my-8">
                     <div className="flex flex-col justify-between items-left">
                       <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                         Saved
                       </h2>
-                      {!savedLessons.length && 'Nothing here yet!'}
+                      {!savedLessons.length && <div>Nothing here yet!</div>}
                       {!!savedLessons.length && (
                         <div className="-mx-8">
                           <LessonList lessons={savedLessons} />

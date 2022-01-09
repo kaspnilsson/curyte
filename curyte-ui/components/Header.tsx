@@ -27,6 +27,7 @@ import {
   indexRoute,
   lessonSearchRoute,
   loginRoute,
+  myAccountRoute,
   newLessonRoute,
   signupRoute,
 } from '../utils/routes'
@@ -162,12 +163,12 @@ const Header = ({
                   />
                 </Tooltip> */}
                 <div className="relative">
-                  <div className="rounded-full animated-border animate-spin-slow"></div>
+                  <div className="rounded-full animated-border animate-spin-slow "></div>
                   <Tooltip label="Start writing">
                     <IconButton
                       aria-label="Start writing"
                       isRound
-                      className="opacity-100"
+                      className="shadow-xl opacity-100 shadow-zinc-900/10"
                       title="Start writing"
                       onClick={() => router.push(newLessonRoute())}
                       icon={<PlusIcon className="w-4 h-4 text-zinc-900" />}
@@ -184,7 +185,7 @@ const Header = ({
                     </MenuButton>
                     <Portal>
                       <MenuList>
-                        <Link passHref href="/accounts/me">
+                        <Link passHref href={myAccountRoute}>
                           <MenuItem>View account</MenuItem>
                         </Link>
                         <MenuItem onClick={() => logOut()}>Sign out</MenuItem>

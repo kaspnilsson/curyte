@@ -60,7 +60,7 @@ const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
               autoFocus
               className={`${computeClassesForTitle(
                 title
-              )} font-semibold flex-grow resize-none tracking-tight leading-tight border-0`}
+              )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0`}
               placeholder="Add a title..."
               value={title}
               onChange={({ target }) => {

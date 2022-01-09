@@ -30,6 +30,7 @@ export const newLessonRoute = (copyFrom?: string) => {
   if (copyFrom) out += `?copyFrom=${copyFrom}`
   return out
 }
+export const newLessonRouteHref = '/lessons/new'
 
 export const tagRoute = (tag: string) => `/tags/${tag}`
 export const tagRouteHrefPath = '/tags/[tag]'
@@ -39,3 +40,13 @@ export const lessonSearchRoute = (query?: string) => {
   if (query) out += `?query=${query}`
   return out
 }
+
+export const newPathRoute = '/paths/new'
+
+export const editPathRoute = (uid: string) => `/paths/edit/${uid}`
+export const editPathRouteHrefPath = '/paths/edit/[id]'
+
+export const pathRoute = (uid: string) => `/paths/${uid}`
+export const pathRouteHrefPath = '/paths/[id]'
+
+export const myAccountRoute = '/accounts/me'

@@ -9,8 +9,8 @@ interface Props {
 
 const LessonList = ({ lessons = [], allowWrap = false }: Props) => (
   <div
-    className={classNames('flex w-full px-8 py-4 my-4', {
-      'overflow-x-scroll overscroll-contain hide-scrollbar snap-x snap-left':
+    className={classNames('flex w-full py-4 my-4', {
+      'overflow-x-scroll overscroll-contain hide-scrollbar snap-x snap-left px-8 ':
         !allowWrap,
     })}
   >

@@ -10,12 +10,13 @@ import { Author } from '../interfaces/author'
 import AuthorLink from './AuthorLink'
 
 type Props = {
-  lesson: Lesson
+  lesson?: Lesson
   author?: Author | null
   onClick?: (l: Lesson) => void
 }
 
 const LessonPreview = ({ lesson, author, onClick }: Props) => {
+  if (!lesson) return null
   const card = (
     <div className="flex flex-col overflow-hidden border-2 shadow-lg cursor-pointer group rounded-xl w-80 border-zinc-200 lesson-preview">
       <div className="relative h-40 overflow-hidden w-80">
