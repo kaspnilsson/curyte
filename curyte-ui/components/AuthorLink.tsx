@@ -14,21 +14,25 @@ const AuthorLink = ({ author }: Props) => {
     <>
       {!author && null}
       {author && (
-        <div className="flex items-center">
-          <Avatar
-            author={author}
-            className="w-8 h-8 shadow-xl shadow-zinc-900/10"
-          />
-          <Link
-            as={accountRoute(author.uid)}
-            href={accountRouteHrefPath}
-            passHref
-          >
-            <a className="ml-2 text-sm font-bold hover:underline md:text-base">
-              {author.displayName || '(no name)'}
-            </a>
-          </Link>
-        </div>
+        <Link
+          as={accountRoute(author.uid)}
+          href={accountRouteHrefPath}
+          passHref
+        >
+          <div className="flex items-center cursor-pointer group">
+            <Avatar
+              author={author}
+              className="w-8 h-8 shadow-xl shadow-zinc-900/10"
+            />
+            <div className="flex flex-col ml-2">
+              {/* TODO add role here! */}
+              <span className="text-xs text-zinc-700">Instructor</span>
+              <a className="text-sm font-bold group-hover:underline md:text-base">
+                {author.displayName || '(no name)'}
+              </a>
+            </div>
+          </div>
+        </Link>
       )}
     </>
   )

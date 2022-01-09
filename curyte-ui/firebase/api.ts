@@ -21,6 +21,7 @@ import {
 import { deleteObject, ref } from 'firebase/storage'
 import { Author, SavedLesson } from '../interfaces/author'
 import { Lesson } from '../interfaces/lesson'
+import { Path } from '../interfaces/path'
 import { Tag } from '../interfaces/tag'
 import { exception } from '../utils/gtag'
 import { auth, firestore, storage } from './clientApp'
@@ -50,7 +51,7 @@ export async function getLessons(
       const mapped: Lesson[] = []
       result.docs.forEach((result) => mapped.push(result.data() as Lesson))
       return mapped.sort((a, b) =>
-        compareDesc(parseISO(a.created), parseISO(b.created))
+        compareDesc(parseISO(a.created || ''), parseISO(b.created || ''))
       )
     })
   } catch (e) {
@@ -110,23 +111,6 @@ export async function createLesson(lesson: Lesson): Promise<string> {
   }
 }
 
-// export async function publishLesson(lesson: Lesson): Promise<string> {
-//   try {
-//     lesson.uid =
-//       (lesson.title || 'lesson')
-//         .toLocaleLowerCase()
-//         .replace(/[^a-z 0-9]/g, '')
-//         .replace(/ /g, '-')
-//         .substring(0, 32) + `-${Date.now()}`
-//     await setDoc(doc(collection(firestore, 'lessons'), lesson.uid), lesson)
-//     return lesson.uid
-//   } catch (e) {
-//     console.error(lesson)
-//     exception(e as string)
-//     throw e
-//   }
-// }
-
 export async function updateLesson(lesson: Lesson): Promise<string> {
   try {
     assert(lesson.uid)
@@ -157,6 +141,17 @@ export async function setLessonFeatured(
 export async function logLessonView(uid: string): Promise<void> {
   try {
     updateDoc(doc(collection(firestore, 'lessons'), uid), {
+      viewCount: increment(1),
+    })
+  } catch (e) {
+    exception(e as string)
+    throw e
+  }
+}
+
+export async function logPathView(uid: string): Promise<void> {
+  try {
+    updateDoc(doc(collection(firestore, 'paths'), uid), {
       viewCount: increment(1),
     })
   } catch (e) {
@@ -282,6 +277,94 @@ export async function logTagView(tagText: string): Promise<void> {
   }
 }
 
+/**
+ * Deletes an image at a URL.
+ * @param url
+ * @returns
+ */
 export async function deleteImageAtUrl(url: string): Promise<void> {
   return deleteObject(ref(storage, url))
+}
+
+export async function createPath(path: Path): Promise<string> {
+  try {
+    if (!auth.currentUser) throw new Error('Not logged in')
+    path.uid = uuidv4()
+    await setDoc(doc(collection(firestore, 'paths'), path.uid), path)
+    return path.uid
+  } catch (e) {
+    console.error(path)
+    exception(e as string)
+    throw e
+  }
+}
+
+export async function updatePath(path: Path) {
+  try {
+    assert(path.uid)
+    await setDoc(doc(collection(firestore, 'paths'), path.uid), path)
+  } catch (e) {
+    console.error(path)
+    exception(e as string)
+    throw e
+  }
+}
+
+/**
+ * Gets paths from firestore by applying clauses.
+ *
+ * @param whereClauses
+ * @returns
+ */
+export async function getPaths(
+  queryConstraints: QueryConstraint[]
+): Promise<Path[]> {
+  try {
+    const q: CollectionReference<DocumentData> | Query<DocumentData> = query(
+      collection(firestore, 'paths'),
+      ...queryConstraints
+    )
+    return getDocs(q).then((result) => {
+      const mapped: Path[] = []
+      result.docs.forEach((result) => mapped.push(result.data() as Path))
+      // TODO: sort
+      return mapped
+    })
+  } catch (e) {
+    exception(e as string)
+    throw e
+  }
+}
+
+/**
+ * Gets a path from firestore.
+ *
+ * @param uid the ID of the path to fetch
+ * @returns
+ */
+export async function getPath(uid: string): Promise<Path> {
+  try {
+    return (
+      await getDoc(doc(collection(firestore, 'paths'), uid))
+    ).data() as Path
+  } catch (e) {
+    exception(e as string)
+    throw e
+  }
+}
+
+/**
+ * Deletes a path from firestore.
+ *
+ * @param uid the ID of the path to delete
+ * @returns
+ */
+export async function deletePath(uid: string): Promise<void> {
+  try {
+    if (!auth.currentUser) throw new Error('Not logged in')
+    return await deleteDoc(doc(collection(firestore, 'paths'), uid))
+  } catch (e) {
+    exception(e as string)
+    throw e
+  }
 }
