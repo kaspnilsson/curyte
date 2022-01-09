@@ -109,7 +109,6 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         isActive={editor.isActive('bulletList')}
         icon={<i className="text-lg ri-list-unordered" />}
       />
-
       <MenuIconButton
         label="Ordered list"
         onClick={() => editor.chain().focus().toggleOrderedList().run()}

@@ -10,11 +10,11 @@ import {
   RadioGroup,
   Stack,
 } from '@chakra-ui/react'
+import TextareaAutosize from 'react-textarea-autosize'
 
 interface EditorAttrs extends MultipleChoiceAttrs {
   onUpdate: (attrs: MultipleChoiceAttrs) => void
 }
-import TextareaAutosize from 'react-textarea-autosize'
 
 const MultipleChoiceEditorComponent = ({
   question,
@@ -58,8 +58,8 @@ const MultipleChoiceEditorComponent = ({
     <>
       <TextareaAutosize
         autoFocus
-        value={question}
         className="w-full p-4 mx-2 text-lg font-bold leading-tight tracking-tight border-0 rounded resize-none"
+        value={question}
         placeholder="Ask a question"
         onChange={(e) => onUpdateQuestion(e.target.value)}
       />

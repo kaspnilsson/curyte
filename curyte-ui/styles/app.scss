@@ -108,3 +108,7 @@ textarea:focus {
   padding: 2px;
   margin: -2px;
 }
+
+.details-content div :first-child {
+  margin-top: 0;
+}

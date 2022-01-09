@@ -26,6 +26,8 @@ import { CuryteLink } from '../components/extensions/CuryteLink/CuryteLink'
 import { MultipleChoice } from '../components/extensions/MultipleChoice/MultipleChoice'
 import { zinc } from '../styles/theme/colors'
 import { TrailingNode } from '../components/extensions/TrailingNode'
+import Details from '../components/extensions/Details/Details'
+import DetailsContent from '../components/extensions/Details/DetailsContent'
 
 interface EditorProps {
   content: JSONContent | null
@@ -40,6 +42,8 @@ const useCuryteEditor = (
     {
       extensions: [
         Highlight,
+        Details,
+        DetailsContent,
         Typography,
         // TextAlign,
         Link,

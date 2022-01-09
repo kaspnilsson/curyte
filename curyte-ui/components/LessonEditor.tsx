@@ -21,7 +21,6 @@ const prepareTagStr = (str?: string): string[] =>
   (str || '').split(', ').map((s) => s.replace('#', '').trim())
 
 const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
-  console.log(lesson)
   const [title, setTitle] = useState(lesson?.title?.trim() || '')
   const [description, setDescription] = useState(
     lesson?.description?.trim() || ''

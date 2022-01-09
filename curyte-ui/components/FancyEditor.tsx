@@ -31,7 +31,7 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
       <div className="flex flex-col max-w-full min-w-full">
         {!readOnly && <FancyEditorMenuBar editor={editor} />}
         <EditorContent
-          className="prose sm:prose-sm lg:prose-md xl:prose-lg max-w-none prose-zinc prose-headings:font-semibold prose-headings:tracking-tight prose-headings:leading-tight prose-headings:border-b-2 prose-headings:pb-2 prose-headings:scroll-m-28 !prose-th:p-1 !prose-td:p-1 prose-th:border-l-[1px] prose-td:border-l-[1px] first:prose-th:border-l-0 first:prose-td:border-l-0"
+          className="prose sm:prose-sm lg:prose-md max-w-full xl:prose-lg prose-zinc prose-headings:font-semibold prose-headings:tracking-tight prose-headings:leading-tight prose-headings:border-b-2 prose-headings:pb-2 prose-headings:scroll-m-28 !prose-th:p-1 !prose-td:p-1 prose-th:border-l-[1px] prose-td:border-l-[1px] first:prose-th:border-l-0 first:prose-td:border-l-0"
           spellCheck
           editor={editor}
         />
