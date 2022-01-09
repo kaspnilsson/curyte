@@ -23,6 +23,7 @@ const Details = Node.create({
   addAttributes() {
     return {
       isOpen: { default: true },
+      summary: { default: '' },
     } as ExtensionAttrs
   },
 

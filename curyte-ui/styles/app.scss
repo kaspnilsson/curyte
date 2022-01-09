@@ -109,6 +109,6 @@ textarea:focus {
   margin: -2px;
 }
 
-.details-content div :first-child {
+.details-content div > :first-child {
   margin-top: 0;
 }
