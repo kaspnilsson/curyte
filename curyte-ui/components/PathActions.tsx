@@ -1,5 +1,5 @@
-import { Button, Spinner, Tooltip } from '@chakra-ui/react'
-import { TrashIcon, PencilAltIcon, EyeIcon } from '@heroicons/react/solid'
+import { IconButton, Spinner, Tooltip } from '@chakra-ui/react'
+import { TrashIcon, PencilAltIcon, EyeIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -43,46 +43,40 @@ const PathActions = ({ path, isReadOnlyView }: Props) => {
       {user && user.uid === path.authorId && isReadOnlyView && (
         <>
           <Tooltip label="Edit path">
-            <Button
+            <IconButton
+              borderRadius="full"
               className="flex items-center gap-2"
               disabled={loading}
-              colorScheme="black"
               aria-label="Edit lesson"
               onClick={handleEdit}
-            >
-              <PencilAltIcon className="w-5 h-5" />
-              Edit path
-            </Button>
+              icon={<PencilAltIcon className="w-5 h-5" />}
+            ></IconButton>
           </Tooltip>
         </>
       )}
       {!isReadOnlyView && (
         <Tooltip label="View path">
-          <Button
+          <IconButton
+            borderRadius="full"
             className="flex items-center gap-2"
             disabled={loading}
-            colorScheme="black"
             aria-label="View path"
             onClick={handleView}
-          >
-            <EyeIcon className="w-5 h-5" />
-            View path
-          </Button>
+            icon={<EyeIcon className="w-5 h-5" />}
+          ></IconButton>
         </Tooltip>
       )}
       {user && (user.uid === path.authorId || userIsAdmin(user.uid)) && (
         <>
           <Tooltip label="Delete path">
-            <Button
+            <IconButton
+              borderRadius="full"
               className="flex items-center gap-2"
               disabled={loading}
-              colorScheme="black"
               aria-label="Delete path"
               onClick={handleDelete}
-            >
-              <TrashIcon className="w-5 h-5" />
-              Delete path
-            </Button>
+              icon={<TrashIcon className="w-5 h-5" />}
+            ></IconButton>
           </Tooltip>
         </>
       )}

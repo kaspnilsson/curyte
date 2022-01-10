@@ -4,7 +4,7 @@ import Layout from './Layout'
 import { computeClassesForTitle } from './LessonTitle'
 import TextareaAutosize from 'react-textarea-autosize'
 import { useEffect, useState } from 'react'
-import { Button, Heading, Spinner } from '@chakra-ui/react'
+import { Button, Spinner } from '@chakra-ui/react'
 import { PlusIcon } from '@heroicons/react/outline'
 import {
   DragDropContext,
@@ -108,21 +108,20 @@ const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
                 onChange={({ target }) => handleTitleChange(target.value)}
               />
             </div>
-            <div className="flex gap-2 mb-6">
+            <div className="flex items-center justify-end gap-2">
+              <div
+                className={classNames(
+                  'flex items-center gap-2 text-base mr-2 py-2',
+                  {
+                    invisible: !saving,
+                  }
+                )}
+              >
+                Saving...
+                <Spinner />
+              </div>
               <PathActions path={path} />
             </div>
-            <Heading
-              className="flex items-center justify-between font-bold leading-tight tracking-tight"
-              fontSize="3xl"
-            >
-              Units
-              {saving && (
-                <div className="flex items-center gap-2 text-base">
-                  Saving...
-                  <Spinner />
-                </div>
-              )}
-            </Heading>
             {!units.length && <span className="text-zinc-700">(no units)</span>}
             <DragDropContext onDragEnd={onDragEnd}>
               <div>

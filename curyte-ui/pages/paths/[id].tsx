@@ -8,7 +8,7 @@ import { Author } from '../../interfaces/author'
 import { pathRoute } from '../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
 import { logPathView, getAuthor, getPath, getLessons } from '../../firebase/api'
-import { Center, Divider, Heading } from '@chakra-ui/react'
+import { Center, Divider } from '@chakra-ui/react'
 import { where } from 'firebase/firestore'
 import { Path } from '../../interfaces/path'
 import { title } from 'process'
@@ -29,13 +29,6 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
     if (!path.published) return
     logPathView(path.uid)
   }, [path])
-
-  // const handleDelete = async () => {
-  //   setLoading(true)
-  //   await deleteLesson(lesson.uid)
-  //   setLoading(false)
-  //   router.push(lessonSearchRoute())
-  // }
 
   if (!path) return <ErrorPage statusCode={404} />
 
@@ -72,7 +65,7 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
             <div
               className={`${computeClassesForTitle(
                 title
-              )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0  mb-4`}
+              )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0 mb-4`}
             >
               {path.title || '(no title)'}
             </div>
@@ -92,24 +85,18 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
             <div className="flex items-center gap-1">
               <PathActions path={path} isReadOnlyView />
             </div>
+            {path.units?.map((u, index) => (
+              <UnitOutline
+                unit={u}
+                key={index}
+                unitIndex={index}
+                lessonsMap={lessonsMap}
+              />
+            ))}
+            {!path.units?.length && (
+              <span className="px-4 text-zinc-700">(no units)</span>
+            )}
           </div>
-          <Heading
-            className="flex items-center justify-between font-bold leading-tight tracking-tight"
-            fontSize="3xl"
-          >
-            Units
-          </Heading>
-          {path.units?.map((u, index) => (
-            <UnitOutline
-              unit={u}
-              key={index}
-              unitIndex={index}
-              lessonsMap={lessonsMap}
-            />
-          ))}
-          {!path.units?.length && (
-            <span className="text-zinc-700">(no units)</span>
-          )}
         </div>
       </div>
     </Layout>
