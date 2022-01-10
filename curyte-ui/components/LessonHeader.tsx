@@ -156,15 +156,33 @@ const LessonHeader = ({
         </div>
         <div className="flex items-center gap-1">
           <div className="flex items-center mr-4">
-            {lesson.created && <DateFormatter dateString={lesson.created} />}
-            {!!lesson.viewCount && (
-              <>
-                <Center className="w-6 h-4">
-                  <Divider orientation="vertical" />
-                </Center>
-                {`${lesson.viewCount} views`}
-              </>
-            )}
+            <div className="items-center hidden lg:flex">
+              {lesson.created && (
+                <>
+                  <span className="text-sm">
+                    {lesson.updated &&
+                      lesson.created !== lesson.updated &&
+                      'Created '}
+                    <DateFormatter dateString={lesson.created} />{' '}
+                  </span>
+                  <Center className="w-6 h-4">
+                    <Divider orientation="vertical" />
+                  </Center>
+                </>
+              )}
+              {lesson.updated && lesson.updated !== lesson.created && (
+                <>
+                  <span className="text-sm">
+                    {'Updated '}
+                    <DateFormatter dateString={lesson.updated} />
+                  </span>
+                  <Center className="w-6 h-4">
+                    <Divider orientation="vertical" />
+                  </Center>
+                </>
+              )}
+            </div>
+            <span className="text-sm">{`${lesson.viewCount} views`}</span>
           </div>
           {handlePublish && (
             <Button

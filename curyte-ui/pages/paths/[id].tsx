@@ -16,6 +16,7 @@ import { computeClassesForTitle } from '../../components/LessonTitle'
 import UnitOutline from '../../components/UnitOutline'
 import AuthorLink from '../../components/AuthorLink'
 import PathActions from '../../components/PathActions'
+import DateFormatter from '../../components/DateFormatter'
 
 interface Props {
   lessonsMap: { [uid: string]: Lesson }
@@ -71,18 +72,39 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
             </div>
           </div>
           <div className="flex flex-wrap items-center justify-between gap-2 mb-6">
-            <div className="flex items-center gap-2 text-sm md:text-base">
-              <AuthorLink author={author} />
-              {!!path.viewCount && (
-                <>
-                  <Center className="w-6 h-4">
-                    <Divider orientation="vertical" />
-                  </Center>
-                  {`${path.viewCount} views`}
-                </>
-              )}
-            </div>
+            <AuthorLink author={author} />
             <div className="flex items-center gap-1">
+              <div className="flex items-center mr-4">
+                <div className="items-center hidden lg:flex">
+                  {path.created && (
+                    <>
+                      <span className="text-sm">
+                        {path.updated &&
+                          path.created !== path.updated &&
+                          'Created '}
+                        <DateFormatter dateString={path.created} />{' '}
+                      </span>
+                      <Center className="w-6 h-4">
+                        <Divider orientation="vertical" />
+                      </Center>
+                    </>
+                  )}
+                  {path.updated && path.updated !== path.created && (
+                    <>
+                      <span className="text-sm">
+                        {'Updated '}
+                        <DateFormatter dateString={path.updated} />
+                      </span>
+                      <Center className="w-6 h-4">
+                        <Divider orientation="vertical" />
+                      </Center>
+                    </>
+                  )}
+                </div>
+                <span className="text-sm">{`${
+                  path.viewCount || 0
+                } views`}</span>
+              </div>
               <PathActions path={path} isReadOnlyView />
             </div>
             {path.units?.map((u, index) => (
