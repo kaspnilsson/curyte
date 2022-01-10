@@ -8,7 +8,7 @@ import { Author } from '../../interfaces/author'
 import { pathRoute } from '../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
 import { logPathView, getAuthor, getPath, getLessons } from '../../firebase/api'
-import { Center, Divider } from '@chakra-ui/react'
+import { Badge, Center, Divider } from '@chakra-ui/react'
 import { where } from 'firebase/firestore'
 import { Path } from '../../interfaces/path'
 import { title } from 'process'
@@ -16,6 +16,7 @@ import { computeClassesForTitle } from '../../components/LessonTitle'
 import UnitOutline from '../../components/UnitOutline'
 import AuthorLink from '../../components/AuthorLink'
 import PathActions from '../../components/PathActions'
+import DateFormatter from '../../components/DateFormatter'
 
 interface Props {
   lessonsMap: { [uid: string]: Lesson }
@@ -26,7 +27,7 @@ interface Props {
 const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
   // Log views only on render of a published path
   useEffect(() => {
-    if (!path.published) return
+    if (path.private) return
     logPathView(path.uid)
   }, [path])
 
@@ -71,18 +72,48 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
             </div>
           </div>
           <div className="flex flex-wrap items-center justify-between gap-2 mb-6">
-            <div className="flex items-center gap-2 text-sm md:text-base">
-              <AuthorLink author={author} />
-              {!!path.viewCount && (
-                <>
-                  <Center className="w-6 h-4">
-                    <Divider orientation="vertical" />
-                  </Center>
-                  {`${path.viewCount} views`}
-                </>
-              )}
-            </div>
+            <AuthorLink author={author} />
             <div className="flex items-center gap-1">
+              <div className="flex items-center mr-4">
+                {path.private && (
+                  <Badge
+                    variant="subtle"
+                    colorScheme="orange"
+                    className="mr-4 h-min w-fit"
+                  >
+                    Private
+                  </Badge>
+                )}
+                <div className="items-center hidden lg:flex">
+                  {path.created && (
+                    <>
+                      <span className="flex gap-1 text-sm">
+                        {path.updated &&
+                          path.created !== path.updated &&
+                          'Created'}
+                        <DateFormatter dateString={path.created} />
+                      </span>
+                      <Center className="w-6 h-4">
+                        <Divider orientation="vertical" />
+                      </Center>
+                    </>
+                  )}
+                  {path.updated && path.updated !== path.created && (
+                    <>
+                      <span className="flex gap-1 text-sm">
+                        Updated
+                        <DateFormatter dateString={path.updated} />
+                      </span>
+                      <Center className="w-6 h-4">
+                        <Divider orientation="vertical" />
+                      </Center>
+                    </>
+                  )}
+                </div>
+                <span className="text-sm">{`${
+                  path.viewCount || 0
+                } views`}</span>
+              </div>
               <PathActions path={path} isReadOnlyView />
             </div>
             {path.units?.map((u, index) => (

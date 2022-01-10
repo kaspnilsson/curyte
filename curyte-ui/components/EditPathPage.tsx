@@ -1,11 +1,12 @@
+import { UploadIcon, LockClosedIcon } from '@heroicons/react/solid'
+import { CheckIcon, PlusIcon, ExternalLinkIcon } from '@heroicons/react/outline'
 import { Author } from '../interfaces/author'
 import { Path, Unit } from '../interfaces/path'
 import Layout from './Layout'
 import { computeClassesForTitle } from './LessonTitle'
 import TextareaAutosize from 'react-textarea-autosize'
 import { useEffect, useState } from 'react'
-import { Button, Spinner } from '@chakra-ui/react'
-import { PlusIcon } from '@heroicons/react/outline'
+import { Button, Portal, Spinner, Text, useToast } from '@chakra-ui/react'
 import {
   DragDropContext,
   Droppable,
@@ -18,23 +19,31 @@ import { Lesson } from '../interfaces/lesson'
 import { getLessons } from '../firebase/api'
 import { where } from 'firebase/firestore'
 import classNames from 'classnames'
-import PathActions from './PathActions'
 import { uuid } from '../utils/uuid'
+import Container from './Container'
+import { useRouter } from 'next/router'
+import { pathRoute } from '../utils/routes'
+import { Confetti } from './Confetti'
 
 interface Props {
   path: Path
   user: Author
   saving?: boolean
+  dirty?: boolean
   handleUpdate: (p: Path) => Promise<void>
 }
 
-const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
+const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
+  const router = useRouter()
+  const toast = useToast()
   const [title, setTitle] = useState(path.title?.trim() || '')
   const [units, setUnits] = useState(path.units || [])
+  const [isPrivate, setIsPrivate] = useState<boolean>(path.private || true)
   const [lessonsByUid, setLessonsByUid] = useState<{ [uid: string]: Lesson }>(
     {}
   )
   const [lessonsLoading, setLessonsLoading] = useState(false)
+  const [isFiringConfetti, setIsFiringConfetti] = useState(false)
 
   const addUnit = () => {
     setUnits([...units, { uid: uuid() } as Unit])
@@ -91,10 +100,28 @@ const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
     }
   }, [lessonsByUid, units])
 
+  const canPublish =
+    path.title && path.units?.length && path.units?.at(0)?.lessonIds?.length
+
+  const toggleIsPrivate = async () => {
+    const p = !isPrivate
+    setIsPrivate(p)
+    await handleUpdate({ ...path, private: p })
+    if (p) {
+      toast({
+        title: 'Path set to private.',
+      })
+    } else {
+      toast({ title: 'Path published!', status: 'success' })
+      setIsFiringConfetti(true)
+      setTimeout(() => setIsFiringConfetti(false), 300)
+    }
+  }
+
   return (
     <>
       {lessonsLoading && <Spinner />}
-      <Layout sidebar={<div></div>}>
+      <Layout sidebar={<div></div>} withFooter={false}>
         <div className="flex">
           <div className="flex flex-col flex-grow gap-2 overflow-hidden">
             <div className="flex items-center justify-between w-full">
@@ -108,7 +135,7 @@ const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
                 onChange={({ target }) => handleTitleChange(target.value)}
               />
             </div>
-            <div className="flex items-center justify-end gap-2">
+            {/* <div className="flex items-center justify-end gap-2">
               <div
                 className={classNames(
                   'flex items-center gap-2 text-base mr-2 py-2',
@@ -120,8 +147,7 @@ const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
                 Saving...
                 <Spinner />
               </div>
-              <PathActions path={path} />
-            </div>
+            </div> */}
             {!units.length && <span className="text-zinc-700">(no units)</span>}
             <DragDropContext onDragEnd={onDragEnd}>
               <div>
@@ -148,6 +174,7 @@ const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
                               {...provided.draggableProps}
                             >
                               <UnitEditor
+                                unitNumber={index + 1}
                                 unit={u}
                                 lessonsByUid={lessonsByUid}
                                 user={user}
@@ -175,6 +202,63 @@ const EditPathPage = ({ path, user, handleUpdate, saving }: Props) => {
             </DragDropContext>
           </div>
         </div>
+        <footer className="fixed bottom-0 left-0 z-20 w-full h-16 bg-white border-t border-accent-2">
+          <Container className="flex items-center justify-end h-full">
+            <div className="flex items-center gap-2 mr-auto italic text-zinc-500">
+              {saving && (
+                <Text className="flex items-center gap-2">
+                  Saving... <Spinner />
+                </Text>
+              )}
+              {dirty && !saving && (
+                <>
+                  <Text>Unsaved changes...</Text>
+                </>
+              )}
+              {!dirty && !saving && (
+                <>
+                  <CheckIcon className="w-5 h-5" />
+                  <Text>Autosaved!</Text>
+                </>
+              )}
+            </div>
+            <Button
+              variant="outline"
+              onClick={() => router.push(pathRoute(path.uid))}
+              disabled={saving}
+              colorScheme="black"
+              className="flex items-center justify-between gap-2 mr-4 font-semibold disabled:opacity-50"
+            >
+              <ExternalLinkIcon className="w-5 h-5" />
+              Preview
+            </Button>
+            {isPrivate && (
+              <Button
+                colorScheme="black"
+                disabled={saving || !canPublish}
+                className="flex items-center justify-between font-semibold disabled:opacity-50"
+                onClick={toggleIsPrivate}
+              >
+                <UploadIcon className="w-5 h-5 mr-2" />
+                Publish
+              </Button>
+            )}
+            {!isPrivate && (
+              <Button
+                colorScheme="black"
+                disabled={saving}
+                className="flex items-center justify-between font-semibold disabled:opacity-50"
+                onClick={toggleIsPrivate}
+              >
+                <LockClosedIcon className="w-5 h-5 mr-2" />
+                Make private
+              </Button>
+            )}
+          </Container>
+        </footer>
+        <Portal>
+          <Confetti isFiring={isFiringConfetti} />
+        </Portal>
       </Layout>
     </>
   )

@@ -17,7 +17,6 @@ type Props = {
 }
 
 const TagView = ({ lessons, tag, tagText }: Props) => {
-  // Log views only on render of a published lesson
   const [user, userLoading] = useAuthState(auth)
   useEffect(() => {
     if (!user || userLoading || !tag) return
@@ -28,11 +27,13 @@ const TagView = ({ lessons, tag, tagText }: Props) => {
     <>
       <Layout showProgressBar title={tagText}>
         <Container className="px-5">
-          <section className="flex flex-col mb-12">
+          <section className="flex flex-col mb-8">
             <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
               {`# ${tagText}`}
             </h1>
-            {tag && `${tag.viewCount} views`}
+            {tag && (
+              <div className="mt-4 text-sm">{tag.viewCount || 0} views</div>
+            )}
           </section>
           <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
             Lessons

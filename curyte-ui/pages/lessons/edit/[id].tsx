@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { auth } from '../../../firebase/clientApp'
 import { GetServerSideProps } from 'next'
 import { Author } from '../../../interfaces/author'
@@ -9,7 +9,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner'
 import { Lesson } from '../../../interfaces/lesson'
 import { debounce } from 'ts-debounce'
 
-import { loginRoute, newLessonRoute } from '../../../utils/routes'
+import { lessonRoute, loginRoute, newLessonRoute } from '../../../utils/routes'
 import { getLesson, updateLesson } from '../../../firebase/api'
 import { Portal, useToast } from '@chakra-ui/react'
 import { Confetti } from '../../../components/Confetti'
@@ -23,6 +23,7 @@ const LessonView = ({ id }: Props) => {
   const toast = useToast()
   const [user, userLoading] = useAuthState(auth)
   const [loading, setLoading] = useState(true)
+  const [dirty, setDirty] = useState(false)
   const [lesson, setLesson] = useState<Lesson | undefined>()
   const [isFiringConfetti, setIsFiringConfetti] = useState(false)
   const [savingPromise, setSavingPromise] = useState<Promise<unknown> | null>(
@@ -51,14 +52,9 @@ const LessonView = ({ id }: Props) => {
   }, [id, router, user, userLoading])
 
   const handleTogglePrivate = async () => {
-    if (savingPromise) await savingPromise
     if (!lesson) return
     const l = { ...lesson, private: !lesson.private }
-    const p = updateLesson(l)
-    setSavingPromise(p)
-    await p
-    setLesson(l)
-    setSavingPromise(null)
+    await handleUpdate(l)
 
     if (l.private) {
       toast({
@@ -66,23 +62,29 @@ const LessonView = ({ id }: Props) => {
       })
     } else {
       // celebrate!
+      toast({ title: 'Lesson published!', status: 'success' })
       setIsFiringConfetti(true)
       setTimeout(() => setIsFiringConfetti(false), 300)
     }
   }
 
-  const debouncedUpdateLesson = debounce(async (l: Lesson) => {
-    const p = updateLesson(l)
-    setSavingPromise(p)
-    await p
-    setLesson(l)
-    setSavingPromise(null)
-  }, 500)
+  const debouncedUpdateLesson = useMemo(
+    () =>
+      debounce(async (l: Lesson) => {
+        const lessonPromise = updateLesson(l)
+        setSavingPromise(lessonPromise)
+        await lessonPromise
+        setLesson(l)
+        setSavingPromise(null)
+      }, 500),
+    []
+  )
 
   const handleUpdate = async (l: Lesson) => {
     if (loading || !l.uid) return
-    if (savingPromise) await savingPromise
+    setDirty(true)
     await debouncedUpdateLesson(l)
+    setDirty(false)
   }
 
   return (
@@ -95,6 +97,11 @@ const LessonView = ({ id }: Props) => {
             user={user as unknown as Author}
             handleTogglePrivate={handleTogglePrivate}
             handleUpdate={handleUpdate}
+            handlePreview={() => {
+              router.push(lessonRoute(id))
+            }}
+            saving={!!savingPromise}
+            dirty={dirty}
           />
           <Portal>
             <Confetti isFiring={isFiringConfetti} />

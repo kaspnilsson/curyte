@@ -19,7 +19,8 @@ import {
 import { SearchIcon } from '@heroicons/react/outline'
 const searchClient = algoliasearch(
   'J2RQN6DLHP',
-  'fad56d06d43541b6bdf0e83a4bdc12f5'
+  'fad56d06d43541b6bdf0e83a4bdc12f5',
+  {}
 )
 
 const SearchBox = ({ refine }: SearchBoxProvided) => {
@@ -59,7 +60,6 @@ const SearchBox = ({ refine }: SearchBoxProvided) => {
   )
 }
 
-// 2. Connect the component using the connector
 const CustomSearchBox = connectSearchBox(SearchBox)
 
 interface CustomHitsProps extends Partial<InfiniteHitsProvided> {
@@ -105,7 +105,7 @@ const Search = ({ onSelect }: SearchProps) => {
           setQuery(searchState.query)
         }}
       >
-        <Configure hitsPerPage={9} />
+        <Configure hitsPerPage={9} filters="private:false" />
         <CustomSearchBox />
         {query && <CustomHits onSelect={onSelect} />}
       </InstantSearch>

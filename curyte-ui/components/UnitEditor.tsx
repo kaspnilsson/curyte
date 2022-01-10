@@ -3,6 +3,7 @@ import {
   Button,
   IconButton,
   Tooltip,
+  Heading,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
@@ -39,6 +40,7 @@ interface Props {
   onUpdate: (u: Unit) => Promise<void>
   onDelete: () => Promise<void>
   parentDragHandleProps?: DraggableProvidedDragHandleProps
+  unitNumber: number
 }
 
 const UnitEditor = ({
@@ -48,6 +50,7 @@ const UnitEditor = ({
   onDelete,
   lessonsByUid,
   parentDragHandleProps,
+  unitNumber,
 }: Props) => {
   const [loading, setLoading] = useState(false)
   const [title, setTitle] = useState(unit.title?.trim() || '')
@@ -104,36 +107,42 @@ const UnitEditor = ({
 
   return (
     <>
-      <div className="flex items-center w-full gap-2 pt-2">
-        <TextareaAutosize
-          value={title}
-          onChange={(e) => onTitleUpdate(e.target.value)}
-          placeholder="Add a unit title..."
-          className="flex-1 flex-grow text-xl font-semibold tracking-tight bg-transparent border-0 resize-none leading-tighter"
-        />
-        <Tooltip label="Remove unit">
-          <IconButton
-            borderRadius="full"
-            colorScheme="black"
-            variant="ghost"
-            aria-label="Delete lesson"
-            icon={<TrashIcon className="w-6 h-6" />}
-            onClick={() => onDelete()}
+      <div className="flex w-full gap-2 py-2 border-b-2">
+        <Heading className="flex flex-1 flex-grow gap-2 font-semibold tracking-tight leading-tighter">
+          <span>{unitNumber}.</span>
+          <TextareaAutosize
+            value={title}
+            onChange={(e) => onTitleUpdate(e.target.value)}
+            placeholder="Add a unit title..."
+            className="flex-1 flex-grow font-semibold tracking-tight bg-transparent border-0 resize-none text-inherit leading-tighter"
           />
-        </Tooltip>
-        {parentDragHandleProps && (
-          <Tooltip label="Reorder unit">
-            <div
-              {...parentDragHandleProps}
-              className="p-2 rounded-full hover:bg-zinc-100"
-            >
-              <GripIcon className="w-6 h-6 text-zinc-900"></GripIcon>
-            </div>
+        </Heading>
+        <div className="flex items-center gap-2">
+          <Tooltip label="Remove unit">
+            <IconButton
+              borderRadius="full"
+              colorScheme="black"
+              size="sm"
+              variant="ghost"
+              aria-label="Delete lesson"
+              icon={<TrashIcon className="w-5 h-5" />}
+              onClick={() => onDelete()}
+            />
           </Tooltip>
-        )}
+          {parentDragHandleProps && (
+            <Tooltip label="Reorder unit">
+              <div
+                {...parentDragHandleProps}
+                className="p-1 rounded-full h-fit hover:bg-zinc-100"
+              >
+                <GripIcon className="w-5 h-5 text-zinc-900"></GripIcon>
+              </div>
+            </Tooltip>
+          )}
+        </div>
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="py-4">
+        <div className="pb-4">
           {loading && <LoadingSpinner />}
           <Droppable droppableId="lessons">
             {(provided: DroppableProvided) => (
