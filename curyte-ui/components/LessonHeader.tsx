@@ -182,7 +182,7 @@ const LessonHeader = ({
                 </>
               )}
             </div>
-            <span className="text-sm">{`${lesson.viewCount} views`}</span>
+            <span className="text-sm">{`${lesson.viewCount || 0} views`}</span>
           </div>
           {handlePublish && (
             <Button
