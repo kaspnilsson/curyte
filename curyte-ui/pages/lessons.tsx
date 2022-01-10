@@ -17,7 +17,7 @@ const SearchPage = ({ lessons }: Props) => {
       <Container className="flex flex-col items-center">
         <section className="flex flex-row items-center justify-center mb-8">
           <h1 className="text-4xl font-bold leading-tight tracking-tighter text-center md:text-6xl">
-            Byte-sized lessons, for the curious.
+            Open-source curriculum, for the curious.
           </h1>
         </section>
         {lessons && <LessonList lessons={lessons} allowWrap />}
