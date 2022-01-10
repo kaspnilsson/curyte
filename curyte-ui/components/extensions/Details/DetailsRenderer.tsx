@@ -60,7 +60,7 @@ const DetailsWrapper = ({
         )}
         {!editor.isEditable && (
           <summary
-            className="w-full text-lg font-bold leading-tight tracking-tight list-none"
+            className="w-full text-lg font-bold leading-tight tracking-tight list-none cursor-pointer"
             onClick={() => handleSetOpen(!open)}
           >
             {summary}

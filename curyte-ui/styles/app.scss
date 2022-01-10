@@ -1,5 +1,5 @@
 .ProseMirror {
-  :first-child {
+  > :first-child {
     margin-top: 0.5em;
   }
 
