@@ -26,7 +26,7 @@ const Layout = ({
 }: Props) => {
   return (
     <>
-      <div className={'relative min-h-screen ' + className}>
+      <div className={'relative min-h-screen max-w-screen ' + className}>
         <Header
           showProgressBar={showProgressBar}
           isSticky={isSticky}
@@ -34,7 +34,7 @@ const Layout = ({
           title={title}
         ></Header>
         {sidebar && (
-          <div className="grid md:grid-cols-[15%_70%_15%] max-w-full md:flex-row">
+          <div className="grid grid-cols-1 md:grid-cols-[15%_minmax(0,70%)_15%] max-w-screen md:flex-row">
             <Container className="relative flex self-start mb-8 md:flex-col md:sticky md:top-16 min-w-80 md:pr-0">
               {sidebar}
             </Container>

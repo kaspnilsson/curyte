@@ -19,11 +19,13 @@ const PathPreview = ({ path }: Props) => {
       <Button
         variant="link"
         colorScheme="black"
-        className="overflow-hidden rounded w-fit-content hover:bg-zinc-200"
+        className="max-w-full min-w-0 overflow-hidden hover:bg-zinc-200 text-ellipsis whitespace-nowrap"
       >
-        <span className="flex items-center w-auto p-1 m-0 leading-tight tracking-tight text-inherit">
-          <AcademicCapIcon className="w-5 h-5 mr-1" />
-          {path.title || '(no title)'}
+        <span className="flex items-center w-auto min-w-0 p-1 m-0 overflow-hidden leading-tight tracking-tight text-inherit whitespace-nowrap text-ellipsis">
+          <AcademicCapIcon className="flex-shrink-0 w-5 h-5 mr-1" />
+          <div className="overflow-hidden text-ellipsis whitespace-nowrap">
+            {path.title || '(no title)'}
+          </div>
         </span>
       </Button>
     </Link>
