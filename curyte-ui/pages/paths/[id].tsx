@@ -48,7 +48,7 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
   //   })
   // }
   return (
-    <Layout title={path.title} sidebar={<div></div>}>
+    <Layout title={path.title}>
       <NextSeo
         title={path.title}
         // description={openGraphDescription}
