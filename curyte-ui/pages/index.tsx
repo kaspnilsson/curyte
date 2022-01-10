@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Layout from '../components/Layout'
 import CuryteLogo from '../components/CuryteLogo'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -17,11 +17,9 @@ const Home = () => {
   //   () => getLessons([]).then((lessons) => lessons.length),
   //   []
   // )
-  useEffect(() => {
-    if (user && process.env.NODE_ENV === 'production') {
-      router.replace(lessonSearchRoute())
-    }
-  })
+  if (user && process.env.NODE_ENV === 'production') {
+    router.replace(lessonSearchRoute())
+  }
 
   return (
     <Layout>
