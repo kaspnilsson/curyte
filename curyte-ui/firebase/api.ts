@@ -1,6 +1,5 @@
 import assert from 'assert'
 import { compareDesc, parseISO } from 'date-fns'
-import { v4 as uuidv4 } from 'uuid'
 import {
   FieldPath,
   WhereFilterOp,
@@ -24,6 +23,7 @@ import { Lesson } from '../interfaces/lesson'
 import { Path } from '../interfaces/path'
 import { Tag } from '../interfaces/tag'
 import { exception } from '../utils/gtag'
+import { uuid } from '../utils/uuid'
 import { auth, firestore, storage } from './clientApp'
 
 export interface WhereClause {
@@ -101,7 +101,7 @@ export async function deleteLesson(uid: string): Promise<void> {
 export async function createLesson(lesson: Lesson): Promise<string> {
   try {
     if (!auth.currentUser) throw new Error('Not logged in')
-    lesson.uid = uuidv4()
+    lesson.uid = uuid()
     await setDoc(doc(collection(firestore, 'lessons'), lesson.uid), lesson)
     return lesson.uid
   } catch (e) {
@@ -289,7 +289,7 @@ export async function deleteImageAtUrl(url: string): Promise<void> {
 export async function createPath(path: Path): Promise<string> {
   try {
     if (!auth.currentUser) throw new Error('Not logged in')
-    path.uid = uuidv4()
+    path.uid = uuid()
     await setDoc(doc(collection(firestore, 'paths'), path.uid), path)
     return path.uid
   } catch (e) {

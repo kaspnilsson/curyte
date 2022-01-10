@@ -2,6 +2,7 @@ import React, { SyntheticEvent, useState } from 'react'
 import { UploadIcon, LockClosedIcon } from '@heroicons/react/solid'
 import { Button, Text } from '@chakra-ui/react'
 import { Timestamp } from 'firebase/firestore'
+import Container from './Container'
 
 import { Lesson } from '../interfaces/lesson'
 import { Author } from '../interfaces/author'
@@ -66,7 +67,7 @@ const EditLessonPage = ({
   return (
     <LessonEditor lesson={lesson} handleUpdate={localHandleUpdate}>
       <footer className="fixed bottom-0 left-0 z-20 w-full h-16 bg-white border-t border-accent-2">
-        <div className="flex items-center justify-end w-full h-full px-5 m-auto md:px-0 md:w-2/3">
+        <Container className="flex items-center justify-end h-full">
           <div className="flex items-center gap-2 mr-auto italic text-zinc-500">
             {autosaving && (
               <>
@@ -112,7 +113,7 @@ const EditLessonPage = ({
               Make private
             </Button>
           )}
-        </div>
+        </Container>
       </footer>
     </LessonEditor>
   )

@@ -2,6 +2,8 @@ import React from 'react'
 import { BubbleMenu, Editor } from '@tiptap/react'
 import MenuIconButton from '../../MenuIconButton'
 import 'tippy.js/dist/svg-arrow.css'
+import { Center, Divider } from '@chakra-ui/react'
+import StyleMenuButton from '../../StyleMenuButton'
 
 interface Props {
   editor: Editor
@@ -22,7 +24,7 @@ const TextBubbleMenu = ({ editor }: Props) => {
       shouldShow={({ editor, state }) =>
         editor.isActive('paragraph') && !state.selection.empty
       }
-      className="relative flex overflow-hidden rounded shadow bg-white p-1 gap-1"
+      className="relative flex items-center gap-1 p-1 overflow-hidden bg-white rounded shadow"
     >
       <MenuIconButton
         label="Bold"
@@ -37,12 +39,6 @@ const TextBubbleMenu = ({ editor }: Props) => {
         icon={<i className="text-lg ri-italic" />}
       />
       <MenuIconButton
-        label="Strikethrough"
-        onClick={() => editor.chain().focus().toggleStrike().run()}
-        isActive={editor.isActive('strike')}
-        icon={<i className="text-lg ri-strikethrough" />}
-      />
-      <MenuIconButton
         label="Underline"
         onClick={() => editor.chain().focus().toggleUnderline().run()}
         isActive={editor.isActive('underline')}
@@ -53,12 +49,6 @@ const TextBubbleMenu = ({ editor }: Props) => {
         onClick={() => editor.chain().focus().toggleHighlight().run()}
         isActive={editor.isActive('highlight')}
         icon={<i className="text-lg ri-mark-pen-line" />}
-      />
-      <MenuIconButton
-        label="Superscript"
-        onClick={() => editor.chain().focus().toggleSuperscript().run()}
-        isActive={editor.isActive('superscript')}
-        icon={<i className="text-lg ri-superscript" />}
       />
       <MenuIconButton
         label="Code (inline)"
@@ -74,6 +64,13 @@ const TextBubbleMenu = ({ editor }: Props) => {
         }}
         icon={<i className="text-lg ri-format-clear" />}
       />
+      <Center className="w-2 h-6">
+        <Divider
+          orientation="vertical"
+          className="opacity-100 border-zinc-200"
+        />
+      </Center>
+      <StyleMenuButton editor={editor} />
     </BubbleMenu>
   )
 }

@@ -113,7 +113,7 @@ const Header = ({
         })}
       >
         <Container>
-          <div className="flex items-center justify-between h-16 px-5 py-4">
+          <div className="flex items-center justify-between h-16 py-4">
             <Link href={user ? lessonSearchRoute() : indexRoute} passHref>
               <Button
                 variant="link"

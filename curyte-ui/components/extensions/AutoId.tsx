@@ -1,6 +1,6 @@
 import { Node } from '@tiptap/core'
 import { Plugin } from 'prosemirror-state'
-import { v4 as uuidv4 } from 'uuid'
+import { uuid } from '../../utils/uuid'
 
 /**
  * Types that should have an ID in them
@@ -52,7 +52,7 @@ const AutoId = Node.create({
               !id &&
               types.has(node.type.name)
             ) {
-              id = uuidv4()
+              id = uuid()
               tr.setNodeMarkup(pos, undefined, {
                 ...node.attrs,
                 id,

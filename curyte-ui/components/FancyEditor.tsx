@@ -31,7 +31,7 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
       <div className="flex flex-col max-w-full min-w-full">
         {!readOnly && <FancyEditorMenuBar editor={editor} />}
         <EditorContent
-          className="prose sm:prose-sm lg:prose-md xl:prose-lg max-w-none prose-zinc prose-headings:font-semibold prose-headings:tracking-tight prose-headings:leading-tight prose-headings:border-b-2 prose-headings:pb-2 prose-headings:scroll-m-28"
+          className="prose sm:prose-sm lg:prose-md max-w-full xl:prose-lg prose-zinc prose-headings:font-semibold prose-headings:tracking-tight prose-headings:leading-tight prose-headings:border-b-2 prose-headings:pb-2 prose-headings:scroll-m-28 prose-th:!px-2 prose-th:!py-4 prose-td:!px-2 prose-td:!py-4 prose-th:border-[1px] prose-td:border-[1px] prose-th:font-semibold prose-th:bg-zinc-100"
           spellCheck
           editor={editor}
         />
@@ -60,20 +60,20 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
                             fontSize="xs"
                             className="px-4 pt-2 leading-tight tracking-tight text-zinc-500 md:tracking-tighter"
                           >
-                            STYLE
-                          </Heading>
-                          <StyleMenuItems editor={editor} />
-                          <MenuDivider />
-                          <Heading
-                            fontSize="xs"
-                            className="px-4 pt-2 leading-tight tracking-tight text-zinc-500 md:tracking-tighter"
-                          >
                             INSERT
                           </Heading>
                           <InsertMenuItems
                             editor={editor}
                             openDialog={openDialog}
                           />
+                          <MenuDivider />
+                          <Heading
+                            fontSize="xs"
+                            className="px-4 pt-2 leading-tight tracking-tight text-zinc-500 md:tracking-tighter"
+                          >
+                            STYLE
+                          </Heading>
+                          <StyleMenuItems editor={editor} />
                         </>
                       }
                     />

@@ -1,11 +1,11 @@
 .ProseMirror {
-  p.is-empty::before {
+  .is-empty::before {
     color: var(--chakra-colors-zinc-400);
     content: attr(data-placeholder);
     float: left;
     pointer-events: none;
     height: 0;
-    font-style: italic;
+    // font-style: italic;
   }
 
   &.ProseMirror-focused {
@@ -107,4 +107,20 @@ textarea:focus {
   right: 0;
   padding: 2px;
   margin: -2px;
+}
+
+.details-content div > :first-child {
+  margin-top: 0;
+}
+
+.details-content div > :last-child {
+  margin-bottom: 0;
+}
+
+textarea::-webkit-input-placeholder,
+textarea:-moz-placeholder,
+textarea::-moz-placeholder,
+textarea:-ms-input-placeholder,
+textarea::placeholder {
+  color: var(--chakra-colors-zinc-400);
 }

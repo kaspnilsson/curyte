@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { deletePath } from '../firebase/api'
 import { auth } from '../firebase/clientApp'
+import useConfirmDialog from '../hooks/useConfirmDialog'
 import { Path } from '../interfaces/path'
 import { userIsAdmin } from '../utils/hacks'
 import { editPathRoute, myAccountRoute, pathRoute } from '../utils/routes'
@@ -30,6 +31,13 @@ const PathActions = ({ path, isReadOnlyView }: Props) => {
       setLoading(false)
     }
   }
+
+  const { ConfirmDialog, onOpen } = useConfirmDialog({
+    title: 'Delete path',
+    body: 'Are you sure you want to delete this path?',
+    confirmText: 'Delete path',
+    onConfirmClick: handleDelete,
+  })
   const handleEdit = () => {
     router.push(editPathRoute(path.uid))
   }
@@ -40,6 +48,7 @@ const PathActions = ({ path, isReadOnlyView }: Props) => {
   if (userLoading) return <Spinner />
   return (
     <>
+      <ConfirmDialog />
       {user && user.uid === path.authorId && isReadOnlyView && (
         <>
           <Tooltip label="Edit path">
@@ -74,7 +83,7 @@ const PathActions = ({ path, isReadOnlyView }: Props) => {
               className="flex items-center gap-2"
               disabled={loading}
               aria-label="Delete path"
-              onClick={handleDelete}
+              onClick={onOpen}
               icon={<TrashIcon className="w-5 h-5" />}
             ></IconButton>
           </Tooltip>
