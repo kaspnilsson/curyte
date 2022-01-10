@@ -54,6 +54,7 @@ const PathActions = ({ path, isReadOnlyView }: Props) => {
           <Tooltip label="Edit path">
             <IconButton
               borderRadius="full"
+              size="sm"
               className="flex items-center gap-2"
               disabled={loading}
               aria-label="Edit lesson"
@@ -67,6 +68,7 @@ const PathActions = ({ path, isReadOnlyView }: Props) => {
         <Tooltip label="View path">
           <IconButton
             borderRadius="full"
+            size="sm"
             className="flex items-center gap-2"
             disabled={loading}
             aria-label="View path"
@@ -80,6 +82,7 @@ const PathActions = ({ path, isReadOnlyView }: Props) => {
           <Tooltip label="Delete path">
             <IconButton
               borderRadius="full"
+              size="sm"
               className="flex items-center gap-2"
               disabled={loading}
               aria-label="Delete path"

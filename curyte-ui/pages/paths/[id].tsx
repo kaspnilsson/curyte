@@ -8,7 +8,7 @@ import { Author } from '../../interfaces/author'
 import { pathRoute } from '../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
 import { logPathView, getAuthor, getPath, getLessons } from '../../firebase/api'
-import { Center, Divider } from '@chakra-ui/react'
+import { Badge, Center, Divider } from '@chakra-ui/react'
 import { where } from 'firebase/firestore'
 import { Path } from '../../interfaces/path'
 import { title } from 'process'
@@ -27,7 +27,7 @@ interface Props {
 const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
   // Log views only on render of a published path
   useEffect(() => {
-    if (!path.published) return
+    if (path.private) return
     logPathView(path.uid)
   }, [path])
 
@@ -75,14 +75,23 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
             <AuthorLink author={author} />
             <div className="flex items-center gap-1">
               <div className="flex items-center mr-4">
+                {path.private && (
+                  <Badge
+                    variant="subtle"
+                    colorScheme="orange"
+                    className="mr-4 h-min w-fit"
+                  >
+                    Private
+                  </Badge>
+                )}
                 <div className="items-center hidden lg:flex">
                   {path.created && (
                     <>
-                      <span className="text-sm">
+                      <span className="flex gap-1 text-sm">
                         {path.updated &&
                           path.created !== path.updated &&
-                          'Created '}
-                        <DateFormatter dateString={path.created} />{' '}
+                          'Created'}
+                        <DateFormatter dateString={path.created} />
                       </span>
                       <Center className="w-6 h-4">
                         <Divider orientation="vertical" />
@@ -91,8 +100,8 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
                   )}
                   {path.updated && path.updated !== path.created && (
                     <>
-                      <span className="text-sm">
-                        {'Updated '}
+                      <span className="flex gap-1 text-sm">
+                        Updated
                         <DateFormatter dateString={path.updated} />
                       </span>
                       <Center className="w-6 h-4">

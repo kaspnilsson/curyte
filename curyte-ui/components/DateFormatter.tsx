@@ -10,7 +10,7 @@ type Props = {
 }
 
 const DateFormatter = ({ dateString }: Props) => {
-  return <ReactTimeAgo date={parseISO(dateString)} timeStyle="twitter" />
+  return <ReactTimeAgo date={parseISO(dateString)} timeStyle="round-minute" />
 }
 
 export default DateFormatter

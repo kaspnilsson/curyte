@@ -42,8 +42,9 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
   const toast = useToast()
   // Log views only on render of a published lesson
   useEffect(() => {
+    if (lesson.private) return
     logLessonView(lesson.uid)
-  }, [lesson.uid])
+  }, [lesson.private, lesson.uid])
 
   const handleDelete = async () => {
     setLoading(true)

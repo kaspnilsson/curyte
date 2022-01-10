@@ -127,16 +127,6 @@ const LessonHeader = ({
             <LessonLink lesson={parentLesson} />
           </div>
         )}
-        {parentLesson && lesson.private && (
-          <Center className="w-4 h-4 mx-2">
-            <Divider orientation="vertical" />
-          </Center>
-        )}
-        {lesson.private && (
-          <Badge variant="subtle" colorScheme="orange" className="h-min">
-            Private
-          </Badge>
-        )}
       </div>
       <div className="mt-1 mb-8">
         <div className="mb-6 text-2xl focus:outline-none text-zinc-500">
@@ -155,14 +145,19 @@ const LessonHeader = ({
           <AuthorLink author={author} />
         </div>
         <div className="flex items-center gap-1">
+          {lesson.private && (
+            <Badge variant="subtle" colorScheme="orange" className="mr-4 h-min">
+              Private
+            </Badge>
+          )}
           <div className="flex items-center mr-4">
             <div className="items-center hidden lg:flex">
               {lesson.created && (
                 <>
-                  <span className="text-sm">
+                  <span className="flex gap-1 text-sm">
                     {lesson.updated &&
                       lesson.created !== lesson.updated &&
-                      'Created '}
+                      'Created'}
                     <DateFormatter dateString={lesson.created} />{' '}
                   </span>
                   <Center className="w-6 h-4">
@@ -172,8 +167,8 @@ const LessonHeader = ({
               )}
               {lesson.updated && lesson.updated !== lesson.created && (
                 <>
-                  <span className="text-sm">
-                    {'Updated '}
+                  <span className="flex gap-1 text-sm">
+                    Updated
                     <DateFormatter dateString={lesson.updated} />
                   </span>
                   <Center className="w-6 h-4">

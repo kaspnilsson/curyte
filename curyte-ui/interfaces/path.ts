@@ -3,7 +3,7 @@ export declare interface Path {
   authorId: string
   title?: string
   units?: Unit[]
-  published?: boolean
+  private?: boolean
   viewCount?: number
   created?: string
   updated?: string

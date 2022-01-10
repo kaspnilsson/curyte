@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { auth } from '../../../firebase/clientApp'
 import { GetServerSideProps } from 'next'
 import { Author } from '../../../interfaces/author'
@@ -24,7 +24,10 @@ const EditPathView = ({ id }: Props) => {
   const [user, userLoading] = useAuthState(auth)
   const [loading, setLoading] = useState(true)
   const [path, setPath] = useState<Path | undefined>()
-  const [savingPromise, setSavingPromise] = useState<Promise<void> | null>(null)
+  const [savingPromise, setSavingPromise] = useState<Promise<unknown> | null>(
+    null
+  )
+  const [dirty, setDirty] = useState(false)
 
   useEffect(() => {
     if (!user && !userLoading) {
@@ -60,23 +63,29 @@ const EditPathView = ({ id }: Props) => {
   //     router.push(lessonRoute(uid))
   //   }
 
-  const debouncedUpdatePath = debounce(async (p: Path) => {
-    p = {
-      ...p,
-      created: p?.created || Timestamp.now().toDate().toISOString(),
-      updated: Timestamp.now().toDate().toISOString(),
-    }
-    const pathPromise = updatePath(p)
-    setSavingPromise(pathPromise)
-    await pathPromise
-    setPath(p)
-    setSavingPromise(null)
-  }, 500)
+  const debouncedUpdatePath = useMemo(
+    () =>
+      debounce(async (p: Path) => {
+        p = {
+          ...p,
+          created: p?.created || Timestamp.now().toDate().toISOString(),
+          updated: Timestamp.now().toDate().toISOString(),
+        }
+        const pathPromise = updatePath(p)
+        setSavingPromise(pathPromise)
+        await pathPromise
+        setPath(p)
+        setSavingPromise(null)
+      }, 500),
+    []
+  )
 
   const handleUpdate = async (l: Path) => {
     if (loading || !l.uid) return
     if (savingPromise) await savingPromise
+    setDirty(true)
     await debouncedUpdatePath(l)
+    setDirty(false)
   }
 
   return (
@@ -87,6 +96,7 @@ const EditPathView = ({ id }: Props) => {
         <EditPathPage
           path={path}
           saving={!!savingPromise}
+          dirty={dirty}
           user={user as unknown as Author}
           handleUpdate={handleUpdate}
         />
