@@ -104,7 +104,7 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
   }, [lessonsByUid, units])
 
   const canPublish =
-    path.title && path.units?.length && path.units?.at(0)?.lessonIds?.length
+    path.title && path.units?.length && path.units?.[0]?.lessonIds?.length
 
   const toggleIsPrivate = async () => {
     const p = !isPrivate
