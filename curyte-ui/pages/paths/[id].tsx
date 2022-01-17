@@ -7,9 +7,8 @@ import Layout from '../../components/Layout'
 import { Author } from '../../interfaces/author'
 import { pathRoute } from '../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
-import { logPathView, getAuthor, getPath, getLessons } from '../../firebase/api'
+import { logPathView, getAuthor, getPath, getLesson } from '../../firebase/api'
 import { Badge, Center, Divider } from '@chakra-ui/react'
-import { where } from 'firebase/firestore'
 import { Path } from '../../interfaces/path'
 import { title } from 'process'
 import { computeClassesForTitle } from '../../components/LessonTitle'
@@ -116,18 +115,18 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
               </div>
               <PathActions path={path} isReadOnlyView />
             </div>
-            {path.units?.map((u, index) => (
-              <UnitOutline
-                unit={u}
-                key={index}
-                unitIndex={index}
-                lessonsMap={lessonsMap}
-              />
-            ))}
-            {!path.units?.length && (
-              <span className="px-4 text-zinc-700">(no units)</span>
-            )}
           </div>
+          {path.units?.map((u, index) => (
+            <UnitOutline
+              unit={u}
+              key={index}
+              unitIndex={index}
+              lessonsMap={lessonsMap}
+            />
+          ))}
+          {!path.units?.length && (
+            <span className="text-zinc-700">(no units)</span>
+          )}
         </div>
       </div>
     </Layout>
@@ -161,12 +160,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const author = await getAuthor(path.authorId)
   const lessonIds = []
   for (const u of path.units || []) {
-    lessonIds.push(...(u.lessonIds || []))
+    lessonIds.push(...(u?.lessonIds || []))
   }
-  let lessons: Lesson[] = []
-  if (lessonIds.length) {
-    lessons = await getLessons([where('uid', 'in', lessonIds)])
+  const promises = []
+  for (const uid of lessonIds) {
+    promises.push(getLesson(uid))
   }
+  const lessons = await Promise.all(promises)
   const lessonsMap: { [uid: string]: Lesson } = {}
   for (const l of lessons) {
     lessonsMap[l.uid] = l

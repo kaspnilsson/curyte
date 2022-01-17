@@ -16,8 +16,7 @@ import {
 } from 'react-beautiful-dnd'
 import UnitEditor from './UnitEditor'
 import { Lesson } from '../interfaces/lesson'
-import { getLessons } from '../firebase/api'
-import { where } from 'firebase/firestore'
+import { getLesson } from '../firebase/api'
 import classNames from 'classnames'
 import { uuid } from '../utils/uuid'
 import Container from './Container'
@@ -88,8 +87,12 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
     if (toFetch.length) {
       setLessonsLoading(true)
       const fetchLessons = async () => {
-        const newLessons = await getLessons([where('uid', 'in', toFetch)])
+        const promises = []
+        for (const lessonUid of toFetch) {
+          promises.push(getLesson(lessonUid))
+        }
         const clone = { ...lessonsByUid }
+        const newLessons = await Promise.all(promises)
         for (const lesson of newLessons) {
           clone[lesson.uid] = lesson
         }
