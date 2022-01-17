@@ -158,7 +158,7 @@ const LessonHeader = ({
                     {lesson.updated &&
                       lesson.created !== lesson.updated &&
                       'Created'}
-                    <DateFormatter dateString={lesson.created} />{' '}
+                    <DateFormatter dateString={lesson.created} />
                   </span>
                   <Center className="w-6 h-4">
                     <Divider orientation="vertical" />

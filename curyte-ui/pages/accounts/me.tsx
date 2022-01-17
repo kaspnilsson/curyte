@@ -142,7 +142,7 @@ const MySettingsView = () => {
               <TabPanel>
                 <section className="flex flex-col mb-8">
                   <div className="flex flex-col justify-between items-left">
-                    <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+                    <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                       Lessons
                     </h2>
                     {!lessons.length && (
@@ -157,16 +157,12 @@ const MySettingsView = () => {
                         </Link>
                       </div>
                     )}
-                    {!!lessons.length && (
-                      <div className="-mx-8">
-                        <LessonList lessons={lessons} />
-                      </div>
-                    )}
+                    {!!lessons.length && <LessonList lessons={lessons} />}
                   </div>
                 </section>
                 <section className="flex flex-col mb-8">
                   <div className="flex flex-col items-start justify-between gap-2">
-                    <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+                    <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                       Paths
                     </h2>
                     {!paths.length && <div className="">Nothing here yet!</div>}
@@ -179,20 +175,18 @@ const MySettingsView = () => {
                 </section>
                 <section className="flex flex-col my-8">
                   <div className="flex flex-col justify-between items-left">
-                    <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+                    <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                       Saved
                     </h2>
                     {!savedLessons.length && <div>Nothing here yet!</div>}
                     {!!savedLessons.length && (
-                      <div className="-mx-8">
-                        <LessonList lessons={savedLessons} />
-                      </div>
+                      <LessonList lessons={savedLessons} />
                     )}
                   </div>
                 </section>
                 <section className="flex flex-col my-8">
                   <div className="flex flex-col justify-between items-left">
-                    <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+                    <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                       Drafts
                     </h2>
                     <DraftsList />
@@ -202,7 +196,7 @@ const MySettingsView = () => {
               <TabPanel>
                 <section className="flex flex-col my-8">
                   <div className="flex items-center justify-between">
-                    <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+                    <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                       Profile settings
                     </h2>
                     <Button
@@ -248,7 +242,7 @@ const MySettingsView = () => {
                   </div>
                 </section>
                 <section className="flex flex-col my-8">
-                  <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+                  <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                     Email settings
                   </h2>
                   <div className="my-2">
@@ -268,7 +262,7 @@ const MySettingsView = () => {
                   </div>
                 </section>
                 <section className="flex flex-col my-8">
-                  <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+                  <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                     Links
                   </h2>
                   <div className="my-2">

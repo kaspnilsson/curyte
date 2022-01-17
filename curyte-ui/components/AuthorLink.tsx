@@ -7,9 +7,10 @@ import { accountRoute, accountRouteHrefPath } from '../utils/routes'
 
 type Props = {
   author: Author
+  small?: boolean
 }
 
-const AuthorLink = ({ author }: Props) => {
+const AuthorLink = ({ author, small = false }: Props) => {
   return (
     <>
       {!author && null}
@@ -22,14 +23,24 @@ const AuthorLink = ({ author }: Props) => {
           <div className="flex items-center cursor-pointer group">
             <Avatar
               author={author}
-              className="w-8 h-8 shadow-xl shadow-zinc-900/10"
+              className="shadow-xl shadow-zinc-900/10"
+              size={small ? '2xs' : 'md'}
             />
             <div className="flex flex-col ml-2">
               {/* TODO add role here! */}
-              <span className="text-xs text-zinc-700">Instructor</span>
-              <a className="text-sm font-bold group-hover:underline md:text-base">
-                {author.displayName || '(no name)'}
-              </a>
+              {!small && (
+                <>
+                  <span className="text-xs text-zinc-700">Instructor</span>
+                  <a className="text-sm font-bold group-hover:underline md:text-base">
+                    {author.displayName || '(no name)'}
+                  </a>
+                </>
+              )}
+              {small && (
+                <a className="text-xs font-bold group-hover:underline">
+                  {author.displayName || '(no name)'}
+                </a>
+              )}
             </div>
           </div>
         </Link>

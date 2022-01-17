@@ -31,7 +31,7 @@ const UnitOutline = ({ unit, unitIndex, lessonsMap }: Props) => {
           Lessons
         </Heading> */}
         {!lessons.length && <span className="text-zinc-700">(no lessons)</span>}
-        <LessonList lessons={lessons} allowWrap />
+        <LessonList lessons={lessons} />
       </div>
     </>
   )

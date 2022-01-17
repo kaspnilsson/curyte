@@ -34,7 +34,7 @@ const UserView = ({ lessons, author }: Props) => {
       </h2>
       {!!lessons.length && (
         <div className="flex flex-wrap justify-center gap-4 mb-8 -mx-8">
-          <LessonList lessons={lessons} allowWrap />
+          <LessonList lessons={lessons} />
         </div>
       )}
       {!lessons?.length && 'Nothing here yet!'}

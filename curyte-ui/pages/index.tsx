@@ -43,7 +43,7 @@ const Home = () => {
                 variant="outline"
               >
                 <div className="p-4">
-                  Search all {loading ? <Spinner size="xs" /> : data || ''}{' '}
+                  Search all {loading ? <Spinner size="xs" /> : data || ''}
                   lessons
                 </div>
               </Button>
@@ -159,7 +159,7 @@ const Home = () => {
                 variant="outline"
               >
                 <div className="p-4">
-                  Search all {loading ? <Spinner size="xs" /> : data || ''}{' '}
+                  Search all {loading ? <Spinner size="xs" /> : data || ''}
                   lessons
                 </div>
               </Button>
