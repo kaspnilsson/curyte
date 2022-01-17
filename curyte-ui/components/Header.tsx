@@ -28,6 +28,7 @@ import {
   lessonSearchRoute,
   loginRoute,
   myAccountRoute,
+  mySettingsRoute,
   newLessonRoute,
   signupRoute,
 } from '../utils/routes'
@@ -137,7 +138,7 @@ const Header = ({
                   </InputLeftElement>
                   <Input
                     isReadOnly
-                    placeholder="Search lessons..."
+                    placeholder="Search all lessons..."
                     variant="filled"
                     colorScheme="black"
                   ></Input>
@@ -166,14 +167,14 @@ const Header = ({
                   />
                 </Tooltip> */}
                 <div className="relative">
-                  <div className="rounded-full animated-border animate-spin-slow "></div>
-                  <Tooltip label="Start writing">
+                <div className="rounded-full animated-border animate-spin-slow "></div>
+                  <Tooltip label="Create">
                     <IconButton
-                      aria-label="Start writing"
+                      aria-label="Create"
                       isRound
                       className="shadow-xl opacity-100 shadow-zinc-900/10"
-                      title="Start writing"
-                      onClick={() => router.push(newLessonRoute())}
+                      title="Create"
+                      onClick={() => router.push(myAccountRoute)}
                       icon={<PlusIcon className="w-4 h-4 text-zinc-900" />}
                     />
                   </Tooltip>
@@ -188,8 +189,11 @@ const Header = ({
                     </MenuButton>
                     <Portal>
                       <MenuList>
-                        <Link passHref href={myAccountRoute}>
-                          <MenuItem>View account</MenuItem>
+                        <Link href={myAccountRoute}>
+                          <MenuItem>Profile</MenuItem>
+                        </Link>
+                        <Link passHref href={mySettingsRoute}>
+                          <MenuItem>Settings</MenuItem>
                         </Link>
                         <MenuItem onClick={() => logOut()}>Sign out</MenuItem>
                       </MenuList>

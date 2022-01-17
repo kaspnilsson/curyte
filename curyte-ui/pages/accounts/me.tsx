@@ -89,7 +89,6 @@ const MySettingsView = () => {
       const fetchLessons = async () => {
         getLessons([
           where('authorId', '==', user.uid),
-          where('private', '==', false),
         ]).then((res) => {
           setLessons(res)
         })
@@ -135,16 +134,26 @@ const MySettingsView = () => {
           </div>
           <Tabs colorScheme="zinc">
             <TabList>
-              <Tab>Posts</Tab>
-              <Tab>Settings</Tab>
+              <Tab>Lessons</Tab>
+              <Tab>Paths</Tab>
+              <Tab>Saved</Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
                 <section className="flex flex-col mb-8">
-                  <div className="flex flex-col justify-between items-left">
-                    <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
-                      Lessons
+                   <div className="my-5 flex flex-col justify-between items-left">
+                    <h2 className="mb-5 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+                    Lessons
                     </h2>
+                    <div className="flex flex-col items-start gap-2">
+                    <Link
+                          as={newLessonRoute()}
+                          href={newLessonRouteHref}
+                          passHref
+                        >
+                          <Button colorScheme="gray">Create a lesson</Button>
+                        </Link>
+                    </div>
                     {!lessons.length && (
                       <div className="flex flex-col items-start gap-2">
                         Nothing here yet!
@@ -153,7 +162,6 @@ const MySettingsView = () => {
                           href={newLessonRouteHref}
                           passHref
                         >
-                          <Button colorScheme="black">Create a lesson</Button>
                         </Link>
                       </div>
                     )}
@@ -163,22 +171,36 @@ const MySettingsView = () => {
                       </div>
                     )}
                   </div>
-                </section>
-                <section className="flex flex-col mb-8">
                   <div className="flex flex-col items-start justify-between gap-2">
+                  </div>
+                </section>
+                {/* <section className="flex flex-col my-8">
+                  <div className="flex flex-col justify-between items-left">
+                    <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+                      Drafts
+                    </h2>
+                    <DraftsList />
+                  </div>
+                </section> */}
+                </TabPanel>
+              <TabPanel>
+                <section className="flex flex-col mb-8">
+                  <div className="my-5 flex flex-col items-start justify-between gap-2">
                     <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                       Paths
                     </h2>
+                    <Link as={newPathRoute} href={newPathRoute} passHref>
+                      <Button className="mb-4" colorScheme="gray">Create a path</Button>
+                    </Link>
                     {!paths.length && <div className="">Nothing here yet!</div>}
                     {!!paths.length &&
                       paths.map((p) => <PathPreview path={p} key={p.uid} />)}
-                    <Link as={newPathRoute} href={newPathRoute} passHref>
-                      <Button colorScheme="black">Create a path</Button>
-                    </Link>
                   </div>
                 </section>
-                <section className="flex flex-col my-8">
-                  <div className="flex flex-col justify-between items-left">
+              </TabPanel>
+              <TabPanel>
+              <section className="flex flex-col">
+                  <div className="my-5 flex flex-col justify-between items-left">
                     <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
                       Saved
                     </h2>
@@ -189,195 +211,6 @@ const MySettingsView = () => {
                       </div>
                     )}
                   </div>
-                </section>
-                <section className="flex flex-col my-8">
-                  <div className="flex flex-col justify-between items-left">
-                    <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
-                      Drafts
-                    </h2>
-                    <DraftsList />
-                  </div>
-                </section>
-              </TabPanel>
-              <TabPanel>
-                <section className="flex flex-col my-8">
-                  <div className="flex items-center justify-between">
-                    <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
-                      Profile settings
-                    </h2>
-                    <Button
-                      colorScheme="black"
-                      className="w-fit-content disabled:opacity-50"
-                      onClick={handleSave}
-                      disabled={!authorChanged}
-                    >
-                      Save
-                    </Button>
-                  </div>
-                  <div className="my-2">
-                    <h3 className="font-bold leading-tight tracking-tight">
-                      Name
-                    </h3>
-                    <Input
-                      type="text"
-                      size="lg"
-                      variant="outline"
-                      placeholder="Full name"
-                      value={author.displayName}
-                      onChange={(e) =>
-                        modifyAuthor({
-                          ...author,
-                          displayName: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                  <div className="my-2">
-                    <h3 className="font-bold leading-tight tracking-tight">
-                      Bio
-                    </h3>
-                    <Textarea
-                      as={TextareaAutosize}
-                      className="w-full mt-1 border-0 resize-none"
-                      placeholder="Bio"
-                      value={author.bio}
-                      onChange={(e) =>
-                        modifyAuthor({ ...author, bio: e.target.value })
-                      }
-                    />
-                  </div>
-                </section>
-                <section className="flex flex-col my-8">
-                  <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
-                    Email settings
-                  </h2>
-                  <div className="my-2">
-                    <h3 className="font-bold leading-tight tracking-tight">
-                      Email address
-                    </h3>
-                    <Input
-                      type="text"
-                      size="lg"
-                      variant="outline"
-                      placeholder="Email"
-                      value={author.email}
-                      onChange={(e) =>
-                        modifyAuthor({ ...author, email: e.target.value })
-                      }
-                    />
-                  </div>
-                </section>
-                <section className="flex flex-col my-8">
-                  <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
-                    Links
-                  </h2>
-                  <div className="my-2">
-                    <h3 className="font-bold leading-tight tracking-tight">
-                      Twitter profile URL
-                    </h3>
-                    <Input
-                      type="text"
-                      size="lg"
-                      variant="outline"
-                      placeholder="Leave blank to remove from public profile."
-                      value={author.links?.twitter || ''}
-                      onChange={(e) =>
-                        modifyAuthor({
-                          ...author,
-                          links: { ...author.links, twitter: e.target.value },
-                        })
-                      }
-                    />
-                  </div>
-                  <div className="my-2">
-                    <h3 className="font-bold leading-tight tracking-tight">
-                      LinkedIn profile URL
-                    </h3>
-                    <Input
-                      type="text"
-                      size="lg"
-                      variant="outline"
-                      placeholder="Leave blank to remove from public profile."
-                      value={author.links?.linkedin || ''}
-                      onChange={(e) =>
-                        modifyAuthor({
-                          ...author,
-                          links: {
-                            ...author.links,
-                            linkedin: e.target.value,
-                          },
-                        })
-                      }
-                    />
-                  </div>
-                  <div className="my-2">
-                    <h3 className="font-bold leading-tight tracking-tight">
-                      Personal website URL
-                    </h3>
-                    <Input
-                      type="text"
-                      size="lg"
-                      variant="outline"
-                      placeholder="Leave blank to remove from public profile."
-                      value={author.links?.personalSite || ''}
-                      onChange={(e) =>
-                        modifyAuthor({
-                          ...author,
-                          links: {
-                            ...author.links,
-                            personalSite: e.target.value,
-                          },
-                        })
-                      }
-                    />
-                  </div>
-                  <div className="my-2">
-                    <h3 className="font-bold leading-tight tracking-tight">
-                      Public email
-                    </h3>
-                    <Input
-                      type="text"
-                      size="lg"
-                      variant="outline"
-                      placeholder="Leave blank to remove from public profile."
-                      value={author.links?.publicEmail || ''}
-                      onChange={(e) =>
-                        modifyAuthor({
-                          ...author,
-                          links: {
-                            ...author.links,
-                            publicEmail: e.target.value,
-                          },
-                        })
-                      }
-                    />
-                  </div>
-                  <div className="my-2">
-                    <h3 className="font-bold leading-tight tracking-tight">
-                      Venmo URL
-                    </h3>
-                    <Input
-                      type="text"
-                      size="lg"
-                      variant="outline"
-                      placeholder="Leave blank to remove from public profile."
-                      value={author.links?.venmo || ''}
-                      onChange={(e) =>
-                        modifyAuthor({
-                          ...author,
-                          links: {
-                            ...author.links,
-                            venmo: e.target.value,
-                          },
-                        })
-                      }
-                    />
-                  </div>
-                </section>
-                <section className="my-8">
-                  <Button color="red" className="w-56" onClick={handleDelete}>
-                    Delete account
-                  </Button>
                 </section>
               </TabPanel>
             </TabPanels>

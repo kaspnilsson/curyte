@@ -26,7 +26,7 @@ const AuthorLink = ({ author }: Props) => {
             />
             <div className="flex flex-col ml-2">
               {/* TODO add role here! */}
-              <span className="text-xs text-zinc-700">Instructor</span>
+              {/* <span className="text-xs text-zinc-700">Instructor</span> */}
               <a className="text-sm font-bold group-hover:underline md:text-base">
                 {author.displayName || '(no name)'}
               </a>
