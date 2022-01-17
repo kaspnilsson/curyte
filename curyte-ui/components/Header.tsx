@@ -27,9 +27,12 @@ import {
   indexRoute,
   lessonSearchRoute,
   loginRoute,
-  myAccountRoute,
+  workspaceRoute,
   newLessonRoute,
   signupRoute,
+  accountSettingsRoute,
+  accountRoute,
+  accountRouteHrefPath,
 } from '../utils/routes'
 import { sky } from '../styles/theme/colors'
 import { useRouter } from 'next/router'
@@ -185,8 +188,18 @@ const Header = ({
                     </MenuButton>
                     <Portal>
                       <MenuList>
-                        <Link passHref href={myAccountRoute}>
-                          <MenuItem>View account</MenuItem>
+                        <Link passHref href={workspaceRoute}>
+                          <MenuItem>Open workspace</MenuItem>
+                        </Link>
+                        <Link
+                          passHref
+                          as={accountRoute(user.uid)}
+                          href={accountRouteHrefPath}
+                        >
+                          <MenuItem>View public profile</MenuItem>
+                        </Link>
+                        <Link passHref href={accountSettingsRoute}>
+                          <MenuItem>Edit account settings</MenuItem>
                         </Link>
                         <MenuItem onClick={() => logOut()}>Sign out</MenuItem>
                       </MenuList>

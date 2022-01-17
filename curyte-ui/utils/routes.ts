@@ -49,4 +49,6 @@ export const editPathRouteHrefPath = '/paths/edit/[id]'
 export const pathRoute = (uid: string) => `/paths/${uid}`
 export const pathRouteHrefPath = '/paths/[id]'
 
-export const myAccountRoute = '/accounts/me'
+export const workspaceRoute = '/accounts/workspace'
+
+export const accountSettingsRoute = '/accounts/settings'

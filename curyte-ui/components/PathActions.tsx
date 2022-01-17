@@ -8,7 +8,7 @@ import { auth } from '../firebase/clientApp'
 import useConfirmDialog from '../hooks/useConfirmDialog'
 import { Path } from '../interfaces/path'
 import { userIsAdmin } from '../utils/hacks'
-import { editPathRoute, myAccountRoute, pathRoute } from '../utils/routes'
+import { editPathRoute, workspaceRoute, pathRoute } from '../utils/routes'
 
 interface Props {
   path: Path
@@ -26,7 +26,7 @@ const PathActions = ({ path, isReadOnlyView }: Props) => {
       setLoading(true)
       await deletePath(path.uid)
 
-      router.push(myAccountRoute)
+      router.push(workspaceRoute)
     } finally {
       setLoading(false)
     }
