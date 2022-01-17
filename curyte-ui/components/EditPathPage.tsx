@@ -16,8 +16,7 @@ import {
 } from 'react-beautiful-dnd'
 import UnitEditor from './UnitEditor'
 import { Lesson } from '../interfaces/lesson'
-import { getLessons } from '../firebase/api'
-import { where } from 'firebase/firestore'
+import { getLesson } from '../firebase/api'
 import classNames from 'classnames'
 import { uuid } from '../utils/uuid'
 import Container from './Container'
@@ -88,8 +87,12 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
     if (toFetch.length) {
       setLessonsLoading(true)
       const fetchLessons = async () => {
-        const newLessons = await getLessons([where('uid', 'in', toFetch)])
+        const promises = []
+        for (const lessonUid of toFetch) {
+          promises.push(getLesson(lessonUid))
+        }
         const clone = { ...lessonsByUid }
+        const newLessons = await Promise.all(promises)
         for (const lesson of newLessons) {
           clone[lesson.uid] = lesson
         }
@@ -101,7 +104,7 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
   }, [lessonsByUid, units])
 
   const canPublish =
-    path.title && path.units?.length && path.units?.at(0)?.lessonIds?.length
+    path.title && path.units?.length && path.units?.[0]?.lessonIds?.length
 
   const toggleIsPrivate = async () => {
     const p = !isPrivate
@@ -206,9 +209,9 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
           <Container className="flex items-center justify-end h-full">
             <div className="flex items-center gap-2 mr-auto italic text-zinc-500">
               {saving && (
-                <Text className="flex items-center gap-2">
+                <div className="flex items-center gap-2">
                   Saving... <Spinner />
-                </Text>
+                </div>
               )}
               {dirty && !saving && (
                 <>

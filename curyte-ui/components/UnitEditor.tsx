@@ -32,6 +32,7 @@ import { editLessonRoute } from '../utils/routes'
 import GripIcon from './GripIcon'
 import LessonSearchModal from './LessonSearchModal'
 import LoadingSpinner from './LoadingSpinner'
+import InputDialog, { InputDialogProps } from './InputDialog'
 
 interface Props {
   unit: Unit
@@ -58,17 +59,31 @@ const UnitEditor = ({
   const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
+  const [dialogProps, setDialogProps] = useState({} as InputDialogProps)
 
-  const createNewLesson = async () => {
+  const createNewLesson = async (title = '') => {
     setLoading(true)
     const uid = await createLesson({
       authorId: user.uid,
       private: true,
+      title,
     } as Lesson)
     const newLessonIds = [...lessonIds, uid]
     setLessonIds(newLessonIds)
     await onUpdate({ ...unit, lessonIds: newLessonIds })
     setLoading(false)
+    setDialogProps({ ...dialogProps, isOpen: false })
+  }
+
+  const onCreateLesson = () => {
+    setDialogProps({
+      ...dialogProps,
+      isOpen: true,
+      title: 'Set lesson title',
+      description: 'Add a title for your lesson',
+      onClose: () => setDialogProps({ ...dialogProps, isOpen: false }),
+      onConfirm: createNewLesson,
+    })
   }
 
   const onDragEnd = (result: DropResult) => {
@@ -219,7 +234,7 @@ const UnitEditor = ({
             <Button
               className="flex items-center gap-1 w-fit-content"
               colorScheme="black"
-              onClick={() => createNewLesson()}
+              onClick={onCreateLesson}
             >
               <PlusIcon className="w-4 h-4" />
               Create new lesson
@@ -240,6 +255,7 @@ const UnitEditor = ({
         onClose={onClose}
         onSelectLesson={onSelectExistingLesson}
       />
+      <InputDialog {...dialogProps} />
     </>
   )
 }
