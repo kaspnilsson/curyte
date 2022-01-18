@@ -24,7 +24,7 @@ const SearchPage = ({ lessons, authors, tags }: Props) => {
           Open-source curriculum, for the curious.
         </h1>
       </section>
-      <div className="flex flex-col flex-wrap md:flex-row md:divide-x-2">
+      <div className="flex flex-col flex-wrap md:flex-row md:divide-x">
         <div className="w-full mt-8 md:w-2/3 md:pr-8">
           {lessons && <LessonList lessons={lessons} authors={authors} />}
           {!lessons?.length && 'Nothing here yet! Maybe you should teach us!'}
