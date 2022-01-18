@@ -19,50 +19,13 @@ type Props = {
 const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
   if (!lesson) return null
   const card = (
-    <div className="flex items-center w-full gap-2 cursor-pointer group lesson-preview">
+    <div className="flex items-center w-full gap-3 cursor-pointer group lesson-preview">
       <div className="flex flex-col flex-1 gap-1">
-        <div className="flex items-center gap-2 mb-2 text-xs">
-          {!author && <div className="font-bold">{lesson.authorName}</div>}
-          {author && <AuthorLink author={author} small />}
-          <Center className="w-2 h-2">
-            <Divider orientation="vertical" />
-          </Center>
-          <div className="text-zinc-500">
-            <DateFormatter dateString={lesson.created} />
-          </div>
-        </div>
         <div className="flex flex-col gap-2">
-          <Text
-            fontSize="xl"
-            className="font-bold leading-tight tracking-tight line-clamp-2"
-          >
+          <Text className="text-base font-bold leading-tight tracking-tight line-clamp-2 md:text-2xl">
             <a className="hover:underline group-hover:underline">
               {lesson.title || '(no title)'}
             </a>
-          </Text>
-        </div>
-        <div className="hidden md:inline">
-          <Text className="line-clamp-2 text-zinc-500" fontSize="sm">
-            {lesson.description}
-          </Text>
-        </div>
-        <div className="flex items-center gap-2 mt-2">
-          <Text
-            fontSize="xs"
-            className="leading-tight tracking-tight text-zinc-500 proportional-nums"
-          >
-            {lesson.saveCount || 0}
-            &nbsp;{lesson.saveCount === 1 ? 'save' : 'saves'}
-          </Text>
-          <Center className="w-2 h-2">
-            <Divider orientation="vertical" />
-          </Center>
-          <Text
-            fontSize="xs"
-            className="leading-tight tracking-tight text-zinc-500 proportional-nums"
-          >
-            {lesson.viewCount || 0}
-            &nbsp;{lesson.viewCount === 1 ? 'view' : 'views'}
           </Text>
         </div>
         {!!lesson.tags?.length && (
@@ -72,6 +35,43 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
             ))}
           </div>
         )}
+        <div className="hidden mt-2 md:inline">
+          <Text className="line-clamp-2 text-zinc-500" fontSize="sm">
+            {lesson.description}
+          </Text>
+        </div>
+        <div className="flex items-center gap-2 mt-2 text-xs">
+          {!author && <div className="font-bold">{lesson.authorName}</div>}
+          {author && <AuthorLink author={author} small />}
+          <Center className="w-2 h-2">
+            <Divider orientation="vertical" />
+          </Center>
+          <div className="text-zinc-500">
+            <DateFormatter dateString={lesson.created} />
+          </div>
+          <div className="items-center hidden gap-2 md:flex">
+            <Center className="w-2 h-2">
+              <Divider orientation="vertical" />
+            </Center>
+            <Text
+              fontSize="xs"
+              className="leading-tight tracking-tight text-zinc-500 proportional-nums"
+            >
+              {lesson.saveCount || 0}
+              &nbsp;{lesson.saveCount === 1 ? 'save' : 'saves'}
+            </Text>
+            <Center className="w-2 h-2">
+              <Divider orientation="vertical" />
+            </Center>
+            <Text
+              fontSize="xs"
+              className="leading-tight tracking-tight text-zinc-500 proportional-nums"
+            >
+              {lesson.viewCount || 0}
+              &nbsp;{lesson.viewCount === 1 ? 'view' : 'views'}
+            </Text>
+          </div>
+        </div>
       </div>
       <div className="relative w-24 h-24 overflow-hidden rounded md:w-36 md:h-36 lg:w-64">
         {lesson.coverImageUrl && (
