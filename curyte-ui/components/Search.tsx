@@ -71,7 +71,7 @@ const Hits = ({ hits, hasMore, refineNext, onSelect }: CustomHitsProps) => {
   return (
     <div className="flex flex-col items-center">
       <div className="flex flex-wrap justify-center w-full gap-4 pt-4 mt-4 border-t-2 border-zinc-200">
-        {hits && <LessonList lessons={hits} />}
+        {hits && <LessonList lessons={hits} onSelectLesson={onSelect} />}
         {!hits?.length && 'None found!'}
       </div>
       <div className="items-center mt-8">

@@ -6,9 +6,15 @@ interface Props {
   lessons?: Lesson[]
   authors?: Author[]
   pathId?: string
+  onSelectLesson?: (l: Lesson) => void
 }
 
-const LessonList = ({ lessons = [], authors = [], pathId = '' }: Props) => (
+const LessonList = ({
+  lessons = [],
+  authors = [],
+  pathId = '',
+  onSelectLesson,
+}: Props) => (
   <div className="flex flex-wrap max-w-full gap-12">
     {!!lessons.length &&
       lessons.map((l, key) => (
@@ -17,6 +23,7 @@ const LessonList = ({ lessons = [], authors = [], pathId = '' }: Props) => (
           lesson={l}
           author={authors.find((a) => a.uid === l.authorId) || null}
           pathId={pathId}
+          onClick={onSelectLesson}
         />
       ))}
   </div>
