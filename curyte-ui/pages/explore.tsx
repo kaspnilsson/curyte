@@ -65,7 +65,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     authors.push(await getAuthor(id))
   }
 
-  const tags = await getTags([orderBy('viewCount', 'desc'), limit(10)])
+  const tags = await getTags([orderBy('viewCount', 'desc'), limit(16)])
 
   return {
     props: { lessons, authors, tags },
