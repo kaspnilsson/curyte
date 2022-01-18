@@ -71,6 +71,8 @@ const LessonHeader = ({
     const fetchParent = async () => {
       if (lesson.parentLessonId) {
         setParentLesson(await getLesson(lesson.parentLessonId))
+      } else {
+        setParentLesson(null)
       }
     }
     const fetchIsSaved = async () => {
@@ -79,7 +81,7 @@ const LessonHeader = ({
     Promise.all([fetchParent(), fetchIsSaved()]).then(() => {
       setLoading(false)
     })
-  }, [lesson, user, userLoading])
+  }, [lesson, user, userLoading, lesson.parentLessonId])
 
   const toggleSaveLesson = async () => {
     if (!user) {
@@ -158,7 +160,7 @@ const LessonHeader = ({
                     {lesson.updated &&
                       lesson.created !== lesson.updated &&
                       'Created'}
-                    <DateFormatter dateString={lesson.created} />{' '}
+                    <DateFormatter dateString={lesson.created} />
                   </span>
                   <Center className="w-6 h-4">
                     <Divider orientation="vertical" />

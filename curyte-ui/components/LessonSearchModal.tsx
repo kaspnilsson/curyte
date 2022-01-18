@@ -11,7 +11,7 @@ interface Props {
 const LessonSearchModal = ({ onClose, isOpen, onSelectLesson }: Props) => (
   <Modal isOpen={isOpen} onClose={onClose} size="xl">
     <ModalOverlay />
-    <ModalContent maxW="80vw" maxH="80vh" className="overflow-auto">
+    <ModalContent maxW="800px" maxH="80vh" className="overflow-auto">
       <ModalBody>
         <Search onSelect={onSelectLesson} />
       </ModalBody>

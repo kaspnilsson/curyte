@@ -12,9 +12,11 @@ import FancyEditor from '../../components/FancyEditor'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/outline'
 import {
   editLessonRoute,
   lessonRoute,
+  lessonRouteHrefPath,
   lessonSearchRoute,
 } from '../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
@@ -26,16 +28,28 @@ import {
   getLesson,
   getAuthor,
   setLessonFeatured,
+  getPath,
 } from '../../firebase/api'
 import { userIsAdmin } from '../../utils/hacks'
-import { useToast } from '@chakra-ui/react'
+import { Button, useToast, Text } from '@chakra-ui/react'
+import { Path } from '../../interfaces/path'
+import Link from 'next/link'
 
 interface Props {
   lesson: Lesson
   author: Author
+  path: Path | null
+  nextLesson: Lesson | null
+  prevLesson: Lesson | null
 }
 
-const PublishedLessonView = ({ lesson, author }: Props) => {
+const PublishedLessonView = ({
+  lesson,
+  author,
+  nextLesson = null,
+  prevLesson = null,
+  path = null,
+}: Props) => {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [user, userLoading] = useAuthState(auth)
@@ -71,6 +85,7 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
       title: `Lesson featured state set to ${!lesson.featured}`,
     })
   }
+
   return (
     <>
       {(loading || userLoading) && <LoadingSpinner />}
@@ -112,6 +127,53 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
             />
             <FancyEditor readOnly editor={editor} />
           </article>
+          {path && (nextLesson || prevLesson) && (
+            <div className="flex items-center justify-between">
+              {prevLesson && (
+                <div className="flex flex-col items-start gap-2 mr-auto">
+                  <Link
+                    passHref
+                    href={lessonRouteHrefPath}
+                    as={lessonRoute(prevLesson.uid, path.uid)}
+                  >
+                    <Button className="flex items-center gap-2">
+                      <ArrowLeftIcon className="w-5 h-5" />
+                      Back
+                    </Button>
+                  </Link>
+                  <Text
+                    className="mr-2 text-zinc-500 line-clamp-1"
+                    fontSize="sm"
+                  >
+                    {prevLesson.title || '(no title)'}
+                  </Text>
+                </div>
+              )}
+              {nextLesson && (
+                <div className="flex flex-col items-end gap-2 ml-auto">
+                  <Link
+                    passHref
+                    href={lessonRouteHrefPath}
+                    as={lessonRoute(nextLesson.uid, path.uid)}
+                  >
+                    <Button
+                      className="flex items-center gap-2"
+                      colorScheme="black"
+                    >
+                      Next
+                      <ArrowRightIcon className="w-5 h-5" />
+                    </Button>
+                  </Link>
+                  <Text
+                    className="ml-2 text-zinc-500 line-clamp-1"
+                    fontSize="sm"
+                  >
+                    {nextLesson.title || '(no title)'}
+                  </Text>
+                </div>
+              )}
+            </div>
+          )}
         </Layout>
       )}
     </>
@@ -141,7 +203,28 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params as IParams
   const lesson = await getLesson(id)
   const author = await getAuthor(lesson.authorId)
-  return { props: { lesson, author } }
+  let path = null,
+    nextLesson = null,
+    prevLesson = null
+  if (context.query.path) {
+    path = await getPath(context.query.path as string)
+    let flattened: string[] = []
+    for (const u of path.units || []) {
+      flattened = [...flattened, ...(u.lessonIds || [])]
+    }
+
+    const index = flattened.findIndex((uid) => uid === id)
+    if (index !== -1) {
+      nextLesson = flattened[index + 1]
+        ? await getLesson(flattened[index + 1])
+        : null
+      prevLesson = flattened[index - 1]
+        ? await getLesson(flattened[index - 1])
+        : null
+    }
+  }
+
+  return { props: { lesson, author, path, nextLesson, prevLesson } }
 }
 
 export default PublishedLessonView

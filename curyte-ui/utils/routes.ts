@@ -1,4 +1,10 @@
-export const lessonRoute = (uid: string) => `/lessons/${uid}`
+export const lessonRoute = (uid: string, path?: string) => {
+  let out = `/lessons/${uid}`
+  if (path) {
+    out = `${out}?path=${path}`
+  }
+  return out
+}
 export const lessonRouteHrefPath = '/lessons/[id]'
 
 export const editLessonRoute = (uid: string) => `/lessons/edit/${uid}`
@@ -36,7 +42,7 @@ export const tagRoute = (tag: string) => `/tags/${tag}`
 export const tagRouteHrefPath = '/tags/[tag]'
 
 export const lessonSearchRoute = (query?: string) => {
-  let out = '/lessons'
+  let out = '/explore'
   if (query) out += `?query=${query}`
   return out
 }
@@ -49,4 +55,6 @@ export const editPathRouteHrefPath = '/paths/edit/[id]'
 export const pathRoute = (uid: string) => `/paths/${uid}`
 export const pathRouteHrefPath = '/paths/[id]'
 
-export const myAccountRoute = '/accounts/me'
+export const workspaceRoute = '/accounts/workspace'
+
+export const accountSettingsRoute = '/accounts/settings'

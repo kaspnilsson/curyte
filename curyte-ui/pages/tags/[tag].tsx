@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { Lesson } from '../../interfaces/lesson'
 import { GetServerSideProps } from 'next'
 import Layout from '../../components/Layout'
-import Container from '../../components/Container'
 import { Tag } from '../../interfaces/tag'
 import { auth } from '../../firebase/clientApp'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -26,25 +25,19 @@ const TagView = ({ lessons, tag, tagText }: Props) => {
   return (
     <>
       <Layout showProgressBar title={tagText}>
-        <Container className="px-5">
-          <section className="flex flex-col mb-8">
-            <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
-              {`# ${tagText}`}
-            </h1>
-            {tag && (
-              <div className="mt-4 text-sm">{tag.viewCount || 0} views</div>
-            )}
-          </section>
-          <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
-            Lessons
-          </h2>
-          {lessons && (
-            <div className="-ml-8">
-              <LessonList lessons={lessons} />
-            </div>
+        <section className="flex flex-col mb-8">
+          <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
+            {tagText}
+          </h1>
+          {tag && (
+            <div className="mt-4 text-sm">{tag.viewCount || 0} views</div>
           )}
-          {!lessons?.length && 'No lessons yet!'}
-        </Container>
+        </section>
+        <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+          Lessons
+        </h2>
+        {lessons && <LessonList lessons={lessons} />}
+        {!lessons?.length && 'No lessons yet!'}
       </Layout>
     </>
   )

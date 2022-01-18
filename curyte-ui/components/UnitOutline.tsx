@@ -7,9 +7,10 @@ interface Props {
   unit: Unit
   unitIndex: number
   lessonsMap: { [uid: string]: Lesson }
+  pathId: string
 }
 
-const UnitOutline = ({ unit, unitIndex, lessonsMap }: Props) => {
+const UnitOutline = ({ unit, unitIndex, lessonsMap, pathId }: Props) => {
   const unitNumber = unitIndex + 1
   const lessons: Lesson[] = []
   for (const uid of unit.lessonIds || []) {
@@ -31,7 +32,7 @@ const UnitOutline = ({ unit, unitIndex, lessonsMap }: Props) => {
           Lessons
         </Heading> */}
         {!lessons.length && <span className="text-zinc-700">(no lessons)</span>}
-        <LessonList lessons={lessons} allowWrap />
+        <LessonList lessons={lessons} pathId={pathId} />
       </div>
     </>
   )

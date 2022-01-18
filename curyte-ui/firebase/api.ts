@@ -253,6 +253,30 @@ export async function getCurrentUserHasSavedLesson(
     throw e
   }
 }
+/**
+ * Gets tags from firestore by applying clauses.
+ *
+ * @param whereClauses
+ * @returns
+ */
+export async function getTags(
+  queryConstraints: QueryConstraint[]
+): Promise<Tag[]> {
+  try {
+    const q: CollectionReference<DocumentData> | Query<DocumentData> = query(
+      collection(firestore, 'tags'),
+      ...queryConstraints
+    )
+    return getDocs(q).then((result) => {
+      const mapped: Tag[] = []
+      result.docs.forEach((result) => mapped.push(result.data() as Tag))
+      return mapped
+    })
+  } catch (e) {
+    exception(e as string)
+    throw e
+  }
+}
 
 export async function getTag(tagText: string): Promise<Tag> {
   try {

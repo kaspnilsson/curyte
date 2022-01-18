@@ -167,7 +167,7 @@ const UnitEditor = ({
                 ref={provided.innerRef}
               >
                 {lessonIds.map((id, index) => (
-                  <Draggable key={id} draggableId={id} index={index}>
+                  <Draggable key={id + index} draggableId={id} index={index}>
                     {(provided, snapshot) => (
                       <span
                         className={classNames(

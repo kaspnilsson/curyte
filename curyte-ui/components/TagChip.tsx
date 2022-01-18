@@ -6,15 +6,16 @@ import { tagRoute, tagRouteHrefPath } from '../utils/routes'
 interface Props {
   tagLabel: string
   colorScheme?: string
+  size?: string
 }
 
-const TagChip = ({ tagLabel, colorScheme = 'zinc' }: Props) => {
+const TagChip = ({ tagLabel, colorScheme = 'zinc', size = 'sm' }: Props) => {
   return (
     <>
       {tagLabel && (
         <Link passHref href={tagRouteHrefPath} as={tagRoute(tagLabel)}>
           <Tag
-            size="sm"
+            size={size}
             colorScheme={colorScheme}
             className="cursor-pointer hover:text-black"
           >
