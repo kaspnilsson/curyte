@@ -1,4 +1,10 @@
-export const lessonRoute = (uid: string) => `/lessons/${uid}`
+export const lessonRoute = (uid: string, path?: string) => {
+  let out = `/lessons/${uid}`
+  if (path) {
+    out = `${out}?path=${path}`
+  }
+  return out
+}
 export const lessonRouteHrefPath = '/lessons/[id]'
 
 export const editLessonRoute = (uid: string) => `/lessons/edit/${uid}`

@@ -13,9 +13,10 @@ type Props = {
   lesson?: Lesson
   author?: Author | null
   onClick?: (l: Lesson) => void
+  pathId?: string
 }
 
-const LessonPreview = ({ lesson, author, onClick }: Props) => {
+const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
   if (!lesson) return null
   const card = (
     <div className="flex items-center w-full gap-2 cursor-pointer group lesson-preview">
@@ -105,7 +106,11 @@ const LessonPreview = ({ lesson, author, onClick }: Props) => {
   return (
     <>
       {!onClick && (
-        <Link as={lessonRoute(lesson.uid)} href={lessonRouteHrefPath} passHref>
+        <Link
+          as={lessonRoute(lesson.uid, pathId)}
+          href={lessonRouteHrefPath}
+          passHref
+        >
           {card}
         </Link>
       )}

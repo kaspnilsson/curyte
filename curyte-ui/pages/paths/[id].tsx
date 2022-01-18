@@ -122,6 +122,7 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
               key={index}
               unitIndex={index}
               lessonsMap={lessonsMap}
+              pathId={path.uid}
             />
           ))}
           {!path.units?.length && (
