@@ -123,7 +123,7 @@ const Header = ({
                 className="flex items-center gap-1"
               >
                 <CuryteLogo />
-                <h2 className="text-xl font-bold leading-tight tracking-tight md:text-2xl">
+                <h2 className="text-xl font-bold leading-tight tracking-tighter md:text-2xl">
                   Curyte
                 </h2>
               </Button>
@@ -176,7 +176,7 @@ const Header = ({
                       icon={<PencilIcon className="w-4 h-4 text-zinc-900" />}
                     />
                     <Portal>
-                      <MenuList className="shadow-xl">
+                      <MenuList className="!shadow-md">
                         <Link passHref href={newLessonRoute()}>
                           <MenuItem className="flex-col !items-start">
                             <Text>New lesson</Text>
@@ -212,7 +212,7 @@ const Header = ({
                       <Avatar author={user as unknown as Author} />
                     </MenuButton>
                     <Portal>
-                      <MenuList className="shadow-xl">
+                      <MenuList className="!shadow-md">
                         <Link passHref href={workspaceRoute}>
                           <MenuItem className="flex-col !items-start">
                             <Text>Workspace</Text>

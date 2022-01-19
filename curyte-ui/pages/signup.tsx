@@ -28,7 +28,7 @@ const Signup = () => {
         className="flex flex-col items-center p-8 m-auto w-96"
         boxShadow={'lg'}
       >
-        <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+        <h2 className="mb-4 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
           Sign up
         </h2>
         <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />

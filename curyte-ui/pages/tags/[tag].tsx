@@ -5,17 +5,22 @@ import Layout from '../../components/Layout'
 import { Tag } from '../../interfaces/tag'
 import { auth } from '../../firebase/clientApp'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { getLessons, getTag, logTagView } from '../../firebase/api'
+import { getAuthor, getLessons, getTag, logTagView } from '../../firebase/api'
 import LessonList from '../../components/LessonList'
 import { where } from 'firebase/firestore'
+import { Author } from '../../interfaces/author'
+import TagList from '../../components/TagList'
+import { Heading } from '@chakra-ui/react'
 
 type Props = {
   tagText: string
   tag: Tag | null
   lessons: Lesson[] | null
+  authors: Author[]
+  relatedTags: Tag[]
 }
 
-const TagView = ({ lessons, tag, tagText }: Props) => {
+const TagView = ({ lessons, tag, tagText, authors, relatedTags }: Props) => {
   const [user, userLoading] = useAuthState(auth)
   useEffect(() => {
     if (!user || userLoading || !tag) return
@@ -25,7 +30,7 @@ const TagView = ({ lessons, tag, tagText }: Props) => {
   return (
     <>
       <Layout showProgressBar title={tagText}>
-        <section className="flex flex-col mb-8">
+        <section className="flex flex-col">
           <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
             {tagText}
           </h1>
@@ -33,11 +38,25 @@ const TagView = ({ lessons, tag, tagText }: Props) => {
             <div className="mt-4 text-sm">{tag.viewCount || 0} views</div>
           )}
         </section>
-        <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
-          Lessons
-        </h2>
-        {lessons && <LessonList lessons={lessons} />}
-        {!lessons?.length && 'No lessons yet!'}
+        <div className="flex flex-col flex-wrap md:flex-row md:divide-x">
+          <div className="w-full mt-8 md:w-2/3 md:pr-8">
+            <h2 className="mb-2 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
+              Lessons
+            </h2>
+            {lessons && <LessonList lessons={lessons} authors={authors} />}
+            {!lessons?.length && 'Nothing here yet! Maybe you should teach us!'}
+          </div>
+          <div className="w-full mt-8 md:w-1/3 md:pl-8">
+            <Heading
+              className="mb-2 font-bold leading-tight tracking-tighter"
+              size="md"
+            >
+              Related topics
+            </Heading>
+            {!!relatedTags?.length && <TagList tags={relatedTags} />}
+            {!relatedTags?.length && 'Nothing here yet!'}
+          </div>
+        </div>
       </Layout>
     </>
   )
@@ -53,8 +72,32 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       where('private', '==', false),
     ]),
   ])
+
+  const authorIds = (lessons || []).reduce(
+    (acc: Set<string>, curr: Lesson) => acc.add(curr.authorId),
+    new Set()
+  )
+
+  const authors = []
+  for (const id of Array.from(authorIds)) {
+    authors.push(await getAuthor(id))
+  }
+
+  const tagNames = (lessons || []).reduce((acc: Set<string>, curr: Lesson) => {
+    for (const tagName of curr.tags || []) acc.add(tagName)
+    return acc
+  }, new Set())
+
   return {
-    props: { tag, lessons, tagText },
+    props: {
+      tag,
+      lessons,
+      tagText,
+      authors,
+      relatedTags: Array.from(tagNames || [])
+        .map((tagText) => ({ tagText } as Tag))
+        .splice(0, 48),
+    },
   }
 }
 

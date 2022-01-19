@@ -27,7 +27,7 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
     <div className="flex items-center w-full gap-3 cursor-pointer group lesson-preview">
       <div className="flex flex-col flex-1 gap-1">
         <div className="flex flex-col gap-2">
-          <Text className="text-base font-bold leading-tight tracking-tight line-clamp-2 md:text-2xl">
+          <Text className="text-base font-bold leading-tight tracking-tighter line-clamp-2 md:text-2xl">
             <a className="hover:underline group-hover:underline">
               {lesson.title || '(no title)'}
             </a>
@@ -64,7 +64,7 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
             </Center>
             <Text
               fontSize="xs"
-              className="leading-tight tracking-tight text-zinc-500 proportional-nums"
+              className="leading-tight tracking-tighter text-zinc-500 proportional-nums"
             >
               {lesson.saveCount || 0}
               &nbsp;{lesson.saveCount === 1 ? 'save' : 'saves'}
@@ -74,7 +74,7 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
             </Center>
             <Text
               fontSize="xs"
-              className="leading-tight tracking-tight text-zinc-500 proportional-nums"
+              className="leading-tight tracking-tighter text-zinc-500 proportional-nums"
             >
               {lesson.viewCount || 0}
               &nbsp;{lesson.viewCount === 1 ? 'view' : 'views'}

@@ -67,7 +67,7 @@ const SettingsView = () => {
           </div>
           <section className="flex flex-col my-8">
             <div className="flex items-center justify-between">
-              <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+              <h2 className="mb-4 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
                 Profile settings
               </h2>
               <Button
@@ -80,7 +80,7 @@ const SettingsView = () => {
               </Button>
             </div>
             <div className="my-2">
-              <h3 className="font-bold leading-tight tracking-tight">Name</h3>
+              <h3 className="font-bold leading-tight tracking-tighter">Name</h3>
               <Input
                 type="text"
                 size="lg"
@@ -96,7 +96,7 @@ const SettingsView = () => {
               />
             </div>
             <div className="my-2">
-              <h3 className="font-bold leading-tight tracking-tight">Bio</h3>
+              <h3 className="font-bold leading-tight tracking-tighter">Bio</h3>
               <Textarea
                 as={TextareaAutosize}
                 className="w-full mt-1 border-0 resize-none"
@@ -109,11 +109,11 @@ const SettingsView = () => {
             </div>
           </section>
           <section className="flex flex-col my-8">
-            <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+            <h2 className="mb-4 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
               Email settings
             </h2>
             <div className="my-2">
-              <h3 className="font-bold leading-tight tracking-tight">
+              <h3 className="font-bold leading-tight tracking-tighter">
                 Email address
               </h3>
               <Input
@@ -129,11 +129,11 @@ const SettingsView = () => {
             </div>
           </section>
           <section className="flex flex-col my-8">
-            <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+            <h2 className="mb-4 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
               Links
             </h2>
             <div className="my-2">
-              <h3 className="font-bold leading-tight tracking-tight">
+              <h3 className="font-bold leading-tight tracking-tighter">
                 Twitter profile URL
               </h3>
               <Input
@@ -151,7 +151,7 @@ const SettingsView = () => {
               />
             </div>
             <div className="my-2">
-              <h3 className="font-bold leading-tight tracking-tight">
+              <h3 className="font-bold leading-tight tracking-tighter">
                 LinkedIn profile URL
               </h3>
               <Input
@@ -172,7 +172,7 @@ const SettingsView = () => {
               />
             </div>
             <div className="my-2">
-              <h3 className="font-bold leading-tight tracking-tight">
+              <h3 className="font-bold leading-tight tracking-tighter">
                 Personal website URL
               </h3>
               <Input
@@ -193,7 +193,7 @@ const SettingsView = () => {
               />
             </div>
             <div className="my-2">
-              <h3 className="font-bold leading-tight tracking-tight">
+              <h3 className="font-bold leading-tight tracking-tighter">
                 Public email
               </h3>
               <Input
@@ -214,7 +214,7 @@ const SettingsView = () => {
               />
             </div>
             <div className="my-2">
-              <h3 className="font-bold leading-tight tracking-tight">
+              <h3 className="font-bold leading-tight tracking-tighter">
                 Venmo URL
               </h3>
               <Input
