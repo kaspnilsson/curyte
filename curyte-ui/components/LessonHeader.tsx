@@ -17,6 +17,7 @@ import {
   MenuButton,
   Button,
   Portal,
+  useToast,
 } from '@chakra-ui/react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import {
@@ -64,6 +65,7 @@ const LessonHeader = ({
   const [parentLesson, setParentLesson] = useState<Lesson | null>(null)
   const [isSaved, setIsSaved] = useState(false)
   const [featured, setFeatured] = useState(lesson.featured || false)
+  const toast = useToast()
 
   useEffect(() => {
     if (!user || userLoading) return
@@ -93,8 +95,13 @@ const LessonHeader = ({
     setIsSaved(!isSaved)
     if (isSaved) {
       await removeSavedLessonForCurrentUser(lesson.uid)
+      toast({ title: 'Lesson removed from bookmarks.' })
     } else {
       await saveLessonForCurrentUser(lesson.uid)
+      toast({
+        title: 'Lesson bookmarked! View bookmarked lessons in your workspace.',
+        status: 'success',
+      })
     }
     setLoading(false)
   }

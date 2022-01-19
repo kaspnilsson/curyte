@@ -170,7 +170,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const lessons = await Promise.all(promises)
   const lessonsMap: { [uid: string]: Lesson } = {}
   for (const l of lessons) {
-    lessonsMap[l.uid] = l
+    if (l) {
+      lessonsMap[l.uid] = l
+    } else {
+      // Lesson not found, TODO
+    }
   }
   return { props: { path, author, lessonsMap } }
 }

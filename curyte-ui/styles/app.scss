@@ -78,6 +78,10 @@
   mark {
     background: #fff8c5;
   }
+
+  .has-focus {
+    background-color: var(--chakra-colors-sky-50);
+  }
 }
 
 hr.chakra-divider {
