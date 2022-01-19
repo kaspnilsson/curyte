@@ -189,17 +189,17 @@ const Header = ({
                     <Portal>
                       <MenuList>
                         <Link passHref href={workspaceRoute}>
-                          <MenuItem>Open workspace</MenuItem>
+                          <MenuItem>Workspace</MenuItem>
                         </Link>
                         <Link
                           passHref
                           as={accountRoute(user.uid)}
                           href={accountRouteHrefPath}
                         >
-                          <MenuItem>View public profile</MenuItem>
+                          <MenuItem>Profile</MenuItem>
                         </Link>
                         <Link passHref href={accountSettingsRoute}>
-                          <MenuItem>Edit account settings</MenuItem>
+                          <MenuItem>Account settings</MenuItem>
                         </Link>
                         <MenuItem onClick={() => logOut()}>Sign out</MenuItem>
                       </MenuList>

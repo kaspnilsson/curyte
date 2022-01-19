@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Lesson } from '../interfaces/lesson'
 import React from 'react'
-import { Center, Divider, Text } from '@chakra-ui/react'
+import { Badge, Center, Divider, Text } from '@chakra-ui/react'
 import {
   lessonInPathRoute,
   lessonInPathRouteHrefPath,
@@ -48,12 +48,16 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
         <div className="flex items-center gap-2 mt-2 text-xs">
           {!author && <div className="font-bold">{lesson.authorName}</div>}
           {author && <AuthorLink author={author} small />}
-          <Center className="w-2 h-2">
-            <Divider orientation="vertical" />
-          </Center>
-          <div className="text-zinc-500">
-            <DateFormatter dateString={lesson.created} />
-          </div>
+          {lesson.created && (
+            <>
+              <Center className="w-2 h-2">
+                <Divider orientation="vertical" />
+              </Center>
+              <div className="text-zinc-500">
+                <DateFormatter dateString={lesson.created} />
+              </div>
+            </>
+          )}
           <div className="items-center hidden gap-2 md:flex">
             <Center className="w-2 h-2">
               <Divider orientation="vertical" />
@@ -104,6 +108,15 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
               className="image-wrapper"
             />
           </div>
+        )}
+        {lesson.private && (
+          <Badge
+            variant="subtle"
+            colorScheme="orange"
+            className="absolute top-1 right-1 h-min"
+          >
+            Private
+          </Badge>
         )}
       </div>
     </div>

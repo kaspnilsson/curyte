@@ -65,10 +65,7 @@ const MySettingsView = () => {
       }
 
       const fetchLessons = async () => {
-        getLessons([
-          where('authorId', '==', user.uid),
-          where('private', '==', false),
-        ]).then((res) => {
+        getLessons([where('authorId', '==', user.uid)]).then((res) => {
           setLessons(res)
         })
       }
@@ -97,7 +94,7 @@ const MySettingsView = () => {
           <section className="flex flex-col mb-8">
             <div className="flex flex-col items-start justify-between gap-2">
               <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
-                Lessons
+                My lessons
               </h2>
               <Link as={newLessonRoute()} href={newLessonRouteHref} passHref>
                 <Button>Create a lesson</Button>
@@ -113,7 +110,7 @@ const MySettingsView = () => {
           <section className="flex flex-col mb-8">
             <div className="flex flex-col items-start justify-between gap-2">
               <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
-                Paths
+                My paths
               </h2>
               <Link as={newPathRoute} href={newPathRoute} passHref>
                 <Button>Create a path</Button>
@@ -126,18 +123,10 @@ const MySettingsView = () => {
           <section className="flex flex-col my-8">
             <div className="flex flex-col justify-between items-left">
               <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
-                Saved
+                Bookmarked lessons
               </h2>
               {!savedLessons.length && <div>Nothing here yet!</div>}
               {!!savedLessons.length && <LessonList lessons={savedLessons} />}
-            </div>
-          </section>
-          <section className="flex flex-col my-8">
-            <div className="flex flex-col justify-between items-left">
-              <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
-                Drafts
-              </h2>
-              <DraftsList />
             </div>
           </section>
         </Layout>
