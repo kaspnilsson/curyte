@@ -19,7 +19,7 @@ const UserView = ({ lessons, author }: Props) => {
     <Layout title={author.displayName || 'Author page'}>
       <section className="flex my-8">
         <div className="flex-grow">
-          <div className="text-4xl font-bold leading-tight tracking-tight">
+          <div className="text-4xl font-bold leading-tight tracking-tighter">
             {author.displayName}
           </div>
           <div className="my-4">{author.bio}</div>
@@ -29,7 +29,7 @@ const UserView = ({ lessons, author }: Props) => {
           <Avatar author={author} size="2xl" />
         </div>
       </section>
-      <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+      <h2 className="mb-2 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
         Lessons
       </h2>
       {!!lessons.length && (

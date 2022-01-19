@@ -5,7 +5,7 @@ import { exception } from '../utils/gtag'
 
 const ErrorFallback = ({ error }: { error: Error }) => (
   <div className="flex flex-col items-center justify-center w-screen h-screen gap-8">
-    <Heading className="font-bold leading-tight tracking-tight">
+    <Heading className="font-bold leading-tight tracking-tighter">
       Something went wrong :/
     </Heading>
     <pre>{error.name}</pre>

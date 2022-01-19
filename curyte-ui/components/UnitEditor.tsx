@@ -123,13 +123,13 @@ const UnitEditor = ({
   return (
     <>
       <div className="flex w-full gap-2 py-2 border-b-2">
-        <Heading className="flex flex-1 flex-grow gap-2 font-semibold tracking-tight leading-tighter">
+        <Heading className="flex flex-1 flex-grow gap-2 font-semibold tracking-tighter leading-tight">
           <span>{unitNumber}.</span>
           <TextareaAutosize
             value={title}
             onChange={(e) => onTitleUpdate(e.target.value)}
             placeholder="Add a unit title..."
-            className="flex-1 flex-grow font-semibold tracking-tight bg-transparent border-0 resize-none text-inherit leading-tighter"
+            className="flex-1 flex-grow font-semibold tracking-tighter bg-transparent border-0 resize-none text-inherit leading-tight"
           />
         </Heading>
         <div className="flex items-center gap-2">
@@ -184,7 +184,7 @@ const UnitEditor = ({
                         {...provided.dragHandleProps}
                       >
                         <GripIcon className="w-6 h-6 p-1 text-zinc-500"></GripIcon>
-                        <span className="flex flex-1 gap-2 font-semibold leading-tight tracking-tight">
+                        <span className="flex flex-1 gap-2 font-semibold leading-tight tracking-tighter">
                           {lessonsByUid[id] && (
                             <>
                               <div>{index + 1}.</div>

@@ -19,14 +19,14 @@ const UnitOutline = ({ unit, unitIndex, lessonsMap, pathId }: Props) => {
   return (
     <>
       <div className="flex items-center w-full gap-2 py-4 border-b-2">
-        <Heading className="flex flex-wrap flex-1 flex-grow gap-2 font-semibold tracking-tight resize-none leading-tighter">
+        <Heading className="flex flex-wrap flex-1 flex-grow gap-2 font-semibold tracking-tighter resize-none leading-tight">
           <span>{unitNumber}.</span>
           <span className="break-all">{unit.title || '(no unit title)'}</span>
         </Heading>
       </div>
       <div className="p-4">
         {/* <Heading
-          className="font-bold leading-tight tracking-tight"
+          className="font-bold leading-tight tracking-tighter"
           fontSize="xl"
         >
           Lessons

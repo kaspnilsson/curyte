@@ -33,7 +33,7 @@ const TagView = ({ lessons, tag, tagText }: Props) => {
             <div className="mt-4 text-sm">{tag.viewCount || 0} views</div>
           )}
         </section>
-        <h2 className="mb-2 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+        <h2 className="mb-2 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
           Lessons
         </h2>
         {lessons && <LessonList lessons={lessons} />}

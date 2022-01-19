@@ -92,7 +92,7 @@ const MySettingsView = () => {
           </div>
           <section className="flex flex-col mb-8">
             <div className="flex flex-col items-start justify-between gap-2">
-              <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+              <h2 className="mb-4 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
                 My lessons
               </h2>
               <Link as={newLessonRoute()} href={newLessonRouteHref} passHref>
@@ -108,7 +108,7 @@ const MySettingsView = () => {
           </section>
           <section className="flex flex-col mb-8">
             <div className="flex flex-col items-start justify-between gap-2">
-              <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+              <h2 className="mb-4 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
                 My paths
               </h2>
               <Link as={newPathRoute} href={newPathRoute} passHref>
@@ -121,7 +121,7 @@ const MySettingsView = () => {
           </section>
           <section className="flex flex-col my-8">
             <div className="flex flex-col justify-between items-left">
-              <h2 className="mb-4 text-xl font-bold leading-tight tracking-tight md:text-2xl">
+              <h2 className="mb-4 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
                 Bookmarked lessons
               </h2>
               {!savedLessons.length && <div>Nothing here yet!</div>}

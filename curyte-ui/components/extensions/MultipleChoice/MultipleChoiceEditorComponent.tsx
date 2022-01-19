@@ -58,7 +58,7 @@ const MultipleChoiceEditorComponent = ({
     <>
       <TextareaAutosize
         autoFocus
-        className="w-full p-4 mx-2 text-lg font-bold leading-tight tracking-tight border-0 rounded resize-none"
+        className="w-full p-4 mx-2 text-lg font-bold leading-tight tracking-tighter border-0 rounded resize-none"
         value={question}
         placeholder="Ask a question"
         onChange={(e) => onUpdateQuestion(e.target.value)}
