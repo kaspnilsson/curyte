@@ -144,7 +144,7 @@ const LessonHeader = ({
         {!!lesson.tags?.length && (
           <div className="flex flex-wrap items-center gap-2">
             {lesson.tags.map((t, index) => (
-              <TagChip tagLabel={t} key={t + index} />
+              <TagChip tagLabel={t} key={t + index} size="md" />
             ))}
           </div>
         )}

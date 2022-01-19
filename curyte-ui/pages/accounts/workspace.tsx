@@ -24,7 +24,7 @@ import { Path } from '../../interfaces/path'
 import PathPreview from '../../components/PathPreview'
 import Link from 'next/link'
 
-const MySettingsView = () => {
+const WorkspaceView = () => {
   const router = useRouter()
   const handleError = useErrorHandler()
 
@@ -134,4 +134,4 @@ const MySettingsView = () => {
   )
 }
 
-export default MySettingsView
+export default WorkspaceView

@@ -8,7 +8,7 @@ import LessonList from '../components/LessonList'
 import { limit, orderBy, where } from 'firebase/firestore'
 import { Author } from '../interfaces/author'
 import { Heading } from '@chakra-ui/react'
-import TagChip from '../components/TagChip'
+import TagList from '../components/TagList'
 
 interface Props {
   lessons: Lesson[]
@@ -31,18 +31,12 @@ const SearchPage = ({ lessons, authors, tags }: Props) => {
         </div>
         <div className="w-full mt-8 md:w-1/3 md:pl-8">
           <Heading
-            className="mb-8 font-bold leading-tight tracking-tighter"
+            className="mb-2 font-bold leading-tight tracking-tighter"
             size="md"
           >
             Trending topics
           </Heading>
-          {!!tags?.length && (
-            <div className="flex flex-wrap gap-2 mt-2">
-              {tags.map((t, index) => (
-                <TagChip tagLabel={t.tagText} key={index} size="lg" />
-              ))}
-            </div>
-          )}
+          {!!tags?.length && <TagList tags={tags} />}
         </div>
       </div>
     </Layout>
