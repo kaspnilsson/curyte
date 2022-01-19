@@ -9,7 +9,6 @@ import { auth } from '../../firebase/clientApp'
 import { Author } from '../../interfaces/author'
 import { Button } from '@chakra-ui/react'
 import LoadingSpinner from '../../components/LoadingSpinner'
-import DraftsList from '../../components/DraftsList'
 import { Lesson } from '../../interfaces/lesson'
 import { useErrorHandler } from 'react-error-boundary'
 import {
