@@ -1911,6 +1911,14 @@
     prosemirror-view "^1.23.5"
     tippy.js "^6.3.7"
 
+"@tiptap/extension-focus@^2.0.0-beta.39":
+  version "2.0.0-beta.39"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-focus/-/extension-focus-2.0.0-beta.39.tgz#0d07e0d21120b99d1d12cea52f366fd4914efd95"
+  integrity sha512-2nmieEDGXu8n/Bd/UkWJKazo7rpzImAH5qpaPZYZc0i8+O4dn+9iRHClTs7psAcmW3b83s5R5szMh+FfDR8h4w==
+  dependencies:
+    prosemirror-state "^1.3.4"
+    prosemirror-view "^1.23.5"
+
 "@tiptap/extension-font-family@^2.0.0-beta.20":
   version "2.0.0-beta.21"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-font-family/-/extension-font-family-2.0.0-beta.21.tgz#9e2e863a36a7c9ef881f6a3f984d25dcfc2a2c2e"
