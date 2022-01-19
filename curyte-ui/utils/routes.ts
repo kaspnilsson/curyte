@@ -1,10 +1,4 @@
-export const lessonRoute = (uid: string, path?: string) => {
-  let out = `/lessons/${uid}`
-  if (path) {
-    out = `${out}?path=${path}`
-  }
-  return out
-}
+export const lessonRoute = (uid: string) => `/lessons/${uid}`
 export const lessonRouteHrefPath = '/lessons/[id]'
 
 export const editLessonRoute = (uid: string) => `/lessons/edit/${uid}`
@@ -54,6 +48,10 @@ export const editPathRouteHrefPath = '/paths/edit/[id]'
 
 export const pathRoute = (uid: string) => `/paths/${uid}`
 export const pathRouteHrefPath = '/paths/[id]'
+
+export const lessonInPathRoute = (pathId: string, lessonId: string) =>
+  `/paths/${pathId}/${lessonId}`
+export const lessonInPathRouteHrefPath = '/paths/[id]/[lessonId]'
 
 export const workspaceRoute = '/accounts/workspace'
 

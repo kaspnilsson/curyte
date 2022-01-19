@@ -3,7 +3,12 @@ import Image from 'next/image'
 import { Lesson } from '../interfaces/lesson'
 import React from 'react'
 import { Center, Divider, Text } from '@chakra-ui/react'
-import { lessonRoute, lessonRouteHrefPath } from '../utils/routes'
+import {
+  lessonInPathRoute,
+  lessonInPathRouteHrefPath,
+  lessonRoute,
+  lessonRouteHrefPath,
+} from '../utils/routes'
 import TagChip from './TagChip'
 import { Author } from '../interfaces/author'
 import AuthorLink from './AuthorLink'
@@ -106,13 +111,26 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
   return (
     <>
       {!onClick && (
-        <Link
-          as={lessonRoute(lesson.uid, pathId)}
-          href={lessonRouteHrefPath}
-          passHref
-        >
-          {card}
-        </Link>
+        <>
+          {pathId && (
+            <Link
+              as={lessonInPathRoute(pathId, lesson.uid)}
+              href={lessonInPathRouteHrefPath}
+              passHref
+            >
+              {card}
+            </Link>
+          )}
+          {!pathId && (
+            <Link
+              as={lessonRoute(lesson.uid)}
+              href={lessonRouteHrefPath}
+              passHref
+            >
+              {card}
+            </Link>
+          )}
+        </>
       )}
       {onClick && <div onClick={() => onClick(lesson)}>{card}</div>}
     </>

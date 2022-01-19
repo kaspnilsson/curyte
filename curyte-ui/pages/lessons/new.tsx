@@ -25,6 +25,7 @@ const NewLessonView = () => {
           parentLessonId: l.uid,
           private: true,
           authorId: user.uid,
+          authorName: user.displayName || '',
           uid: '',
         })
         router.replace(editLessonRoute(newUid))
@@ -32,6 +33,7 @@ const NewLessonView = () => {
         const newUid = await createLesson({
           private: true,
           authorId: user.uid,
+          authorName: user.displayName,
         } as Lesson)
         router.replace(editLessonRoute(newUid))
       }
