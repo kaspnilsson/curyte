@@ -82,7 +82,7 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
           </div>
         </div>
       </div>
-      <div className="relative w-24 h-24 overflow-hidden rounded md:w-36 md:h-36 lg:w-64">
+      <div className="relative w-24 h-24 overflow-hidden rounded md:w-36 md:h-36 lg:w-64 border-[1px]">
         {lesson.coverImageUrl && (
           <Image
             src={lesson.coverImageUrl}

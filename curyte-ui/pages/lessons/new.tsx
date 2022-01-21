@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { editLessonRoute, loginRoute } from '../../utils/routes'
 import { getLesson, createLesson } from '../../firebase/api'
+import { Timestamp } from 'firebase/firestore'
 
 const NewLessonView = () => {
   const router = useRouter()
@@ -27,6 +28,8 @@ const NewLessonView = () => {
           authorId: user.uid,
           authorName: user.displayName || '',
           uid: '',
+          created: Timestamp.now().toDate().toISOString(),
+          updated: Timestamp.now().toDate().toISOString(),
         })
         router.replace(editLessonRoute(newUid))
       } else {
@@ -34,6 +37,8 @@ const NewLessonView = () => {
           private: true,
           authorId: user.uid,
           authorName: user.displayName,
+          created: Timestamp.now().toDate().toISOString(),
+          updated: Timestamp.now().toDate().toISOString(),
         } as Lesson)
         router.replace(editLessonRoute(newUid))
       }

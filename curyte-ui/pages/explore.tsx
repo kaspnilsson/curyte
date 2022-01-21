@@ -7,16 +7,31 @@ import { getAuthor, getLessons, getTags } from '../firebase/api'
 import LessonList from '../components/LessonList'
 import { limit, orderBy, where } from 'firebase/firestore'
 import { Author } from '../interfaces/author'
-import { Heading } from '@chakra-ui/react'
+import {
+  Heading,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+} from '@chakra-ui/react'
 import TagList from '../components/TagList'
 
 interface Props {
-  lessons: Lesson[]
+  featuredLessons: Lesson[]
+  recentLessons: Lesson[]
+  popularLessons: Lesson[]
   authors: Author[]
   tags: Tag[]
 }
 
-const SearchPage = ({ lessons, authors, tags }: Props) => {
+const SearchPage = ({
+  featuredLessons,
+  recentLessons,
+  popularLessons,
+  authors,
+  tags,
+}: Props) => {
   return (
     <Layout>
       <section className="flex flex-row items-center justify-center mb-8">
@@ -25,9 +40,34 @@ const SearchPage = ({ lessons, authors, tags }: Props) => {
         </h1>
       </section>
       <div className="flex flex-col flex-wrap md:flex-row md:divide-x">
-        <div className="w-full mt-8 md:w-2/3 md:pr-8">
-          {lessons && <LessonList lessons={lessons} authors={authors} />}
-          {!lessons?.length && 'Nothing here yet! Maybe you should teach us!'}
+        <div className="w-full mt-4 pt-2 md:w-2/3 md:pr-8">
+          <Tabs colorScheme="black" isLazy>
+            <TabList>
+              <Tab>Featured</Tab>
+              <Tab>Popular</Tab>
+              <Tab>Recent</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel className="!px-0">
+                {featuredLessons && (
+                  <LessonList lessons={featuredLessons} authors={authors} />
+                )}
+                {!featuredLessons?.length && 'Nothing here yet!'}
+              </TabPanel>
+              <TabPanel className="!px-0">
+                {popularLessons && (
+                  <LessonList lessons={popularLessons} authors={authors} />
+                )}
+                {!popularLessons?.length && 'Nothing here yet!'}
+              </TabPanel>
+              <TabPanel className="!px-0">
+                {recentLessons && (
+                  <LessonList lessons={recentLessons} authors={authors} />
+                )}
+                {!recentLessons?.length && 'Nothing here yet!'}
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         </div>
         <div className="w-full mt-8 md:w-1/3 md:pl-8">
           <Heading
@@ -44,12 +84,29 @@ const SearchPage = ({ lessons, authors, tags }: Props) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const lessons = await getLessons([
+  const featuredLessons = await getLessons([
     where('featured', '==', true),
     where('private', '==', false),
+    limit(10),
   ])
 
-  const authorIds = lessons.reduce(
+  const popularLessons = await getLessons([
+    where('private', '==', false),
+    orderBy('viewCount', 'desc'),
+    limit(10),
+  ])
+
+  const recentLessons = await getLessons([
+    where('private', '==', false),
+    orderBy('created', 'desc'),
+    limit(10),
+  ])
+
+  const authorIds = [
+    ...featuredLessons,
+    ...popularLessons,
+    ...recentLessons,
+  ].reduce(
     (acc: Set<string>, curr: Lesson) => acc.add(curr.authorId),
     new Set()
   )
@@ -62,7 +119,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const tags = await getTags([orderBy('viewCount', 'desc'), limit(16)])
 
   return {
-    props: { lessons, authors, tags },
+    props: { featuredLessons, popularLessons, recentLessons, authors, tags },
   }
 }
 export default SearchPage
