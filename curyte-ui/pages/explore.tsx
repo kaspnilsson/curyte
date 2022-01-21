@@ -40,7 +40,7 @@ const SearchPage = ({
         </h1>
       </section>
       <div className="flex flex-col flex-wrap md:flex-row md:divide-x">
-        <div className="w-full mt-8 md:w-2/3 md:pr-4">
+        <div className="w-full mt-8 md:w-2/3 md:pr-8">
           <Tabs colorScheme="black" isLazy>
             <TabList>
               <Tab>Featured</Tab>
@@ -48,19 +48,19 @@ const SearchPage = ({
               <Tab>Recent</Tab>
             </TabList>
             <TabPanels>
-              <TabPanel>
+              <TabPanel className="!px-0">
                 {featuredLessons && (
                   <LessonList lessons={featuredLessons} authors={authors} />
                 )}
                 {!featuredLessons?.length && 'Nothing here yet!'}
               </TabPanel>
-              <TabPanel>
+              <TabPanel className="!px-0">
                 {popularLessons && (
                   <LessonList lessons={popularLessons} authors={authors} />
                 )}
                 {!popularLessons?.length && 'Nothing here yet!'}
               </TabPanel>
-              <TabPanel>
+              <TabPanel className="!px-0">
                 {recentLessons && (
                   <LessonList lessons={recentLessons} authors={authors} />
                 )}
