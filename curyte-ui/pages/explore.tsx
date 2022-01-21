@@ -41,7 +41,7 @@ const SearchPage = ({
       </section>
       <div className="flex flex-col flex-wrap md:flex-row md:divide-x">
         <div className="w-full mt-8 md:w-2/3 md:pr-4">
-          <Tabs variant="soft-rounded" colorScheme="zinc">
+          <Tabs variant="soft-rounded" colorScheme="zinc" isLazy>
             <TabList>
               <Tab>Featured</Tab>
               <Tab>Popular</Tab>
