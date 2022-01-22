@@ -50,9 +50,7 @@ export async function getLessons(
     return getDocs(q).then((result) => {
       const mapped: Lesson[] = []
       result.docs.forEach((result) => mapped.push(result.data() as Lesson))
-      return mapped.sort((a, b) =>
-        compareDesc(parseISO(a.created || ''), parseISO(b.created || ''))
-      )
+      return mapped
     })
   } catch (e) {
     exception(e as string)
