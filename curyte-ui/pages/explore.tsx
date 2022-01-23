@@ -34,7 +34,7 @@ const SearchPage = ({
 }: Props) => {
   return (
     <Layout>
-      <section className="flex flex-row items-center justify-center mb-8">
+      <section className="flex flex-row items-center mb-8">
         <h1 className="text-4xl font-bold leading-tight tracking-tighter text-center md:text-6xl">
           Open-source curriculum, for the curious.
         </h1>

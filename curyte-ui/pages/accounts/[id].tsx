@@ -39,7 +39,7 @@ const UserView = ({ lessons, author, favoriteTags }: Props) => {
             Lessons
           </h2>
           {lessons && <LessonList lessons={lessons} authors={[author]} />}
-          {!lessons?.length && 'Nothing here yet! Maybe you should teach us!'}
+          {!lessons?.length && 'Nothing here yet!'}
         </div>
         <div className="w-full mt-8 md:w-1/3 md:pl-8">
           <Heading
