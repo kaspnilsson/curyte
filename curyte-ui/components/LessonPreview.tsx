@@ -13,6 +13,7 @@ import TagChip from './TagChip'
 import { Author } from '../interfaces/author'
 import AuthorLink from './AuthorLink'
 import DateFormatter from './DateFormatter'
+import { DocumentTextIcon } from '@heroicons/react/outline'
 
 type Props = {
   lesson?: Lesson
@@ -45,7 +46,7 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
             {lesson.description}
           </Text>
         </div>
-        <div className="flex items-center gap-2 mt-2 text-xs">
+        <div className="flex flex-wrap items-center gap-2 mt-2 text-xs">
           {!author && <div className="font-bold">{lesson.authorName}</div>}
           {author && <AuthorLink author={author} small />}
           {lesson.created && (
@@ -109,15 +110,28 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
             />
           </div>
         )}
-        {lesson.private && (
-          <Badge
-            variant="subtle"
-            colorScheme="orange"
-            className="absolute top-1 right-1 h-min"
-          >
-            Private
+        <div className="absolute flex flex-col items-end gap-1 bottom-2 right-2 h-min">
+          {lesson.featured && (
+            <Badge variant="subtle" colorScheme="green" className="h-min w-min">
+              Featured
+            </Badge>
+          )}
+          {lesson.private && (
+            <Badge
+              variant="subtle"
+              colorScheme="orange"
+              className="h-min w-min"
+            >
+              Private
+            </Badge>
+          )}
+          <Badge variant="subtle" colorScheme="zinc" className="h-min w-min">
+            <div className="flex items-center gap-1">
+              Lesson
+              <DocumentTextIcon className="w-4 h-4" />
+            </div>
           </Badge>
-        )}
+        </div>
       </div>
     </div>
   )

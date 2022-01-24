@@ -116,7 +116,9 @@ const WorkspaceView = () => {
               </Link>
               {!paths.length && <div className="">Nothing here yet!</div>}
               {!!paths.length &&
-                paths.map((p) => <PathPreview path={p} key={p.uid} />)}
+                paths.map((p) => (
+                  <PathPreview path={p} key={p.uid} author={author} />
+                ))}
             </div>
           </section>
           <section className="flex flex-col my-8">
