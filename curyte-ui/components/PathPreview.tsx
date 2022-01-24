@@ -16,27 +16,6 @@ interface Props {
 
 const PathPreview = ({ path, author, onClick }: Props) => {
   if (!path) return null
-  // return (
-  //   <Link
-  //     as={pathRoute(path.uid)}
-  //     href={pathRouteHrefPath}
-  //     passHref
-  //     key={path.uid}
-  //   >
-  //     <Button
-  //       variant="link"
-  //       colorScheme="black"
-  //       className="max-w-full min-w-0 overflow-hidden hover:bg-zinc-200 text-ellipsis whitespace-nowrap"
-  //     >
-  //       <span className="flex items-center w-auto min-w-0 p-1 m-0 overflow-hidden leading-tight tracking-tighter text-inherit whitespace-nowrap text-ellipsis">
-  //         <AcademicCapIcon className="flex-shrink-0 w-5 h-5 mr-1" />
-  //         <div className="overflow-hidden text-ellipsis whitespace-nowrap">
-  //           {path.title || '(no title)'}
-  //         </div>
-  //       </span>
-  //     </Button>
-  //   </Link>
-  // )
 
   const unitCount = (path.units || []).length
   const lessonCount = (path.units || []).reduce(
@@ -45,8 +24,8 @@ const PathPreview = ({ path, author, onClick }: Props) => {
   )
 
   const card = (
-    <div className="flex items-center w-full gap-3 cursor-pointer group lesson-preview">
-      <div className="flex flex-col flex-1 gap-1">
+    <div className="grid grid-cols-[1fr_min-content] w-full gap-3 cursor-pointer group lesson-preview">
+      <div className="flex flex-col flex-1 h-full gap-1">
         <div className="flex flex-col gap-2">
           <Text className="text-base font-bold leading-tight tracking-tighter line-clamp-2 md:text-2xl">
             <a className="hover:underline group-hover:underline">
@@ -54,7 +33,14 @@ const PathPreview = ({ path, author, onClick }: Props) => {
             </a>
           </Text>
         </div>
-        <div className="flex items-center gap-2 mt-2 text-xs">
+        {unitCount && lessonCount && (
+          <Text className="mt-2 text-base font-bold">
+            {`${lessonCount} lesson${
+              lessonCount === 1 ? '' : 's'
+            } across ${unitCount} unit${unitCount === 1 ? '' : 's'}`}
+          </Text>
+        )}
+        <div className="flex items-center gap-2 pt-2 mt-auto text-xs">
           {author && <AuthorLink author={author} small />}
           {path.created && (
             <>
@@ -89,13 +75,6 @@ const PathPreview = ({ path, author, onClick }: Props) => {
             </Text>
           </div>
         </div>
-        {unitCount && lessonCount && (
-          <Text className="mt-2 text-base font-bold">
-            {`${lessonCount} lesson${
-              lessonCount === 1 ? '' : 's'
-            } across ${unitCount} unit${unitCount === 1 ? '' : 's'}`}
-          </Text>
-        )}
       </div>
       <div className="relative w-24 h-24 overflow-hidden rounded md:w-36 md:h-36 lg:w-64 border-[1px]">
         {path.coverImageUrl && (
@@ -137,7 +116,7 @@ const PathPreview = ({ path, author, onClick }: Props) => {
           <Badge variant="subtle" colorScheme="zinc" className="h-min w-min">
             <div className="flex items-center gap-1">
               Path
-              <AcademicCapIcon className="w-4 h-4" />
+              <AcademicCapIcon className="w-3 h-3" />
             </div>
           </Badge>
         </div>
