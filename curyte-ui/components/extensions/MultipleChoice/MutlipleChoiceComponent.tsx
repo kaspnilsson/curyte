@@ -31,7 +31,7 @@ const MultipleChoiceComponent = ({
 
   return (
     <div className="select-text">
-      <Text className="font-bold tracking-tight leading-tight resize-none text-lg w-full pb-2">
+      <Text className="font-bold tracking-tighter leading-tight resize-none text-lg w-full pb-2">
         {question}
       </Text>
       <RadioGroup
@@ -57,7 +57,7 @@ const MultipleChoiceComponent = ({
             <div className="flex flex-col gap-2 p-4 rounded-xl bg-green-50">
               <Text
                 color="green"
-                className="font-bold tracking-tight leading-tight resize-none text-lg w-full"
+                className="font-bold tracking-tighter leading-tight resize-none text-lg w-full"
               >
                 Correct!
               </Text>
@@ -70,7 +70,7 @@ const MultipleChoiceComponent = ({
             <div className="flex flex-col gap-2 p-4 rounded-xl bg-red-50">
               <Text
                 color="red"
-                className="font-bold tracking-tight leading-tight resize-none text-lg w-full m-0"
+                className="font-bold tracking-tighter leading-tight resize-none text-lg w-full m-0"
               >
                 Incorrect
               </Text>

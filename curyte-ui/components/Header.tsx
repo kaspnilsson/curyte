@@ -13,7 +13,7 @@ import {
   MenuItem,
   Portal,
   IconButton,
-  Tooltip,
+  Text,
   Input,
   InputGroup,
   InputLeftElement,
@@ -22,16 +22,20 @@ import {
 import Head from 'next/head'
 import Avatar from './Avatar'
 import CuryteLogo from './CuryteLogo'
-import { PlusIcon, SearchIcon } from '@heroicons/react/outline'
+import { PencilIcon, SearchIcon } from '@heroicons/react/outline'
 import {
   indexRoute,
   lessonSearchRoute,
   loginRoute,
+  workspaceRoute,
   newLessonRoute,
   signupRoute,
+  accountSettingsRoute,
+  accountRoute,
+  accountRouteHrefPath,
+  newPathRoute,
 } from '../utils/routes'
 import { sky } from '../styles/theme/colors'
-import { useRouter } from 'next/router'
 import LessonSearchModal from './LessonSearchModal'
 
 type Props = {
@@ -50,7 +54,6 @@ const Header = ({
   const [isStuck, setStuck] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [progress, setProgress] = useState(0)
-  const router = useRouter()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -112,7 +115,7 @@ const Header = ({
         })}
       >
         <Container>
-          <div className="flex items-center justify-between h-16 px-5 py-4">
+          <div className="flex items-center justify-between h-16 py-4">
             <Link href={user ? lessonSearchRoute() : indexRoute} passHref>
               <Button
                 variant="link"
@@ -120,7 +123,7 @@ const Header = ({
                 className="flex items-center gap-1"
               >
                 <CuryteLogo />
-                <h2 className="text-xl font-bold leading-tight tracking-tight md:text-2xl">
+                <h2 className="text-xl font-bold leading-tight tracking-tighter md:text-2xl">
                   Curyte
                 </h2>
               </Button>
@@ -162,32 +165,91 @@ const Header = ({
                   />
                 </Tooltip> */}
                 <div className="relative">
-                  <div className="rounded-full animated-border animate-spin-slow"></div>
-                  <Tooltip label="Start writing">
-                    <IconButton
+                  <Menu>
+                    <div className="z-0 rounded-full animated-border animate-spin-slow"></div>
+                    <MenuButton
+                      as={IconButton}
                       aria-label="Start writing"
                       isRound
-                      className="opacity-100"
+                      className="shadow-xl opacity-100 shadow-zinc-900/10"
                       title="Start writing"
-                      onClick={() => router.push(newLessonRoute())}
-                      icon={<PlusIcon className="w-4 h-4 text-zinc-900" />}
+                      icon={<PencilIcon className="w-4 h-4 text-zinc-900" />}
                     />
-                  </Tooltip>
+                    <Portal>
+                      <MenuList className="!shadow-md">
+                        <Link passHref href={newLessonRoute()}>
+                          <MenuItem className="flex-col !items-start">
+                            <Text>New lesson</Text>
+                            <Text fontSize="xs" className="text-zinc-500">
+                              Create a new lesson from scratch.
+                            </Text>
+                          </MenuItem>
+                        </Link>
+                        <Link passHref href={newPathRoute}>
+                          <MenuItem className="flex-col !items-start">
+                            <Text>New path</Text>
+                            <Text fontSize="xs" className="text-zinc-500">
+                              Create an outline of a course, then fill it with
+                              lessons.
+                            </Text>
+                          </MenuItem>
+                        </Link>
+                        <Link passHref href={workspaceRoute}>
+                          <MenuItem className="flex-col !items-start">
+                            <Text>Existing path or lesson</Text>
+                            <Text fontSize="xs" className="text-zinc-500">
+                              View all your work in the workspace.
+                            </Text>
+                          </MenuItem>
+                        </Link>
+                      </MenuList>
+                    </Portal>
+                  </Menu>
                 </div>
                 <div className="flex">
                   <Menu>
                     <MenuButton>
-                      <Avatar
-                        author={user as unknown as Author}
-                        className="w-10 h-10"
-                      />
+                      <Avatar author={user as unknown as Author} />
                     </MenuButton>
                     <Portal>
-                      <MenuList>
-                        <Link passHref href="/accounts/me">
-                          <MenuItem>View account</MenuItem>
+                      <MenuList className="!shadow-md">
+                        <Link passHref href={workspaceRoute}>
+                          <MenuItem className="flex-col !items-start">
+                            <Text>Workspace</Text>
+                            <Text fontSize="xs" className="text-zinc-500">
+                              Create, edit, and publish new content.
+                            </Text>
+                          </MenuItem>
                         </Link>
-                        <MenuItem onClick={() => logOut()}>Sign out</MenuItem>
+                        <Link
+                          passHref
+                          as={accountRoute(user.uid)}
+                          href={accountRouteHrefPath}
+                        >
+                          <MenuItem className="flex-col !items-start">
+                            <Text>Profile</Text>
+                            <Text fontSize="xs" className="text-zinc-500">
+                              View your public profile.
+                            </Text>
+                          </MenuItem>
+                        </Link>
+                        <Link passHref href={accountSettingsRoute}>
+                          <MenuItem className="flex-col !items-start">
+                            <Text>Account settings</Text>
+                            <Text fontSize="xs" className="text-zinc-500">
+                              Update username, bio, and more.
+                            </Text>
+                          </MenuItem>
+                        </Link>
+                        <MenuItem
+                          className="flex-col !items-start"
+                          onClick={() => logOut()}
+                        >
+                          <Text>Sign out</Text>
+                          <Text fontSize="xs" className="text-zinc-500">
+                            Log out of Curyte.
+                          </Text>
+                        </MenuItem>
                       </MenuList>
                     </Portal>
                   </Menu>

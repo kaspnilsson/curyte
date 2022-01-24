@@ -153,6 +153,12 @@ const InsertMenuItems = ({ editor, openDialog }: Props) => {
         description="Insert a multiple choice question."
       />
       <MenuItem
+        onClick={() => editor.commands.toggleDetails()}
+        icon={<i className="ri-2x ri-split-cells-vertical" />}
+        label="Collapsible section"
+        description="Insert a collapsible section."
+      />
+      <MenuItem
         onClick={() =>
           editor
             .chain()

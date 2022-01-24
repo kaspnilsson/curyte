@@ -1,32 +1,33 @@
-import React, { SyntheticEvent, useState } from 'react'
+import React, { SyntheticEvent } from 'react'
 import { UploadIcon, LockClosedIcon } from '@heroicons/react/solid'
-import { Button, Text } from '@chakra-ui/react'
+import { Button, Spinner, Text } from '@chakra-ui/react'
 import { Timestamp } from 'firebase/firestore'
+import Container from './Container'
 
 import { Lesson } from '../interfaces/lesson'
 import { Author } from '../interfaces/author'
-import LoadingSpinner from './LoadingSpinner'
 import LessonEditor from './LessonEditor'
-import { CheckIcon } from '@heroicons/react/outline'
+import { CheckIcon, ExternalLinkIcon } from '@heroicons/react/outline'
 
 type Props = {
   lesson?: Lesson
   user: Author
-  handleTogglePrivate: () => Promise<void>
-  handleUpdate: (l: Lesson) => Promise<void>
-  handlePreview?: () => Promise<void>
+  saving: boolean
+  dirty: boolean
+  handleTogglePrivate: () => void
+  handleUpdate: (l: Lesson) => void
+  handlePreview?: () => void
 }
 
 const EditLessonPage = ({
   lesson,
   user,
+  saving,
+  dirty,
   handleTogglePrivate,
   handleUpdate,
   handlePreview,
 }: Props) => {
-  const [saving, setSaving] = useState(false)
-  const [autosaving, setAutosaving] = useState(false)
-
   const makeNewLessonLocally = (l: Partial<Lesson>, u: Author): Lesson => ({
     ...lesson,
     content: l.content || null,
@@ -45,35 +46,32 @@ const EditLessonPage = ({
 
   const localHandleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault()
-    try {
-      setSaving(true)
-      await handleTogglePrivate()
-    } finally {
-      setSaving(false)
-    }
+    handleTogglePrivate()
   }
 
   const localHandleUpdate = async (l: Partial<Lesson>) => {
-    setAutosaving(true)
     const newLesson = makeNewLessonLocally(l, user)
-    await handleUpdate(newLesson)
-    setAutosaving(false)
+    handleUpdate(newLesson)
   }
 
   const canPublish = lesson && lesson.content && lesson.title
 
-  if (saving) return <LoadingSpinner />
   return (
     <LessonEditor lesson={lesson} handleUpdate={localHandleUpdate}>
       <footer className="fixed bottom-0 left-0 z-20 w-full h-16 bg-white border-t border-accent-2">
-        <div className="flex items-center justify-end w-full h-full px-5 m-auto md:px-0 md:w-2/3">
+        <Container className="flex items-center justify-end h-full">
           <div className="flex items-center gap-2 mr-auto italic text-zinc-500">
-            {autosaving && (
+            {saving && (
+              <Text className="flex items-center gap-2">
+                Saving... <Spinner />
+              </Text>
+            )}
+            {dirty && !saving && (
               <>
                 <Text>Unsaved changes...</Text>
               </>
             )}
-            {!autosaving && (
+            {!dirty && !saving && (
               <>
                 <CheckIcon className="w-5 h-5" />
                 <Text>Autosaved!</Text>
@@ -82,12 +80,13 @@ const EditLessonPage = ({
           </div>
           {handlePreview && (
             <Button
-              variant="link"
-              size="sm"
+              variant="outline"
               onClick={() => handlePreview()}
-              colorScheme="zinc"
-              className="flex items-center justify-between mr-4 font-semibold disabled:opacity-50"
+              disabled={saving}
+              colorScheme="black"
+              className="flex items-center justify-between gap-2 mr-4 font-semibold disabled:opacity-50"
             >
+              <ExternalLinkIcon className="w-5 h-5" />
               Preview
             </Button>
           )}
@@ -105,6 +104,7 @@ const EditLessonPage = ({
           {!lesson?.private && (
             <Button
               colorScheme="black"
+              disabled={saving}
               className="flex items-center justify-between font-semibold disabled:opacity-50"
               onClick={localHandleSubmit}
             >
@@ -112,7 +112,7 @@ const EditLessonPage = ({
               Make private
             </Button>
           )}
-        </div>
+        </Container>
       </footer>
     </LessonEditor>
   )

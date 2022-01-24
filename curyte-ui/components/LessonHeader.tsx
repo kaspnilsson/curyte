@@ -17,6 +17,7 @@ import {
   MenuButton,
   Button,
   Portal,
+  useToast,
 } from '@chakra-ui/react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import {
@@ -38,6 +39,7 @@ import {
   removeSavedLessonForCurrentUser,
   saveLessonForCurrentUser,
 } from '../firebase/api'
+import useConfirmDialog from '../hooks/useConfirmDialog'
 
 type Props = {
   lesson: Lesson
@@ -63,6 +65,7 @@ const LessonHeader = ({
   const [parentLesson, setParentLesson] = useState<Lesson | null>(null)
   const [isSaved, setIsSaved] = useState(false)
   const [featured, setFeatured] = useState(lesson.featured || false)
+  const toast = useToast()
 
   useEffect(() => {
     if (!user || userLoading) return
@@ -70,6 +73,8 @@ const LessonHeader = ({
     const fetchParent = async () => {
       if (lesson.parentLessonId) {
         setParentLesson(await getLesson(lesson.parentLessonId))
+      } else {
+        setParentLesson(null)
       }
     }
     const fetchIsSaved = async () => {
@@ -78,7 +83,7 @@ const LessonHeader = ({
     Promise.all([fetchParent(), fetchIsSaved()]).then(() => {
       setLoading(false)
     })
-  }, [lesson, user, userLoading])
+  }, [lesson, user, userLoading, lesson.parentLessonId])
 
   const toggleSaveLesson = async () => {
     if (!user) {
@@ -90,8 +95,13 @@ const LessonHeader = ({
     setIsSaved(!isSaved)
     if (isSaved) {
       await removeSavedLessonForCurrentUser(lesson.uid)
+      toast({ title: 'Lesson removed from bookmarks.' })
     } else {
       await saveLessonForCurrentUser(lesson.uid)
+      toast({
+        title: 'Lesson bookmarked! View bookmarked lessons in your workspace.',
+        status: 'success',
+      })
     }
     setLoading(false)
   }
@@ -105,8 +115,16 @@ const LessonHeader = ({
     router.push(newLessonRoute(lesson.uid))
   }
 
+  const { ConfirmDialog, onOpen } = useConfirmDialog({
+    title: 'Delete lesson',
+    body: 'Are you sure you want to delete this lesson?',
+    confirmText: 'Delete lesson',
+    onConfirmClick: handleDelete || (() => null),
+  })
+
   return (
     <>
+      <ConfirmDialog />
       <LessonTitle title={lesson?.title || '(no title)'} />
       <div className="flex items-center mb-4 h-min">
         {parentLesson && (
@@ -118,16 +136,6 @@ const LessonHeader = ({
             <LessonLink lesson={parentLesson} />
           </div>
         )}
-        {parentLesson && lesson.private && (
-          <Center className="w-4 h-4 mx-2">
-            <Divider orientation="vertical" />
-          </Center>
-        )}
-        {lesson.private && (
-          <Badge variant="subtle" colorScheme="orange" className="h-min">
-            Private
-          </Badge>
-        )}
       </div>
       <div className="mt-1 mb-8">
         <div className="mb-6 text-2xl focus:outline-none text-zinc-500">
@@ -136,7 +144,7 @@ const LessonHeader = ({
         {!!lesson.tags?.length && (
           <div className="flex flex-wrap items-center gap-2">
             {lesson.tags.map((t, index) => (
-              <TagChip tagLabel={t} key={t + index} />
+              <TagChip tagLabel={t} key={t + index} size="md" />
             ))}
           </div>
         )}
@@ -144,17 +152,42 @@ const LessonHeader = ({
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2 text-sm md:text-base">
           <AuthorLink author={author} />
-          {lesson.created && <DateFormatter dateString={lesson.created} />}
-          {!!lesson.viewCount && (
-            <>
-              <Center className="w-6 h-4">
-                <Divider orientation="vertical" />
-              </Center>
-              {`${lesson.viewCount} views`}
-            </>
-          )}
         </div>
         <div className="flex items-center gap-1">
+          {lesson.private && (
+            <Badge variant="subtle" colorScheme="orange" className="mr-4 h-min">
+              Private
+            </Badge>
+          )}
+          <div className="flex items-center mr-4">
+            <div className="items-center hidden lg:flex">
+              {lesson.created && (
+                <>
+                  <span className="flex gap-1 text-sm">
+                    {lesson.updated &&
+                      lesson.created !== lesson.updated &&
+                      'Created'}
+                    <DateFormatter dateString={lesson.created} />
+                  </span>
+                  <Center className="w-6 h-4">
+                    <Divider orientation="vertical" />
+                  </Center>
+                </>
+              )}
+              {lesson.updated && lesson.updated !== lesson.created && (
+                <>
+                  <span className="flex gap-1 text-sm">
+                    Updated
+                    <DateFormatter dateString={lesson.updated} />
+                  </span>
+                  <Center className="w-6 h-4">
+                    <Divider orientation="vertical" />
+                  </Center>
+                </>
+              )}
+            </div>
+            <span className="text-sm">{`${lesson.viewCount || 0} views`}</span>
+          </div>
           {handlePublish && (
             <Button
               size="sm"
@@ -217,7 +250,7 @@ const LessonHeader = ({
                   </MenuItem>
                 )}
                 {handleDelete && (
-                  <MenuItem onClick={handleDelete}>
+                  <MenuItem onClick={onOpen}>
                     <DocumentRemoveIcon className="w-5 h-5 mr-4 text-inherit" />
                     Delete lesson
                   </MenuItem>

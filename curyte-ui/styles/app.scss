@@ -1,11 +1,14 @@
 .ProseMirror {
-  p.is-empty::before {
+  > :first-child {
+    margin-top: 0.5em;
+  }
+
+  .is-empty::before {
     color: var(--chakra-colors-zinc-400);
     content: attr(data-placeholder);
     float: left;
     pointer-events: none;
     height: 0;
-    font-style: italic;
   }
 
   &.ProseMirror-focused {
@@ -75,6 +78,10 @@
   mark {
     background: #fff8c5;
   }
+
+  .has-focus {
+    background-color: var(--chakra-colors-sky-50);
+  }
 }
 
 hr.chakra-divider {
@@ -107,4 +114,34 @@ textarea:focus {
   right: 0;
   padding: 2px;
   margin: -2px;
+}
+
+.details-content div > :first-child {
+  margin-top: 0;
+}
+
+.details-content div > :last-child {
+  margin-bottom: 0;
+}
+
+textarea::-webkit-input-placeholder {
+  color: var(--chakra-colors-zinc-400);
+}
+
+textarea:-moz-placeholder {
+  /* Firefox 18- */
+  color: var(--chakra-colors-zinc-400);
+}
+
+textarea::-moz-placeholder {
+  /* Firefox 19+ */
+  color: var(--chakra-colors-zinc-400);
+}
+
+textarea:-ms-input-placeholder {
+  color: var(--chakra-colors-zinc-400);
+}
+
+textarea::placeholder {
+  color: var(--chakra-colors-zinc-400);
 }

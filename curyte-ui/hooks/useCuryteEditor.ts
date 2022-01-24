@@ -2,12 +2,14 @@ import Color from '@tiptap/extension-color'
 import Highlight from '@tiptap/extension-highlight'
 import Placeholder from '@tiptap/extension-placeholder'
 import Superscript from '@tiptap/extension-superscript'
+import Subscript from '@tiptap/extension-subscript'
 import TableCell from '@tiptap/extension-table-cell'
 import Table from '@tiptap/extension-table'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
+import Focus from '@tiptap/extension-focus'
 import Typography from '@tiptap/extension-typography'
 import Underline from '@tiptap/extension-underline'
 import { JSONContent, useEditor } from '@tiptap/react'
@@ -26,6 +28,9 @@ import { MultipleChoice } from '../components/extensions/MultipleChoice/Multiple
 import { zinc } from '../styles/theme/colors'
 import { TrailingNode } from '../components/extensions/TrailingNode'
 import PasteHandler from '../components/extensions/HandlePaste/HandlePaste'
+import Details from '../components/extensions/Details/Details'
+import DetailsContent from '../components/extensions/Details/DetailsContent'
+import { getCurrentlySelectedNodes } from '../utils/prosemirror'
 
 interface EditorProps {
   content: JSONContent | null
@@ -40,17 +45,22 @@ const useCuryteEditor = (
     {
       extensions: [
         Highlight,
+        Details,
+        DetailsContent,
         Typography,
-        // TextAlign,
         Link,
         Superscript,
-        Table.configure({ resizable: true }),
+        Subscript,
+        Table,
         TableCell,
         TableHeader,
         TableRow,
         IFrameEmbed,
         YoutubeEmbed,
         Color,
+        Focus.configure({
+          mode: 'deepest',
+        }),
         Underline,
         PasteHandler,
         CuryteLink,
@@ -72,7 +82,27 @@ const useCuryteEditor = (
         }),
         Placeholder.configure({
           showOnlyWhenEditable: true,
-          placeholder: 'What are you teaching today?',
+          placeholder: ({ editor, node, pos }) => {
+            if (node.type.name === 'heading') {
+              if (pos === 0) return 'Add your first section header...'
+              if (node.attrs.level === 1) return 'Add section header...'
+              return 'Add section subheader...'
+            }
+            if (node.type.name === 'paragraph') {
+              const nodes = getCurrentlySelectedNodes(
+                editor.state.doc.resolve(pos)
+              )
+              for (const n of nodes) {
+                if (n.type.name === 'table') {
+                  return ''
+                }
+              }
+              return 'Type anywhere or use [ insert ] to add new elements.'
+            }
+            return ''
+          },
+          showOnlyCurrent: false,
+          includeChildren: true,
         }),
         MultipleChoice,
       ],

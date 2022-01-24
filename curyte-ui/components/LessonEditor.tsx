@@ -10,6 +10,7 @@ import { useDebounceCallback } from '@react-hook/debounce'
 import EditableCoverImage from './EditableCoverImage'
 import useCuryteEditor from '../hooks/useCuryteEditor'
 import LessonOutline from './LessonOutline'
+import { uuid } from '../utils/uuid'
 
 type Props = {
   lesson?: Lesson
@@ -21,13 +22,23 @@ const prepareTagStr = (str?: string): string[] =>
   (str || '').split(', ').map((s) => s.replace('#', '').trim())
 
 const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
-  console.log(lesson)
   const [title, setTitle] = useState(lesson?.title?.trim() || '')
   const [description, setDescription] = useState(
     lesson?.description?.trim() || ''
   )
   const [tagsStr, setTagsStr] = useState(lesson?.tags?.join(', ') || '')
-  const [content, setContent] = useState(lesson?.content || null)
+  const [content, setContent] = useState(
+    lesson?.content || {
+      type: 'doc',
+      content: [
+        {
+          type: 'heading',
+          attrs: { id: uuid(), level: 1 },
+        },
+        { type: 'paragraph' },
+      ],
+    }
+  )
   const [coverImageUrl, setCoverImageUrl] = useState(
     lesson?.coverImageUrl || ''
   )
@@ -55,13 +66,13 @@ const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
       sidebar={<LessonOutline editor={editor} />}
     >
       <div className="flex">
-        <div className="flex flex-col flex-grow px-5 overflow-hidden md:px-0">
+        <div className="flex flex-col flex-grow overflow-hidden">
           <div className="flex items-center justify-between w-full">
             <TextareaAutosize
               autoFocus
               className={`${computeClassesForTitle(
                 title
-              )} font-semibold flex-grow resize-none tracking-tight leading-tight border-0`}
+              )} font-bold flex-grow resize-none tracking-tighter leading-tight border-0`}
               placeholder="Add a title..."
               value={title}
               onChange={({ target }) => {

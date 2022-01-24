@@ -16,7 +16,7 @@ interface Props {
   onConfirmClick: () => void
 }
 
-export default function useConfirmationDialog({
+export default function useConfirmDialog({
   title,
   body,
   confirmText,
@@ -30,11 +30,12 @@ export default function useConfirmationDialog({
     setIsOpen(true)
   }
 
-  const Dialog = useCallback(
+  const ConfirmDialog = useCallback(
     () => (
       <AlertDialog
         leastDestructiveRef={cancelRef}
         isOpen={isOpen}
+        isCentered
         onClose={onClose}
       >
         <AlertDialogOverlay>
@@ -59,7 +60,7 @@ export default function useConfirmationDialog({
   )
 
   return {
-    Dialog,
+    ConfirmDialog,
     onOpen,
   }
 }

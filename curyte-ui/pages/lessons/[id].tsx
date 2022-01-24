@@ -7,7 +7,6 @@ import { Lesson } from '../../interfaces/lesson'
 import { GetServerSideProps } from 'next'
 import Layout from '../../components/Layout'
 import { Author } from '../../interfaces/author'
-import Container from '../../components/Container'
 import LessonHeader from '../../components/LessonHeader'
 import FancyEditor from '../../components/FancyEditor'
 import LoadingSpinner from '../../components/LoadingSpinner'
@@ -43,8 +42,9 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
   const toast = useToast()
   // Log views only on render of a published lesson
   useEffect(() => {
+    if (lesson.private) return
     logLessonView(lesson.uid)
-  }, [lesson.uid])
+  }, [lesson.private, lesson.uid])
 
   const handleDelete = async () => {
     setLoading(true)
@@ -71,6 +71,7 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
       title: `Lesson featured state set to ${!lesson.featured}`,
     })
   }
+
   return (
     <>
       {(loading || userLoading) && <LoadingSpinner />}
@@ -91,33 +92,27 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
               site_name: 'Curyte',
             }}
           ></NextSeo>
-          <Container>
-            <article className="px-4 mb-32">
-              <Head>
-                <title>{lesson.title}</title>
-              </Head>
-              <LessonHeader
-                author={author}
-                lesson={lesson}
-                handleDelete={
-                  user && user.uid === lesson.authorId
-                    ? handleDelete
-                    : undefined
-                }
-                handleEdit={
-                  user && user.uid === lesson.authorId
-                    ? () => router.push(editLessonRoute(lesson.uid))
-                    : undefined
-                }
-                handleToggleFeatured={
-                  user && userIsAdmin(user.uid)
-                    ? handleToggleFeatured
-                    : undefined
-                }
-              />
-              <FancyEditor readOnly editor={editor} />
-            </article>
-          </Container>
+          <article className="mb-32">
+            <Head>
+              <title>{lesson.title}</title>
+            </Head>
+            <LessonHeader
+              author={author}
+              lesson={lesson}
+              handleDelete={
+                user && user.uid === lesson.authorId ? handleDelete : undefined
+              }
+              handleEdit={
+                user && user.uid === lesson.authorId
+                  ? () => router.push(editLessonRoute(lesson.uid))
+                  : undefined
+              }
+              handleToggleFeatured={
+                user && userIsAdmin(user.uid) ? handleToggleFeatured : undefined
+              }
+            />
+            <FancyEditor readOnly editor={editor} />
+          </article>
         </Layout>
       )}
     </>
@@ -147,6 +142,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params as IParams
   const lesson = await getLesson(id)
   const author = await getAuthor(lesson.authorId)
+
   return { props: { lesson, author } }
 }
 

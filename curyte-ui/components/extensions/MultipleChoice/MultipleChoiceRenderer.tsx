@@ -7,7 +7,6 @@ export interface MultipleChoiceRendererProps {
   editor: Editor
   node: {
     attrs: MultipleChoiceAttrs
-    nodeSize: number
   }
   updateAttributes: (attr: MultipleChoiceAttrs) => void
 }

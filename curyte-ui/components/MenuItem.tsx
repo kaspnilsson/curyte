@@ -1,4 +1,5 @@
 import * as chakra from '@chakra-ui/react'
+import classNames from 'classnames'
 interface Props {
   onClick: () => void
   icon?: React.ReactNode
@@ -6,6 +7,7 @@ interface Props {
   description: string
   shortcut?: React.ReactNode
   disabled?: boolean
+  isActive?: boolean
 }
 
 const MenuItem = ({
@@ -13,12 +15,15 @@ const MenuItem = ({
   icon,
   label,
   shortcut,
+  isActive,
   disabled,
   description,
 }: Props) => {
   return (
     <chakra.MenuItem
-      className="flex items-start gap-3 justify-items-center"
+      className={classNames('flex items-start gap-3 justify-items-center', {
+        'bg-zinc-200': isActive,
+      })}
       onClick={onClick}
       disabled={disabled}
     >
