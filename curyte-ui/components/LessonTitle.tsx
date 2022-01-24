@@ -5,9 +5,9 @@ type Props = {
 }
 
 export const computeClassesForTitle = (title?: string): string => {
-  if ((title?.length || 0) < 25) return 'text-6xl'
-  if ((title?.length || 0) < 70) return 'text-5xl'
-  return 'text-4xl'
+  if ((title?.length || 0) < 25) return 'text-4xl lg:text-6xl'
+  if ((title?.length || 0) < 70) return 'text-3xl lg:text-5xl'
+  return 'text-2xl lg:text-4xl'
 }
 
 const LessonTitle = ({ title }: Props) => {
