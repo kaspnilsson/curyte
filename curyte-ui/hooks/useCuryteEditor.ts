@@ -17,7 +17,6 @@ import StarterKit from '@tiptap/starter-kit'
 import { DependencyList } from 'react'
 import { GoogleDriveEmbed } from '../components/embeds/GoogleDriveEmbed'
 import { IFrameEmbed } from '../components/embeds/IFrameEmbed'
-import { ImageEmbed } from '../components/embeds/ImageEmbed'
 import VimeoEmbed from '../components/embeds/VimeoEmbed'
 import Document from '../components/extensions/Document'
 import { YoutubeEmbed } from '../components/embeds/YoutubeEmbed'
@@ -27,10 +26,11 @@ import { CuryteLink } from '../components/extensions/CuryteLink/CuryteLink'
 import { MultipleChoice } from '../components/extensions/MultipleChoice/MultipleChoice'
 import { zinc } from '../styles/theme/colors'
 import { TrailingNode } from '../components/extensions/TrailingNode'
-import PasteHandler from '../components/extensions/HandlePaste/HandlePaste'
 import Details from '../components/extensions/Details/Details'
 import DetailsContent from '../components/extensions/Details/DetailsContent'
 import { getCurrentlySelectedNodes } from '../utils/prosemirror'
+import { uploadImage } from '../firebase/api'
+import CuryteImage from '../components/extensions/Image/CuryteImage'
 
 interface EditorProps {
   content: JSONContent | null
@@ -62,7 +62,6 @@ const useCuryteEditor = (
           mode: 'deepest',
         }),
         Underline,
-        PasteHandler,
         CuryteLink,
         VimeoEmbed,
         StarterKit.configure({
@@ -73,7 +72,9 @@ const useCuryteEditor = (
         }),
         Document,
         GoogleDriveEmbed,
-        ImageEmbed,
+        CuryteImage(uploadImage),
+        // ImageEmbed,
+        // Image,
         TaskList,
         AutoId,
         TrailingNode,
