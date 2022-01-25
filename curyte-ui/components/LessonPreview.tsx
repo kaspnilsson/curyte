@@ -42,7 +42,7 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
           </div>
         )}
         <div className="hidden mt-2 md:inline">
-          <Text className="line-clamp-2 text-zinc-500" fontSize="sm">
+          <Text className="line-clamp-2 text-zinc-700" fontSize="sm">
             {lesson.description}
           </Text>
         </div>
@@ -83,7 +83,7 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
           </div>
         </div>
       </div>
-      <div className="relative w-24 h-24 overflow-hidden rounded md:w-36 md:h-36 lg:w-64 border-[1px]">
+      <div className="relative w-24 h-24 overflow-hidden rounded md:w-36 md:h-36 lg:w-64 border">
         {lesson.coverImageUrl && (
           <Image
             src={lesson.coverImageUrl}
@@ -98,16 +98,10 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
             className="w-full h-full"
             style={{
               background:
-                'radial-gradient(circle, rgba(255,255,255,1) 60%, rgba(113,113,122,1) 100%)',
+                'radial-gradient(circle, rgba(255,255,255,1) 20%, rgba(200,200,200,1) 100%)',
             }}
           >
-            <Image
-              src="/static/curyte_logo_black.svg"
-              layout="fill"
-              objectFit="contain"
-              alt={`Cover Image for ${lesson.title}`}
-              className="image-wrapper"
-            />
+            <DocumentTextIcon className="w-full h-full p-6" />
           </div>
         )}
         <div className="absolute flex flex-col items-end gap-1 bottom-2 right-2 h-min">

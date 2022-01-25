@@ -36,7 +36,7 @@ const DetailsWrapper = ({
   }
   return (
     <NodeViewWrapper>
-      <div className="grid grid-cols-[min-content_1fr] items-center gap-2 p-4 my-4 border-2 rounded-xl border-zinc-200">
+      <div className="grid grid-cols-[min-content_1fr] items-center gap-2 p-4 my-4 border rounded-xl border-zinc-200">
         <IconButton
           contentEditable={false}
           aria-label="Expand toggle"

@@ -98,7 +98,7 @@ const PublishedLessonView = ({
         <Layout
           showProgressBar
           title={lesson.title}
-          sidebar={<LessonOutline editor={editor} />}
+          leftSidebar={<LessonOutline editor={editor} />}
         >
           <NextSeo
             title={lesson.title}

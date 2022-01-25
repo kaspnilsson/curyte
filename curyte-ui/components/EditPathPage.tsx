@@ -163,7 +163,6 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
                 <Spinner />
               </div>
             </div> */}
-            {!units.length && <span className="text-zinc-700">(no units)</span>}
             <DragDropContext onDragEnd={onDragEnd}>
               <div>
                 <Droppable droppableId="units">

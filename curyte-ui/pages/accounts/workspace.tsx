@@ -30,7 +30,11 @@ import { where } from 'firebase/firestore'
 import { Path } from '../../interfaces/path'
 import PathPreview from '../../components/PathPreview'
 import Link from 'next/link'
-import { AcademicCapIcon, DocumentTextIcon } from '@heroicons/react/outline'
+import {
+  AcademicCapIcon,
+  DocumentTextIcon,
+  SupportIcon,
+} from '@heroicons/react/outline'
 
 const WorkspaceView = () => {
   const router = useRouter()
@@ -119,10 +123,13 @@ const WorkspaceView = () => {
                   </TabPanel>
                   <TabPanel className="!px-0">
                     {!paths.length && <div className="">Nothing here yet!</div>}
-                    {!!paths.length &&
-                      paths.map((p) => (
-                        <PathPreview path={p} key={p.uid} author={author} />
-                      ))}
+                    {!!paths.length && (
+                      <div className="flex flex-wrap w-full gap-12">
+                        {paths.map((p) => (
+                          <PathPreview path={p} key={p.uid} author={author} />
+                        ))}
+                      </div>
+                    )}
                   </TabPanel>
                   <TabPanel className="!px-0">
                     {!savedLessons.length && <div>Nothing here yet!</div>}
@@ -133,27 +140,81 @@ const WorkspaceView = () => {
                 </TabPanels>
               </Tabs>
             </div>
-            <div className="w-full mt-8 md:w-1/3 md:pl-8">
-              <Heading
-                className="mb-2 font-bold leading-tight tracking-tighter"
-                size="md"
-              >
-                Create
-              </Heading>
-              <div className="flex flex-col items-start gap-2">
-                <Link as={newLessonRoute()} href={newLessonRouteHref} passHref>
-                  <Button className="flex items-center gap-1">
-                    Create a lesson
-                    <DocumentTextIcon className="w-5 h-5" />
+            <div className="flex flex-col w-full gap-8 mt-8 md:w-1/3 md:pl-8">
+              <section>
+                <Heading
+                  className="mb-2 font-bold leading-tight tracking-tighter"
+                  size="md"
+                >
+                  Create
+                </Heading>
+                <div className="flex flex-col items-start gap-2">
+                  <Link
+                    as={newLessonRoute()}
+                    href={newLessonRouteHref}
+                    passHref
+                  >
+                    <Button className="flex items-center gap-1">
+                      Create a lesson
+                      <DocumentTextIcon className="w-5 h-5" />
+                    </Button>
+                  </Link>
+                  <Link as={newPathRoute} href={newPathRoute} passHref>
+                    <Button className="flex items-center gap-1">
+                      Create a path
+                      <AcademicCapIcon className="w-5 h-5" />
+                    </Button>
+                  </Link>
+                </div>
+              </section>
+              <section>
+                <Heading
+                  className="mb-2 font-bold leading-tight tracking-tighter"
+                  size="md"
+                >
+                  Resources
+                </Heading>
+                <ul className="flex flex-col items-start gap-2 list-disc list-inside">
+                  <li className="hover:underline">
+                    <Link
+                      href="https://www.curyte.com/lessons/aa19daf3-3399-40db-bfda-be3c7f64f083"
+                      passHref
+                    >
+                      Getting started with Curyte
+                    </Link>
+                  </li>
+                  <li className="hover:underline">
+                    <Link
+                      href="http://curyte.com/lessons/writing-a-lesson-on-curyte-1639450877617"
+                      passHref
+                    >
+                      Writing your first lesson
+                    </Link>
+                  </li>
+                  <li className="hover:underline">
+                    <Link
+                      href="http://curyte.com/lessons/writing-a-lesson-on-curyte-1639450877617"
+                      passHref
+                    >
+                      The 5E Method
+                    </Link>
+                  </li>
+                  <li className="hover:underline">
+                    <Link
+                      href="http://curyte.com/lessons/8e7265ed-5aba-4283-939a-cd3c20bbdf5d"
+                      passHref
+                    >
+                      Adding embedded content
+                    </Link>
+                  </li>
+                </ul>
+                <Link href="https://discord.gg/Axd7QgGYF9" passHref>
+                  <Button className="flex items-center gap-1 mt-4">
+                    Get help
+                    <SupportIcon className="w-5 h-5" />
                   </Button>
                 </Link>
-                <Link as={newPathRoute} href={newPathRoute} passHref>
-                  <Button className="flex items-center gap-1">
-                    Create a path
-                    <AcademicCapIcon className="w-5 h-5" />
-                  </Button>
-                </Link>
-              </div>
+              </section>
             </div>
           </div>
         </Layout>
