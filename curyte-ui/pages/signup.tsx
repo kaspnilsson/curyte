@@ -5,11 +5,16 @@ import { auth } from '../firebase/clientApp'
 import { Box } from '@chakra-ui/react'
 import { GoogleAuthProvider, EmailAuthProvider } from 'firebase/auth'
 import { useRouter } from 'next/router'
+import { accountSettingsRoute } from '../utils/routes'
 
 const Signup = () => {
   const router = useRouter()
   const signInSuccessWithAuthResult = () => {
-    router.push(router.query.referrer ? (router.query.referrer as string) : '/')
+    router.push(
+      router.query.referrer
+        ? (router.query.referrer as string)
+        : accountSettingsRoute
+    )
     return false
   }
   const uiConfig = {
