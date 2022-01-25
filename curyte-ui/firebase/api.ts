@@ -1,5 +1,4 @@
 import assert from 'assert'
-import { compareDesc, parseISO } from 'date-fns'
 import {
   FieldPath,
   WhereFilterOp,

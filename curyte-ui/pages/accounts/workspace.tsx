@@ -119,10 +119,13 @@ const WorkspaceView = () => {
                   </TabPanel>
                   <TabPanel className="!px-0">
                     {!paths.length && <div className="">Nothing here yet!</div>}
-                    {!!paths.length &&
-                      paths.map((p) => (
-                        <PathPreview path={p} key={p.uid} author={author} />
-                      ))}
+                    {!!paths.length && (
+                      <div className="flex flex-wrap w-full gap-12">
+                        {paths.map((p) => (
+                          <PathPreview path={p} key={p.uid} author={author} />
+                        ))}
+                      </div>
+                    )}
                   </TabPanel>
                   <TabPanel className="!px-0">
                     {!savedLessons.length && <div>Nothing here yet!</div>}

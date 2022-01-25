@@ -42,7 +42,7 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
           </div>
         )}
         <div className="hidden mt-2 md:inline">
-          <Text className="line-clamp-2 text-zinc-500" fontSize="sm">
+          <Text className="line-clamp-2 text-zinc-700" fontSize="sm">
             {lesson.description}
           </Text>
         </div>
