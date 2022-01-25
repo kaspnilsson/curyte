@@ -38,7 +38,7 @@ const TagView = ({ lessons, tag, tagText, authors, relatedTags }: Props) => {
             <div className="mt-4 text-sm">{tag.viewCount || 0} views</div>
           )}
         </section>
-        <div className="flex flex-col flex-wrap md:flex-row md:divide-x">
+        <div className="flex flex-col flex-wrap md:flex-row">
           <div className="w-full mt-8 md:w-2/3 md:pr-8">
             <h2 className="mb-2 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
               Lessons

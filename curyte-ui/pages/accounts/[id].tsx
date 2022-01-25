@@ -33,7 +33,7 @@ const UserView = ({ lessons, author, favoriteTags }: Props) => {
           <Avatar author={author} size="2xl" />
         </div>
       </section>
-      <div className="flex flex-col flex-wrap md:flex-row md:divide-x">
+      <div className="flex flex-col flex-wrap md:flex-row">
         <div className="w-full md:w-2/3 md:pr-8">
           <h2 className="mb-2 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
             Lessons
