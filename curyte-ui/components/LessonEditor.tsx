@@ -11,6 +11,9 @@ import EditableCoverImage from './EditableCoverImage'
 import useCuryteEditor from '../hooks/useCuryteEditor'
 import LessonOutline from './LessonOutline'
 import { uuid } from '../utils/uuid'
+import Link from 'next/link'
+import { Button, Heading } from '@chakra-ui/react'
+import { SupportIcon } from '@heroicons/react/outline'
 
 type Props = {
   lesson?: Lesson
@@ -63,7 +66,57 @@ const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
       withFooter={false}
       withSearch={false}
       isSticky={false}
-      sidebar={<LessonOutline editor={editor} />}
+      leftSidebar={<LessonOutline editor={editor} />}
+      rightSidebar={
+        <div className="flex flex-col items-start w-full md:mt-10">
+          <Heading
+            className="mb-2 font-bold leading-tight tracking-tighter"
+            size="sm"
+          >
+            Resources
+          </Heading>
+          <ul className="flex flex-col items-start gap-2 text-sm 2xl:text-base">
+            <li className="hover:underline">
+              <Link
+                href="https://www.curyte.com/lessons/aa19daf3-3399-40db-bfda-be3c7f64f083"
+                passHref
+              >
+                Getting started with Curyte
+              </Link>
+            </li>
+            <li className="hover:underline">
+              <Link
+                href="http://curyte.com/lessons/writing-a-lesson-on-curyte-1639450877617"
+                passHref
+              >
+                Writing your first lesson
+              </Link>
+            </li>
+            <li className="hover:underline">
+              <Link
+                href="http://curyte.com/lessons/writing-a-lesson-on-curyte-1639450877617"
+                passHref
+              >
+                The 5E Method
+              </Link>
+            </li>
+            <li className="hover:underline">
+              <Link
+                href="http://curyte.com/lessons/8e7265ed-5aba-4283-939a-cd3c20bbdf5d"
+                passHref
+              >
+                Adding embedded content
+              </Link>
+            </li>
+          </ul>
+          <Link href="https://discord.gg/Axd7QgGYF9" passHref>
+            <Button className="flex items-center gap-1 mt-4" size="sm">
+              Get help
+              <SupportIcon className="w-4 h-4" />
+            </Button>
+          </Link>
+        </div>
+      }
     >
       <div className="flex">
         <div className="flex flex-col flex-grow overflow-hidden">

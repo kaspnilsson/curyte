@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { List, ListItem } from '@chakra-ui/react'
+import { Heading, List, ListItem } from '@chakra-ui/react'
 import { Editor } from '@tiptap/react'
 import { useCallback, useEffect, useState } from 'react'
 import { types } from './extensions/AutoId'
@@ -60,9 +60,12 @@ const LessonOutline = ({ editor }: Props) => {
       {!items.length && null}
       {!!items.length && (
         <div className="flex flex-col w-full truncate toc md:mt-10">
-          <span className="py-2 text-xs font-bold leading-tight tracking-tighter text-zinc-500 lg:text-sm">
-            OUTLINE
-          </span>
+          <Heading
+            className="mb-2 font-bold leading-tight tracking-tighter"
+            size="sm"
+          >
+            Outline
+          </Heading>
           <List listStyleType="none">
             {items.map((item, index) => (
               <a
