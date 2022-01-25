@@ -1,5 +1,5 @@
 import { Text, Center, Divider, Badge } from '@chakra-ui/react'
-import { AcademicCapIcon } from '@heroicons/react/outline'
+import { AcademicCapIcon, DocumentTextIcon } from '@heroicons/react/outline'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Author } from '../interfaces/author'
@@ -34,7 +34,8 @@ const PathPreview = ({ path, author, onClick }: Props) => {
           </Text>
         </div>
         {
-          <Text className="mt-2 text-base font-bold">
+          <Text className="flex items-center gap-1 mt-2 text-base font-bold">
+            <DocumentTextIcon className="w-5 h-5" />
             {(unitCount &&
               lessonCount &&
               `${lessonCount} lesson${
