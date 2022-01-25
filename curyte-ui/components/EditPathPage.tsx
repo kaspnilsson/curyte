@@ -23,6 +23,7 @@ import Container from './Container'
 import { useRouter } from 'next/router'
 import { pathRoute } from '../utils/routes'
 import { Confetti } from './Confetti'
+import EditableCoverImage from './EditableCoverImage'
 
 interface Props {
   path: Path
@@ -43,6 +44,7 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
   )
   const [lessonsLoading, setLessonsLoading] = useState(false)
   const [isFiringConfetti, setIsFiringConfetti] = useState(false)
+  const [coverImageUrl, setCoverImageUrl] = useState(path?.coverImageUrl || '')
 
   const addUnit = () => {
     setUnits([...units, { uid: uuid() } as Unit])
@@ -121,6 +123,11 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
     }
   }
 
+  const onCoverImageUpload = (url: string) => {
+    setCoverImageUrl(url)
+    handleUpdate({ ...path, coverImageUrl: url })
+  }
+
   return (
     <>
       {lessonsLoading && <Spinner />}
@@ -138,6 +145,11 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
                 onChange={({ target }) => handleTitleChange(target.value)}
               />
             </div>
+            <EditableCoverImage
+              title={path?.title || ''}
+              src={coverImageUrl}
+              onEditUrl={onCoverImageUpload}
+            />
             {/* <div className="flex items-center justify-end gap-2">
               <div
                 className={classNames(
@@ -151,7 +163,6 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
                 <Spinner />
               </div>
             </div> */}
-            {!units.length && <span className="text-zinc-700">(no units)</span>}
             <DragDropContext onDragEnd={onDragEnd}>
               <div>
                 <Droppable droppableId="units">

@@ -16,6 +16,7 @@ import UnitOutline from '../../components/UnitOutline'
 import AuthorLink from '../../components/AuthorLink'
 import PathActions from '../../components/PathActions'
 import DateFormatter from '../../components/DateFormatter'
+import CoverImage from '../../components/CoverImage'
 
 interface Props {
   lessonsMap: { [uid: string]: Lesson }
@@ -32,13 +33,10 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
 
   if (!path) return <ErrorPage statusCode={404} />
 
-  // const openGraphDescription = `${lesson.description}, tags:${[
-  //   lesson.tags || [],
-  // ].join(', ')}`
-  // const openGraphImages = []
-  // if (lesson.coverImageUrl) {
-  //   openGraphImages.push({ url: lesson.coverImageUrl })
-  // }
+  const openGraphImages = []
+  if (path.coverImageUrl) {
+    openGraphImages.push({ url: path.coverImageUrl })
+  }
 
   // const handleToggleFeatured = async () => {
   //   await setLessonFeatured(lesson.uid, !lesson.featured)
@@ -50,17 +48,17 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
     <Layout title={path.title}>
       <NextSeo
         title={path.title}
-        // description={openGraphDescription}
+        description={path.title}
         openGraph={{
           url: pathRoute(path.uid),
           title: path.title,
-          // description: openGraphDescription,
-          // images: openGraphImages,
+          description: path.title,
+          images: openGraphImages,
           site_name: 'Curyte',
         }}
       ></NextSeo>
       <div className="flex">
-        <div className="flex flex-col flex-grow gap-2 overflow-hidden">
+        <div className="flex flex-col flex-grow gap-2">
           <div className="flex items-center justify-between w-full">
             <div
               className={`${computeClassesForTitle(
@@ -70,6 +68,14 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
               {path.title || '(no title)'}
             </div>
           </div>
+          {path.coverImageUrl && (
+            <div className="mb-8 sm:mx-0">
+              <CoverImage
+                title={path?.title || '(no title)'}
+                src={path.coverImageUrl}
+              />
+            </div>
+          )}
           <div className="flex flex-wrap items-center justify-between gap-2 mb-6">
             <AuthorLink author={author} />
             <div className="flex items-center gap-1">

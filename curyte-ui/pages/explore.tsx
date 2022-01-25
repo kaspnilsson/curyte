@@ -34,13 +34,13 @@ const SearchPage = ({
 }: Props) => {
   return (
     <Layout>
-      <section className="flex flex-row items-center justify-center mb-8">
+      <section className="flex flex-row items-center">
         <h1 className="text-4xl font-bold leading-tight tracking-tighter text-center md:text-6xl">
           Open-source curriculum, for the curious.
         </h1>
       </section>
       <div className="flex flex-col flex-wrap md:flex-row md:divide-x">
-        <div className="w-full mt-4 pt-2 md:w-2/3 md:pr-8">
+        <div className="w-full pt-2 mt-4 md:w-2/3 md:pr-8">
           <Tabs colorScheme="black" isLazy>
             <TabList>
               <Tab>Featured</Tab>

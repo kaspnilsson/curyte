@@ -1,5 +1,4 @@
 import assert from 'assert'
-import { compareDesc, parseISO } from 'date-fns'
 import {
   FieldPath,
   WhereFilterOp,
@@ -40,7 +39,8 @@ export interface WhereClause {
  * @returns
  */
 export async function getLessons(
-  queryConstraints: QueryConstraint[]
+  queryConstraints: QueryConstraint[],
+  includeLessonContent = false
 ): Promise<Lesson[]> {
   try {
     const q: CollectionReference<DocumentData> | Query<DocumentData> = query(
@@ -49,10 +49,12 @@ export async function getLessons(
     )
     return getDocs(q).then((result) => {
       const mapped: Lesson[] = []
-      result.docs.forEach((result) => mapped.push(result.data() as Lesson))
-      return mapped.sort((a, b) =>
-        compareDesc(parseISO(a.created || ''), parseISO(b.created || ''))
-      )
+      result.docs.forEach((result) => {
+        const lesson = result.data() as Lesson
+        if (!includeLessonContent) lesson.content = null
+        mapped.push(lesson)
+      })
+      return mapped
     })
   } catch (e) {
     exception(e as string)

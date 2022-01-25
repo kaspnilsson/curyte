@@ -16,5 +16,4 @@ export declare interface Lesson {
   coverImageUrl?: string
   featured?: boolean
   private?: boolean
-  inPaths?: string[]
 }

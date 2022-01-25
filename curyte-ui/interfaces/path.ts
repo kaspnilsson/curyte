@@ -7,6 +7,7 @@ export declare interface Path {
   viewCount?: number
   created?: string
   updated?: string
+  coverImageUrl?: string
 }
 
 export declare interface Unit {

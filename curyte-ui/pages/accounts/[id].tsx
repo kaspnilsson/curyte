@@ -34,14 +34,14 @@ const UserView = ({ lessons, author, favoriteTags }: Props) => {
         </div>
       </section>
       <div className="flex flex-col flex-wrap md:flex-row md:divide-x">
-        <div className="w-full mt-8 md:w-2/3 md:pr-8">
+        <div className="w-full md:w-2/3 md:pr-8">
           <h2 className="mb-2 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
             Lessons
           </h2>
           {lessons && <LessonList lessons={lessons} authors={[author]} />}
-          {!lessons?.length && 'Nothing here yet! Maybe you should teach us!'}
+          {!lessons?.length && 'Nothing here yet!'}
         </div>
-        <div className="w-full mt-8 md:w-1/3 md:pl-8">
+        <div className="w-full md:w-1/3 md:pl-8">
           <Heading
             className="mb-4 font-bold leading-tight tracking-tighter"
             size="md"
