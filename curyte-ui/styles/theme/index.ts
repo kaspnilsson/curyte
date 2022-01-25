@@ -1,10 +1,10 @@
 import { extendTheme, ThemeConfig } from '@chakra-ui/react'
-import { black, sky, zinc } from './colors'
+import { black, violet, zinc } from './colors'
 import components from './components'
 
 const theme = extendTheme({
   colors: {
-    sky,
+    violet,
     zinc,
     black,
     gray: { ...zinc },

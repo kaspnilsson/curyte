@@ -35,7 +35,7 @@ import {
   accountRouteHrefPath,
   newPathRoute,
 } from '../utils/routes'
-import { sky } from '../styles/theme/colors'
+import { violet } from '../styles/theme/colors'
 import LessonSearchModal from './LessonSearchModal'
 
 type Props = {
@@ -263,7 +263,7 @@ const Header = ({
             style={{
               width: `${progress}%`,
               height: '3px',
-              background: sky[500],
+              background: violet[500],
               opacity: '0.8',
               marginTop: '-3px',
             }}

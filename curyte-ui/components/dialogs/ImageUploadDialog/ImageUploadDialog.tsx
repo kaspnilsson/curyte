@@ -141,7 +141,7 @@ const ImageUploadDialog = ({
               <div
                 {...getRootProps({
                   className:
-                    'dropzone w-full p-8 bg-zinc-50 rounded-xl border-dashed border-2 border-zinc-200 cursor-pointer hover:bg-zinc-100',
+                    'dropzone w-full p-8 bg-zinc-50 rounded-xl border-dashed border border-zinc-200 cursor-pointer hover:bg-zinc-100',
                 })}
               >
                 <input {...getInputProps()} />
