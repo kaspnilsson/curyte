@@ -13,6 +13,7 @@ import UploadProgressBar from '../../UploadProgressBar'
 import { useDropzone } from 'react-dropzone'
 import { imageUrlMatchRegex } from '../../embeds/matchers'
 import { exception } from '../../../utils/gtag'
+import { compressImage } from '../../../utils/upload-image'
 
 interface ImageUploadDialogProps {
   title: string
@@ -20,15 +21,6 @@ interface ImageUploadDialogProps {
   isOpen: boolean
   onClose: () => void
   onSuccess: (url: string) => void
-}
-
-const compressOptions = {
-  // As the key specify the maximum size
-  // Leave blank for infinity
-  maxSizeMB: 1.5,
-  // Use webworker for faster compression with
-  // the help of threads
-  useWebWorker: true,
 }
 
 const ImageUploadDialog = ({
@@ -43,27 +35,8 @@ const ImageUploadDialog = ({
 
   const onDropAccepted = async (files: File[]) => {
     const f = files[0]
-    if (f.type === 'image/gif') {
-      // Compress library does not support gif
-      setFile(f)
-    } else {
-      import('browser-image-compression')
-        .then((Compress) => {
-          return Compress.default(f, compressOptions)
-        })
-        .then((compressedBlob) => {
-          const convertedBlobFile = new File([compressedBlob], f.name, {
-            type: f.type,
-            lastModified: Date.now(),
-          })
-
-          setFile(convertedBlobFile)
-          setError('')
-        })
-        .catch((e) => {
-          console.error(e)
-        })
-    }
+    setFile(await compressImage(f))
+    setError('')
   }
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -141,7 +114,7 @@ const ImageUploadDialog = ({
               <div
                 {...getRootProps({
                   className:
-                    'dropzone w-full p-8 bg-zinc-50 rounded-xl border-dashed border-2 border-zinc-200 cursor-pointer hover:bg-zinc-100',
+                    'dropzone w-full p-8 bg-zinc-50 rounded-xl border-dashed border border-zinc-200 cursor-pointer hover:bg-zinc-100',
                 })}
               >
                 <input {...getInputProps()} />

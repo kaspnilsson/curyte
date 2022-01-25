@@ -16,7 +16,12 @@ import {
   updateDoc,
   QueryConstraint,
 } from 'firebase/firestore'
-import { deleteObject, ref } from 'firebase/storage'
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from 'firebase/storage'
 import { Author, SavedLesson } from '../interfaces/author'
 import { Lesson } from '../interfaces/lesson'
 import { Path } from '../interfaces/path'
@@ -310,6 +315,13 @@ export async function logTagView(tagText: string): Promise<void> {
  */
 export async function deleteImageAtUrl(url: string): Promise<void> {
   return deleteObject(ref(storage, url))
+}
+
+export async function uploadImage(file: File): Promise<string> {
+  const storageRef = ref(storage, uuid())
+  return uploadBytes(storageRef, file).then((snapshot) =>
+    getDownloadURL(snapshot.ref)
+  )
 }
 
 export async function createPath(path: Path): Promise<string> {

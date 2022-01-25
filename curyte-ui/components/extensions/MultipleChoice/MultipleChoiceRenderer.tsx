@@ -19,7 +19,7 @@ const MultipleChoiceRenderer = ({
   <NodeViewWrapper>
     <NodeViewContent>
       <div
-        className="p-4 my-4 border-2 rounded-xl border-zinc-200"
+        className="p-4 my-4 border rounded-xl border-zinc-200"
         data-drag-handle=""
       >
         {editor.isEditable && (

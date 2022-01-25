@@ -1,5 +1,5 @@
 import { Text, Center, Divider, Badge } from '@chakra-ui/react'
-import { AcademicCapIcon } from '@heroicons/react/outline'
+import { AcademicCapIcon, DocumentTextIcon } from '@heroicons/react/outline'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Author } from '../interfaces/author'
@@ -33,13 +33,17 @@ const PathPreview = ({ path, author, onClick }: Props) => {
             </a>
           </Text>
         </div>
-        {unitCount && lessonCount && (
-          <Text className="mt-2 text-base font-bold">
-            {`${lessonCount} lesson${
-              lessonCount === 1 ? '' : 's'
-            } across ${unitCount} unit${unitCount === 1 ? '' : 's'}`}
+        {
+          <Text className="flex items-center gap-1 mt-2 text-base font-bold">
+            <DocumentTextIcon className="w-5 h-5" />
+            {(unitCount &&
+              lessonCount &&
+              `${lessonCount} lesson${
+                lessonCount === 1 ? '' : 's'
+              } across ${unitCount} unit${unitCount === 1 ? '' : 's'}`) ||
+              '(no units)'}
           </Text>
-        )}
+        }
         <div className="flex items-center gap-2 pt-2 mt-auto text-xs">
           {author && <AuthorLink author={author} small />}
           {path.created && (
@@ -76,7 +80,7 @@ const PathPreview = ({ path, author, onClick }: Props) => {
           </div>
         </div>
       </div>
-      <div className="relative w-24 h-24 overflow-hidden rounded md:w-36 md:h-36 lg:w-64 border-[1px]">
+      <div className="relative w-24 h-24 overflow-hidden rounded md:w-36 md:h-36 lg:w-64 border">
         {path.coverImageUrl && (
           <Image
             src={path.coverImageUrl}
@@ -91,16 +95,10 @@ const PathPreview = ({ path, author, onClick }: Props) => {
             className="w-full h-full"
             style={{
               background:
-                'radial-gradient(circle, rgba(255,255,255,1) 60%, rgba(113,113,122,1) 100%)',
+                'radial-gradient(circle, rgba(255,255,255,1) 20%, rgba(200,200,200,1) 100%)',
             }}
           >
-            <Image
-              src="/static/curyte_logo_black.svg"
-              layout="fill"
-              objectFit="contain"
-              alt={`Cover Image for ${path.title}`}
-              className="image-wrapper"
-            />
+            <AcademicCapIcon className="w-full h-full p-6" />
           </div>
         )}
         <div className="absolute flex flex-col items-end gap-1 bottom-2 right-2 h-min">

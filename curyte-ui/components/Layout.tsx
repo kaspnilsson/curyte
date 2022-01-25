@@ -9,7 +9,8 @@ type Props = {
   isSticky?: boolean
   showProgressBar?: boolean
   title?: string
-  sidebar?: React.ReactNode
+  leftSidebar?: React.ReactNode
+  rightSidebar?: React.ReactNode
   className?: string
   withSearch?: boolean
 }
@@ -20,7 +21,8 @@ const Layout = ({
   withFooter = true,
   isSticky = true,
   showProgressBar,
-  sidebar,
+  leftSidebar = null,
+  rightSidebar = null,
   title = 'Curyte',
   className = '',
 }: Props) => {
@@ -33,20 +35,21 @@ const Layout = ({
           withSearch={withSearch}
           title={title}
         ></Header>
-        {sidebar && (
-          <div className="grid grid-cols-1 md:grid-cols-[15%_minmax(0,70%)_15%] max-w-screen md:flex-row">
+        {(leftSidebar || rightSidebar) && (
+          <div className="grid grid-cols-1 md:grid-cols-[minmax(15%,1fr)_minmax(70%,1200px)_minmax(15%,1fr)] max-w-screen md:flex-row">
             <Container className="relative flex self-start mb-8 md:flex-col md:sticky md:top-16 min-w-80 md:pr-0">
-              {sidebar}
+              {leftSidebar}
             </Container>
             {/* keep pb-24 in sync with footer height */}
-            <main className="w-full pb-24">
+            <main className="w-full pb-24 max-w-[1200px]">
               <Container className="flex-1">{children}</Container>
             </main>
-            {/* empty sidebar to ensure content is centered */}
-            <Container className="min-w-80 md:pl-0"></Container>
+            <Container className="relative flex self-start mb-8 md:flex-col md:sticky md:top-16 min-w-80 md:pl-0">
+              {rightSidebar}
+            </Container>
           </div>
         )}
-        {!sidebar && (
+        {!leftSidebar && (
           <main className="w-full pb-24">
             <Container>{children}</Container>
           </main>

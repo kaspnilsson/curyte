@@ -69,7 +69,7 @@ export const IFrameEmbed = Node.create({
       [
         'div',
         {
-          class: 'px-2 w-full h-auto relative aspect-w-16 aspect-h-9',
+          class: 'w-full h-auto relative aspect-w-16 aspect-h-9',
           'data-drag-handle': '',
         },
         [

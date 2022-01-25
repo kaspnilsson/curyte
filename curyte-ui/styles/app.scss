@@ -80,7 +80,7 @@
   }
 
   .has-focus {
-    background-color: var(--chakra-colors-sky-50);
+    background-color: var(--chakra-colors-violet-50);
   }
 }
 
@@ -106,7 +106,8 @@ textarea:focus {
 }
 
 .animated-border {
-  background: conic-gradient(#ff9518, #ffe324, #34aaff, #220d3e, #ff9518);
+  // Tailwind: orange 400, yellow 400, sky 400, violet 700
+  background: conic-gradient(#fb923c, #facc15, #38bdf8, #6d28d9, #fb923c);
   position: absolute;
   top: 0;
   bottom: 0;
