@@ -33,13 +33,16 @@ const PathPreview = ({ path, author, onClick }: Props) => {
             </a>
           </Text>
         </div>
-        {unitCount && lessonCount && (
+        {
           <Text className="mt-2 text-base font-bold">
-            {`${lessonCount} lesson${
-              lessonCount === 1 ? '' : 's'
-            } across ${unitCount} unit${unitCount === 1 ? '' : 's'}`}
+            {(unitCount &&
+              lessonCount &&
+              `${lessonCount} lesson${
+                lessonCount === 1 ? '' : 's'
+              } across ${unitCount} unit${unitCount === 1 ? '' : 's'}`) ||
+              '(no units)'}
           </Text>
-        )}
+        }
         <div className="flex items-center gap-2 pt-2 mt-auto text-xs">
           {author && <AuthorLink author={author} small />}
           {path.created && (
@@ -91,16 +94,10 @@ const PathPreview = ({ path, author, onClick }: Props) => {
             className="w-full h-full"
             style={{
               background:
-                'radial-gradient(circle, rgba(255,255,255,1) 60%, rgba(113,113,122,1) 100%)',
+                'radial-gradient(circle, rgba(255,255,255,1) 20%, rgba(200,200,200,1) 100%)',
             }}
           >
-            <Image
-              src="/static/curyte_logo_black.svg"
-              layout="fill"
-              objectFit="contain"
-              alt={`Cover Image for ${path.title}`}
-              className="image-wrapper"
-            />
+            <AcademicCapIcon className="w-full h-full p-6" />
           </div>
         )}
         <div className="absolute flex flex-col items-end gap-1 bottom-2 right-2 h-min">
