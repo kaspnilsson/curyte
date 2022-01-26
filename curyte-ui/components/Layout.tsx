@@ -36,7 +36,7 @@ const Layout = ({
           title={title}
         ></Header>
         {(leftSidebar || rightSidebar) && (
-          <div className="grid grid-cols-1 md:grid-cols-[minmax(15%,1fr)_minmax(70%,1200px)_minmax(15%,1fr)] max-w-screen md:flex-row">
+          <div className="grid grid-cols-1 md:grid-cols-[minmax(15%,1fr)_minmax(70%,1200px)_minmax(15%,1fr)] max-w-screen md:flex-row justify-items-center">
             <Container className="relative flex self-start mb-8 md:flex-col md:sticky md:top-16 min-w-80 md:pr-0">
               {leftSidebar}
             </Container>
