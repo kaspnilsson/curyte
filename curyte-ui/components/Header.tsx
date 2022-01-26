@@ -123,7 +123,7 @@ const Header = ({
                 className="flex items-center gap-1"
               >
                 <CuryteLogo />
-                <h2 className="text-xl font-bold leading-tight tracking-tighter md:text-2xl">
+                <h2 className="hidden text-xl font-bold leading-tight tracking-tighter md:text-2xl md:flex">
                   Curyte
                 </h2>
               </Button>
@@ -139,6 +139,14 @@ const Header = ({
                     placeholder="Search lessons..."
                     variant="filled"
                     colorScheme="black"
+                    className="hidden md:flex"
+                  ></Input>
+                  <Input
+                    isReadOnly
+                    placeholder="Search..."
+                    variant="filled"
+                    colorScheme="black"
+                    className="flex md:hidden"
                   ></Input>
                 </InputGroup>
               </div>
