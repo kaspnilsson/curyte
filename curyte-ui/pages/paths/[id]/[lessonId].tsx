@@ -17,9 +17,9 @@ import {
   editLessonRoute,
   lessonInPathRoute,
   lessonInPathRouteHrefPath,
-  lessonSearchRoute,
   pathRoute,
   pathRouteHrefPath,
+  workspaceRoute,
 } from '../../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
 import useCuryteEditor from '../../../hooks/useCuryteEditor'
@@ -69,7 +69,7 @@ const PublishedLessonView = ({
     setLoading(true)
     await deleteLesson(lesson.uid)
     setLoading(false)
-    router.push(lessonSearchRoute())
+    router.push(workspaceRoute)
   }
 
   const editor = useCuryteEditor({ content: lesson.content }, [lesson])
