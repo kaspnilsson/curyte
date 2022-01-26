@@ -149,10 +149,8 @@ const LessonHeader = ({
           </div>
         )}
       </div>
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-2 text-sm md:text-base">
-          <AuthorLink author={author} />
-        </div>
+      <div className="flex items-center justify-between gap-1 mb-6">
+        <AuthorLink author={author} />
         <div className="flex items-center gap-1">
           {lesson.private && (
             <Badge variant="subtle" colorScheme="orange" className="mr-4 h-min">
@@ -176,13 +174,15 @@ const LessonHeader = ({
               )}
               {lesson.updated && lesson.updated !== lesson.created && (
                 <>
-                  <span className="flex gap-1 text-sm">
+                  <span className="hidden gap-1 text-sm xl:flex">
                     Updated
                     <DateFormatter dateString={lesson.updated} />
                   </span>
-                  <Center className="w-6 h-4">
-                    <Divider orientation="vertical" />
-                  </Center>
+                  <div className="hidden xl:flex">
+                    <Center className="w-6 h-4">
+                      <Divider orientation="vertical" />
+                    </Center>
+                  </div>
                 </>
               )}
             </div>
