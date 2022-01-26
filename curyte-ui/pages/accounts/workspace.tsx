@@ -193,7 +193,7 @@ const WorkspaceView = () => {
                   </li>
                   <li className="hover:underline">
                     <Link
-                      href="http://curyte.com/lessons/writing-a-lesson-on-curyte-1639450877617"
+                      href="http://curyte.com/lessons/4Jhyh_peR2IJyLo8"
                       passHref
                     >
                       The 5E Method
