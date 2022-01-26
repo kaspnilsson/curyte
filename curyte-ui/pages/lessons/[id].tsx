@@ -15,7 +15,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import {
   editLessonRoute,
   lessonRoute,
-  lessonSearchRoute,
+  workspaceRoute,
 } from '../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
 import useCuryteEditor from '../../hooks/useCuryteEditor'
@@ -50,7 +50,7 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
     setLoading(true)
     await deleteLesson(lesson.uid)
     setLoading(false)
-    router.push(lessonSearchRoute())
+    router.push(workspaceRoute)
   }
 
   const editor = useCuryteEditor({ content: lesson.content }, [lesson])
