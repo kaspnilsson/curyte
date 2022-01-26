@@ -29,7 +29,7 @@ const Home = () => {
           </div>
           Curyte
         </h1>
-        <div className="flex gap-1 mb-8 text-4xl font-bold leading-tight tracking-tighter text-center">
+        <div className="flex flex-wrap items-center justify-center gap-1 mb-8 text-4xl font-bold leading-tight tracking-tighter text-center">
           Engaging lessons,
           <div className="text-violet-500">digitally native.</div>
         </div>
