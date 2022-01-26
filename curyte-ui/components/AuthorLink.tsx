@@ -4,6 +4,7 @@ import { Author } from '../interfaces/author'
 import React from 'react'
 import Avatar from './Avatar'
 import { accountRoute, accountRouteHrefPath } from '../utils/routes'
+import classNames from 'classnames'
 
 type Props = {
   author: Author
@@ -27,20 +28,14 @@ const AuthorLink = ({ author, small = false }: Props) => {
               size={small ? '2xs' : 'md'}
             />
             <div className="flex flex-col ml-2">
-              {/* TODO add role here! */}
-              {!small && (
-                <>
-                  <span className="text-xs text-zinc-700">Instructor</span>
-                  <a className="text-sm font-bold group-hover:underline md:text-base">
-                    {author.displayName || '(no name)'}
-                  </a>
-                </>
-              )}
-              {small && (
-                <a className="text-xs font-bold group-hover:underline">
-                  {author.displayName || '(no name)'}
-                </a>
-              )}
+              <a
+                className={classNames(
+                  'text-sm font-bold group-hover:underline',
+                  { 'md:text-base': !small }
+                )}
+              >
+                {author.displayName || '(no name)'}
+              </a>
             </div>
           </div>
         </Link>

@@ -60,10 +60,7 @@ const LessonOutline = ({ editor }: Props) => {
       {!items.length && null}
       {!!items.length && (
         <div className="flex flex-col w-full truncate toc md:mt-10">
-          <Heading
-            className="mb-2 font-bold leading-tight tracking-tighter"
-            size="sm"
-          >
+          <Heading className="mb-2 uppercase text-zinc-700" size="xs">
             Outline
           </Heading>
           <List listStyleType="none">

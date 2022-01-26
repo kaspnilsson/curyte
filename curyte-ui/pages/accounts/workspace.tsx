@@ -104,7 +104,7 @@ const WorkspaceView = () => {
               Workspace
             </h1>
           </section>
-          <div className="flex flex-col flex-wrap md:flex-row md:divide-x">
+          <div className="flex flex-col flex-wrap md:flex-row">
             <div className="w-full pt-2 mt-4 md:w-2/3 md:pr-8">
               <Tabs colorScheme="black" isLazy>
                 <TabList>
