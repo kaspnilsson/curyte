@@ -48,7 +48,14 @@ export default function useConfirmDialog({
               <Button ref={cancelRef} onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme="black" onClick={onConfirmClick} ml={3}>
+              <Button
+                colorScheme="black"
+                onClick={() => {
+                  onConfirmClick()
+                  onClose()
+                }}
+                ml={3}
+              >
                 {confirmText}
               </Button>
             </AlertDialogFooter>

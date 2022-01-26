@@ -4,6 +4,8 @@ import { Lesson } from '../interfaces/lesson'
 import React from 'react'
 import { Badge, Center, Divider, Text } from '@chakra-ui/react'
 import {
+  editLessonRoute,
+  editLessonRouteHrefPath,
   lessonInPathRoute,
   lessonInPathRouteHrefPath,
   lessonRoute,
@@ -143,13 +145,26 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
             </Link>
           )}
           {!pathId && (
-            <Link
-              as={lessonRoute(lesson.uid)}
-              href={lessonRouteHrefPath}
-              passHref
-            >
-              {card}
-            </Link>
+            <>
+              {!lesson.private && (
+                <Link
+                  as={lessonRoute(lesson.uid)}
+                  href={lessonRouteHrefPath}
+                  passHref
+                >
+                  {card}
+                </Link>
+              )}
+              {lesson.private && (
+                <Link
+                  as={editLessonRoute(lesson.uid)}
+                  href={editLessonRouteHrefPath}
+                  passHref
+                >
+                  {card}
+                </Link>
+              )}
+            </>
           )}
         </>
       )}

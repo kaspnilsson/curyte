@@ -13,6 +13,7 @@ import MenuIconButton from './MenuIconButton'
 import InsertMenuItems from './menuItems/InsertMenuItems'
 import InputDialog, { InputDialogProps } from './InputDialog'
 import StyleMenuButton from './StyleMenuButton'
+import TemplatesMenu from './TemplatesMenu'
 
 interface Props {
   editor: Editor | null
@@ -151,6 +152,7 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
           </MenuList>
         </Portal>
       </Menu>
+      <TemplatesMenu editor={editor}></TemplatesMenu>
     </div>
   )
 }

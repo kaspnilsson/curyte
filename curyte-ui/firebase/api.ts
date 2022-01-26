@@ -145,6 +145,21 @@ export async function setLessonFeatured(
   }
 }
 
+export async function setLessonTemplate(
+  uid: string,
+  template: boolean
+): Promise<void> {
+  try {
+    assert(uid)
+    await updateDoc(doc(collection(firestore, 'lessons'), uid), {
+      template,
+    })
+  } catch (e) {
+    exception(e as string)
+    throw e
+  }
+}
+
 export async function logLessonView(uid: string): Promise<void> {
   try {
     updateDoc(doc(collection(firestore, 'lessons'), uid), {
