@@ -25,7 +25,7 @@ const CuryteImage = (uploadFn: UploadFn) => {
     name: 'image',
     addOptions() {
       return {
-        inline: true,
+        inline: false,
         HTMLAttributes: {
           class: 'image-wrapper w-auto h-full min-h-96 shadow-lg rounded-xl',
         },
