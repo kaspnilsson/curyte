@@ -4,7 +4,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Author } from '../interfaces/author'
 import { Path } from '../interfaces/path'
-import { pathRoute, pathRouteHrefPath } from '../utils/routes'
+import {
+  editPathRoute,
+  editPathRouteHrefPath,
+  pathRoute,
+  pathRouteHrefPath,
+} from '../utils/routes'
 import AuthorLink from './AuthorLink'
 import DateFormatter from './DateFormatter'
 
@@ -80,7 +85,7 @@ const PathPreview = ({ path, author, onClick }: Props) => {
           </div>
         </div>
       </div>
-      <div className="relative w-24 h-24 overflow-hidden rounded md:w-36 md:h-36 lg:w-64 border">
+      <div className="relative w-24 h-24 overflow-hidden border rounded md:w-36 md:h-36 lg:w-64">
         {path.coverImageUrl && (
           <Image
             src={path.coverImageUrl}
@@ -124,14 +129,28 @@ const PathPreview = ({ path, author, onClick }: Props) => {
   return (
     <>
       {!onClick && (
-        <Link
-          as={pathRoute(path.uid)}
-          href={pathRouteHrefPath}
-          passHref
-          key={path.uid}
-        >
-          {card}
-        </Link>
+        <>
+          {!path.private && (
+            <Link
+              as={pathRoute(path.uid)}
+              href={pathRouteHrefPath}
+              passHref
+              key={path.uid}
+            >
+              {card}
+            </Link>
+          )}
+          {path.private && (
+            <Link
+              as={editPathRoute(path.uid)}
+              href={editPathRouteHrefPath}
+              passHref
+              key={path.uid}
+            >
+              {card}
+            </Link>
+          )}
+        </>
       )}
       {onClick && <div onClick={() => onClick(path)}>{card}</div>}
     </>

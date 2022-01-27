@@ -52,7 +52,7 @@ const EditorHelpMenu = () => {
             </MenuItem>
             <MenuItem className="hover:underline">
               <a
-                href="http://curyte.com/lessons/writing-a-lesson-on-curyte-1639450877617"
+                href="http://curyte.com/lessons/4Jhyh_peR2IJyLo8"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -69,18 +69,17 @@ const EditorHelpMenu = () => {
               </a>
             </MenuItem>
           </MenuOptionGroup>
-          <MenuItem>
-            <a
-              target="_blank"
-              href="https://discord.gg/Axd7QgGYF9"
-              rel="noreferrer"
-            >
-              <Button className="flex items-center gap-1" size="sm">
-                Get help
-                <SupportIcon className="w-4 h-4" />
-              </Button>
-            </a>
-          </MenuItem>
+          <a
+            target="_blank"
+            href="https://discord.gg/Axd7QgGYF9"
+            rel="noreferrer"
+            className=""
+          >
+            <Button className="flex items-center gap-1 mx-3 my-2" size="sm">
+              Get help
+              <SupportIcon className="w-4 h-4" />
+            </Button>
+          </a>
         </MenuList>
       </Portal>
     </Menu>

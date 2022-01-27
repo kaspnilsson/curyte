@@ -26,6 +26,7 @@ import {
   getLesson,
   getAuthor,
   setLessonFeatured,
+  setLessonTemplate,
 } from '../../firebase/api'
 import { userIsAdmin } from '../../utils/hacks'
 import { useToast } from '@chakra-ui/react'
@@ -72,6 +73,13 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
     })
   }
 
+  const handleToggleTemplate = async () => {
+    await setLessonTemplate(lesson.uid, !lesson.template)
+    toast({
+      title: `Lesson template state set to ${!lesson.template}`,
+    })
+  }
+
   return (
     <>
       {(loading || userLoading) && <LoadingSpinner />}
@@ -109,6 +117,9 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
               }
               handleToggleFeatured={
                 user && userIsAdmin(user.uid) ? handleToggleFeatured : undefined
+              }
+              handleToggleTemplate={
+                user && userIsAdmin(user.uid) ? handleToggleTemplate : undefined
               }
             />
             <FancyEditor readOnly editor={editor} />

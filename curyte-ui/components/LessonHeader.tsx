@@ -49,6 +49,7 @@ type Props = {
   handleEdit?: () => void
   handlePublish?: () => void
   handleToggleFeatured?: () => void
+  handleToggleTemplate?: () => void
 }
 
 const LessonHeader = ({
@@ -58,6 +59,7 @@ const LessonHeader = ({
   handleEdit,
   handlePublish,
   handleToggleFeatured,
+  handleToggleTemplate,
 }: Props) => {
   const router = useRouter()
   const [user, userLoading] = useAuthState(auth)
@@ -65,6 +67,7 @@ const LessonHeader = ({
   const [parentLesson, setParentLesson] = useState<Lesson | null>(null)
   const [isSaved, setIsSaved] = useState(false)
   const [featured, setFeatured] = useState(lesson.featured || false)
+  const [isTemplate, setIsTemplate] = useState(lesson.template || false)
   const toast = useToast()
 
   useEffect(() => {
@@ -247,6 +250,21 @@ const LessonHeader = ({
                       <i className="mr-4 text-lg ri-lightbulb-flash-fill text-inherit" />
                     )}
                     {featured ? 'Unfeature' : 'Feature'} lesson
+                  </MenuItem>
+                )}
+                {handleToggleTemplate && (
+                  <MenuItem
+                    onClick={() => {
+                      setIsTemplate(!isTemplate)
+                      handleToggleTemplate()
+                    }}
+                  >
+                    {isTemplate ? (
+                      <i className="mr-4 text-lg ri-t-box-line text-inherit" />
+                    ) : (
+                      <i className="mr-4 text-lg ri-t-box-fill text-inherit" />
+                    )}
+                    {isTemplate ? 'Unmark' : 'Mark'} lesson as template
                   </MenuItem>
                 )}
                 {handleDelete && (
