@@ -28,7 +28,7 @@ import {
   accountRoute,
   accountRouteHrefPath,
   accountSettingsRoute,
-  lessonSearchRoute,
+  exploreRoute,
   loginRoute,
   logOutRoute,
   workspaceRoute,
@@ -75,7 +75,7 @@ const AppMenu = () => {
   if (userLoading) return null
   return (
     <div className="flex flex-col h-full gap-2">
-      <Link href={lessonSearchRoute()} passHref>
+      <Link href={exploreRoute} passHref>
         <Button
           variant="ghost"
           className="flex items-center gap-2 !justify-start mb-4"
@@ -102,8 +102,8 @@ const AppMenu = () => {
       <ListItem
         icon={<GlobeAltIcon className="h-6 w-6 !text-inherit" />}
         label="Explore"
-        as={lessonSearchRoute()}
-        href={lessonSearchRoute()}
+        as={exploreRoute}
+        href={exploreRoute}
       />
       <ListItem
         icon={<CollectionIcon className="h-6 w-6 !text-inherit" />}
@@ -137,8 +137,8 @@ const AppMenu = () => {
         <ListItem
           icon={<LoginIcon className="h-6 w-6 !text-inherit" />}
           label="Log in to Curyte"
-          as={loginRoute(router.route || lessonSearchRoute())}
-          href={loginRoute(router.route || lessonSearchRoute())}
+          as={loginRoute(router.route || exploreRoute)}
+          href={loginRoute(router.route || exploreRoute)}
         />
       )}
       <LessonSearchModal isOpen={isOpen} onClose={onClose} />

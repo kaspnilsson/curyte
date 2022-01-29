@@ -11,11 +11,7 @@ import { where } from 'firebase/firestore'
 import { Author } from '../../interfaces/author'
 import TagList from '../../components/TagList'
 import { Heading } from '@chakra-ui/react'
-import {
-  lessonSearchRoute,
-  tagRoute,
-  tagRouteHrefPath,
-} from '../../utils/routes'
+import { exploreRoute, tagRoute, tagRouteHrefPath } from '../../utils/routes'
 
 type Props = {
   tagText: string
@@ -39,8 +35,8 @@ const TagView = ({ lessons, tag, tagText, authors, relatedTags }: Props) => {
         breadcrumbs={[
           {
             label: 'Explore',
-            href: lessonSearchRoute(),
-            as: lessonSearchRoute(),
+            href: exploreRoute,
+            as: exploreRoute,
           },
           {
             label: tagText,
