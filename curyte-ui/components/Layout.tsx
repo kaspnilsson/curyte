@@ -3,6 +3,7 @@ import Footer from './Footer'
 import Header, { BreadcrumbProps } from './Header'
 import Container from './Container'
 import { FullSidebar } from './AppSidebar'
+import classNames from 'classnames'
 
 type Props = {
   children: React.ReactNode
@@ -12,6 +13,7 @@ type Props = {
   withSearch?: boolean
   breadcrumbs?: BreadcrumbProps[]
   rightContent?: React.ReactNode
+  rightContentWrapBehavior?: 'normal' | 'reverse'
 }
 
 const Layout = ({
@@ -21,6 +23,7 @@ const Layout = ({
   className = '',
   breadcrumbs,
   rightContent = null,
+  rightContentWrapBehavior = 'normal',
 }: Props) => {
   return (
     <div className={'relative min-h-screen max-w-screen flex ' + className}>
@@ -33,7 +36,15 @@ const Layout = ({
           <Container className="mb-24">
             {!rightContent && children}{' '}
             {rightContent && (
-              <div className="flex flex-col-reverse items-start gap-8 xl:gap-12 2xl:gap-16 md:flex-row">
+              <div
+                className={classNames(
+                  'flex items-start gap-8 xl:gap-12 2xl:gap-16 md:flex-row',
+                  {
+                    'flex-col': rightContentWrapBehavior === 'normal',
+                    'flex-col-reverse': rightContentWrapBehavior === 'reverse',
+                  }
+                )}
+              >
                 <div className="flex-1">{children}</div>
                 <div className="md:sticky md:top-20 md:w-64">
                   {rightContent}

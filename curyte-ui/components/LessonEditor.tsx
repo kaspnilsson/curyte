@@ -75,6 +75,7 @@ const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
           </div>
         </div>
       }
+      rightContentWrapBehavior="reverse"
       breadcrumbs={[
         {
           label: 'Workspace',
