@@ -41,10 +41,18 @@ interface ListItemProps {
   as: string
   label: string
   icon?: React.ReactNode
+  requiresLogin?: boolean
 }
-const ListItem = ({ href, as, label, icon }: ListItemProps) => {
+const ListItem = ({
+  href,
+  as,
+  label,
+  icon,
+  requiresLogin = false,
+}: ListItemProps) => {
   const router = useRouter()
   const isActive = router.pathname === href
+  const [user] = useAuthState(auth)
   return (
     <div
       className={classNames('relative flex', {
@@ -55,7 +63,11 @@ const ListItem = ({ href, as, label, icon }: ListItemProps) => {
       {isActive && (
         <div className="z-10 w-1 h-6 my-auto -mr-1 rounded-r-full bg-zinc-900"></div>
       )}
-      <Link href={href} passHref as={as}>
+      <Link
+        href={requiresLogin && !user ? loginRoute() : href}
+        passHref
+        as={requiresLogin && !user ? loginRoute() : as}
+      >
         <Button
           variant="ghost"
           className="flex !justify-start !w-full gap-3 text-inherit font-bold leading-tight tracking-tighter"
@@ -108,20 +120,23 @@ const AppMenu = () => {
       <ListItem
         icon={<CollectionIcon className="h-6 w-6 !text-inherit" />}
         label="Workspace"
-        as={user ? workspaceRoute : loginRoute()}
+        as={workspaceRoute}
         href={workspaceRoute}
+        requiresLogin
       />
       <ListItem
         icon={<HomeIcon className="h-6 w-6 !text-inherit" />}
         label="Profile"
-        as={user ? accountRoute(user.uid) : loginRoute()}
+        as={accountRoute(user?.uid || '')}
         href={accountRouteHrefPath}
+        requiresLogin
       />
       <ListItem
         icon={<CogIcon className="h-6 w-6 !text-inherit" />}
         label="Account settings"
-        as={user ? accountSettingsRoute : loginRoute()}
+        as={accountSettingsRoute}
         href={accountSettingsRoute}
+        requiresLogin
       />
       {/* empty div acts as spacer to put content at bottom */}
       <div className="flex-1" />
