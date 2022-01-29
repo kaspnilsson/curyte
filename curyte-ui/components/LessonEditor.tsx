@@ -68,7 +68,7 @@ const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
     <Layout
       withFooter={false}
       rightContent={
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-8 mb-4">
           <LessonOutline editor={editor} />
           <div className="flex flex-col items-start w-full">
             <EditorHelpMenu />

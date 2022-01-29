@@ -18,7 +18,7 @@ const EditorHelpMenu = () => {
       <MenuButton
         onMouseEnter={onOpen}
         onMouseLeave={onClose}
-        className={classNames('text-zinc-300 hover:text-zinc-700', {
+        className={classNames('text-zinc-300 hover:text-zinc-700 p-2 -mx-2', {
           'text-zinc-700': isOpen,
         })}
       >
