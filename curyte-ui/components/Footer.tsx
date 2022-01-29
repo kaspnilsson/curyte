@@ -12,13 +12,13 @@ const Footer = () => {
           Made with <HeartIcon className="w-6 h-6" fill="red" /> in San
           Francisco
         </h3>
-        <div className="flex flex-wrap items-center gap-4">
+        <div className="flex flex-wrap items-center justify-end gap-2 md:gap-4">
           <Link href={whatIsCuryteRoute} passHref>
             <Button variant="link" colorScheme="violet">
               What is Curyte?
             </Button>
           </Link>
-          <h4 className="text-base leading-tight tracking-tighter text-right">
+          <h4 className="text-base leading-tight tracking-tighter">
             © 2021 Curyte
           </h4>
         </div>
