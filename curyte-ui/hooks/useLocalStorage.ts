@@ -5,6 +5,7 @@ const useLocalStorage = <T>(key: string, initialValue: T) => {
   // Pass initial state function to useState so logic is only executed once
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
+      if (typeof window === 'undefined') return
       // Get from local storage by key
       const item = window.localStorage.getItem(key)
       // Parse stored json or if none return initialValue
@@ -19,6 +20,7 @@ const useLocalStorage = <T>(key: string, initialValue: T) => {
   // ... persists the new value to localStorage.
   const setValue = (value: T | ((val: T) => T), setLocally = true) => {
     try {
+      if (typeof window === 'undefined') return
       // Allow value to be a function so we have same API as useState
       const valueToStore =
         value instanceof Function ? value(storedValue) : value
@@ -33,6 +35,7 @@ const useLocalStorage = <T>(key: string, initialValue: T) => {
   }
 
   const removeValue = () => {
+    if (typeof window === 'undefined') return
     window.localStorage.removeItem(key)
   }
   return [storedValue, setValue, removeValue] as const

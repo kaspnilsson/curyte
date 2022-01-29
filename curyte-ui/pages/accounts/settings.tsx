@@ -10,7 +10,7 @@ import TextareaAutosize from 'react-textarea-autosize'
 import { getAuthor, updateAuthor } from '../../firebase/api'
 import { auth } from '../../firebase/clientApp'
 import { Author } from '../../interfaces/author'
-import { indexRoute } from '../../utils/routes'
+import { accountSettingsRoute, indexRoute } from '../../utils/routes'
 
 const SettingsView = () => {
   const router = useRouter()
@@ -57,12 +57,21 @@ const SettingsView = () => {
     router.push(indexRoute)
   }
   return (
-    <Layout>
+    <Layout
+      title="Account settings"
+      breadcrumbs={[
+        {
+          label: 'Account settings',
+          href: accountSettingsRoute,
+          as: accountSettingsRoute,
+        },
+      ]}
+    >
       {loading && <LoadingSpinner />}
       {saving && <LoadingSpinner />}
       {author && !loading && (
         <>
-          <div className="pb-4">
+          <div className="mb-4">
             <AuthorLink author={author}></AuthorLink>
           </div>
           <section className="flex flex-col my-8">

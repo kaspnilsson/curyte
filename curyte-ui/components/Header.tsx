@@ -1,10 +1,8 @@
-import classNames from 'classnames'
 import { auth } from '../firebase/clientApp'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { Author } from '../interfaces/author'
-import Container from './Container'
 import {
   Button,
   Menu,
@@ -14,18 +12,14 @@ import {
   Portal,
   IconButton,
   Text,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  useDisclosure,
+  BreadcrumbItem,
+  Breadcrumb,
+  Tooltip,
 } from '@chakra-ui/react'
 import Head from 'next/head'
 import Avatar from './Avatar'
-import CuryteLogo from './CuryteLogo'
-import { PencilIcon, SearchIcon } from '@heroicons/react/outline'
+import { ChevronRightIcon, PencilIcon } from '@heroicons/react/outline'
 import {
-  indexRoute,
-  lessonSearchRoute,
   loginRoute,
   workspaceRoute,
   newLessonRoute,
@@ -34,53 +28,24 @@ import {
   accountRoute,
   accountRouteHrefPath,
   newPathRoute,
+  logOutRoute,
 } from '../utils/routes'
-import { violet } from '../styles/theme/colors'
-import LessonSearchModal from './LessonSearchModal'
+import { MobileSidebar } from './AppSidebar'
+import Container from './Container'
+import classNames from 'classnames'
 
-type Props = {
-  showProgressBar?: boolean
-  title: string
-  isSticky?: boolean
-  withSearch?: boolean
+export interface BreadcrumbProps {
+  href: string
+  label: string
+  as: string
 }
 
-const Header = ({
-  showProgressBar,
-  title,
-  isSticky = true,
-  withSearch = true,
-}: Props) => {
-  const [isStuck, setStuck] = useState(false)
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const [progress, setProgress] = useState(0)
+type Props = {
+  title: string
+  breadcrumbs?: BreadcrumbProps[]
+}
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (isSticky) setStuck(document.documentElement.scrollTop > 0)
-      const winScroll =
-        document.body.scrollTop || document.documentElement.scrollTop
-      const height =
-        document.documentElement.scrollHeight -
-        document.documentElement.clientHeight
-      const scrolled = (winScroll / height) * 100
-      if (height > 0) {
-        setProgress(scrolled)
-      } else {
-        setProgress(0)
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [isSticky])
-
-  const logOut = () => {
-    auth.signOut()
-  }
-
+const Header = ({ title, breadcrumbs = [] }: Props) => {
   const [user] = useAuthState(auth)
 
   return (
@@ -108,49 +73,44 @@ const Header = ({
         />
         <title>{title}</title>
       </Head>
-      <div
-        className={classNames('z-10 bg-white mb-12 transition-shadow', {
-          'sticky top-0': isSticky,
-          'shadow-xl shadow-zinc-900/10': isSticky && isStuck,
-        })}
-      >
+      <div className="sticky top-0 z-10 bg-white border-b bg-opacity-90 backdrop-filter backdrop-blur-lg">
         <Container>
           <div className="flex items-center justify-between h-16 py-4">
-            <Link href={user ? lessonSearchRoute() : indexRoute} passHref>
-              <Button
-                variant="link"
-                colorScheme="black"
-                className="flex items-center gap-1"
-              >
-                <CuryteLogo />
-                <h2 className="hidden text-xl font-bold leading-tight tracking-tighter md:text-2xl md:flex">
-                  Curyte
-                </h2>
-              </Button>
-            </Link>
-            {withSearch && (
-              <div className="flex-1 mx-4 md:mx-8 lg:mx-24" onClick={onOpen}>
-                <InputGroup className="w-96" size="lg">
-                  <InputLeftElement>
-                    <SearchIcon className="w-5 h-5 text-zinc-500" />
-                  </InputLeftElement>
-                  <Input
-                    isReadOnly
-                    placeholder="Search lessons..."
-                    variant="filled"
-                    colorScheme="black"
-                    className="hidden md:flex"
-                  ></Input>
-                  <Input
-                    isReadOnly
-                    placeholder="Search..."
-                    variant="filled"
-                    colorScheme="black"
-                    className="flex md:hidden"
-                  ></Input>
-                </InputGroup>
+            <div className="flex items-center gap-4">
+              <div className="lg:hidden">
+                <MobileSidebar />
               </div>
-            )}
+              {breadcrumbs.length ? (
+                <Breadcrumb
+                  separator={
+                    <ChevronRightIcon className="w-5 h-5 text-zinc-500" />
+                  }
+                  className="flex flex-wrap -mx-2"
+                >
+                  {breadcrumbs.map((b, index) => (
+                    <BreadcrumbItem key={index}>
+                      <Link as={b.as} href={b.href} passHref>
+                        <Button
+                          size="xs"
+                          className={classNames('truncate min-w-0 !py-4', {
+                            'max-w-[15vw]': breadcrumbs.length > 2,
+                            'max-w-[25vw]': breadcrumbs.length == 2,
+                            'max-w-[50vw]': breadcrumbs.length < 2,
+                          })}
+                          variant="ghost"
+                        >
+                          <Tooltip label={b.label}>
+                            <Text className="min-w-0 text-base font-bold leading-tight tracking-tighter truncate lg:text-xl">
+                              {b.label}
+                            </Text>
+                          </Tooltip>
+                        </Button>
+                      </Link>
+                    </BreadcrumbItem>
+                  ))}
+                </Breadcrumb>
+              ) : null}
+            </div>
             {!user && (
               <div className="flex items-center gap-2">
                 <Link passHref href={loginRoute()}>
@@ -163,15 +123,6 @@ const Header = ({
             )}
             {user && (
               <div className="flex items-center gap-2">
-                {/* <Tooltip label="Search lessons">
-                  <IconButton
-                    aria-label="Search lessons"
-                    onClick={() => router.push(lessonSearchRoute())}
-                    isRound
-                    title="Start writing"
-                    icon={<SearchIcon className="w-4 h-4 text-zinc-900" />}
-                  />
-                </Tooltip> */}
                 <div className="relative">
                   <Menu>
                     <div className="z-0 rounded-full animated-border animate-spin-slow"></div>
@@ -249,15 +200,15 @@ const Header = ({
                             </Text>
                           </MenuItem>
                         </Link>
-                        <MenuItem
-                          className="flex-col !items-start"
-                          onClick={() => logOut()}
-                        >
-                          <Text>Sign out</Text>
-                          <Text fontSize="xs" className="text-zinc-500">
-                            Log out of Curyte.
-                          </Text>
-                        </MenuItem>
+
+                        <Link passHref href={logOutRoute}>
+                          <MenuItem className="flex-col !items-start">
+                            <Text>Sign out</Text>
+                            <Text fontSize="xs" className="text-zinc-500">
+                              Log out of Curyte.
+                            </Text>
+                          </MenuItem>
+                        </Link>
                       </MenuList>
                     </Portal>
                   </Menu>
@@ -266,18 +217,6 @@ const Header = ({
             )}
           </div>
         </Container>
-        {showProgressBar && (
-          <div
-            style={{
-              width: `${progress}%`,
-              height: '3px',
-              background: violet[500],
-              opacity: '0.8',
-              marginTop: '-3px',
-            }}
-          />
-        )}
-        <LessonSearchModal isOpen={isOpen} onClose={onClose} />
       </div>
     </>
   )

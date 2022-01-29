@@ -12,6 +12,11 @@ import useCuryteEditor from '../hooks/useCuryteEditor'
 import LessonOutline from './LessonOutline'
 import { uuid } from '../utils/uuid'
 import EditorHelpMenu from './EditorHelpMenu'
+import {
+  editLessonRoute,
+  editLessonRouteHrefPath,
+  workspaceRoute,
+} from '../utils/routes'
 
 type Props = {
   lesson?: Lesson
@@ -62,14 +67,27 @@ const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
   return (
     <Layout
       withFooter={false}
-      withSearch={false}
-      isSticky={false}
-      leftSidebar={<LessonOutline editor={editor} />}
-      rightSidebar={
-        <div className="flex flex-col items-end w-full md:mt-10">
-          <EditorHelpMenu />
+      rightContent={
+        <div className="flex flex-col gap-8 mb-4">
+          <LessonOutline editor={editor} />
+          <div className="flex flex-col items-start w-full">
+            <EditorHelpMenu />
+          </div>
         </div>
       }
+      rightContentWrapBehavior="reverse"
+      breadcrumbs={[
+        {
+          label: 'Workspace',
+          href: workspaceRoute,
+          as: workspaceRoute,
+        },
+        {
+          label: `Edit ${lesson?.title || 'lesson'}`,
+          href: editLessonRouteHrefPath,
+          as: editLessonRoute(lesson?.uid || ''),
+        },
+      ]}
     >
       <div className="flex">
         <div className="flex flex-col flex-grow overflow-hidden">
@@ -118,6 +136,7 @@ const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
           </div>
         </div>
       </div>
+
       {children}
     </Layout>
   )

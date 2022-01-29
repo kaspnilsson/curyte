@@ -1,192 +1,170 @@
 import React from 'react'
+import { Lesson } from '../interfaces/lesson'
+import { Tag } from '../interfaces/tag'
 import Layout from '../components/Layout'
-import CuryteLogo from '../components/CuryteLogo'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { useRouter } from 'next/router'
-import { auth } from '../firebase/clientApp'
-import { lessonSearchRoute, newLessonRoute } from '../utils/routes'
+import { GetServerSideProps } from 'next'
+import { getAuthor, getLessons, getTags } from '../firebase/api'
+import LessonList from '../components/LessonList'
+import { limit, orderBy, where } from 'firebase/firestore'
+import { Author } from '../interfaces/author'
+import {
+  Button,
+  Heading,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+} from '@chakra-ui/react'
+import TagList from '../components/TagList'
+import { exploreRoute, newLessonRoute } from '../utils/routes'
+import useLocalStorage from '../hooks/useLocalStorage'
 import Link from 'next/link'
-import { Button, Heading, Text } from '@chakra-ui/react'
-import AutoPlaySilentVideo from '../components/AutoPlaySilentVideo'
+import { XIcon } from '@heroicons/react/outline'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '../firebase/clientApp'
 
-const Home = () => {
-  const router = useRouter()
+interface Props {
+  featuredLessons: Lesson[]
+  recentLessons: Lesson[]
+  popularLessons: Lesson[]
+  authors: Author[]
+  tags: Tag[]
+}
+
+const ExplorePage = ({
+  featuredLessons,
+  recentLessons,
+  popularLessons,
+  authors,
+  tags,
+}: Props) => {
+  const [showHero, setShowHero] = useLocalStorage('showStartWritingHero', true)
   const [user] = useAuthState(auth)
-
-  if (user && process.env.NODE_ENV === 'production') {
-    router.replace(lessonSearchRoute())
-  }
-
   return (
-    <Layout>
-      <section className="flex flex-col items-center justify-center gap-8 mb-12">
-        <h1 className="text-6xl md:text-8xl text-center font-bold tracking-tighter leading-tight flex items-center gap-2 md:gap-4 aspect-[3/1]">
-          <div className="hidden md:flex h-min-content">
-            <CuryteLogo height={'80px'} width={'80px'} />
-          </div>
-          <div className="flex md:hidden h-min-content">
-            <CuryteLogo height={'54px'} width={'54px'} />
-          </div>
-          Curyte
+    <Layout
+      breadcrumbs={[
+        {
+          href: exploreRoute,
+          label: 'Explore',
+          as: exploreRoute,
+        },
+      ]}
+      rightContent={
+        <div className="w-full">
+          <Heading
+            className="mb-2 font-bold leading-tight tracking-tighter"
+            size="md"
+          >
+            Trending topics
+          </Heading>
+          {!!tags?.length && <TagList tags={tags} />}
+        </div>
+      }
+    >
+      {(!user || showHero) && (
+        <section className="relative flex flex-col items-center p-12 mb-12 rounded-xl bg-zinc-100 group">
+          {user && (
+            <Button
+              onClick={() => setShowHero(false)}
+              className="!absolute top-2 right-2 opacity-0 group-hover:opacity-100 ease-in-out transition-all duration-150"
+              size="xs"
+            >
+              <XIcon className="w-5 h-5 text-zinc-500" />
+            </Button>
+          )}
+          <Heading
+            className="mb-8 font-bold leading-tight tracking-tighter text-center"
+            size="lg"
+          >
+            A better lesson builder -- for teachers, by teachers.
+          </Heading>
+          <Link href={newLessonRoute()} passHref>
+            <Button
+              colorScheme="black"
+              onClick={() => setShowHero(false)}
+              className="shadow-xl shadow-violet-500/20"
+            >
+              Start writing
+            </Button>
+          </Link>
+        </section>
+      )}
+      <section className="flex flex-row">
+        <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
+          Explore
         </h1>
-        <div className="flex flex-wrap items-center justify-center gap-1 mb-8 text-4xl font-bold leading-tight tracking-tighter text-center">
-          Engaging lessons,
-          <div className="text-violet-500">digitally native.</div>
-        </div>
-        <div className="relative flex flex-col items-center gap-4 mb-8 md:flex-row align-center">
-          <Link passHref href={lessonSearchRoute()}>
-            <Button className="flex-1" size="lg">
-              <div className="p-4">Explore</div>
-            </Button>
-          </Link>
-          <Link passHref href={newLessonRoute()}>
-            <Button size="lg" className="flex-1" colorScheme="black">
-              <div className="p-4">Start writing</div>
-            </Button>
-          </Link>
-        </div>
       </section>
-      <section className="relative flex flex-col items-center justify-around mb-8">
-        <div className="shadow-xl shadow-violet-500/20 rounded-xl overflow-hidden mb-16 border border-violet-200 lg:max-w-[60vw] hidden md:inline relative">
-          <AutoPlaySilentVideo
-            src="/static/promo.mp4"
-            type="video/mp4"
-            className="w-full"
-          />
-        </div>
-        <div className="relative grid grid-cols-1 gap-12 md:grid-cols-3">
-          <div className="flex flex-col items-center gap-4 p-4 text-center">
-            <div className="w-20 h-20 text-6xl">🕓</div>
-            <Heading
-              fontSize="x-large"
-              className="font-bold leading-tight tracking-tighter"
-            >
-              Stop reinventing the wheel every week
-            </Heading>
-            <Text className="text-zinc-700">
-              Explore an open-source curriculum with hundreds of lessons about
-              anything from atoms to zygotes.
-            </Text>
-          </div>
-          <div className="flex flex-col items-center gap-4 p-4 text-center">
-            <div className="w-20 h-20 text-6xl">🔨</div>
-            <Heading
-              fontSize="x-large"
-              className="font-bold leading-tight tracking-tighter"
-            >
-              Create and curate in an editor built for teachers
-            </Heading>
-            <Text className="text-zinc-700">
-              Keep your students focused with embedded videos, interactive
-              questions, simulations, and entire websites.
-            </Text>
-          </div>
-          <div className="flex flex-col items-center gap-4 p-4 text-center">
-            <div className="w-20 h-20 text-6xl">🔗</div>
-            <Heading
-              fontSize="x-large"
-              className="font-bold leading-tight tracking-tighter"
-            >
-              Share everything learners need with one link
-            </Heading>
-            <Text className="text-zinc-700">
-              Student-facing lessons with transparent objectives. No login, no
-              class codes, no data collection.
-            </Text>
-          </div>
-        </div>
-      </section>
-      {/* <section className="flex flex-col items-center justify-around mb-8">
-        <p className="text-2xl font-semibold leading-tight tracking-tighter md:text-3xl">
-          Curyte is a new lesson builder & library for the digital classroom.
-        </p>
-        <p className="text-2xl font-semibold leading-tight tracking-tighter md:text-3xl">
-          Collect and organize docs, share them with students and colleagues,
-          and explore what everyone else is teaching.
-        </p>
-      </section>
-      <section className="flex flex-col flex-wrap items-center justify-around w-full gap-8 mb-16 md:items-start md:mb-32 lg:flex-row colums-lg">
-        <div className="flex flex-col items-center flex-1 text-base w-80 md:w-96 md:text-xl">
-          <ul className="flex-1">
-            <h3 className="mb-4 text-2xl font-bold leading-tight tracking-tighter text-center">
-              Browse
-            </h3>
-            <li className="flex items-center gap-3 py-2">
-              <div className="text-base">✅</div>
-              Search through free lessons
-            </li>
-            <li className="flex items-center gap-3 py-2">
-              <div className="text-base">✅</div>
-              Explore what others are teaching
-            </li>
-            <li className="flex items-center gap-3 py-2">
-              <div className="text-base">✅</div>
-              Collect a library of lessons
-            </li>
-            <li className="flex items-center gap-3 py-2">
-              <div className="text-base">✅</div>
-              Build your personal profile
-            </li>
-            <li className="flex items-center gap-3 py-2">
-              <div className="text-base">✅</div>
-              Send lessons to learners with just a link
-            </li>
-            <li className="flex items-center gap-3 py-2">
-              <div className="text-base">✅</div>
-              Collect donations
-            </li>
-          </ul>
-        </div>
-        <div className="flex flex-col items-center flex-1 text-base w-80 md:w-96 md:text-xl">
-          <ul className="flex-1">
-            <h3 className="mb-4 text-2xl font-bold leading-tight tracking-tighter text-center">
-              Build
-            </h3>
-            <li className="flex items-center gap-3 py-2">
-              <div className="text-base">✅</div>
-              Create interactive lessons
-            </li>
-            <li className="flex items-center gap-3 py-2">
-              <div className="text-base">✅</div>
-              Add questions, videos, and entire websites
-            </li>
-            <li className="flex items-center gap-3 py-2">
-              <div className="text-base">✅</div>
-              Insert Google Docs, Slides, and more
-            </li>
-            <li className="flex items-center gap-3 py-2">
-              <div className="text-base">✅</div>
-              Insert Youtube videos
-            </li>
-            <li className="flex items-center gap-3 py-2">
-              <div className="text-base">✅</div>
-              Tag with topics, standards, and skill level
-            </li>
-            <li className="flex items-center gap-3 py-2">
-              <div className="text-base">✅</div>
-              Organize lessons into paths
-            </li>
-            <li className="flex items-center gap-3 py-2">
-              <div className="text-base">✅</div>
-              Share your lessons with the world
-            </li>
-          </ul>
-        </div>
-      </section> */}
-      <section className="flex flex-col items-center justify-around mb-8">
-        <div className="mb-8 text-4xl font-bold leading-tight tracking-tighter text-center">
-          Get started today!
-        </div>
-        <div className="flex flex-col items-center gap-4 md:flex-row align-center">
-          <Link passHref href={newLessonRoute()}>
-            <Button size="lg" className="flex-1" colorScheme="black">
-              <div className="p-4">Start writing</div>
-            </Button>
-          </Link>
-        </div>
-      </section>
+      <div className="w-full pt-2 mt-4">
+        <Tabs colorScheme="black" isLazy>
+          <TabList>
+            <Tab>Featured</Tab>
+            <Tab>Popular</Tab>
+            <Tab>Recent</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel className="!px-0">
+              {featuredLessons && (
+                <LessonList lessons={featuredLessons} authors={authors} />
+              )}
+              {!featuredLessons?.length && 'Nothing here yet!'}
+            </TabPanel>
+            <TabPanel className="!px-0">
+              {popularLessons && (
+                <LessonList lessons={popularLessons} authors={authors} />
+              )}
+              {!popularLessons?.length && 'Nothing here yet!'}
+            </TabPanel>
+            <TabPanel className="!px-0">
+              {recentLessons && (
+                <LessonList lessons={recentLessons} authors={authors} />
+              )}
+              {!recentLessons?.length && 'Nothing here yet!'}
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </div>
     </Layout>
   )
 }
 
-export default Home
+export const getServerSideProps: GetServerSideProps = async () => {
+  const featuredLessons = await getLessons([
+    where('featured', '==', true),
+    where('private', '==', false),
+    limit(10),
+  ])
+
+  const popularLessons = await getLessons([
+    where('private', '==', false),
+    orderBy('viewCount', 'desc'),
+    limit(10),
+  ])
+
+  const recentLessons = await getLessons([
+    where('private', '==', false),
+    orderBy('created', 'desc'),
+    limit(10),
+  ])
+
+  const authorIds = [
+    ...featuredLessons,
+    ...popularLessons,
+    ...recentLessons,
+  ].reduce(
+    (acc: Set<string>, curr: Lesson) => acc.add(curr.authorId),
+    new Set()
+  )
+
+  const authors = []
+  for (const id of Array.from(authorIds)) {
+    authors.push(await getAuthor(id))
+  }
+
+  const tags = await getTags([orderBy('viewCount', 'desc'), limit(16)])
+
+  return {
+    props: { featuredLessons, popularLessons, recentLessons, authors, tags },
+  }
+}
+export default ExplorePage

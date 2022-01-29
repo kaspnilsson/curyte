@@ -11,6 +11,7 @@ import { where } from 'firebase/firestore'
 import { Author } from '../../interfaces/author'
 import TagList from '../../components/TagList'
 import { Heading } from '@chakra-ui/react'
+import { exploreRoute, tagRoute, tagRouteHrefPath } from '../../utils/routes'
 
 type Props = {
   tagText: string
@@ -29,7 +30,33 @@ const TagView = ({ lessons, tag, tagText, authors, relatedTags }: Props) => {
 
   return (
     <>
-      <Layout showProgressBar title={tagText}>
+      <Layout
+        title={tagText}
+        breadcrumbs={[
+          {
+            label: 'Explore',
+            href: exploreRoute,
+            as: exploreRoute,
+          },
+          {
+            label: tagText,
+            href: tagRouteHrefPath,
+            as: tagRoute(tagText),
+          },
+        ]}
+        rightContent={
+          <div className="w-full">
+            <Heading
+              className="mb-2 font-bold leading-tight tracking-tighter"
+              size="md"
+            >
+              Related topics
+            </Heading>
+            {!!relatedTags?.length && <TagList tags={relatedTags} />}
+            {!relatedTags?.length && 'Nothing here yet!'}
+          </div>
+        }
+      >
         <section className="flex flex-col">
           <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
             {tagText}
@@ -39,22 +66,12 @@ const TagView = ({ lessons, tag, tagText, authors, relatedTags }: Props) => {
           )}
         </section>
         <div className="flex flex-col flex-wrap md:flex-row">
-          <div className="w-full mt-8 md:w-2/3 md:pr-8">
+          <div className="w-full mt-8">
             <h2 className="mb-2 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
               Lessons
             </h2>
             {lessons && <LessonList lessons={lessons} authors={authors} />}
             {!lessons?.length && 'Nothing here yet!'}
-          </div>
-          <div className="w-full mt-8 md:w-1/3 md:pl-8">
-            <Heading
-              className="mb-2 font-bold leading-tight tracking-tighter"
-              size="md"
-            >
-              Related topics
-            </Heading>
-            {!!relatedTags?.length && <TagList tags={relatedTags} />}
-            {!relatedTags?.length && 'Nothing here yet!'}
           </div>
         </div>
       </Layout>

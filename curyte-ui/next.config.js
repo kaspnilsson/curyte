@@ -9,4 +9,18 @@ module.exports = withBundleAnalyzer({
   images: {
     domains: ['firebasestorage.googleapis.com'],
   },
+  async redirects() {
+    return [
+      {
+        source: '/explore',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/lessons',
+        destination: '/',
+        permanent: true,
+      },
+    ]
+  },
 })

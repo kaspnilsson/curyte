@@ -25,6 +25,8 @@ export const signupRoute = (referrer = '') => {
 
 export const indexRoute = '/'
 
+export const logOutRoute = '/logout'
+
 export const newLessonRoute = (copyFrom?: string) => {
   let out = '/lessons/new'
   if (copyFrom) out += `?copyFrom=${copyFrom}`
@@ -35,11 +37,7 @@ export const newLessonRouteHref = '/lessons/new'
 export const tagRoute = (tag: string) => `/tags/${tag}`
 export const tagRouteHrefPath = '/tags/[tag]'
 
-export const lessonSearchRoute = (query?: string) => {
-  let out = '/explore'
-  if (query) out += `?query=${query}`
-  return out
-}
+export const exploreRoute = '/'
 
 export const newPathRoute = '/paths/new'
 
@@ -56,3 +54,5 @@ export const lessonInPathRouteHrefPath = '/paths/[id]/[lessonId]'
 export const workspaceRoute = '/accounts/workspace'
 
 export const accountSettingsRoute = '/accounts/settings'
+
+export const whatIsCuryteRoute = '/what-is-curyte'
