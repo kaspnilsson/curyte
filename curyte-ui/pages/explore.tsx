@@ -21,6 +21,8 @@ import { lessonSearchRoute, newLessonRoute } from '../utils/routes'
 import useLocalStorage from '../hooks/useLocalStorage'
 import Link from 'next/link'
 import { XIcon } from '@heroicons/react/outline'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '../firebase/clientApp'
 
 interface Props {
   featuredLessons: Lesson[]
@@ -38,6 +40,7 @@ const SearchPage = ({
   tags,
 }: Props) => {
   const [showHero, setShowHero] = useLocalStorage('showStartWritingHero', true)
+  const [user] = useAuthState(auth)
   return (
     <Layout
       breadcrumbs={[
@@ -59,15 +62,17 @@ const SearchPage = ({
         </div>
       }
     >
-      {showHero && (
+      {(!user || showHero) && (
         <section className="relative flex flex-col items-center p-12 mb-12 rounded-xl bg-zinc-100 group">
-          <Button
-            onClick={() => setShowHero(false)}
-            className="!absolute top-2 right-2 opacity-0 group-hover:opacity-100 ease-in-out transition-all duration-150"
-            size="xs"
-          >
-            <XIcon className="w-5 h-5 text-zinc-500" />
-          </Button>
+          {user && (
+            <Button
+              onClick={() => setShowHero(false)}
+              className="!absolute top-2 right-2 opacity-0 group-hover:opacity-100 ease-in-out transition-all duration-150"
+              size="xs"
+            >
+              <XIcon className="w-5 h-5 text-zinc-500" />
+            </Button>
+          )}
           <Heading
             className="mb-8 font-bold leading-tight tracking-tighter text-center"
             size="lg"

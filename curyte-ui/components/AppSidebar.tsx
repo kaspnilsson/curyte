@@ -13,6 +13,7 @@ import {
   CollectionIcon,
   GlobeAltIcon,
   HomeIcon,
+  LoginIcon,
   LogoutIcon,
   MenuIcon,
   SearchIcon,
@@ -27,7 +28,6 @@ import {
   accountRoute,
   accountRouteHrefPath,
   accountSettingsRoute,
-  indexRoute,
   lessonSearchRoute,
   loginRoute,
   logOutRoute,
@@ -70,11 +70,12 @@ const ListItem = ({ href, as, label, icon }: ListItemProps) => {
 
 const AppMenu = () => {
   const [user, userLoading] = useAuthState(auth)
+  const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
   if (userLoading) return null
   return (
     <div className="flex flex-col h-full gap-2">
-      <Link href={user ? lessonSearchRoute() : indexRoute} passHref>
+      <Link href={lessonSearchRoute()} passHref>
         <Button
           variant="ghost"
           className="flex items-center gap-2 !justify-start mb-4"
@@ -108,19 +109,19 @@ const AppMenu = () => {
         icon={<CollectionIcon className="h-6 w-6 !text-inherit" />}
         label="Workspace"
         as={user ? workspaceRoute : loginRoute()}
-        href={user ? workspaceRoute : loginRoute()}
+        href={workspaceRoute}
       />
       <ListItem
         icon={<HomeIcon className="h-6 w-6 !text-inherit" />}
         label="Profile"
         as={user ? accountRoute(user.uid) : loginRoute()}
-        href={user ? accountRouteHrefPath : loginRoute()}
+        href={accountRouteHrefPath}
       />
       <ListItem
         icon={<CogIcon className="h-6 w-6 !text-inherit" />}
         label="Account settings"
         as={user ? accountSettingsRoute : loginRoute()}
-        href={user ? accountSettingsRoute : loginRoute()}
+        href={accountSettingsRoute}
       />
       {/* empty div acts as spacer to put content at bottom */}
       <div className="flex-1" />
@@ -130,6 +131,14 @@ const AppMenu = () => {
           label="Log out of Curyte"
           as={logOutRoute}
           href={logOutRoute}
+        />
+      )}
+      {!user && (
+        <ListItem
+          icon={<LoginIcon className="h-6 w-6 !text-inherit" />}
+          label="Log in to Curyte"
+          as={loginRoute(router.route || lessonSearchRoute())}
+          href={loginRoute(router.route || lessonSearchRoute())}
         />
       )}
       <LessonSearchModal isOpen={isOpen} onClose={onClose} />

@@ -32,6 +32,7 @@ import {
 } from '../utils/routes'
 import { MobileSidebar } from './AppSidebar'
 import Container from './Container'
+import classNames from 'classnames'
 
 export interface BreadcrumbProps {
   href: string
@@ -91,7 +92,11 @@ const Header = ({ title, breadcrumbs = [] }: Props) => {
                       <Link as={b.as} href={b.href} passHref>
                         <Button
                           size="xs"
-                          className="truncate max-w-[15vw] min-w-0 !py-4"
+                          className={classNames('truncate min-w-0 !py-4', {
+                            'max-w-[15vw]': breadcrumbs.length > 2,
+                            'max-w-[25vw]': breadcrumbs.length == 2,
+                            'max-w-[50vw]': breadcrumbs.length < 2,
+                          })}
                           variant="ghost"
                         >
                           <Tooltip label={b.label}>
