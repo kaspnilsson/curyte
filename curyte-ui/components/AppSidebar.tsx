@@ -148,7 +148,7 @@ const AppMenu = () => {
 
 export const FullSidebar = () => {
   return (
-    <div className="fixed w-64 h-full py-4">
+    <div className="fixed w-64 h-full pt-4 pb-3">
       <AppMenu />
     </div>
   )

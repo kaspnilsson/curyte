@@ -176,6 +176,14 @@ const WorkspaceView = () => {
                       Adding embedded content
                     </Link>
                   </li>
+                  <li className="hover:underline">
+                    <Link
+                      href="http://curyte.com/lessons/WxzMiQtgkuigQeM7"
+                      passHref
+                    >
+                      Curriculum and copyright
+                    </Link>
+                  </li>
                 </ul>
                 <Link href="https://discord.gg/Axd7QgGYF9" passHref>
                   <Button className="flex items-center gap-1 mt-4">

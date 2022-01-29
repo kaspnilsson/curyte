@@ -7,7 +7,7 @@ import { whatIsCuryteRoute } from '../utils/routes'
 const Footer = () => {
   return (
     <footer className="flex w-full h-16 bg-white border-t">
-      <Container className="flex items-center justify-between py-4 my-auto h-fit-content">
+      <Container className="flex items-center justify-between py-4 h-fit-content">
         <h3 className="flex flex-wrap items-center gap-1 text-base font-bold leading-tight tracking-tighter">
           Made with <HeartIcon className="w-6 h-6" fill="red" /> in San
           Francisco
