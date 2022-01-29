@@ -68,6 +68,15 @@ const EditorHelpMenu = () => {
                 Adding embedded content
               </a>
             </MenuItem>
+            <MenuItem className="hover:underline">
+              <a
+                href="http://curyte.com/lessons/WxzMiQtgkuigQeM7"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Curriculum and copyright
+              </a>
+            </MenuItem>
           </MenuOptionGroup>
           <a
             target="_blank"

@@ -8,6 +8,7 @@ module.exports = {
       animation: {
         'spin-slow': 'spin 3s linear infinite',
         blob: 'blob 10s infinite',
+        wiggle: 'wiggle 1s ease-in-out infinite',
       },
       keyframes: {
         blob: {
@@ -23,6 +24,10 @@ module.exports = {
           '75%': {
             transform: 'translate(-20px, -15px) scale(0.9)',
           },
+        },
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-1deg)' },
+          '50%': { transform: 'rotate(1deg)' },
         },
       },
     },
