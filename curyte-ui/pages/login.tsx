@@ -5,11 +5,16 @@ import { auth } from '../firebase/clientApp'
 import { Box } from '@chakra-ui/react'
 import { GoogleAuthProvider, EmailAuthProvider } from 'firebase/auth'
 import { useRouter } from 'next/router'
+import { lessonSearchRoute } from '../utils/routes'
 
 const Login = () => {
   const router = useRouter()
   const signInSuccessWithAuthResult = () => {
-    router.push(router.query.referrer ? (router.query.referrer as string) : '/')
+    router.push(
+      router.query.referrer
+        ? (router.query.referrer as string)
+        : lessonSearchRoute()
+    )
     return false
   }
   const uiConfig = {

@@ -107,7 +107,7 @@ const PathPreview = ({ path, author, onClick }: Props) => {
           </div>
         )}
         <div className="absolute flex flex-col items-end gap-1 bottom-2 right-2 h-min">
-          {path.private && (
+          {!!path.private && (
             <Badge
               variant="subtle"
               colorScheme="orange"

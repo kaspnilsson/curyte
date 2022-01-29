@@ -11,6 +11,11 @@ import { where } from 'firebase/firestore'
 import { Author } from '../../interfaces/author'
 import TagList from '../../components/TagList'
 import { Heading } from '@chakra-ui/react'
+import {
+  lessonSearchRoute,
+  tagRoute,
+  tagRouteHrefPath,
+} from '../../utils/routes'
 
 type Props = {
   tagText: string
@@ -29,7 +34,21 @@ const TagView = ({ lessons, tag, tagText, authors, relatedTags }: Props) => {
 
   return (
     <>
-      <Layout showProgressBar title={tagText}>
+      <Layout
+        title={tagText}
+        breadcrumbs={[
+          {
+            label: 'Explore',
+            href: lessonSearchRoute(),
+            as: lessonSearchRoute(),
+          },
+          {
+            label: tagText,
+            href: tagRouteHrefPath,
+            as: tagRoute(tagText),
+          },
+        ]}
+      >
         <section className="flex flex-col">
           <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
             {tagText}

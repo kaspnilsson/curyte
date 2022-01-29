@@ -14,9 +14,13 @@ import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/outline'
 import {
+  accountRoute,
+  accountRouteHrefPath,
   editLessonRoute,
   lessonInPathRoute,
   lessonInPathRouteHrefPath,
+  lessonRoute,
+  lessonRouteHrefPath,
   pathRoute,
   pathRouteHrefPath,
   workspaceRoute,
@@ -46,7 +50,7 @@ interface Props {
   prevLesson: Lesson | null
 }
 
-const PublishedLessonView = ({
+const LessonInPathView = ({
   lesson,
   author,
   path,
@@ -96,9 +100,25 @@ const PublishedLessonView = ({
       {(loading || userLoading) && <LoadingSpinner />}
       {!(loading || userLoading) && (
         <Layout
-          showProgressBar
           title={lesson.title}
-          leftSidebar={<LessonOutline editor={editor} />}
+          rightContent={<LessonOutline editor={editor} />}
+          breadcrumbs={[
+            {
+              label: author.displayName,
+              href: accountRouteHrefPath,
+              as: accountRoute(author.uid),
+            },
+            {
+              label: path.title || '(no title)',
+              href: pathRouteHrefPath,
+              as: pathRoute(path.uid),
+            },
+            {
+              label: lesson.title || '(no title)',
+              href: lessonRouteHrefPath,
+              as: lessonRoute(lesson.uid),
+            },
+          ]}
         >
           <NextSeo
             title={lesson.title}
@@ -111,7 +131,7 @@ const PublishedLessonView = ({
               site_name: 'Curyte',
             }}
           ></NextSeo>
-          <article className="mb-32">
+          <article>
             <Head>
               <title>{lesson.title}</title>
             </Head>
@@ -131,8 +151,6 @@ const PublishedLessonView = ({
               }
             />
             <FancyEditor readOnly editor={editor} />
-          </article>
-          {path && (
             <div className="flex items-center justify-between">
               {prevLesson && (
                 <div className="flex flex-col items-start gap-2 mr-auto">
@@ -221,7 +239,7 @@ const PublishedLessonView = ({
                 </div>
               )}
             </div>
-          )}
+          </article>
         </Layout>
       )}
     </>
@@ -274,4 +292,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return { props: { lesson, author, path, nextLesson, prevLesson } }
 }
 
-export default PublishedLessonView
+export default LessonInPathView

@@ -13,8 +13,11 @@ import LoadingSpinner from '../../components/LoadingSpinner'
 import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import {
+  accountRoute,
+  accountRouteHrefPath,
   editLessonRoute,
   lessonRoute,
+  lessonRouteHrefPath,
   workspaceRoute,
 } from '../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
@@ -85,9 +88,20 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
       {(loading || userLoading) && <LoadingSpinner />}
       {!(loading || userLoading) && (
         <Layout
-          showProgressBar
           title={lesson.title}
-          leftSidebar={<LessonOutline editor={editor} />}
+          rightContent={<LessonOutline editor={editor} />}
+          breadcrumbs={[
+            {
+              label: author.displayName,
+              href: accountRouteHrefPath,
+              as: accountRoute(author.uid),
+            },
+            {
+              label: lesson.title || '(no title)',
+              href: lessonRouteHrefPath,
+              as: lessonRoute(lesson.uid),
+            },
+          ]}
         >
           <NextSeo
             title={lesson.title}
@@ -100,7 +114,7 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
               site_name: 'Curyte',
             }}
           ></NextSeo>
-          <article className="mb-32">
+          <article>
             <Head>
               <title>{lesson.title}</title>
             </Head>

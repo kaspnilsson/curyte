@@ -11,6 +11,7 @@ import { where } from 'firebase/firestore'
 import { Tag } from '../../interfaces/tag'
 import { Heading } from '@chakra-ui/react'
 import TagList from '../../components/TagList'
+import { accountRouteHrefPath, accountRoute } from '../../utils/routes'
 
 type Props = {
   lessons: Lesson[]
@@ -20,10 +21,19 @@ type Props = {
 
 const UserView = ({ lessons, author, favoriteTags }: Props) => {
   return (
-    <Layout title={author.displayName || 'Author page'}>
-      <section className="flex my-8">
+    <Layout
+      title={author.displayName || 'Author page'}
+      breadcrumbs={[
+        {
+          label: author.displayName + "'s page",
+          href: accountRouteHrefPath,
+          as: accountRoute(author.uid),
+        },
+      ]}
+    >
+      <section className="flex mb-8">
         <div className="flex-grow">
-          <div className="text-4xl font-bold leading-tight tracking-tighter">
+          <div className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
             {author.displayName}
           </div>
           <div className="my-4">{author.bio}</div>

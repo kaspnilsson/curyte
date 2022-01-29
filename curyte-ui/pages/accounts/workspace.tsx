@@ -23,6 +23,7 @@ import {
   newLessonRoute,
   newLessonRouteHref,
   newPathRoute,
+  workspaceRoute,
 } from '../../utils/routes'
 import { getAuthor, getLessons, getPaths } from '../../firebase/api'
 import LessonList from '../../components/LessonList'
@@ -98,49 +99,17 @@ const WorkspaceView = () => {
       {loading && <LoadingSpinner />}
       {!user && !userLoading && <ErrorPage statusCode={404} />}
       {author && !loading && (
-        <Layout>
-          <section className="flex flex-row items-center">
-            <h1 className="text-4xl font-bold leading-tight tracking-tighter text-center md:text-6xl">
-              Workspace
-            </h1>
-          </section>
-          <div className="flex flex-col flex-wrap md:flex-row">
-            <div className="w-full pt-2 mt-4 md:w-2/3 md:pr-8">
-              <Tabs colorScheme="black" isLazy>
-                <TabList>
-                  <Tab>Lessons</Tab>
-                  <Tab>Paths</Tab>
-                  <Tab>Bookmarks</Tab>
-                </TabList>
-                <TabPanels>
-                  <TabPanel className="!px-0">
-                    {!lessons.length && (
-                      <div className="flex flex-col items-start gap-2">
-                        Nothing here yet!
-                      </div>
-                    )}
-                    {!!lessons.length && <LessonList lessons={lessons} />}
-                  </TabPanel>
-                  <TabPanel className="!px-0">
-                    {!paths.length && <div className="">Nothing here yet!</div>}
-                    {!!paths.length && (
-                      <div className="flex flex-wrap w-full gap-12">
-                        {paths.map((p) => (
-                          <PathPreview path={p} key={p.uid} author={author} />
-                        ))}
-                      </div>
-                    )}
-                  </TabPanel>
-                  <TabPanel className="!px-0">
-                    {!savedLessons.length && <div>Nothing here yet!</div>}
-                    {!!savedLessons.length && (
-                      <LessonList lessons={savedLessons} />
-                    )}
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </div>
-            <div className="flex flex-col w-full gap-8 mt-8 md:w-1/3 md:pl-8">
+        <Layout
+          breadcrumbs={[
+            {
+              label: 'Workspace',
+              href: workspaceRoute,
+              as: workspaceRoute,
+            },
+          ]}
+          title="Workspace"
+          rightContent={
+            <div className="flex flex-col w-full gap-8">
               <section>
                 <Heading
                   className="mb-2 font-bold leading-tight tracking-tighter"
@@ -216,6 +185,47 @@ const WorkspaceView = () => {
                 </Link>
               </section>
             </div>
+          }
+        >
+          <section className="flex flex-row">
+            <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
+              Workspace
+            </h1>
+          </section>
+          <div className="w-full pt-2 mt-4">
+            <Tabs colorScheme="black" isLazy>
+              <TabList>
+                <Tab>Lessons</Tab>
+                <Tab>Paths</Tab>
+                <Tab>Bookmarks</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel className="!px-0">
+                  {!lessons.length && (
+                    <div className="flex flex-col items-start gap-2">
+                      Nothing here yet!
+                    </div>
+                  )}
+                  {!!lessons.length && <LessonList lessons={lessons} />}
+                </TabPanel>
+                <TabPanel className="!px-0">
+                  {!paths.length && <div className="">Nothing here yet!</div>}
+                  {!!paths.length && (
+                    <div className="flex flex-wrap w-full gap-12">
+                      {paths.map((p) => (
+                        <PathPreview path={p} key={p.uid} author={author} />
+                      ))}
+                    </div>
+                  )}
+                </TabPanel>
+                <TabPanel className="!px-0">
+                  {!savedLessons.length && <div>Nothing here yet!</div>}
+                  {!!savedLessons.length && (
+                    <LessonList lessons={savedLessons} />
+                  )}
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
           </div>
         </Layout>
       )}

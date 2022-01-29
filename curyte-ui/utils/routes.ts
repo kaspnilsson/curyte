@@ -25,6 +25,8 @@ export const signupRoute = (referrer = '') => {
 
 export const indexRoute = '/'
 
+export const logOutRoute = '/logout'
+
 export const newLessonRoute = (copyFrom?: string) => {
   let out = '/lessons/new'
   if (copyFrom) out += `?copyFrom=${copyFrom}`

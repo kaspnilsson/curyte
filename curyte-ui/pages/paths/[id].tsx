@@ -5,7 +5,12 @@ import { Lesson } from '../../interfaces/lesson'
 import { GetServerSideProps } from 'next'
 import Layout from '../../components/Layout'
 import { Author } from '../../interfaces/author'
-import { pathRoute } from '../../utils/routes'
+import {
+  accountRoute,
+  accountRouteHrefPath,
+  pathRoute,
+  pathRouteHrefPath,
+} from '../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
 import { logPathView, getAuthor, getPath, getLesson } from '../../firebase/api'
 import { Badge, Center, Divider } from '@chakra-ui/react'
@@ -45,7 +50,21 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
   //   })
   // }
   return (
-    <Layout title={path.title}>
+    <Layout
+      title={path.title}
+      breadcrumbs={[
+        {
+          label: author.displayName,
+          href: accountRouteHrefPath,
+          as: accountRoute(author.uid),
+        },
+        {
+          label: path.title || '(no title)',
+          href: pathRouteHrefPath,
+          as: pathRoute(path.uid),
+        },
+      ]}
+    >
       <NextSeo
         title={path.title}
         description={path.title}

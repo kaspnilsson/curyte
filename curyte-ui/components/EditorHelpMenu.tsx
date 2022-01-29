@@ -16,15 +16,15 @@ const EditorHelpMenu = () => {
   return (
     <Menu isOpen={isOpen}>
       <MenuButton
-        py={1}
-        px={1}
         onMouseEnter={onOpen}
         onMouseLeave={onClose}
         className={classNames('text-zinc-300 hover:text-zinc-700', {
           'text-zinc-700': isOpen,
         })}
       >
-        <QuestionMarkCircleIcon className="w-6 h-6" />
+        <div className="flex items-center gap-1 font-bold leading-tight tracking-tighter">
+          Help <QuestionMarkCircleIcon className="w-5 h-5" />
+        </div>
       </MenuButton>
       <Portal>
         <MenuList onMouseEnter={onOpen} onMouseLeave={onClose}>
