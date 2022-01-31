@@ -38,18 +38,7 @@ const PathPreview = ({ path, author, onClick }: Props) => {
             </a>
           </Text>
         </div>
-        {
-          <Text className="flex items-center gap-1 mt-2 text-base font-bold">
-            <DocumentTextIcon className="w-5 h-5" />
-            {(unitCount &&
-              lessonCount &&
-              `${lessonCount} lesson${
-                lessonCount === 1 ? '' : 's'
-              } across ${unitCount} unit${unitCount === 1 ? '' : 's'}`) ||
-              '(no units)'}
-          </Text>
-        }
-        <div className="flex items-center gap-2 pt-2 mt-auto text-xs">
+        <div className="flex items-center gap-2 pt-2 text-xs">
           {author && <AuthorLink author={author} small />}
           {path.created && (
             <>
@@ -84,8 +73,17 @@ const PathPreview = ({ path, author, onClick }: Props) => {
             </Text>
           </div>
         </div>
+        <Text className="flex items-center gap-1 mt-2 text-base font-bold">
+          <DocumentTextIcon className="w-5 h-5" />
+          {(unitCount &&
+            lessonCount &&
+            `${lessonCount} lesson${
+              lessonCount === 1 ? '' : 's'
+            } across ${unitCount} unit${unitCount === 1 ? '' : 's'}`) ||
+            '(no units)'}
+        </Text>
       </div>
-      <div className="relative w-24 h-24 overflow-hidden border rounded md:w-36 md:h-36 lg:w-64">
+      <div className="relative w-32 h-32 overflow-hidden border rounded sm:w-64 md:w-40 md:h-40 lg:w-80">
         {path.coverImageUrl && (
           <Image
             src={path.coverImageUrl}

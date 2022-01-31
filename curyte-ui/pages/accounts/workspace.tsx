@@ -143,7 +143,7 @@ const WorkspaceView = () => {
                 >
                   Resources
                 </Heading>
-                <ul className="flex flex-col items-start gap-2 list-disc list-inside">
+                <ul className="flex flex-col items-start gap-2 ml-6 list-disc list-outside">
                   <li className="hover:underline">
                     <Link
                       href="https://www.curyte.com/lessons/aa19daf3-3399-40db-bfda-be3c7f64f083"

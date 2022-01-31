@@ -36,19 +36,7 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
             </a>
           </Text>
         </div>
-        {!!lesson.tags?.length && (
-          <div className="flex flex-wrap items-center gap-2">
-            {lesson.tags.slice(0, 3).map((t, index) => (
-              <TagChip tagLabel={t} key={t + index} />
-            ))}
-          </div>
-        )}
-        <div className="hidden mt-2 md:inline">
-          <Text className="line-clamp-2 text-zinc-700" fontSize="sm">
-            {lesson.description}
-          </Text>
-        </div>
-        <div className="flex flex-wrap items-center gap-2 pt-2 mt-auto text-xs">
+        <div className="flex flex-wrap items-center gap-2 pt-1 text-xs sm:pt-2">
           {!author && <div className="font-bold">{lesson.authorName}</div>}
           {author && <AuthorLink author={author} small />}
           {lesson.created && (
@@ -84,8 +72,23 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
             </Text>
           </div>
         </div>
+        <div className="hidden mt-1 sm:mt-2 xs:inline">
+          <Text
+            className="line-clamp-1 md:line-clamp-2 text-zinc-700"
+            fontSize="sm"
+          >
+            {lesson.description}
+          </Text>
+        </div>
+        {!!lesson.tags?.length && (
+          <div className="flex flex-wrap items-center gap-2 mt-1 sm:mt-2">
+            {lesson.tags.slice(0, 3).map((t, index) => (
+              <TagChip tagLabel={t} key={t + index} />
+            ))}
+          </div>
+        )}
       </div>
-      <div className="relative w-24 h-24 overflow-hidden border rounded md:w-36 md:h-36 lg:w-64">
+      <div className="relative w-32 h-32 overflow-hidden border rounded sm:w-64 md:w-40 md:h-40 lg:w-80">
         {lesson.coverImageUrl && (
           <Image
             src={lesson.coverImageUrl}

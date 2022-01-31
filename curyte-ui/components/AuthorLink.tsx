@@ -30,7 +30,7 @@ const AuthorLink = ({ author, small = false }: Props) => {
             <div className="flex flex-col ml-2">
               <a
                 className={classNames(
-                  'text-sm font-bold group-hover:underline',
+                  'text-xs sm:text-sm font-bold group-hover:underline',
                   { 'md:text-base': !small }
                 )}
               >

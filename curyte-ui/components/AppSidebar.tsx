@@ -98,7 +98,7 @@ const AppMenu = () => {
           </h2>
         </Button>
       </Link>
-      <div className="w-56 mx-4 mb-4" onClick={onOpen}>
+      <div className="w-auto mx-4 mb-4" onClick={onOpen}>
         <InputGroup>
           <InputLeftElement>
             <SearchIcon className="w-5 h-5 text-zinc-500" />
@@ -163,7 +163,7 @@ const AppMenu = () => {
 
 export const FullSidebar = () => {
   return (
-    <div className="fixed w-64 h-full pt-4 pb-3">
+    <div className="fixed w-48 h-full pt-4 pb-3 xl:w-64">
       <AppMenu />
     </div>
   )

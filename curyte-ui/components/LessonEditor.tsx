@@ -91,7 +91,7 @@ const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
     >
       <div className="flex">
         <div className="flex flex-col flex-grow overflow-hidden">
-          <div className="flex items-center justify-between w-full">
+          <div className="flex items-center justify-between w-full md:max-w-[50vw]">
             <TextareaAutosize
               autoFocus
               className={`${computeClassesForTitle(
