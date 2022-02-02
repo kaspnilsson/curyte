@@ -30,7 +30,8 @@ export const IFrameEmbed = Node.create({
     return {
       allowFullscreen: true,
       HTMLAttributes: {
-        class: 'iframe-wrapper w-full h-full min-h-96 shadow-lg rounded-xl',
+        class:
+          'iframe-wrapper w-full h-full min-h-96 shadow-lg rounded-xl border',
       },
     }
   },

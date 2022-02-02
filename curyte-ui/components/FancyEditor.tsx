@@ -28,10 +28,10 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
   return (
     <>
       <InputDialog {...dialogProps} />
-      <div className="flex flex-col max-w-full min-w-full md:max-w-[50vw]">
+      <div className="relative flex flex-col items-start w-full">
         {!readOnly && <FancyEditorMenuBar editor={editor} />}
         <EditorContent
-          className="prose sm:prose-sm lg:prose-md max-w-full xl:prose-lg prose-violet prose-headings:font-semibold prose-headings:tracking-tighter prose-headings:leading-tight prose-headings:border-b-2 prose-headings:pb-2 prose-headings:scroll-m-28 prose-th:!px-2 prose-th:!py-4 prose-td:!px-2 prose-td:!py-4 prose-th:border prose-td:border prose-th:font-semibold prose-th:bg-zinc-100"
+          className="prose sm:prose-sm lg:prose-md xl:prose-lg prose-zinc prose-violet prose-headings:font-semibold prose-headings:tracking-tighter prose-headings:leading-tight prose-headings:scroll-m-28 prose-th:!px-2 prose-th:!py-4 prose-td:!px-2 prose-td:!py-4 prose-th:border prose-td:border prose-th:font-semibold prose-th:bg-zinc-100 md:overflow-hidden w-full max-w-full"
           spellCheck
           editor={editor}
         />
@@ -41,10 +41,19 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
               <>
                 <TableBubbleMenu editor={editor} />
                 <TextBubbleMenu editor={editor} />
-                <FloatingMenu editor={editor} tippyOptions={{ zIndex: 12 }}>
+                <FloatingMenu
+                  editor={editor}
+                  tippyOptions={{ zIndex: 12 }}
+                  shouldShow={({ view }) => {
+                    return (
+                      view.endOfTextblock('forward') &&
+                      view.endOfTextblock('backward')
+                    )
+                  }}
+                >
                   <div
-                    style={{ position: 'absolute', top: -16, left: -90 }}
-                    className="flex items-center gap-1"
+                    style={{ position: 'absolute', top: -16, left: -80 }}
+                    className="flex items-center bg-white border !rounded-lg shadow-xl"
                   >
                     <DeleteButton
                       disabled={editor.isEmpty}

@@ -18,7 +18,6 @@ import { DependencyList } from 'react'
 import { GoogleDriveEmbed } from '../components/embeds/GoogleDriveEmbed'
 import { IFrameEmbed } from '../components/embeds/IFrameEmbed'
 import VimeoEmbed from '../components/embeds/VimeoEmbed'
-import Document from '../components/extensions/Document'
 import { YoutubeEmbed } from '../components/embeds/YoutubeEmbed'
 import AutoId from '../components/extensions/AutoId'
 import Link from '@tiptap/extension-link'
@@ -65,12 +64,10 @@ const useCuryteEditor = (
         CuryteLink,
         VimeoEmbed,
         StarterKit.configure({
-          document: false,
           dropcursor: {
             color: zinc[500],
           },
         }),
-        Document,
         GoogleDriveEmbed,
         CuryteImage(uploadImage),
         // ImageEmbed,

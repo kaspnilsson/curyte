@@ -90,8 +90,8 @@ const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
       ]}
     >
       <div className="flex">
-        <div className="flex flex-col flex-grow overflow-hidden">
-          <div className="flex items-center justify-between w-full md:max-w-[50vw]">
+        <div className="flex flex-col flex-grow min-w-0 md:ml-10 lg:ml-0">
+          <div className="flex items-center justify-between w-full ">
             <TextareaAutosize
               autoFocus
               className={`${computeClassesForTitle(
@@ -131,7 +131,7 @@ const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
             src={coverImageUrl}
             onEditUrl={onCoverImageUpload}
           />
-          <div className="flex py-8">
+          <div className="py-8">
             <FancyEditor editor={editor} />
           </div>
         </div>

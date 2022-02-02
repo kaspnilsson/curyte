@@ -73,17 +73,18 @@ const Header = ({ title, breadcrumbs = [] }: Props) => {
         />
         <title>{title}</title>
       </Head>
-      <div className="sticky top-0 z-10 bg-white border-b bg-opacity-90 backdrop-filter backdrop-blur-lg">
+      <div className="sticky top-0 z-20 bg-white border-b">
         <Container>
           <div className="flex items-center justify-between h-16 py-4">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
               <div className="lg:hidden">
                 <MobileSidebar />
               </div>
               {breadcrumbs.length ? (
                 <Breadcrumb
+                  spacing="0"
                   separator={
-                    <ChevronRightIcon className="w-5 h-5 text-zinc-500" />
+                    <ChevronRightIcon className="w-3 h-3 md:w-5 md:h-5 text-zinc-500" />
                   }
                   className="flex flex-wrap -mx-2"
                 >
@@ -93,14 +94,17 @@ const Header = ({ title, breadcrumbs = [] }: Props) => {
                         <Button
                           size="xs"
                           className={classNames('truncate min-w-0 !py-4', {
-                            'max-w-[15vw]': breadcrumbs.length > 2,
-                            'max-w-[25vw]': breadcrumbs.length == 2,
-                            'max-w-[50vw]': breadcrumbs.length < 2,
+                            'max-w-[15vw] !text-sm md:!text-base lg:!text-xl':
+                              breadcrumbs.length > 2,
+                            'max-w-[25vw] !text-xs md:!text-base lg:!text-xl':
+                              breadcrumbs.length == 2,
+                            'max-w-[50vw] !text-base lg:!text-xl':
+                              breadcrumbs.length < 2,
                           })}
                           variant="ghost"
                         >
                           <Tooltip label={b.label}>
-                            <Text className="min-w-0 text-base font-bold leading-tight tracking-tighter truncate lg:text-xl">
+                            <Text className="min-w-0 font-bold leading-tight tracking-tighter truncate">
                               {b.label}
                             </Text>
                           </Tooltip>
