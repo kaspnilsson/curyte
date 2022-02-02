@@ -18,7 +18,7 @@ interface EditorAttrs extends MultipleChoiceAttrs {
 
 const MultipleChoiceEditorComponent = ({
   question,
-  options,
+  options = [],
   correctAnswer,
   onUpdate,
 }: EditorAttrs) => {

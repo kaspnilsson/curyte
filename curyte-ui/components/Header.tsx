@@ -73,7 +73,7 @@ const Header = ({ title, breadcrumbs = [] }: Props) => {
         />
         <title>{title}</title>
       </Head>
-      <div className="sticky top-0 z-10 bg-white border-b bg-opacity-90 backdrop-filter backdrop-blur-lg">
+      <div className="sticky top-0 z-20 bg-white border-b">
         <Container>
           <div className="flex items-center justify-between h-16 py-4">
             <div className="flex items-center gap-4">

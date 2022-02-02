@@ -22,7 +22,8 @@ export const YoutubeEmbed = Node.create({
       inline: false,
       allowFullscreen: true,
       HTMLAttributes: {
-        class: 'iframe-wrapper w-full h-full shadow-lg rounded-xl min-h-96',
+        class:
+          'iframe-wrapper w-full h-full shadow-lg rounded-xl min-h-96 border',
       },
     }
   },

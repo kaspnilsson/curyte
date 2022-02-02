@@ -64,7 +64,7 @@
     "@tiptap/extension-underline": "^2.0.0-beta.22",
     "@tiptap/react": "^2.0.0-beta.98",
     "@tiptap/starter-kit": "^2.0.0-beta.152",
-    "@tiptap/suggestion": "^2.0.0-beta.85",
+    "@tiptap/suggestion": "^2.0.0-beta.90",
     "@types/tailwindcss": "^3.0.3",
     "algoliasearch": "^4.11.0",
     "browser-image-compression": "^1.0.17",

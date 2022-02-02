@@ -62,9 +62,10 @@ const EditLessonPage = ({
         <Container className="flex items-center justify-end h-full">
           <div className="flex items-center gap-2 mr-auto italic text-zinc-500">
             {saving && (
-              <Text className="flex items-center gap-2">
-                Saving... <Spinner />
-              </Text>
+              <>
+                <Text className="flex items-center gap-2">Saving...</Text>
+                <Spinner />
+              </>
             )}
             {dirty && !saving && (
               <>

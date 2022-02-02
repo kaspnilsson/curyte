@@ -3,6 +3,11 @@
     margin-top: 0.5em;
   }
 
+  br + br.ProseMirror-trailingBreak,
+  &[contenteditable='false'] br.ProseMirror-trailingBreak {
+    display: none;
+  }
+
   .is-empty::before {
     color: var(--chakra-colors-zinc-400);
     content: attr(data-placeholder);
@@ -15,7 +20,8 @@
     outline: none;
 
     .ProseMirror-selectednode iframe,
-    .ProseMirror-selectednode img {
+    .ProseMirror-selectednode img,
+    .has-focus .multiple-choice {
       box-shadow: var(--chakra-shadows-outline);
     }
   }
@@ -79,8 +85,12 @@
     background: #fff8c5;
   }
 
-  .has-focus {
+  .has-focus:not(.react-renderer) {
     background-color: var(--chakra-colors-violet-50);
+  }
+
+  .ProseMirror-separator {
+    display: none;
   }
 }
 

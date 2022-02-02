@@ -26,11 +26,11 @@ const Layout = ({
   rightContentWrapBehavior = 'normal',
 }: Props) => {
   return (
-    <div className={'relative min-h-screen max-w-screen flex ' + className}>
-      <nav className="relative hidden w-48 border-r xl:w-64 lg:flex">
+    <div className={'relative min-h-screen max-w-[100vw] flex ' + className}>
+      <nav className="relative hidden w-48 border-r xl:w-64 lg:flex flex-0">
         <FullSidebar />
       </nav>
-      <main className="flex flex-col flex-1">
+      <main className="flex flex-col flex-1 max-w-full min-w-0">
         <Header title={title} breadcrumbs={breadcrumbs}></Header>
         <div className="relative flex flex-col justify-between flex-1 pt-12">
           <Container className="mb-24">
@@ -45,7 +45,7 @@ const Layout = ({
                   }
                 )}
               >
-                <div className="flex-1">{children}</div>
+                <div className="flex-1 min-w-0">{children}</div>
                 <div className="md:sticky md:top-20 md:w-40 xl:w-64">
                   {rightContent}
                 </div>

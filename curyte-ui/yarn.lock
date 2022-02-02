@@ -2117,14 +2117,14 @@
     "@tiptap/extension-strike" "^2.0.0-beta.27"
     "@tiptap/extension-text" "^2.0.0-beta.15"
 
-"@tiptap/suggestion@^2.0.0-beta.85":
-  version "2.0.0-beta.86"
-  resolved "https://registry.yarnpkg.com/@tiptap/suggestion/-/suggestion-2.0.0-beta.86.tgz#ce0e33001a5f8c8d1f89188743bc7e6bd41e2338"
-  integrity sha512-T39GOxn+9u0Hp8pL44zJMB7bFEmUhC4HfLobtA1I0kUtVQL8ieVrPfdzbkQ5Z0fQFyukhqH5RxU18HDqhIBDyA==
+"@tiptap/suggestion@^2.0.0-beta.90":
+  version "2.0.0-beta.90"
+  resolved "https://registry.yarnpkg.com/@tiptap/suggestion/-/suggestion-2.0.0-beta.90.tgz#16b0cf8732c08ac57d5e7f6cc98b70b0a581bdc6"
+  integrity sha512-L5PPYRatY/75uJJRQx2o/Ce+gzcOkmd81TwLjio9sADV3bRf4DO4WYcQy0AtGe6uNSz78DTL0SUVw4204VjoBw==
   dependencies:
     prosemirror-model "^1.16.1"
     prosemirror-state "^1.3.4"
-    prosemirror-view "^1.23.5"
+    prosemirror-view "^1.23.6"
 
 "@tootallnate/once@2":
   version "2.0.0"
@@ -6704,6 +6704,15 @@ prosemirror-view@^1.0.0, prosemirror-view@^1.1.0, prosemirror-view@^1.13.3, pros
   version "1.23.5"
   resolved "https://registry.yarnpkg.com/prosemirror-view/-/prosemirror-view-1.23.5.tgz#0f4af48fa9d30aa0b945816e2b8e6cb1c82ac674"
   integrity sha512-GlcCtoFdW17KNOKjOl7OZTU3btENgVfzN/i0RBvy1SEKAZfo88PdvcFrWTraNZHH+y/uhYR3PAdMiDK9DlN5UA==
+  dependencies:
+    prosemirror-model "^1.16.0"
+    prosemirror-state "^1.0.0"
+    prosemirror-transform "^1.1.0"
+
+prosemirror-view@^1.23.6:
+  version "1.23.6"
+  resolved "https://registry.yarnpkg.com/prosemirror-view/-/prosemirror-view-1.23.6.tgz#f514b3166942cb70aac4ac24d0a28c21c3897608"
+  integrity sha512-B4DAzriNpI/AVoW0Lu6SVfX00jZZQxOVwdBQEjWlRbCdT9V0pvk4GQJ3JTFaib+b6BcPdRZ3MjWXz2xvV1rblA==
   dependencies:
     prosemirror-model "^1.16.0"
     prosemirror-state "^1.0.0"

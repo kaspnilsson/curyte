@@ -29,7 +29,16 @@ export const MultipleChoice = Node.create({
   addAttributes() {
     return {
       question: { default: '' },
-      options: { default: [{} as Option, {} as Option] },
+      options: {
+        default: [{} as Option, {} as Option],
+        renderHTML: (attrs) => ({
+          'data-options': JSON.stringify(attrs.options),
+        }),
+        parseHTML: (el) =>
+          el.getAttribute('data-options')
+            ? JSON.parse(el.getAttribute('data-options') || '')
+            : null,
+      },
       correctAnswer: { default: 1 },
     } as ExtensionAttrs
   },
@@ -44,10 +53,6 @@ export const MultipleChoice = Node.create({
         tag: 'multiple-choice',
       },
     ]
-  },
-
-  renderText({ node }) {
-    return node.attrs.href
   },
 
   addNodeView() {
