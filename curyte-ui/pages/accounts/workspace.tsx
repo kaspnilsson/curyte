@@ -78,13 +78,21 @@ const WorkspaceView = () => {
 
       const fetchLessons = async () => {
         getLessons([where('authorId', '==', user.uid)]).then((res) => {
-          setLessons(res)
+          // TODO(kasper): support sorting
+          setLessons(res.sort((a, b) => b.updated.localeCompare(a.updated)))
         })
       }
 
       const fetchPaths = async () => {
         getPaths([where('authorId', '==', user.uid)]).then((res) =>
-          setPaths(res)
+          // TODO(kasper): support sorting
+          setPaths(
+            res.sort((a, b) =>
+              (b.updated || b.created || '').localeCompare(
+                a.updated || a.created || ''
+              )
+            )
+          )
         )
       }
 
