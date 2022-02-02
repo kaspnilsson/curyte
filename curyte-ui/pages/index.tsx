@@ -80,11 +80,7 @@ const ExplorePage = ({
             A better lesson builder -- for teachers, by teachers.
           </Heading>
           <Link href={newLessonRoute()} passHref>
-            <Button
-              colorScheme="black"
-              onClick={() => setShowHero(false)}
-              className="shadow-xl shadow-violet-500/20"
-            >
+            <Button colorScheme="black" onClick={() => setShowHero(false)}>
               Start writing
             </Button>
           </Link>

@@ -1,13 +1,28 @@
 import React, { SyntheticEvent } from 'react'
 import { UploadIcon, LockClosedIcon } from '@heroicons/react/solid'
-import { Button, Spinner, Text } from '@chakra-ui/react'
+import {
+  Button,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Spinner,
+  Text,
+} from '@chakra-ui/react'
 import { Timestamp } from 'firebase/firestore'
 import Container from './Container'
 
 import { Lesson } from '../interfaces/lesson'
 import { Author } from '../interfaces/author'
 import LessonEditor from './LessonEditor'
-import { CheckIcon, ExternalLinkIcon } from '@heroicons/react/outline'
+import {
+  CheckIcon,
+  CogIcon,
+  DocumentRemoveIcon,
+  ExternalLinkIcon,
+} from '@heroicons/react/outline'
+import useConfirmDialog from '../hooks/useConfirmDialog'
 
 type Props = {
   lesson?: Lesson
@@ -17,6 +32,7 @@ type Props = {
   handleTogglePrivate: () => void
   handleUpdate: (l: Lesson) => void
   handlePreview?: () => void
+  handleDelete?: () => void
 }
 
 const EditLessonPage = ({
@@ -27,6 +43,7 @@ const EditLessonPage = ({
   handleTogglePrivate,
   handleUpdate,
   handlePreview,
+  handleDelete,
 }: Props) => {
   const makeNewLessonLocally = (l: Partial<Lesson>, u: Author): Lesson => ({
     ...lesson,
@@ -56,8 +73,16 @@ const EditLessonPage = ({
 
   const canPublish = lesson && lesson.content && lesson.title
 
+  const { ConfirmDialog, onOpen } = useConfirmDialog({
+    title: 'Delete lesson',
+    body: 'Are you sure you want to delete this lesson?',
+    confirmText: 'Delete lesson',
+    onConfirmClick: handleDelete || (() => null),
+  })
+
   return (
     <LessonEditor lesson={lesson} handleUpdate={localHandleUpdate}>
+      <ConfirmDialog />
       <footer className="fixed bottom-0 left-0 z-20 w-full h-16 bg-white border-t border-accent-2">
         <Container className="flex items-center justify-end h-full">
           <div className="flex items-center gap-2 mr-auto italic text-zinc-500">
@@ -79,18 +104,46 @@ const EditLessonPage = ({
               </>
             )}
           </div>
-          {handlePreview && (
-            <Button
-              variant="outline"
-              onClick={() => handlePreview()}
-              disabled={saving}
-              colorScheme="black"
-              className="flex items-center justify-between gap-2 mr-4 font-semibold disabled:opacity-50"
-            >
-              <ExternalLinkIcon className="w-5 h-5" />
-              Preview
-            </Button>
-          )}
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              className="mr-4"
+              aria-label="Settings"
+              icon={<CogIcon className="w-6 h-6" />}
+              variant="ghost"
+            />
+            <MenuList>
+              {handlePreview && (
+                <MenuItem
+                  icon={<ExternalLinkIcon className="w-5 h-5 text-zinc-700" />}
+                  onClick={() => handlePreview()}
+                  disabled={saving}
+                >
+                  Preview
+                </MenuItem>
+              )}
+              {handleDelete && (
+                <MenuItem
+                  icon={
+                    <DocumentRemoveIcon className="w-5 h-5 text-zinc-700" />
+                  }
+                  onClick={onOpen}
+                  disabled={saving}
+                >
+                  Delete lesson
+                </MenuItem>
+              )}
+              {/* <MenuItem icon={<ExternalLinkIcon />} command="⌘N">
+                New Window
+              </MenuItem>
+              <MenuItem icon={<RepeatIcon />} command="⌘⇧N">
+                Open Closed Tab
+              </MenuItem>
+              <MenuItem icon={<EditIcon />} command="⌘O">
+                Open File...
+              </MenuItem> */}
+            </MenuList>
+          </Menu>
           {lesson?.private && (
             <Button
               colorScheme="black"

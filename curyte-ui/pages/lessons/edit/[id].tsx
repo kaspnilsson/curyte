@@ -9,8 +9,13 @@ import LoadingSpinner from '../../../components/LoadingSpinner'
 import { Lesson } from '../../../interfaces/lesson'
 import { debounce } from 'ts-debounce'
 
-import { lessonRoute, loginRoute, newLessonRoute } from '../../../utils/routes'
-import { getLesson, updateLesson } from '../../../firebase/api'
+import {
+  lessonRoute,
+  loginRoute,
+  newLessonRoute,
+  workspaceRoute,
+} from '../../../utils/routes'
+import { deleteLesson, getLesson, updateLesson } from '../../../firebase/api'
 import { Portal, useToast } from '@chakra-ui/react'
 import { Confetti } from '../../../components/Confetti'
 
@@ -86,6 +91,13 @@ const LessonView = ({ id }: Props) => {
     await debouncedUpdateLesson(l)
     setDirty(false)
   }
+  const handleDelete = async () => {
+    if (!lesson) return
+    setLoading(true)
+    await deleteLesson(lesson.uid)
+    setLoading(false)
+    router.push(workspaceRoute)
+  }
 
   return (
     <>
@@ -100,6 +112,7 @@ const LessonView = ({ id }: Props) => {
             handlePreview={() => {
               router.push(lessonRoute(id))
             }}
+            handleDelete={handleDelete}
             saving={!!savingPromise}
             dirty={dirty}
           />
