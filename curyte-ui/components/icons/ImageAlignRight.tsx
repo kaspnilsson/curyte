@@ -1,0 +1,11 @@
+const ImageAlignRight = () => (
+  <svg viewBox="0 0 24 24" fill="none" width="24" height="24" focusable="false">
+    <path d="M18.5 5H17V19H18.5V5Z" fill="currentColor"></path>
+    <path
+      d="M4.5 16.5H15.5V7.5H4.5V16.5ZM6 9H14V15H6V9Z"
+      fill="currentColor"
+    ></path>
+  </svg>
+)
+
+export default ImageAlignRight

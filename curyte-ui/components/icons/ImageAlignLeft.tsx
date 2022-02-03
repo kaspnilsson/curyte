@@ -1,0 +1,18 @@
+const ImageAlignLeft = () => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    width="24"
+    height="24"
+    focusable="false"
+    role="img"
+  >
+    <path d="M6.5 5H5V19H6.5V5Z" fill="currentColor"></path>
+    <path
+      d="M8 7.5V16.5H19V7.5H8ZM17.5 15H9.5V9H17.5V15Z"
+      fill="currentColor"
+    ></path>
+  </svg>
+)
+
+export default ImageAlignLeft
