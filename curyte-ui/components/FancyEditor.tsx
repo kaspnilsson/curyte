@@ -43,7 +43,7 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
                 <TextBubbleMenu editor={editor} />
                 <FloatingMenu
                   editor={editor}
-                  tippyOptions={{ zIndex: 12 }}
+                  tippyOptions={{ zIndex: 40 }}
                   shouldShow={({ view }) => {
                     return (
                       view.endOfTextblock('forward') &&
@@ -52,7 +52,7 @@ const FancyEditor = ({ editor, readOnly }: Props) => {
                   }}
                 >
                   <div
-                    style={{ position: 'absolute', top: -16, left: -80 }}
+                    style={{ position: 'absolute', top: -16, left: -82 }}
                     className="flex items-center bg-white border !rounded-lg shadow-xl"
                   >
                     <DeleteButton

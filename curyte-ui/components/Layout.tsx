@@ -7,7 +7,7 @@ import classNames from 'classnames'
 
 type Props = {
   children: React.ReactNode
-  withFooter?: boolean
+  footer?: React.ReactNode
   title?: string
   className?: string
   withSearch?: boolean
@@ -18,7 +18,7 @@ type Props = {
 
 const Layout = ({
   children,
-  withFooter = true,
+  footer = null,
   title = 'Curyte',
   className = '',
   breadcrumbs,
@@ -27,14 +27,14 @@ const Layout = ({
 }: Props) => {
   return (
     <div className={'relative min-h-screen max-w-[100vw] flex ' + className}>
-      <nav className="relative hidden w-48 border-r xl:w-64 lg:flex flex-0">
+      <nav className="relative z-30 hidden w-48 bg-white border-r xl:w-64 lg:flex flex-0">
         <FullSidebar />
       </nav>
       <main className="flex flex-col flex-1 max-w-full min-w-0">
         <Header title={title} breadcrumbs={breadcrumbs}></Header>
         <div className="relative flex flex-col justify-between flex-1 pt-12">
           <Container className="mb-24">
-            {!rightContent && children}{' '}
+            {!rightContent && children}
             {rightContent && (
               <div
                 className={classNames(
@@ -52,7 +52,7 @@ const Layout = ({
               </div>
             )}
           </Container>
-          {withFooter && <Footer />}
+          {footer || <Footer />}
         </div>
       </main>
     </div>

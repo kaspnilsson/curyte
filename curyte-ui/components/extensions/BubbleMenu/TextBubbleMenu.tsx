@@ -1,5 +1,6 @@
 import React from 'react'
-import { BubbleMenu, Editor } from '@tiptap/react'
+import { BubbleMenu, Editor, getTextBetween } from '@tiptap/react'
+// import { getTextSeralizersFromSchema } from '@tiptap/core'
 import MenuIconButton from '../../MenuIconButton'
 import 'tippy.js/dist/svg-arrow.css'
 import { Center, Divider } from '@chakra-ui/react'
@@ -21,9 +22,17 @@ const TextBubbleMenu = ({ editor }: Props) => {
         animation: 'shift-away',
         zIndex: 1000,
       }}
-      shouldShow={({ editor, state }) =>
-        editor.isActive('paragraph') && !state.selection.empty
-      }
+      shouldShow={({ editor, state }) => {
+        const { doc, selection } = state
+        const { ranges } = selection
+        const from = Math.min(...ranges.map((range) => range.$from.pos))
+        const to = Math.max(...ranges.map((range) => range.$to.pos))
+        const range = { from, to }
+        return (
+          !!getTextBetween(doc, range) &&
+          (editor.isActive('paragraph') || editor.isActive('heading'))
+        )
+      }}
       className="relative flex items-center gap-1 p-1 overflow-hidden bg-white rounded shadow"
     >
       <MenuIconButton

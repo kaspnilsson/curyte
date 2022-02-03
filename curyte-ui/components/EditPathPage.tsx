@@ -131,7 +131,7 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
   return (
     <>
       {lessonsLoading && <Spinner />}
-      <Layout withFooter={false} title={path.title || 'Edit path'}>
+      <Layout title={path.title || 'Edit path'}>
         <div className="flex">
           <div className="flex flex-col flex-grow gap-2 overflow-hidden">
             <div className="flex items-center justify-between w-full">
