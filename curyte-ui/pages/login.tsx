@@ -1,42 +1,69 @@
 import Layout from '../components/Layout'
 import React, { useState } from 'react'
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-import { auth } from '../firebase/clientApp'
-import { Box, Button } from '@chakra-ui/react'
-import { GoogleAuthProvider, EmailAuthProvider } from 'firebase/auth'
+import { Box, Button, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { exploreRoute } from '../utils/routes'
 import supabase from '../supabase/client'
 import InputDialog, { InputDialogProps } from '../components/InputDialog'
 
 const Login = () => {
-  // const router = useRouter()
+  const router = useRouter()
+  const toast = useToast()
 
+  // const redirectTo = `${
+  //   process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com'
+  // }${router.query.referrer ? (router.query.referrer as string) : exploreRoute}`
+  const redirectTo = 'http://localhost:3000/explore'
   const [loading, setLoading] = useState(false)
   const [dialogProps, setDialogProps] = useState({} as InputDialogProps)
 
   const handleEmailConfirm = async (email: string) => {
-    try {
-      setLoading(true)
-      const { error } = await supabase.auth.signIn({ email })
-      if (error) throw error
-      alert('Check your email for the login link!')
-    } catch (error) {
-      // alert(error.error_description || error.message)
-    } finally {
-      setLoading(false)
+    toast({
+      title: 'Check your email for a magic link!',
+    })
+    setLoading(true)
+    const { error } = await supabase.auth.signIn({ email }, { redirectTo })
+    setLoading(false)
+    if (error) {
+      toast({
+        status: 'error',
+        title: error.message,
+      })
     }
   }
 
   const logInWithGoogle = async () => {
-    const { user, session, error } = await supabase.auth.signIn({
-      provider: 'google',
-    })
+    setLoading(true)
+    const { error } = await supabase.auth.signIn(
+      {
+        provider: 'google',
+      },
+      { redirectTo }
+    )
+    setLoading(false)
+    if (error) {
+      toast({
+        status: 'error',
+        title: error.message,
+      })
+    }
   }
+
   const logInWithFacebook = async () => {
-    const { user, session, error } = await supabase.auth.signIn({
-      provider: 'facebook',
-    })
+    setLoading(true)
+    const { error } = await supabase.auth.signIn(
+      {
+        provider: 'facebook',
+      },
+      { redirectTo }
+    )
+    setLoading(false)
+    if (error) {
+      toast({
+        status: 'error',
+        title: error.message,
+      })
+    }
   }
 
   const openDialog = () => {
