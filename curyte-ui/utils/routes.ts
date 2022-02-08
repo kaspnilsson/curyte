@@ -56,3 +56,7 @@ export const workspaceRoute = '/accounts/workspace'
 export const accountSettingsRoute = '/accounts/settings'
 
 export const whatIsCuryteRoute = '/what-is-curyte'
+
+export const privacyPolicyRoute = '/lessons/7VVYBD7pm450RvCG'
+
+export const dataDeletionInstructionsRoute = '/lessons/HL9wDt63rC04bL2M'
