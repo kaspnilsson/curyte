@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Lesson } from '../interfaces/lesson'
 import { Tag } from '../interfaces/tag'
 import Layout from '../components/Layout'
@@ -23,6 +23,8 @@ import Link from 'next/link'
 import { XIcon } from '@heroicons/react/outline'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../firebase/clientApp'
+// import { json2csvAsync } from 'json-2-csv'
+// import { parseISO } from 'date-fns'
 
 interface Props {
   featuredLessons: Lesson[]
@@ -41,6 +43,20 @@ const ExplorePage = ({
 }: Props) => {
   const [showHero, setShowHero] = useLocalStorage('showStartWritingHero', true)
   const [user] = useAuthState(auth)
+
+  // useEffect(() => {
+  //   const fetch = async () => {
+  //     const allLessons = (await getLessons([])).map((l) =>
+  //       JSON.parse(JSON.stringify({ ...l, created: parseISO(l.created) }))
+  //     )
+  //     const csv = await json2csvAsync(allLessons)
+  //     console.log(csv)
+  //     window.localStorage.setItem('lessons', csv)
+  //     debugger
+  //   }
+  //   fetch()
+  // }, [])
+
   return (
     <Layout
       breadcrumbs={[
