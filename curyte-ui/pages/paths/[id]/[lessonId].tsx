@@ -160,7 +160,7 @@ const LessonInPathView = ({
                     as={lessonInPathRoute(path.uid, prevLesson.uid)}
                   >
                     <Button className="flex items-center gap-2">
-                      <ArrowLeftIcon className="w-5 h-5" />
+                      <ArrowLeftIcon className="w-4 h-4" />
                       Back
                     </Button>
                   </Link>
@@ -180,7 +180,7 @@ const LessonInPathView = ({
                     as={pathRoute(path.uid)}
                   >
                     <Button className="flex items-center gap-2">
-                      <ArrowLeftIcon className="w-5 h-5" />
+                      <ArrowLeftIcon className="w-4 h-4" />
                       Back
                     </Button>
                   </Link>
@@ -204,7 +204,7 @@ const LessonInPathView = ({
                       colorScheme="black"
                     >
                       Next
-                      <ArrowRightIcon className="w-5 h-5" />
+                      <ArrowRightIcon className="w-4 h-4" />
                     </Button>
                   </Link>
                   <Text
@@ -227,7 +227,7 @@ const LessonInPathView = ({
                       colorScheme="black"
                     >
                       Next
-                      <ArrowRightIcon className="w-5 h-5" />
+                      <ArrowRightIcon className="w-4 h-4" />
                     </Button>
                   </Link>
                   <Text

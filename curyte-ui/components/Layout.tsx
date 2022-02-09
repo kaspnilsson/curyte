@@ -27,7 +27,7 @@ const Layout = ({
 }: Props) => {
   return (
     <div className={'relative min-h-screen max-w-[100vw] flex ' + className}>
-      <nav className="relative z-30 hidden w-48 bg-white border-r xl:w-64 lg:flex flex-0">
+      <nav className="relative z-[11] hidden w-48 bg-white border-r xl:w-64 lg:flex flex-0">
         <FullSidebar />
       </nav>
       <main className="flex flex-col flex-1 max-w-full min-w-0">

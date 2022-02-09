@@ -89,7 +89,7 @@ const useCuryteEditor = (
         // Image,
         TaskList,
         AutoId,
-        TrailingNode,
+        // TrailingNode,
         TaskItem.configure({
           nested: true,
         }),

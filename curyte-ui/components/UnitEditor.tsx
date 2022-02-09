@@ -232,7 +232,7 @@ const UnitEditor = ({
           </Droppable>
           <div className="flex gap-2 pb-4">
             <Button
-              className="flex items-center gap-1 w-fit-content"
+              className="flex items-center gap-1 w-fit"
               colorScheme="black"
               onClick={onCreateLesson}
             >
@@ -240,7 +240,7 @@ const UnitEditor = ({
               Create new lesson
             </Button>
             <Button
-              className="flex items-center gap-1 w-fit-content"
+              className="flex items-center gap-1 w-fit"
               colorScheme="black"
               onClick={onOpen}
             >

@@ -81,7 +81,7 @@ const SettingsView = () => {
               </h2>
               <Button
                 colorScheme="black"
-                className="w-fit-content disabled:opacity-50"
+                className="w-fit disabled:opacity-50"
                 onClick={handleSave}
                 disabled={!authorChanged}
               >
