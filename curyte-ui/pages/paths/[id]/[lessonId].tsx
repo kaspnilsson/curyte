@@ -23,6 +23,7 @@ import {
   lessonRouteHrefPath,
   pathRoute,
   pathRouteHrefPath,
+  presentLessonInPathRoute,
   workspaceRoute,
 } from '../../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
@@ -148,6 +149,9 @@ const LessonInPathView = ({
               }
               handleToggleFeatured={
                 user && userIsAdmin(user.uid) ? handleToggleFeatured : undefined
+              }
+              handlePresent={() =>
+                router.push(presentLessonInPathRoute(path.uid, lesson.uid))
               }
             />
             <FancyEditor readOnly editor={editor} />

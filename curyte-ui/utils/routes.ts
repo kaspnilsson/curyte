@@ -54,6 +54,10 @@ export const lessonInPathRoute = (pathId: string, lessonId: string) =>
   `/paths/${pathId}/${lessonId}`
 export const lessonInPathRouteHrefPath = '/paths/[id]/[lessonId]'
 
+export const presentLessonInPathRoute = (pathId: string, lessonId: string) =>
+  `/paths/${pathId}/present/${lessonId}`
+export const presentLessonInPathRouteHrefPath = '/paths/[id]/present/[lessonId]'
+
 export const workspaceRoute = '/accounts/workspace'
 
 export const accountSettingsRoute = '/accounts/settings'

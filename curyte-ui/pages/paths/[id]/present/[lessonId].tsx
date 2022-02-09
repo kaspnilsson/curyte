@@ -1,25 +1,28 @@
 import React from 'react'
-import { Lesson } from '../../../interfaces/lesson'
+import { Lesson } from '../../../../interfaces/lesson'
 import { GetServerSideProps } from 'next'
-import { Author } from '../../../interfaces/author'
+import { Author } from '../../../../interfaces/author'
 import { ParsedUrlQuery } from 'querystring'
-import { getLesson, getAuthor } from '../../../firebase/api'
-// Import Swiper styles
-import 'swiper/css'
-import { lessonRouteHrefPath, lessonRoute } from '../../../utils/routes'
-import PresentLessonView from '../../../components/PresentLessonView'
+import { getLesson, getAuthor, getPath } from '../../../../firebase/api'
+import {
+  lessonInPathRoute,
+  lessonInPathRouteHrefPath,
+} from '../../../../utils/routes'
+import PresentLessonView from '../../../../components/PresentLessonView'
+import { Path } from '../../../../interfaces/path'
 
 interface Props {
   lesson: Lesson
   author: Author
+  path: Path
 }
 
-const PresentLesson = ({ lesson, author }: Props) => (
+const PresentLesson = ({ lesson, author, path }: Props) => (
   <PresentLessonView
     lesson={lesson}
     author={author}
-    backUrl={lessonRoute(lesson.uid)}
-    backUrlHref={lessonRouteHrefPath}
+    backUrl={lessonInPathRoute(path.uid, lesson.uid)}
+    backUrlHref={lessonInPathRouteHrefPath}
   />
 )
 
@@ -43,11 +46,12 @@ interface IParams extends ParsedUrlQuery {
 // }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.params as IParams
-  const lesson = await getLesson(id)
+  const { id, lessonId } = context.params as IParams
+  const lesson = await getLesson(lessonId as string)
   const author = await getAuthor(lesson.authorId)
+  const path = await getPath(id as string)
 
-  return { props: { lesson, author } }
+  return { props: { lesson, author, path } }
 }
 
 export default PresentLesson
