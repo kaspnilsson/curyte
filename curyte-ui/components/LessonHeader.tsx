@@ -194,7 +194,7 @@ const LessonHeader = ({
             </div>
             <span className="text-sm">{`${lesson.viewCount || 0} views`}</span>
           </div>
-          <div className="">
+          <div className="flex items-center gap-1">
             {handlePresent && (
               <IconButton
                 borderRadius="full"

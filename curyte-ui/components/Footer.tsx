@@ -12,7 +12,7 @@ import {
 const Footer = () => {
   return (
     <footer className="flex w-full bg-white border-t">
-      <Container className="flex flex-col-reverse justify-between gap-8 py-8 md:flex-row">
+      <Container className="flex flex-col-reverse items-start justify-between gap-8 py-8 md:flex-row">
         <div className="flex flex-col flex-wrap items-start flex-1 h-full gap-2">
           <Heading
             size="sm"

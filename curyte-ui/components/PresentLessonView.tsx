@@ -1,12 +1,12 @@
 import Head from 'next/head'
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useCallback, useRef, useState } from 'react'
 import { Lesson } from '../interfaces/lesson'
 import { Author } from '../interfaces/author'
 import LessonHeader from '../components/LessonHeader'
 import FancyEditor from '../components/FancyEditor'
 import useCuryteEditor from '../hooks/useCuryteEditor'
 import { JSONContent } from '@tiptap/core'
-import { Navigation, HashNavigation, Lazy } from 'swiper'
+import SwiperClass, { Navigation, HashNavigation, Lazy } from 'swiper'
 import { SwiperSlide, Swiper } from 'swiper/react'
 import Container from '../components/Container'
 import { Button, Progress } from '@chakra-ui/react'
@@ -15,6 +15,7 @@ import Link from 'next/link'
 import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 import ExitFullscreen from '../components/icons/ExitFullscreen'
 import EnterFullscreen from '../components/icons/EnterFullscreen'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import 'swiper/css'
 
@@ -71,9 +72,38 @@ interface Props {
 const PresentLessonView = ({ lesson, author, backUrl, backUrlHref }: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [progress, setProgress] = useState(0)
+  const [swiper, setSwiper] = useState<SwiperClass | null>(null)
   const [prevEl, setPrevEl] = useState<HTMLElement | null>(null)
   const [nextEl, setNextEl] = useState<HTMLElement | null>(null)
   const handle = useFullScreenHandle()
+  const [activeIndex, setActiveIndex] = useState(0)
+  const ref = useRef<HTMLDivElement | null>(null)
+
+  const downOrNext = useCallback(() => {
+    if (!swiper || !ref || !ref.current) return
+    if (
+      ref.current &&
+      ref.current.scrollHeight - ref.current.scrollTop > swiper.height
+    ) {
+      ref.current.scroll({ top: swiper.height, left: 0, behavior: 'smooth' })
+    } else {
+      swiper?.slideNext()
+    }
+  }, [swiper, ref])
+
+  const upOrBack = useCallback(() => {
+    if (!swiper || !ref || !ref.current) return
+    if (ref.current && ref.current.scrollTop > 0) {
+      ref.current.scroll({ top: -swiper.height, left: 0, behavior: 'smooth' })
+    } else {
+      swiper?.slidePrev()
+    }
+  }, [swiper, ref])
+
+  useHotkeys('left', upOrBack, [upOrBack])
+  useHotkeys('up', upOrBack, [upOrBack])
+  useHotkeys('right', downOrNext, [downOrNext])
+  useHotkeys('down', downOrNext, [downOrNext])
 
   const partitioned = partitionDocForPresentationMode(lesson.content).map(
     (content, index) => <EditorContentSlide content={content} key={index} />
@@ -131,6 +161,8 @@ const PresentLessonView = ({ lesson, author, backUrl, backUrlHref }: Props) => {
         </div>
         <Swiper
           onProgress={(_swiper, progress) => setProgress(progress * 100)}
+          onSwiper={setSwiper}
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
           watchSlidesProgress
           slidesPerView="auto"
           centeredSlides
@@ -147,9 +179,14 @@ const PresentLessonView = ({ lesson, author, backUrl, backUrlHref }: Props) => {
               data-hash={`slide-${index}`}
               className="w-auto lg:!max-w-[1000px] xl:!max-w-[1200px] 2xl:!max-w-[1440px]"
             >
-              <Container className="grid items-center w-auto h-full min-h-0 py-8 overflow-y-auto">
-                {item}
-              </Container>
+              <div
+                ref={activeIndex === index ? ref : undefined}
+                className="w-auto h-full overflow-y-auto scroll-auto"
+              >
+                <Container className="grid items-center w-auto h-full min-h-0 py-8">
+                  {item}
+                </Container>
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>
