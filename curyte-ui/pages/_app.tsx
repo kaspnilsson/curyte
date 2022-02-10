@@ -4,13 +4,14 @@ import 'remixicon/fonts/remixicon.css'
 import '../styles/index.css'
 import '../styles/app.scss'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { ImageUploadDialogProvider } from '../components/dialogs/ImageUploadDialog/ImageUploadDialogContext'
 import { exception, pageview } from '../utils/gtag'
 import ErrorBoundary from '../components/ErrorBoundary'
 import theme from '../styles/theme'
 import supabase from '../supabase/client'
-import { User } from '@supabase/supabase-js'
+import { AuthChangeEvent, Session } from '@supabase/supabase-js'
+import { exploreRoute } from '../utils/routes'
 
 export default function CuryteApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -25,19 +26,61 @@ export default function CuryteApp({ Component, pageProps }: AppProps) {
     }
   }, [router.events])
 
-  const [user, setUser] = useState<User | null>(null)
+  const user = supabase.auth.user()
+
+  if (user) {
+    debugger
+    supabase.auth.signOut()
+  }
+
   useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange(async () =>
-      checkUser()
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        debugger
+        handleAuthSession(event, session)
+        if (event === 'SIGNED_IN') {
+          const signedInUser = supabase.auth.user()
+          if (!signedInUser) return
+          const userId = signedInUser.id
+          supabase
+            .from('profiles')
+            .upsert({ id: userId })
+            .then(({ error }) => {
+              if (!error) {
+                router.push(exploreRoute)
+              }
+            })
+        }
+        if (event === 'SIGNED_OUT') {
+          router.push(exploreRoute)
+        }
+      }
     )
-    checkUser()
+
     return () => {
       authListener?.unsubscribe()
     }
-  }, [])
-  async function checkUser() {
-    const user = supabase.auth.user()
-    setUser(user)
+  }, [router])
+
+  useEffect(() => {
+    if (user) {
+      if (router.pathname === '/signin') {
+        router.push('/')
+      }
+    }
+  }, [router.pathname, user, router])
+
+  const handleAuthSession = async (
+    event: AuthChangeEvent,
+    session: Session | null
+  ) => {
+    if (!session) return
+    await fetch('/api/auth', {
+      method: 'POST',
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      credentials: 'same-origin',
+      body: JSON.stringify({ event, session }),
+    })
   }
 
   useEffect(() => {

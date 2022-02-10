@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Lesson } from '../interfaces/lesson'
 import { Tag } from '../interfaces/tag'
 import Layout from '../components/Layout'
@@ -46,12 +46,18 @@ const ExplorePage = ({
 
   // useEffect(() => {
   //   const fetch = async () => {
-  //     const allLessons = (await getLessons([])).map((l) =>
-  //       JSON.parse(JSON.stringify({ ...l, created: parseISO(l.created) }))
+  //     const allLessons = await getLessons(
+  //       [
+  //         where('authorId', 'not-in', [
+  //           'FcLTIdF6tOhMMZZzOnsSHmCQVjt1',
+  //           'PoX0rTaDEJeb3fw28o2kSM5oABA2',
+  //         ]),
+  //       ],
+  //       true
   //     )
-  //     const csv = await json2csvAsync(allLessons)
-  //     console.log(csv)
-  //     window.localStorage.setItem('lessons', csv)
+  //     // const csv = await json2csvAsync(allLessons)
+  //     // console.log(csv)
+  //     // window.localStorage.setItem('lessons', csv)
   //     debugger
   //   }
   //   fetch()

@@ -1,109 +1,161 @@
-import Layout from '../components/Layout'
-import React, { useState } from 'react'
-import { Box, Button, useToast } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
-import { exploreRoute } from '../utils/routes'
+import React, { SyntheticEvent, useState } from 'react'
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  chakra,
+  Input,
+  useToast,
+} from '@chakra-ui/react'
 import supabase from '../supabase/client'
-import InputDialog, { InputDialogProps } from '../components/InputDialog'
+import Link from 'next/link'
+import { exploreRoute, signupRoute } from '../utils/routes'
+import GoogleLogo from '../components/icons/GoogleLogo'
+import FacebookLogo from '../components/icons/FacebookLogo'
+import Footer from '../components/Footer'
+import CuryteLogo from '../components/CuryteLogo'
+import Head from 'next/head'
+import Container from '../components/Container'
 
 const Login = () => {
-  const router = useRouter()
   const toast = useToast()
+  const [email, setEmail] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  // const redirectTo = `${
-  //   process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com'
-  // }${router.query.referrer ? (router.query.referrer as string) : exploreRoute}`
-  const redirectTo = 'http://localhost:3000/explore'
-  const [loading, setLoading] = useState(false)
-  const [dialogProps, setDialogProps] = useState({} as InputDialogProps)
+  const user = supabase.auth.user()
 
-  const handleEmailConfirm = async (email: string) => {
-    toast({
-      title: 'Check your email for a magic link!',
-    })
-    setLoading(true)
-    const { error } = await supabase.auth.signIn({ email }, { redirectTo })
-    setLoading(false)
-    if (error) {
-      toast({
-        status: 'error',
-        title: error.message,
-      })
-    }
+  if (user) {
+    debugger
+    supabase.auth.signOut()
   }
 
-  const logInWithGoogle = async () => {
-    setLoading(true)
+  const submitHandler = async (event: SyntheticEvent) => {
+    event.preventDefault()
+    setIsLoading(true)
+    setError('')
+    const { error } = await supabase.auth.signIn(
+      {
+        email,
+      },
+      { redirectTo: 'http://localhost:3000' }
+    )
+    toast({ title: 'Check your email for a sign in link!' })
+    if (error) {
+      debugger
+      setError(error.message)
+    }
+
+    setIsLoading(false)
+  }
+
+  const signInWithGoogle = async () => {
+    setIsLoading(true)
+    setError('')
     const { error } = await supabase.auth.signIn(
       {
         provider: 'google',
       },
-      { redirectTo }
+      { redirectTo: 'http://localhost:3000' }
     )
-    setLoading(false)
     if (error) {
-      toast({
-        status: 'error',
-        title: error.message,
-      })
+      debugger
+      setError(error.message)
     }
+
+    setIsLoading(false)
   }
 
-  const logInWithFacebook = async () => {
-    setLoading(true)
+  const signInWithFacebook = async () => {
+    setIsLoading(true)
+    setError('')
     const { error } = await supabase.auth.signIn(
       {
         provider: 'facebook',
       },
-      { redirectTo }
+      { redirectTo: 'http://localhost:3000' }
     )
-    setLoading(false)
     if (error) {
-      toast({
-        status: 'error',
-        title: error.message,
-      })
+      debugger
+      setError(error.message)
     }
-  }
 
-  const openDialog = () => {
-    setDialogProps({
-      ...dialogProps,
-      isOpen: true,
-      title: 'Enter yout email',
-      description: 'Enter an email to receive a magic link!',
-      onClose: () => setDialogProps({ ...dialogProps, isOpen: false }),
-      onConfirm: handleEmailConfirm,
-    })
+    setIsLoading(false)
   }
 
   return (
-    <Layout>
-      <InputDialog {...dialogProps} />
-      <Box
-        rounded={'lg'}
-        className="flex flex-col items-center justify-center gap-2 p-8 m-auto w-96"
-        boxShadow={'lg'}
-      >
-        <h2 className="mb-4 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
-          Login
-        </h2>
-        {/* <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} /> */}
-        <Button disabled={loading} onClick={openDialog}>
-          Email
-        </Button>
-        <Button
-          disabled={loading}
-          onClick={logInWithFacebook}
-          colorScheme="facebook"
-        >
-          Facebook
-        </Button>
-        <Button disabled={loading} onClick={logInWithGoogle} colorScheme="red">
-          Google
-        </Button>
-      </Box>
-    </Layout>
+    <>
+      <Head>
+        <title>Curyte: Log in</title>
+      </Head>
+      <div className="flex flex-col items-center justify-center w-screen min-h-screen">
+        <Container className="flex items-center w-full gap-2 my-4">
+          <Link href={exploreRoute} passHref>
+            <h2 className="flex items-center gap-2 text-2xl font-bold leading-tight tracking-tighter">
+              <CuryteLogo />
+              Curyte
+            </h2>
+          </Link>
+        </Container>
+        <Container className="flex flex-col items-center justify-center flex-1 my-16">
+          <section className="flex flex-row w-80">
+            <div className="flex flex-col gap-4">
+              <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
+                Log in
+              </h1>
+              <h3 className="flex items-center gap-1 text-xl font-semibold leading-tight tracking-tighter text-zinc-500">
+                Not a member?
+                <Link href={signupRoute()} passHref>
+                  <a className="underline text-violet-500">Sign up</a>
+                </Link>
+              </h3>
+            </div>
+          </section>
+          <section className="flex flex-col gap-2 mt-8 w-80">
+            <Button className="relative" onClick={signInWithGoogle}>
+              <span className="absolute left-4">
+                <GoogleLogo />
+              </span>
+              Log in with Google
+            </Button>
+            <Button className="relative" onClick={signInWithFacebook}>
+              <span className="absolute left-4">
+                <FacebookLogo />
+              </span>
+              Log in with Facebook
+            </Button>
+            <chakra.form
+              className="flex flex-col gap-2 mt-8"
+              onSubmit={submitHandler}
+            >
+              <FormControl id="email">
+                <FormLabel className="font-semibold leading-tight tracking-tighter">
+                  Or, log in with email
+                </FormLabel>
+                <Input
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.currentTarget.value)}
+                />
+              </FormControl>
+              {error && <span className="text-red-500">{error}</span>}
+              <Button
+                colorScheme="black"
+                className="justify-end mt-4 ml-auto"
+                type="submit"
+                disabled={isLoading}
+              >
+                Continue
+              </Button>
+            </chakra.form>
+          </section>
+        </Container>
+        <Footer />
+      </div>
+    </>
   )
 }
 
