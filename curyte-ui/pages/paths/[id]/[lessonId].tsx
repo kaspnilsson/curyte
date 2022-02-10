@@ -23,6 +23,7 @@ import {
   lessonRouteHrefPath,
   pathRoute,
   pathRouteHrefPath,
+  presentLessonInPathRoute,
   workspaceRoute,
 } from '../../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
@@ -149,6 +150,9 @@ const LessonInPathView = ({
               handleToggleFeatured={
                 user && userIsAdmin(user.uid) ? handleToggleFeatured : undefined
               }
+              handlePresent={() =>
+                router.push(presentLessonInPathRoute(path.uid, lesson.uid))
+              }
             />
             <FancyEditor readOnly editor={editor} />
             <div className="flex items-center justify-between">
@@ -160,7 +164,7 @@ const LessonInPathView = ({
                     as={lessonInPathRoute(path.uid, prevLesson.uid)}
                   >
                     <Button className="flex items-center gap-2">
-                      <ArrowLeftIcon className="w-5 h-5" />
+                      <ArrowLeftIcon className="w-4 h-4" />
                       Back
                     </Button>
                   </Link>
@@ -180,7 +184,7 @@ const LessonInPathView = ({
                     as={pathRoute(path.uid)}
                   >
                     <Button className="flex items-center gap-2">
-                      <ArrowLeftIcon className="w-5 h-5" />
+                      <ArrowLeftIcon className="w-4 h-4" />
                       Back
                     </Button>
                   </Link>
@@ -204,7 +208,7 @@ const LessonInPathView = ({
                       colorScheme="black"
                     >
                       Next
-                      <ArrowRightIcon className="w-5 h-5" />
+                      <ArrowRightIcon className="w-4 h-4" />
                     </Button>
                   </Link>
                   <Text
@@ -227,7 +231,7 @@ const LessonInPathView = ({
                       colorScheme="black"
                     >
                       Next
-                      <ArrowRightIcon className="w-5 h-5" />
+                      <ArrowRightIcon className="w-4 h-4" />
                     </Button>
                   </Link>
                   <Text

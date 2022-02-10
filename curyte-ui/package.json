@@ -95,6 +95,7 @@
     "react-error-boundary": "^3.1.4",
     "react-firebase-hooks": "^4.0.2",
     "react-firebaseui": "^6.0.0",
+    "react-full-screen": "^1.1.0",
     "react-image-file-resizer": "^0.4.7",
     "react-instantsearch": "^6.18.0",
     "react-instantsearch-dom": "^6.18.0",
@@ -106,6 +107,7 @@
     "remixicon": "^2.5.0",
     "sass": "^1.45.0",
     "styled-components": "^5.3.3",
+    "swiper": "^8.0.3",
     "tippy.js": "^6.3.7",
     "ts-debounce": "^4.0.0",
     "webpack": "^5.62.1"

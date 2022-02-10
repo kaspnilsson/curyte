@@ -41,11 +41,11 @@ export interface BreadcrumbProps {
 }
 
 type Props = {
-  title: string
+  title?: string
   breadcrumbs?: BreadcrumbProps[]
 }
 
-const Header = ({ title, breadcrumbs = [] }: Props) => {
+const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
   const [user] = useAuthState(auth)
 
   return (

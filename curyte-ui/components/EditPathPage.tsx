@@ -205,7 +205,7 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
                   )}
                 </Droppable>
                 <Button
-                  className="flex items-center gap-1 my-8 w-fit-content"
+                  className="flex items-center gap-1 my-8 w-fit"
                   colorScheme="black"
                   onClick={() => addUnit()}
                 >
