@@ -40,6 +40,7 @@ import {
   saveLessonForCurrentUser,
 } from '../firebase/api'
 import useConfirmDialog from '../hooks/useConfirmDialog'
+import Present from './icons/Present'
 
 type Props = {
   lesson: Lesson
@@ -50,6 +51,7 @@ type Props = {
   handlePublish?: () => void
   handleToggleFeatured?: () => void
   handleToggleTemplate?: () => void
+  handlePresent?: () => void
 }
 
 const LessonHeader = ({
@@ -60,6 +62,7 @@ const LessonHeader = ({
   handlePublish,
   handleToggleFeatured,
   handleToggleTemplate,
+  handlePresent,
 }: Props) => {
   const router = useRouter()
   const [user, userLoading] = useAuthState(auth)
@@ -152,7 +155,7 @@ const LessonHeader = ({
           </div>
         )}
       </div>
-      <div className="flex items-center justify-between gap-1 mb-6">
+      <div className="flex flex-wrap items-center justify-between mb-6 gap-x-1 gap-y-2">
         <AuthorLink author={author} />
         <div className="flex items-center gap-1">
           {lesson.private && (
@@ -191,91 +194,103 @@ const LessonHeader = ({
             </div>
             <span className="text-sm">{`${lesson.viewCount || 0} views`}</span>
           </div>
-          {handlePublish && (
-            <Button
-              size="sm"
-              colorScheme="black"
-              className="flex items-center justify-between mr-2 font-semibold"
-              onClick={handlePublish}
-            >
-              <UploadIcon className="w-5 h-5" />
-              <div className="hidden ml-2 md:flex">Publish</div>
-            </Button>
-          )}
-          {!lesson.private && (
-            <IconButton
-              borderRadius="full"
-              size="sm"
-              aria-label={isSaved ? 'Saved' : 'Save'}
-              onClick={() => toggleSaveLesson()}
-            >
-              <BookmarkIcon
-                className="w-5 h-5 text-inherit"
-                style={{ fill: isSaved ? black[900] : 'transparent' }}
+          <div className="flex items-center gap-1">
+            {handlePresent && (
+              <IconButton
+                borderRadius="full"
+                size="sm"
+                onClick={handlePresent}
+                aria-label="Present as slides"
+              >
+                <Present />
+              </IconButton>
+            )}
+            {handlePublish && (
+              <Button
+                size="sm"
+                colorScheme="black"
+                className="flex items-center justify-between mr-2 font-semibold"
+                onClick={handlePublish}
+              >
+                <UploadIcon className="w-5 h-5" />
+                <div className="hidden ml-2 md:flex">Publish</div>
+              </Button>
+            )}
+            {!lesson.private && (
+              <IconButton
+                borderRadius="full"
+                size="sm"
+                aria-label={isSaved ? 'Saved' : 'Save'}
+                onClick={() => toggleSaveLesson()}
+              >
+                <BookmarkIcon
+                  className="w-5 h-5 text-inherit"
+                  style={{ fill: isSaved ? black[900] : 'transparent' }}
+                />
+              </IconButton>
+            )}
+            <Menu id="more-menu" isLazy>
+              <MenuButton
+                borderRadius="full"
+                size="sm"
+                as={IconButton}
+                aria-label="Options"
+                icon={<MenuIcon className="w-5 h-5 text-inherit" />}
               />
-            </IconButton>
-          )}
-          <Menu id="more-menu" isLazy>
-            <MenuButton
-              borderRadius="full"
-              size="sm"
-              as={IconButton}
-              aria-label="Options"
-              icon={<MenuIcon className="w-5 h-5 text-inherit" />}
-            />
-            <Portal>
-              <MenuList>
-                {!lesson.private && (
-                  <MenuItem onClick={handleMakeCopy}>
-                    <DuplicateIcon className="w-5 h-5 mr-4 text-inherit" />
-                    Make a copy
-                  </MenuItem>
-                )}
-                {handleEdit && (
-                  <MenuItem onClick={handleEdit}>
-                    <PencilAltIcon className="w-5 h-5 mr-4 text-inherit" />
-                    Edit lesson
-                  </MenuItem>
-                )}
-                {handleToggleFeatured && (
-                  <MenuItem
-                    onClick={() => {
-                      setFeatured(!featured)
-                      handleToggleFeatured()
-                    }}
-                  >
-                    {featured ? (
-                      <i className="mr-4 text-lg ri-lightbulb-flash-line text-inherit" />
-                    ) : (
-                      <i className="mr-4 text-lg ri-lightbulb-flash-fill text-inherit" />
-                    )}
-                    {featured ? 'Unfeature' : 'Feature'} lesson
-                  </MenuItem>
-                )}
-                {handleToggleTemplate && (
-                  <MenuItem
-                    onClick={() => {
-                      setIsTemplate(!isTemplate)
-                      handleToggleTemplate()
-                    }}
-                  >
-                    {isTemplate ? (
-                      <i className="mr-4 text-lg ri-t-box-line text-inherit" />
-                    ) : (
-                      <i className="mr-4 text-lg ri-t-box-fill text-inherit" />
-                    )}
-                    {isTemplate ? 'Unmark' : 'Mark'} lesson as template
-                  </MenuItem>
-                )}
-                {handleDelete && (
-                  <MenuItem onClick={onOpen}>
-                    <DocumentRemoveIcon className="w-5 h-5 mr-4 text-inherit" />
-                    Delete lesson
-                  </MenuItem>
-                )}
-              </MenuList>
-            </Portal>
-          </Menu>
+              <Portal>
+                <MenuList>
+                  {!lesson.private && (
+                    <MenuItem onClick={handleMakeCopy}>
+                      <DuplicateIcon className="w-5 h-5 mr-4 text-inherit" />
+                      Make a copy
+                    </MenuItem>
+                  )}
+                  {handleEdit && (
+                    <MenuItem onClick={handleEdit}>
+                      <PencilAltIcon className="w-5 h-5 mr-4 text-inherit" />
+                      Edit lesson
+                    </MenuItem>
+                  )}
+                  {handleToggleFeatured && (
+                    <MenuItem
+                      onClick={() => {
+                        setFeatured(!featured)
+                        handleToggleFeatured()
+                      }}
+                    >
+                      {featured ? (
+                        <i className="mr-4 text-lg ri-lightbulb-flash-line text-inherit" />
+                      ) : (
+                        <i className="mr-4 text-lg ri-lightbulb-flash-fill text-inherit" />
+                      )}
+                      {featured ? 'Unfeature' : 'Feature'} lesson
+                    </MenuItem>
+                  )}
+                  {handleToggleTemplate && (
+                    <MenuItem
+                      onClick={() => {
+                        setIsTemplate(!isTemplate)
+                        handleToggleTemplate()
+                      }}
+                    >
+                      {isTemplate ? (
+                        <i className="mr-4 text-lg ri-t-box-line text-inherit" />
+                      ) : (
+                        <i className="mr-4 text-lg ri-t-box-fill text-inherit" />
+                      )}
+                      {isTemplate ? 'Unmark' : 'Mark'} lesson as template
+                    </MenuItem>
+                  )}
+                  {handleDelete && (
+                    <MenuItem onClick={onOpen}>
+                      <DocumentRemoveIcon className="w-5 h-5 mr-4 text-inherit" />
+                      Delete lesson
+                    </MenuItem>
+                  )}
+                </MenuList>
+              </Portal>
+            </Menu>
+          </div>
         </div>
       </div>
       {lesson.coverImageUrl && (

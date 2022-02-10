@@ -75,12 +75,12 @@ const CuryteImage = (uploadFn: UploadFn) => {
     renderHTML({ HTMLAttributes }) {
       return [
         'div',
-        { class: 'my-8 lg:max-w-[50vw] mx-auto' },
+        { class: 'mx-auto' },
         [
           'div',
           {
             class: classNames(
-              'w-full h-auto relative not-prose flex justify-center',
+              'm-8 h-auto relative not-prose flex justify-center',
               { 'opacity-50': HTMLAttributes.uploading }
             ),
             'data-drag-handle': '',

@@ -22,12 +22,18 @@ type Props = {
   lesson?: Lesson
   children?: ReactNode
   handleUpdate: (l: Partial<Lesson>) => void
+  stickyFooter: ReactNode
 }
 
 const prepareTagStr = (str?: string): string[] =>
   (str || '').split(', ').map((s) => s.replace('#', '').trim())
 
-const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
+const LessonEditor = ({
+  lesson,
+  children,
+  handleUpdate,
+  stickyFooter,
+}: Props) => {
   const [title, setTitle] = useState(lesson?.title?.trim() || '')
   const [description, setDescription] = useState(
     lesson?.description?.trim() || ''
@@ -66,7 +72,7 @@ const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
 
   return (
     <Layout
-      withFooter={false}
+      footer={stickyFooter}
       rightContent={
         <div className="flex flex-col gap-8 mb-4">
           <LessonOutline editor={editor} />
@@ -136,7 +142,6 @@ const LessonEditor = ({ lesson, children, handleUpdate }: Props) => {
           </div>
         </div>
       </div>
-
       {children}
     </Layout>
   )

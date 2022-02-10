@@ -18,19 +18,21 @@ const MultipleChoiceRenderer = ({
 }: MultipleChoiceRendererProps) => (
   <NodeViewWrapper>
     <NodeViewContent>
-      <div
-        className="p-4 my-4 lg:max-w-[50vw] mx-auto rounded-xl shadow-lg multiple-choice border"
-        data-drag-handle=""
-      >
-        {editor.isEditable && (
-          <MultipleChoiceEditorComponent
-            {...node.attrs}
-            onUpdate={(attrs) => {
-              updateAttributes(attrs)
-            }}
-          />
-        )}
-        {!editor.isEditable && <MultipleChoiceComponent {...node.attrs} />}
+      <div className="mx-auto">
+        <div
+          className="p-4 m-8 border shadow-lg rounded-xl multiple-choice"
+          data-drag-handle=""
+        >
+          {editor.isEditable && (
+            <MultipleChoiceEditorComponent
+              {...node.attrs}
+              onUpdate={(attrs) => {
+                updateAttributes(attrs)
+              }}
+            />
+          )}
+          {!editor.isEditable && <MultipleChoiceComponent {...node.attrs} />}
+        </div>
       </div>
     </NodeViewContent>
   </NodeViewWrapper>

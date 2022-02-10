@@ -66,11 +66,11 @@ export const IFrameEmbed = Node.create({
   renderHTML({ HTMLAttributes }) {
     return [
       'div',
-      { class: 'my-8 lg:max-w-[50vw] mx-auto' },
+      { class: 'mx-auto' },
       [
         'div',
         {
-          class: 'w-full h-auto relative aspect-w-16 aspect-h-9',
+          class: 'm-8 h-auto relative aspect-w-16 aspect-h-9',
           'data-drag-handle': '',
         },
         [

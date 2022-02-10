@@ -19,6 +19,7 @@ import LoadingSpinner from '../../components/LoadingSpinner'
 import { Lesson } from '../../interfaces/lesson'
 import { useErrorHandler } from 'react-error-boundary'
 import {
+  discordInviteHref,
   indexRoute,
   newLessonRoute,
   newLessonRouteHref,
@@ -199,12 +200,12 @@ const WorkspaceView = () => {
                     </Link>
                   </li>
                 </ul>
-                <Link href="https://discord.gg/Axd7QgGYF9" passHref>
+                <a href={discordInviteHref} target="_blank" rel="noreferrer">
                   <Button className="flex items-center gap-1 mt-4">
                     Get help
                     <SupportIcon className="w-5 h-5" />
                   </Button>
-                </Link>
+                </a>
               </section>
             </div>
           }

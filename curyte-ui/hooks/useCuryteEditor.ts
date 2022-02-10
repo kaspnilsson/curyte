@@ -12,7 +12,7 @@ import TaskList from '@tiptap/extension-task-list'
 import Focus from '@tiptap/extension-focus'
 import Typography from '@tiptap/extension-typography'
 import Underline from '@tiptap/extension-underline'
-import { JSONContent, useEditor } from '@tiptap/react'
+import { JSONContent, mergeAttributes, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { DependencyList } from 'react'
 import { GoogleDriveEmbed } from '../components/embeds/GoogleDriveEmbed'
@@ -30,6 +30,7 @@ import DetailsContent from '../components/extensions/Details/DetailsContent'
 import { getCurrentlySelectedNodes } from '../utils/prosemirror'
 import { uploadImage } from '../firebase/api'
 import CuryteImage from '../components/extensions/Image/CuryteImage'
+import Heading from '@tiptap/extension-heading'
 
 interface EditorProps {
   content: JSONContent | null
@@ -67,14 +68,28 @@ const useCuryteEditor = (
           dropcursor: {
             color: zinc[500],
           },
+          heading: false,
         }),
+        Heading.extend({
+          // Force headings to be one level lower, as we only offer three and
+          renderHTML({ node, HTMLAttributes }) {
+            const hasLevel = this.options.levels.includes(node.attrs.level)
+            const level = hasLevel ? node.attrs.level : this.options.levels[0]
+
+            return [
+              `h${level + 1}`,
+              mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
+              0,
+            ]
+          },
+        }).configure({ levels: [1, 2, 3] }),
         GoogleDriveEmbed,
         CuryteImage(uploadImage),
         // ImageEmbed,
         // Image,
         TaskList,
         AutoId,
-        TrailingNode,
+        // TrailingNode,
         TaskItem.configure({
           nested: true,
         }),

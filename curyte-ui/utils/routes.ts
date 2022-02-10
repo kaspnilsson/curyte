@@ -1,6 +1,9 @@
 export const lessonRoute = (uid: string) => `/lessons/${uid}`
 export const lessonRouteHrefPath = '/lessons/[id]'
 
+export const presentLessonRoute = (uid: string) => `/lessons/present/${uid}`
+export const presentLessonRouteHrefPath = '/lessons/present/[id]'
+
 export const editLessonRoute = (uid: string) => `/lessons/edit/${uid}`
 export const editLessonRouteHrefPath = '/lessons/edit/[id]'
 
@@ -51,8 +54,18 @@ export const lessonInPathRoute = (pathId: string, lessonId: string) =>
   `/paths/${pathId}/${lessonId}`
 export const lessonInPathRouteHrefPath = '/paths/[id]/[lessonId]'
 
+export const presentLessonInPathRoute = (pathId: string, lessonId: string) =>
+  `/paths/${pathId}/present/${lessonId}`
+export const presentLessonInPathRouteHrefPath = '/paths/[id]/present/[lessonId]'
+
 export const workspaceRoute = '/accounts/workspace'
 
 export const accountSettingsRoute = '/accounts/settings'
 
 export const whatIsCuryteRoute = '/what-is-curyte'
+
+export const privacyPolicyRoute = '/lessons/7VVYBD7pm450RvCG'
+
+export const dataDeletionInstructionsRoute = '/lessons/HL9wDt63rC04bL2M'
+
+export const discordInviteHref = 'https://discord.gg/Axd7QgGYF9'

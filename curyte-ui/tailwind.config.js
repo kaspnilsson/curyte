@@ -1,4 +1,5 @@
 module.exports = {
+  darkMode: 'media',
   content: [
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
@@ -6,7 +7,7 @@ module.exports = {
   theme: {
     screens: {
       xs: '400px',
-      // => @media (min-width: 640px) { ... }
+      // => @media (min-width: 400px) { ... }
 
       sm: '640px',
       // => @media (min-width: 640px) { ... }
