@@ -6,7 +6,7 @@ import LessonHeader from '../components/LessonHeader'
 import FancyEditor from '../components/FancyEditor'
 import useCuryteEditor from '../hooks/useCuryteEditor'
 import { JSONContent } from '@tiptap/core'
-import SwiperClass, { Navigation, HashNavigation, Lazy } from 'swiper'
+import SwiperClass, { Navigation, HashNavigation } from 'swiper'
 import { SwiperSlide, Swiper } from 'swiper/react'
 import Container from '../components/Container'
 import { Button, Progress } from '@chakra-ui/react'
@@ -15,12 +15,12 @@ import Link from 'next/link'
 import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 import ExitFullscreen from '../components/icons/ExitFullscreen'
 import EnterFullscreen from '../components/icons/EnterFullscreen'
-import { useHotkeys } from 'react-hotkeys-hook'
 
 import 'swiper/css'
+import useKeypress from '../hooks/useKeypress'
 
-const shouldConcatBlock = (type?: string): boolean =>
-  type === 'paragraph' || type === 'details' || type === 'bulletList'
+// const shouldConcatBlock = (type?: string): boolean =>
+//   type === 'paragraph' || type === 'details' || type === 'bulletList'
 
 const partitionDocForPresentationMode = (
   doc: JSONContent | null
@@ -29,9 +29,8 @@ const partitionDocForPresentationMode = (
   const output = []
   let acc: JSONContent[] = []
   for (const block of doc.content || []) {
-    if (shouldConcatBlock(block.type)) {
-      acc.push(block)
-    } else {
+    if (block.type === 'heading') {
+      // Heading starts a new slide, heading goes at the top
       if (acc.length) {
         output.push({
           type: 'doc',
@@ -39,6 +38,16 @@ const partitionDocForPresentationMode = (
         })
       }
       acc = [block]
+    } else if (block.type === 'horizontalRule') {
+      // HR starts a new slide and is dropped
+      if (acc.length) {
+        output.push({
+          type: 'doc',
+          content: acc,
+        })
+      }
+    } else {
+      acc.push(block)
     }
   }
 
@@ -81,11 +90,12 @@ const PresentLessonView = ({ lesson, author, backUrl, backUrlHref }: Props) => {
 
   const downOrNext = useCallback(() => {
     if (!swiper || !ref || !ref.current) return
-    if (
-      ref.current &&
-      ref.current.scrollHeight - ref.current.scrollTop > swiper.height
-    ) {
-      ref.current.scroll({ top: swiper.height, left: 0, behavior: 'smooth' })
+    if (ref.current.scrollHeight - ref.current.scrollTop > swiper.height) {
+      ref.current.scroll({
+        top: swiper.height + ref.current.scrollTop,
+        left: 0,
+        behavior: 'smooth',
+      })
     } else {
       swiper?.slideNext()
     }
@@ -93,17 +103,19 @@ const PresentLessonView = ({ lesson, author, backUrl, backUrlHref }: Props) => {
 
   const upOrBack = useCallback(() => {
     if (!swiper || !ref || !ref.current) return
-    if (ref.current && ref.current.scrollTop > 0) {
-      ref.current.scroll({ top: -swiper.height, left: 0, behavior: 'smooth' })
+    if (ref.current.scrollTop > 0) {
+      ref.current.scroll({
+        top: ref.current.scrollTop - swiper.height,
+        left: 0,
+        behavior: 'smooth',
+      })
     } else {
       swiper?.slidePrev()
     }
   }, [swiper, ref])
 
-  useHotkeys('left', upOrBack, [upOrBack])
-  useHotkeys('up', upOrBack, [upOrBack])
-  useHotkeys('right', downOrNext, [downOrNext])
-  useHotkeys('down', downOrNext, [downOrNext])
+  useKeypress(upOrBack, ['ArrowLeft', 'ArrowUp'])
+  useKeypress(downOrNext, ['ArrowDown', 'ArrowRight'])
 
   const partitioned = partitionDocForPresentationMode(lesson.content).map(
     (content, index) => <EditorContentSlide content={content} key={index} />
@@ -133,7 +145,7 @@ const PresentLessonView = ({ lesson, author, backUrl, backUrlHref }: Props) => {
 
   return (
     <FullScreen handle={handle}>
-      <article className="relative flex flex-col w-screen h-screen overflow-hidden bg-white">
+      <article className="relative flex flex-col w-screen h-screen overflow-hidden bg-white scroll-auto">
         <Head>
           <title>{lesson.title}</title>
         </Head>
@@ -169,8 +181,7 @@ const PresentLessonView = ({ lesson, author, backUrl, backUrlHref }: Props) => {
           simulateTouch={false}
           hashNavigation
           navigation={{ prevEl, nextEl }}
-          lazy
-          modules={[HashNavigation, Navigation, Lazy]}
+          modules={[HashNavigation, Navigation]}
           className="w-full h-full"
         >
           {items.map((item, index) => (
@@ -180,10 +191,10 @@ const PresentLessonView = ({ lesson, author, backUrl, backUrlHref }: Props) => {
               className="w-auto lg:!max-w-[1000px] xl:!max-w-[1200px] 2xl:!max-w-[1440px]"
             >
               <div
+                className="w-auto h-full overflow-y-auto"
                 ref={activeIndex === index ? ref : undefined}
-                className="w-auto h-full overflow-y-auto scroll-auto"
               >
-                <Container className="grid items-center w-auto h-full min-h-0 py-8">
+                <Container className="grid items-center w-auto min-h-full py-8">
                   {item}
                 </Container>
               </div>

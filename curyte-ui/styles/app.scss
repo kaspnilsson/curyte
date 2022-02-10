@@ -162,8 +162,10 @@ textarea::placeholder {
   -webkit-transition: opacity 0.15s ease-in-out;
   -moz-transition: opacity 0.15s ease-in-out;
   transition: opacity 0.15s ease-in-out;
+  overflow: hidden;
 }
 
 .swiper-slide-active {
   opacity: 1;
+  overflow: auto;
 }
