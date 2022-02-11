@@ -31,7 +31,11 @@ const Signup = () => {
       {
         email,
       },
-      { redirectTo: 'http://localhost:3000/what-is-curyte' }
+      {
+        redirectTo: `${
+          process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com'
+        }/what-is-curyte`,
+      }
     )
     toast({ title: 'Check your email for a sign in link!' })
     if (error) {
@@ -48,7 +52,11 @@ const Signup = () => {
       {
         provider: 'google',
       },
-      { redirectTo: 'http://localhost:3000/what-is-curyte' }
+      {
+        redirectTo: `${
+          process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com'
+        }/what-is-curyte`,
+      }
     )
     if (error) {
       setError(error.message)
@@ -64,7 +72,11 @@ const Signup = () => {
       {
         provider: 'facebook',
       },
-      { redirectTo: 'http://localhost:3000/what-is-curyte' }
+      {
+        redirectTo: `${
+          process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com'
+        }/what-is-curyte`,
+      }
     )
     if (error) {
       setError(error.message)

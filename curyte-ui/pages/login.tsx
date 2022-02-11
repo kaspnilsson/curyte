@@ -34,16 +34,20 @@ const Login = () => {
     event.preventDefault()
     setIsLoading(true)
     setError('')
-    const { error } = await supabase.auth.signIn(
+    const stuff = await supabase.auth.signIn(
       {
         email,
       },
-      { redirectTo: 'http://localhost:3000' }
+      {
+        redirectTo:
+          process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com/',
+      }
     )
     toast({ title: 'Check your email for a sign in link!' })
-    if (error) {
+    if (stuff.error) {
+      console.log(stuff)
       debugger
-      setError(error.message)
+      setError(stuff.error.message)
     }
 
     setIsLoading(false)
@@ -56,7 +60,10 @@ const Login = () => {
       {
         provider: 'google',
       },
-      { redirectTo: 'http://localhost:3000' }
+      {
+        redirectTo:
+          process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com/',
+      }
     )
     if (error) {
       debugger
@@ -73,7 +80,10 @@ const Login = () => {
       {
         provider: 'facebook',
       },
-      { redirectTo: 'http://localhost:3000' }
+      {
+        redirectTo:
+          process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com/',
+      }
     )
     if (error) {
       debugger
