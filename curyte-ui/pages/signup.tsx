@@ -27,6 +27,7 @@ const Signup = () => {
     event.preventDefault()
     setIsLoading(true)
     setError('')
+
     const { error } = await supabase.auth.signIn(
       {
         email,
@@ -48,6 +49,7 @@ const Signup = () => {
   const signInWithGoogle = async () => {
     setIsLoading(true)
     setError('')
+
     const { error } = await supabase.auth.signIn(
       {
         provider: 'google',
@@ -68,6 +70,7 @@ const Signup = () => {
   const signInWithFacebook = async () => {
     setIsLoading(true)
     setError('')
+
     const { error } = await supabase.auth.signIn(
       {
         provider: 'facebook',
