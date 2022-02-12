@@ -22,8 +22,7 @@ import classNames from 'classnames'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useRef } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { auth } from '../firebase/clientApp'
+import supabase from '../supabase/client'
 import {
   accountRoute,
   accountRouteHrefPath,
@@ -52,7 +51,7 @@ const ListItem = ({
 }: ListItemProps) => {
   const router = useRouter()
   const isActive = router.pathname === href
-  const [user] = useAuthState(auth)
+  const user = supabase.auth.user()
   return (
     <div
       className={classNames('relative flex', {
@@ -81,10 +80,10 @@ const ListItem = ({
 }
 
 const AppMenu = () => {
-  const [user, userLoading] = useAuthState(auth)
+  const user = supabase.auth.user()
   const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  if (userLoading) return null
+
   return (
     <div className="flex flex-col h-full gap-2">
       <Link href={exploreRoute} passHref>

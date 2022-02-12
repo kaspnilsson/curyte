@@ -199,6 +199,31 @@ export async function getAuthor(uid: string): Promise<Author> {
   }
 }
 
+/**
+ * Gets authors from firestore by applying clauses.
+ *
+ * @param whereClauses
+ * @returns
+ */
+export async function getAuthors(
+  queryConstraints: QueryConstraint[]
+): Promise<Author[]> {
+  try {
+    const q: CollectionReference<DocumentData> | Query<DocumentData> = query(
+      collection(firestore, 'users'),
+      ...queryConstraints
+    )
+    return getDocs(q).then((result) => {
+      const mapped: Author[] = []
+      result.docs.forEach((result) => mapped.push(result.data() as Author))
+      return mapped
+    })
+  } catch (e) {
+    exception(e as string)
+    throw e
+  }
+}
+
 export async function updateAuthor(author: Author): Promise<void> {
   try {
     return await setDoc(doc(collection(firestore, 'users'), author.uid), author)

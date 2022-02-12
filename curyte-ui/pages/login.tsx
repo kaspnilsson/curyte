@@ -17,37 +17,30 @@ import CuryteLogo from '../components/CuryteLogo'
 import Head from 'next/head'
 import Container from '../components/Container'
 
+const REDIRECT_URL_BASE =
+  process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com'
+
 const Login = () => {
   const toast = useToast()
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const user = supabase.auth.user()
-
-  if (user) {
-    debugger
-    supabase.auth.signOut()
-  }
-
   const submitHandler = async (event: SyntheticEvent) => {
     event.preventDefault()
     setIsLoading(true)
     setError('')
-    const stuff = await supabase.auth.signIn(
+    const res = await supabase.auth.signIn(
       {
         email,
       },
       {
-        redirectTo:
-          process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com/',
+        redirectTo: REDIRECT_URL_BASE,
       }
     )
     toast({ title: 'Check your email for a sign in link!' })
-    if (stuff.error) {
-      console.log(stuff)
-      debugger
-      setError(stuff.error.message)
+    if (res.error) {
+      setError(res.error.message)
     }
 
     setIsLoading(false)
@@ -61,12 +54,10 @@ const Login = () => {
         provider: 'google',
       },
       {
-        redirectTo:
-          process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com/',
+        redirectTo: REDIRECT_URL_BASE,
       }
     )
     if (error) {
-      debugger
       setError(error.message)
     }
 
@@ -81,12 +72,10 @@ const Login = () => {
         provider: 'facebook',
       },
       {
-        redirectTo:
-          process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com/',
+        redirectTo: REDIRECT_URL_BASE,
       }
     )
     if (error) {
-      debugger
       setError(error.message)
     }
 
@@ -98,7 +87,7 @@ const Login = () => {
       <Head>
         <title>Curyte: Log in</title>
       </Head>
-      <div className="flex flex-col items-center justify-center w-full min-h-full">
+      <div className="flex flex-col items-center justify-center w-full min-h-screen">
         <Container className="flex items-center w-full gap-2 my-4">
           <Link href={exploreRoute} passHref>
             <h2 className="flex items-center gap-2 text-2xl font-bold leading-tight tracking-tighter">

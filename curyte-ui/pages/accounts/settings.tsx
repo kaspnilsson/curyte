@@ -2,7 +2,6 @@ import { Button, Input, Textarea } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { SyntheticEvent, useEffect, useState } from 'react'
 import { useErrorHandler } from 'react-error-boundary'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import AuthorLink from '../../components/AuthorLink'
 import Layout from '../../components/Layout'
 import LoadingSpinner from '../../components/LoadingSpinner'
@@ -11,13 +10,14 @@ import { getAuthor, updateAuthor } from '../../firebase/api'
 import { auth } from '../../firebase/clientApp'
 import { Author } from '../../interfaces/author'
 import { accountSettingsRoute, indexRoute } from '../../utils/routes'
+import supabase from '../../supabase/client'
 
 const SettingsView = () => {
   const router = useRouter()
   const handleError = useErrorHandler()
 
-  const [user, userLoading] = useAuthState(auth)
-  const [loading, setLoading] = useState(userLoading)
+  const user = supabase.auth.user()
+  const [loading, setLoading] = useState(false)
   const [author, setAuthor] = useState<Author | null>(null)
   const [saving, setSaving] = useState(false)
   const [authorChanged, setAuthorChanged] = useState(false)
@@ -26,7 +26,7 @@ const SettingsView = () => {
     if (user && !author) {
       setLoading(true)
       const fetchAuthor = async () => {
-        await getAuthor(user.uid)
+        await getAuthor(user.id)
           .then((author) => {
             setAuthor(author)
           })

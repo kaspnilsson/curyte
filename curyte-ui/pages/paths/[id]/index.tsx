@@ -1,27 +1,32 @@
 import { NextSeo } from 'next-seo'
 import ErrorPage from 'next/error'
 import React, { useEffect } from 'react'
-import { Lesson } from '../../interfaces/lesson'
+import { Lesson } from '../../../interfaces/lesson'
 import { GetServerSideProps } from 'next'
-import Layout from '../../components/Layout'
-import { Author } from '../../interfaces/author'
+import Layout from '../../../components/Layout'
+import { Author } from '../../../interfaces/author'
 import {
   accountRoute,
   accountRouteHrefPath,
   pathRoute,
   pathRouteHrefPath,
-} from '../../utils/routes'
+} from '../../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
-import { logPathView, getAuthor, getPath, getLesson } from '../../firebase/api'
+import {
+  logPathView,
+  getAuthor,
+  getPath,
+  getLesson,
+} from '../../../firebase/api'
 import { Badge, Center, Divider } from '@chakra-ui/react'
-import { Path } from '../../interfaces/path'
+import { Path } from '../../../interfaces/path'
 import { title } from 'process'
-import { computeClassesForTitle } from '../../components/LessonTitle'
-import UnitOutline from '../../components/UnitOutline'
-import AuthorLink from '../../components/AuthorLink'
-import PathActions from '../../components/PathActions'
-import DateFormatter from '../../components/DateFormatter'
-import CoverImage from '../../components/CoverImage'
+import { computeClassesForTitle } from '../../../components/LessonTitle'
+import UnitOutline from '../../../components/UnitOutline'
+import AuthorLink from '../../../components/AuthorLink'
+import PathActions from '../../../components/PathActions'
+import DateFormatter from '../../../components/DateFormatter'
+import CoverImage from '../../../components/CoverImage'
 
 interface Props {
   lessonsMap: { [uid: string]: Lesson }

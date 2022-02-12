@@ -11,7 +11,6 @@ import ErrorBoundary from '../components/ErrorBoundary'
 import theme from '../styles/theme'
 import supabase from '../supabase/client'
 import { AuthChangeEvent, Session } from '@supabase/supabase-js'
-import { exploreRoute } from '../utils/routes'
 
 export default function CuryteApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -26,33 +25,14 @@ export default function CuryteApp({ Component, pageProps }: AppProps) {
     }
   }, [router.events])
 
-  const user = supabase.auth.user()
-
-  if (user) {
-    debugger
-    supabase.auth.signOut()
-  }
-
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        debugger
-        handleAuthSession(event, session)
-        if (event === 'SIGNED_IN') {
-          const signedInUser = supabase.auth.user()
-          if (!signedInUser) return
-          const userId = signedInUser.id
-          supabase
-            .from('profiles')
-            .upsert({ id: userId })
-            .then(({ error }) => {
-              if (!error) {
-                router.push(exploreRoute)
-              }
-            })
-        }
-        if (event === 'SIGNED_OUT') {
-          router.push(exploreRoute)
+        const user = supabase.auth.user()
+        updateSupabaseCookie(event, session)
+        if (event === 'SIGNED_IN' && user) {
+          // Ensure users always have profiles.
+          supabase.from('profiles').upsert({ id: user.id })
         }
       }
     )
@@ -60,28 +40,18 @@ export default function CuryteApp({ Component, pageProps }: AppProps) {
     return () => {
       authListener?.unsubscribe()
     }
-  }, [router])
+  })
 
-  useEffect(() => {
-    if (user) {
-      if (router.pathname === '/signin') {
-        router.push('/')
-      }
-    }
-  }, [router.pathname, user, router])
-
-  const handleAuthSession = async (
+  const updateSupabaseCookie = async (
     event: AuthChangeEvent,
     session: Session | null
-  ) => {
-    if (!session) return
+  ) =>
     await fetch('/api/auth', {
       method: 'POST',
       headers: new Headers({ 'Content-Type': 'application/json' }),
       credentials: 'same-origin',
       body: JSON.stringify({ event, session }),
     })
-  }
 
   useEffect(() => {
     window.onerror = function (msg, source, lineNo, columnNo, error) {

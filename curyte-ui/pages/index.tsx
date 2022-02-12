@@ -1,11 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Lesson } from '../interfaces/lesson'
 import { Tag } from '../interfaces/tag'
 import Layout from '../components/Layout'
 import { GetServerSideProps } from 'next'
-import { getAuthor, getLessons, getTags } from '../firebase/api'
 import LessonList from '../components/LessonList'
-import { limit, orderBy, where } from 'firebase/firestore'
 import { Author } from '../interfaces/author'
 import {
   Button,
@@ -18,13 +16,13 @@ import {
 } from '@chakra-ui/react'
 import TagList from '../components/TagList'
 import { exploreRoute, newLessonRoute } from '../utils/routes'
-import useLocalStorage from '../hooks/useLocalStorage'
 import Link from 'next/link'
 import { XIcon } from '@heroicons/react/outline'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { auth } from '../firebase/clientApp'
-// import { json2csvAsync } from 'json-2-csv'
-// import { parseISO } from 'date-fns'
+import supabase from '../supabase/client'
+import { getLessons } from './api/lessons'
+import { PostgrestResponse, User } from '@supabase/supabase-js'
+import { getTags } from './api/tags'
+import { getAuthors } from './api/profiles'
 
 interface Props {
   featuredLessons: Lesson[]
@@ -32,6 +30,7 @@ interface Props {
   popularLessons: Lesson[]
   authors: Author[]
   tags: Tag[]
+  user: User | null
 }
 
 const ExplorePage = ({
@@ -40,28 +39,18 @@ const ExplorePage = ({
   popularLessons,
   authors,
   tags,
+  user,
 }: Props) => {
-  const [showHero, setShowHero] = useLocalStorage('showStartWritingHero', true)
-  const [user] = useAuthState(auth)
+  const [showHero, setShowHero] = useState(false)
+  useEffect(() => {
+    const hideShowHero = localStorage.getItem('hideStartWritingHero')
+    setShowHero(!hideShowHero)
+  }, [])
 
-  // useEffect(() => {
-  //   const fetch = async () => {
-  //     const allLessons = await getLessons(
-  //       [
-  //         where('authorId', 'not-in', [
-  //           'FcLTIdF6tOhMMZZzOnsSHmCQVjt1',
-  //           'PoX0rTaDEJeb3fw28o2kSM5oABA2',
-  //         ]),
-  //       ],
-  //       true
-  //     )
-  //     // const csv = await json2csvAsync(allLessons)
-  //     // console.log(csv)
-  //     // window.localStorage.setItem('lessons', csv)
-  //     debugger
-  //   }
-  //   fetch()
-  // }, [])
+  const hideHero = () => {
+    setShowHero(false)
+    localStorage.setItem('hideStartWritingHero', 'true')
+  }
 
   return (
     <Layout
@@ -88,7 +77,7 @@ const ExplorePage = ({
         <section className="relative flex flex-col items-center p-12 mb-12 shadow-xl rounded-xl bg-zinc-100 group shadow-violet-500/20">
           {user && (
             <Button
-              onClick={() => setShowHero(false)}
+              onClick={hideHero}
               className="!absolute top-2 right-2 opacity-0 group-hover:opacity-100 ease-in-out transition-all duration-150"
               size="xs"
             >
@@ -102,7 +91,7 @@ const ExplorePage = ({
             A better lesson builder -- for teachers, by teachers.
           </Heading>
           <Link href={newLessonRoute()} passHref>
-            <Button colorScheme="black" onClick={() => setShowHero(false)}>
+            <Button colorScheme="black" onClick={hideHero}>
               Start writing
             </Button>
           </Link>
@@ -146,24 +135,25 @@ const ExplorePage = ({
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const featuredLessons = await getLessons([
-    where('featured', '==', true),
-    where('private', '==', false),
-    limit(10),
-  ])
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const { user } = await supabase.auth.api.getUserByCookie(req)
 
-  const popularLessons = await getLessons([
-    where('private', '==', false),
-    orderBy('viewCount', 'desc'),
-    limit(10),
-  ])
+  const mapLessonFn = (res: PostgrestResponse<unknown>) =>
+    (res.body || []).map((data) => data as Lesson)
 
-  const recentLessons = await getLessons([
-    where('private', '==', false),
-    orderBy('created', 'desc'),
-    limit(10),
-  ])
+  const [featuredLessons, popularLessons, recentLessons] = (
+    await Promise.all([
+      getLessons().eq('featured', true).neq('private', true).limit(10),
+      getLessons()
+        .neq('private', true)
+        .order('viewCount', { ascending: false })
+        .limit(10),
+      getLessons()
+        .neq('private', true)
+        .order('created', { ascending: false })
+        .limit(10),
+    ])
+  ).map((res) => mapLessonFn(res))
 
   const authorIds = [
     ...featuredLessons,
@@ -174,15 +164,25 @@ export const getServerSideProps: GetServerSideProps = async () => {
     new Set()
   )
 
-  const authors = []
-  for (const id of Array.from(authorIds)) {
-    authors.push(await getAuthor(id))
-  }
+  const authors = (
+    (await getAuthors().in('uid', Array.from(authorIds))).body || []
+  ).map((a) => a as Author)
 
-  const tags = await getTags([orderBy('viewCount', 'desc'), limit(16)])
+  const tags = (
+    (await getTags().order('viewCount', { ascending: false }).limit(16)).body ||
+    []
+  ).map((t) => t as Tag)
 
   return {
-    props: { featuredLessons, popularLessons, recentLessons, authors, tags },
+    props: {
+      featuredLessons,
+      popularLessons,
+      recentLessons,
+      authors,
+      tags,
+      user,
+    },
   }
 }
+
 export default ExplorePage

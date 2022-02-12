@@ -1,12 +1,11 @@
-import { IconButton, Spinner, Tooltip } from '@chakra-ui/react'
+import { IconButton, Tooltip } from '@chakra-ui/react'
 import { TrashIcon, PencilAltIcon, EyeIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { deletePath } from '../firebase/api'
-import { auth } from '../firebase/clientApp'
 import useConfirmDialog from '../hooks/useConfirmDialog'
 import { Path } from '../interfaces/path'
+import supabase from '../supabase/client'
 import { userIsAdmin } from '../utils/hacks'
 import { editPathRoute, workspaceRoute, pathRoute } from '../utils/routes'
 
@@ -17,11 +16,11 @@ interface Props {
 
 const PathActions = ({ path, isReadOnlyView }: Props) => {
   const [loading, setLoading] = useState(false)
-  const [user, userLoading] = useAuthState(auth)
+  const user = supabase.auth.user()
   const router = useRouter()
 
   const handleDelete = async () => {
-    if (!user || !user.uid) return
+    if (!user || !user.id) return
     try {
       setLoading(true)
       await deletePath(path.uid)
@@ -45,11 +44,10 @@ const PathActions = ({ path, isReadOnlyView }: Props) => {
     router.push(pathRoute(path.uid))
   }
 
-  if (userLoading) return <Spinner />
   return (
     <>
       <ConfirmDialog />
-      {user && user.uid === path.authorId && isReadOnlyView && (
+      {user && user.id === path.authorId && isReadOnlyView && (
         <>
           <Tooltip label="Edit path">
             <IconButton
@@ -77,7 +75,7 @@ const PathActions = ({ path, isReadOnlyView }: Props) => {
           ></IconButton>
         </Tooltip>
       )}
-      {user && (user.uid === path.authorId || userIsAdmin(user.uid)) && (
+      {user && (user.id === path.authorId || userIsAdmin(user.id)) && (
         <>
           <Tooltip label="Delete path">
             <IconButton

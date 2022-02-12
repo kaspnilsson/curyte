@@ -15,7 +15,7 @@ const LessonList = ({
   pathId = '',
   onSelectLesson,
 }: Props) => (
-  <div className="flex flex-wrap w-full gap-12">
+  <div className="flex flex-wrap w-full divide-y">
     {!!lessons.length &&
       lessons.map((l, key) => (
         <LessonPreview

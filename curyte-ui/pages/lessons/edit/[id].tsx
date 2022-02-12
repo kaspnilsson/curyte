@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { auth } from '../../../firebase/clientApp'
 import { GetServerSideProps } from 'next'
 import { Author } from '../../../interfaces/author'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { useRouter } from 'next/router'
 import EditLessonPage from '../../../components/EditLessonPage'
 import LoadingSpinner from '../../../components/LoadingSpinner'
@@ -18,6 +16,7 @@ import {
 import { deleteLesson, getLesson, updateLesson } from '../../../firebase/api'
 import { Portal, useToast } from '@chakra-ui/react'
 import { Confetti } from '../../../components/Confetti'
+import supabase from '../../../supabase/client'
 
 type Props = {
   id: string
@@ -26,7 +25,7 @@ type Props = {
 const LessonView = ({ id }: Props) => {
   const router = useRouter()
   const toast = useToast()
-  const [user, userLoading] = useAuthState(auth)
+  const user = supabase.auth.user()
   const [loading, setLoading] = useState(true)
   const [dirty, setDirty] = useState(false)
   const [lesson, setLesson] = useState<Lesson | undefined>()
@@ -36,14 +35,14 @@ const LessonView = ({ id }: Props) => {
   )
 
   useEffect(() => {
-    if (!user && !userLoading) {
+    if (!user) {
       router.push(loginRoute(router.asPath))
       return
     }
   })
 
   useEffect(() => {
-    if (!user || userLoading) return
+    if (!user) return
     const fetchLesson = async () => {
       const l = await getLesson(id)
       if (!l) {
@@ -54,7 +53,7 @@ const LessonView = ({ id }: Props) => {
     }
     setLoading(true)
     fetchLesson()
-  }, [id, router, user, userLoading])
+  }, [id, router, user])
 
   const handleTogglePrivate = async () => {
     if (!lesson) return

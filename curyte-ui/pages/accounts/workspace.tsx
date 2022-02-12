@@ -2,9 +2,7 @@
 import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
 import React, { useEffect, useState } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import Layout from '../../components/Layout'
-import { auth } from '../../firebase/clientApp'
 import { Author } from '../../interfaces/author'
 import {
   Button,
@@ -26,7 +24,6 @@ import {
   newPathRoute,
   workspaceRoute,
 } from '../../utils/routes'
-import { getAuthor, getLessons, getPaths } from '../../firebase/api'
 import LessonList from '../../components/LessonList'
 import { where } from 'firebase/firestore'
 import { Path } from '../../interfaces/path'
@@ -37,27 +34,34 @@ import {
   DocumentTextIcon,
   SupportIcon,
 } from '@heroicons/react/outline'
+import supabase from '../../supabase/client'
+import { GetServerSideProps } from 'next'
+import { PostgrestResponse } from '@supabase/supabase-js'
+import { getAuthors } from '../api/profiles'
+import { Tag } from '../../interfaces/tag'
+import { getLessons } from '../api/lessons'
+import { getTags } from '../api/tags'
 
 const WorkspaceView = () => {
   const router = useRouter()
   const handleError = useErrorHandler()
 
-  const [user, userLoading] = useAuthState(auth)
+  const user = supabase.auth.user()
   const [author, setAuthor] = useState<Author | null>(null)
-  const [loading, setLoading] = useState(userLoading)
+  const [loading, setLoading] = useState(false)
   const [lessons, setLessons] = useState<Lesson[]>([])
   const [paths, setPaths] = useState<Path[]>([])
   const [savedLessons, setSavedLessons] = useState<Lesson[]>([])
 
   useEffect(() => {
-    if (!user && !userLoading) router.push(indexRoute)
-  }, [user, userLoading, router])
+    if (!user) router.push(indexRoute)
+  }, [user, router])
 
   useEffect(() => {
     if (user && !author) {
       setLoading(true)
       const fetchAuthor = async () => {
-        await getAuthor(user.uid)
+        await getAuthor(user.id)
           .then((author) => {
             setAuthor(author)
             if (author.savedLessons?.length) {
@@ -78,7 +82,7 @@ const WorkspaceView = () => {
       }
 
       const fetchLessons = async () => {
-        getLessons([where('authorId', '==', user.uid)]).then((res) => {
+        getLessons([where('authorId', '==', user.id)]).then((res) => {
           // TODO(kasper): support sorting
           setLessons(
             res.sort((a, b) =>
@@ -91,7 +95,7 @@ const WorkspaceView = () => {
       }
 
       const fetchPaths = async () => {
-        getPaths([where('authorId', '==', user.uid)]).then((res) =>
+        getPaths([where('authorId', '==', user.id)]).then((res) =>
           // TODO(kasper): support sorting
           setPaths(
             res.sort((a, b) =>
@@ -112,7 +116,7 @@ const WorkspaceView = () => {
   return (
     <>
       {loading && <LoadingSpinner />}
-      {!user && !userLoading && <ErrorPage statusCode={404} />}
+      {!user && <ErrorPage statusCode={403} />}
       {author && !loading && (
         <Layout
           breadcrumbs={[
@@ -254,6 +258,48 @@ const WorkspaceView = () => {
       )}
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const { user } = await supabase.auth.api.getUserByCookie(req)
+  const params = { props: { user } }
+  if (user) {
+    const mapLessonFn = (res: PostgrestResponse<unknown>) =>
+      (res.body || []).map((data) => data as Lesson)
+
+    const [featuredLessons, popularLessons, recentLessons] = (
+      await Promise.all([
+        getLessons().eq('featured', true).neq('private', true).limit(10),
+        getLessons()
+          .neq('private', true)
+          .order('viewCount', { ascending: false })
+          .limit(10),
+        getLessons()
+          .neq('private', true)
+          .order('created', { ascending: false })
+          .limit(10),
+      ])
+    ).map((res) => mapLessonFn(res))
+
+    const authorIds = [
+      ...featuredLessons,
+      ...popularLessons,
+      ...recentLessons,
+    ].reduce(
+      (acc: Set<string>, curr: Lesson) => acc.add(curr.authorId),
+      new Set()
+    )
+
+    const authors = (
+      (await getAuthors().in('uid', Array.from(authorIds))).body || []
+    ).map((a) => a as Author)
+
+    const tags = (
+      (await getTags().order('viewCount', { ascending: false }).limit(16))
+        .body || []
+    ).map((t) => t as Tag)
+  }
+  return params
 }
 
 export default WorkspaceView

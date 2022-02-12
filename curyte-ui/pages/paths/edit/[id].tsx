@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { auth } from '../../../firebase/clientApp'
 import { GetServerSideProps } from 'next'
 import { Author } from '../../../interfaces/author'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { useRouter } from 'next/router'
 import LoadingSpinner from '../../../components/LoadingSpinner'
 import { debounce } from 'ts-debounce'
@@ -14,6 +12,7 @@ import { Path } from '../../../interfaces/path'
 import EditPathPage from '../../../components/EditPathPage'
 import { exception } from '../../../utils/gtag'
 import { Timestamp } from 'firebase/firestore'
+import supabase from '../../../supabase/client'
 
 type Props = {
   id: string
@@ -21,7 +20,7 @@ type Props = {
 
 const EditPathView = ({ id }: Props) => {
   const router = useRouter()
-  const [user, userLoading] = useAuthState(auth)
+  const user = supabase.auth.user()
   const [loading, setLoading] = useState(true)
   const [path, setPath] = useState<Path | undefined>()
   const [savingPromise, setSavingPromise] = useState<Promise<unknown> | null>(
@@ -30,14 +29,14 @@ const EditPathView = ({ id }: Props) => {
   const [dirty, setDirty] = useState(false)
 
   useEffect(() => {
-    if (!user && !userLoading) {
+    if (!user) {
       router.push(loginRoute(router.asPath))
       return
     }
   })
 
   useEffect(() => {
-    if (!user || userLoading) return
+    if (!user) return
     const fetchPath = async () => {
       let d
       try {
@@ -54,7 +53,7 @@ const EditPathView = ({ id }: Props) => {
     }
     setLoading(true)
     fetchPath()
-  }, [id, router, user, userLoading])
+  }, [id, router, user])
 
   //   const handleSubmit = async () => {
   //     if (savingPromise) await savingPromise

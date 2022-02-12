@@ -17,6 +17,9 @@ import CuryteLogo from '../components/CuryteLogo'
 import Head from 'next/head'
 import Container from '../components/Container'
 
+const REDIRECT_URL_BASE =
+  process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com'
+
 const Signup = () => {
   const toast = useToast()
   const [email, setEmail] = useState('')
@@ -33,9 +36,7 @@ const Signup = () => {
         email,
       },
       {
-        redirectTo: `${
-          process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com'
-        }/what-is-curyte`,
+        redirectTo: `${REDIRECT_URL_BASE}/what-is-curyte`,
       }
     )
     toast({ title: 'Check your email for a sign in link!' })
@@ -55,9 +56,7 @@ const Signup = () => {
         provider: 'google',
       },
       {
-        redirectTo: `${
-          process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com'
-        }/what-is-curyte`,
+        redirectTo: `${REDIRECT_URL_BASE}/what-is-curyte`,
       }
     )
     if (error) {
@@ -76,9 +75,7 @@ const Signup = () => {
         provider: 'facebook',
       },
       {
-        redirectTo: `${
-          process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com'
-        }/what-is-curyte`,
+        redirectTo: `${REDIRECT_URL_BASE}/what-is-curyte`,
       }
     )
     if (error) {
@@ -91,9 +88,9 @@ const Signup = () => {
   return (
     <>
       <Head>
-        <title>Curyte: Log in</title>
+        <title>Curyte: Sign up</title>
       </Head>
-      <div className="flex flex-col items-center justify-center w-full min-h-full">
+      <div className="flex flex-col items-center justify-center w-full min-h-screen">
         <Container className="flex items-center w-full gap-2 my-4">
           <Link href={exploreRoute} passHref>
             <h2 className="flex items-center gap-2 text-2xl font-bold leading-tight tracking-tighter">

@@ -1,7 +1,5 @@
-import { auth } from '../firebase/clientApp'
 import Link from 'next/link'
 import React from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { Author } from '../interfaces/author'
 import {
   Button,
@@ -33,6 +31,7 @@ import {
 import { MobileSidebar } from './AppSidebar'
 import Container from './Container'
 import classNames from 'classnames'
+import supabase from '../supabase/client'
 
 export interface BreadcrumbProps {
   href: string
@@ -46,7 +45,7 @@ type Props = {
 }
 
 const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
-  const [user] = useAuthState(auth)
+  const user = supabase.auth.user()
 
   return (
     <>
@@ -186,7 +185,7 @@ const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
                         </Link>
                         <Link
                           passHref
-                          as={accountRoute(user.uid)}
+                          as={accountRoute(user.id)}
                           href={accountRouteHrefPath}
                         >
                           <MenuItem className="flex-col !items-start">

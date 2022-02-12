@@ -3,7 +3,6 @@ import { Author } from '../interfaces/author'
 import AuthorLink from './AuthorLink'
 import DateFormatter from './DateFormatter'
 import LessonTitle from './LessonTitle'
-import { auth } from '../firebase/clientApp'
 import { Lesson } from '../interfaces/lesson'
 import LessonLink from './LessonLink'
 import {
@@ -19,7 +18,6 @@ import {
   Portal,
   useToast,
 } from '@chakra-ui/react'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import {
   BookmarkIcon,
   DocumentRemoveIcon,
@@ -41,6 +39,7 @@ import {
 } from '../firebase/api'
 import useConfirmDialog from '../hooks/useConfirmDialog'
 import Present from './icons/Present'
+import supabase from '../supabase/client'
 
 type Props = {
   lesson: Lesson
@@ -65,7 +64,7 @@ const LessonHeader = ({
   handlePresent,
 }: Props) => {
   const router = useRouter()
-  const [user, userLoading] = useAuthState(auth)
+  const user = supabase.auth.user()
   const [, setLoading] = useState(false)
   const [parentLesson, setParentLesson] = useState<Lesson | null>(null)
   const [isSaved, setIsSaved] = useState(false)
@@ -74,7 +73,7 @@ const LessonHeader = ({
   const toast = useToast()
 
   useEffect(() => {
-    if (!user || userLoading) return
+    if (!user) return
     setLoading(true)
     const fetchParent = async () => {
       if (lesson.parentLessonId) {
@@ -89,7 +88,7 @@ const LessonHeader = ({
     Promise.all([fetchParent(), fetchIsSaved()]).then(() => {
       setLoading(false)
     })
-  }, [lesson, user, userLoading, lesson.parentLessonId])
+  }, [lesson, user, lesson.parentLessonId])
 
   const toggleSaveLesson = async () => {
     if (!user) {

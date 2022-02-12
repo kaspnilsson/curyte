@@ -3,8 +3,6 @@ import { Lesson } from '../../interfaces/lesson'
 import { GetServerSideProps } from 'next'
 import Layout from '../../components/Layout'
 import { Tag } from '../../interfaces/tag'
-import { auth } from '../../firebase/clientApp'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuthor, getLessons, getTag, logTagView } from '../../firebase/api'
 import LessonList from '../../components/LessonList'
 import { where } from 'firebase/firestore'
@@ -12,6 +10,7 @@ import { Author } from '../../interfaces/author'
 import TagList from '../../components/TagList'
 import { Heading } from '@chakra-ui/react'
 import { exploreRoute, tagRoute, tagRouteHrefPath } from '../../utils/routes'
+import supabase from '../../supabase/client'
 
 type Props = {
   tagText: string
@@ -22,11 +21,11 @@ type Props = {
 }
 
 const TagView = ({ lessons, tag, tagText, authors, relatedTags }: Props) => {
-  const [user, userLoading] = useAuthState(auth)
+  const user = supabase.auth.user()
   useEffect(() => {
-    if (!user || userLoading || !tag) return
+    if (!user || !tag) return
     logTagView(tagText)
-  }, [tag, tagText, user, userLoading])
+  }, [tag, tagText, user])
 
   return (
     <>

@@ -1,5 +1,4 @@
 import { NextSeo } from 'next-seo'
-import { auth } from '../../../firebase/clientApp'
 import Head from 'next/head'
 import ErrorPage from 'next/error'
 import React, { useEffect, useState } from 'react'
@@ -11,7 +10,6 @@ import LessonHeader from '../../../components/LessonHeader'
 import FancyEditor from '../../../components/FancyEditor'
 import LoadingSpinner from '../../../components/LoadingSpinner'
 import { useRouter } from 'next/router'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/outline'
 import {
   accountRoute,
@@ -42,6 +40,7 @@ import { userIsAdmin } from '../../../utils/hacks'
 import { Button, useToast, Text } from '@chakra-ui/react'
 import { Path } from '../../../interfaces/path'
 import Link from 'next/link'
+import supabase from '../../../supabase/client'
 
 interface Props {
   lesson: Lesson
@@ -60,7 +59,7 @@ const LessonInPathView = ({
 }: Props) => {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const [user, userLoading] = useAuthState(auth)
+  const user = supabase.auth.user()
   const toast = useToast()
 
   // Log views only on render of a published lesson in published path
@@ -98,8 +97,8 @@ const LessonInPathView = ({
 
   return (
     <>
-      {(loading || userLoading) && <LoadingSpinner />}
-      {!(loading || userLoading) && (
+      {loading && <LoadingSpinner />}
+      {!loading && (
         <Layout
           title={lesson.title}
           rightContent={<LessonOutline editor={editor} />}
@@ -140,15 +139,15 @@ const LessonInPathView = ({
               author={author}
               lesson={lesson}
               handleDelete={
-                user && user.uid === lesson.authorId ? handleDelete : undefined
+                user && user.id === lesson.authorId ? handleDelete : undefined
               }
               handleEdit={
-                user && user.uid === lesson.authorId
+                user && user.id === lesson.authorId
                   ? () => router.push(editLessonRoute(lesson.uid))
                   : undefined
               }
               handleToggleFeatured={
-                user && userIsAdmin(user.uid) ? handleToggleFeatured : undefined
+                user && userIsAdmin(user.id) ? handleToggleFeatured : undefined
               }
               handlePresent={() =>
                 router.push(presentLessonInPathRoute(path.uid, lesson.uid))

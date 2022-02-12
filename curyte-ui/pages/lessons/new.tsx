@@ -1,19 +1,17 @@
-import { auth } from '../../firebase/clientApp'
 import React, { useEffect } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { Lesson } from '../../interfaces/lesson'
 import { useRouter } from 'next/router'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { editLessonRoute, loginRoute } from '../../utils/routes'
 import { getLesson, createLesson } from '../../firebase/api'
 import { Timestamp } from 'firebase/firestore'
+import supabase from '../../supabase/client'
 
 const NewLessonView = () => {
   const router = useRouter()
-  const [user, userLoading] = useAuthState(auth)
+  const user = supabase.auth.user()
 
   useEffect(() => {
-    if (userLoading) return
     if (!user) {
       router.push(loginRoute(router.asPath))
       return
@@ -25,8 +23,7 @@ const NewLessonView = () => {
           ...l,
           parentLessonId: l.uid,
           private: true,
-          authorId: user.uid,
-          authorName: user.displayName || '',
+          authorId: user.id,
           uid: '',
           created: Timestamp.now().toDate().toISOString(),
           updated: Timestamp.now().toDate().toISOString(),
@@ -35,8 +32,7 @@ const NewLessonView = () => {
       } else {
         const newUid = await createLesson({
           private: true,
-          authorId: user.uid,
-          authorName: user.displayName,
+          authorId: user.id,
           created: Timestamp.now().toDate().toISOString(),
           updated: Timestamp.now().toDate().toISOString(),
         } as Lesson)
@@ -44,7 +40,7 @@ const NewLessonView = () => {
       }
     }
     createNewDraft()
-  }, [router, router.query.copyFrom, user, userLoading])
+  }, [router, router.query.copyFrom, user])
 
   return <LoadingSpinner message="Building lesson..." />
 }
