@@ -98,9 +98,6 @@ const PresentLessonView = ({ lesson, author, backUrl, backUrlHref }: Props) => {
       ref.current.scrollHeight - ref.current.scrollTop - SCROLL_THRESHOLD_PX >
       swiper.height
     ) {
-      console.log(
-        ref.current.scrollHeight - ref.current.scrollTop - swiper.height
-      )
       ref.current.scroll({
         top: swiper.height + ref.current.scrollTop,
         left: 0,
