@@ -18,6 +18,10 @@ import EnterFullscreen from '../components/icons/EnterFullscreen'
 
 import 'swiper/css'
 import useKeypress from '../hooks/useKeypress'
+import classNames from 'classnames'
+
+// If we're this close to the beginning or the end of the slide, skip.
+const SCROLL_THRESHOLD_PX = 48
 
 // const shouldConcatBlock = (type?: string): boolean =>
 //   type === 'paragraph' || type === 'details' || type === 'bulletList'
@@ -90,7 +94,13 @@ const PresentLessonView = ({ lesson, author, backUrl, backUrlHref }: Props) => {
 
   const downOrNext = useCallback(() => {
     if (!swiper || !ref || !ref.current) return
-    if (ref.current.scrollHeight - ref.current.scrollTop > swiper.height) {
+    if (
+      ref.current.scrollHeight - ref.current.scrollTop - SCROLL_THRESHOLD_PX >
+      swiper.height
+    ) {
+      console.log(
+        ref.current.scrollHeight - ref.current.scrollTop - swiper.height
+      )
       ref.current.scroll({
         top: swiper.height + ref.current.scrollTop,
         left: 0,
@@ -103,7 +113,7 @@ const PresentLessonView = ({ lesson, author, backUrl, backUrlHref }: Props) => {
 
   const upOrBack = useCallback(() => {
     if (!swiper || !ref || !ref.current) return
-    if (ref.current.scrollTop > 0) {
+    if (ref.current.scrollTop > SCROLL_THRESHOLD_PX) {
       ref.current.scroll({
         top: ref.current.scrollTop - swiper.height,
         left: 0,
@@ -191,7 +201,9 @@ const PresentLessonView = ({ lesson, author, backUrl, backUrlHref }: Props) => {
               className="w-auto lg:!max-w-[1000px] xl:!max-w-[1200px] 2xl:!max-w-[1440px]"
             >
               <div
-                className="w-auto h-full overflow-y-auto"
+                className={classNames('w-auto h-full', {
+                  'overflow-y-auto': activeIndex === index,
+                })}
                 ref={activeIndex === index ? ref : undefined}
               >
                 <Container className="grid items-center w-auto min-h-full py-8">
