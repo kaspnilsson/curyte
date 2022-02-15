@@ -174,7 +174,7 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
                 <TabPanel className="!px-0">
                   {!paths.length && <div className="">Nothing here yet!</div>}
                   {!!paths.length && (
-                    <div className="flex flex-wrap w-full gap-12">
+                    <div className="flex flex-wrap w-full divide-y">
                       {paths.map((p) => (
                         <PathPreview
                           path={p}

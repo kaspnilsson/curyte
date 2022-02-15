@@ -30,7 +30,7 @@ const Login = () => {
     event.preventDefault()
     setIsLoading(true)
     setError('')
-    console.error(REDIRECT_URL_BASE)
+
     const res = await supabase.auth.signIn(
       {
         email,
