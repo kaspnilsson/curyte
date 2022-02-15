@@ -1,6 +1,6 @@
 export interface CuryteImageAttrs {
   src: string
-  displayMode: 'left' | 'center' | 'right'
+  displayMode: 'full' | 'half'
   alt?: string
   title?: string
   caption?: string

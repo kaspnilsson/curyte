@@ -5,6 +5,7 @@ import Image from '@tiptap/extension-image'
 import { uploadImagePlugin, UploadFn } from './UploadImage'
 import { CuryteImageAttrs } from './CuryteImageAttrs'
 import CuryteImageRenderer from './CuryteImageRenderer'
+import classNames from 'classnames'
 
 type ExtensionAttrs = { [key in keyof CuryteImageAttrs]: Partial<Attribute> }
 
@@ -48,16 +49,16 @@ const CuryteImage = (uploadFn: UploadFn) => {
     addAttributes() {
       return {
         src: {
-          default: null,
+          default: '',
         },
         alt: {
-          default: null,
+          default: '',
         },
         title: {
-          default: null,
+          default: '',
         },
         caption: {
-          default: null,
+          default: '',
         },
         displayMode: {
           default: 'center',
@@ -76,7 +77,8 @@ const CuryteImage = (uploadFn: UploadFn) => {
             src: element.getAttribute('src'),
             title: element.getAttribute('title'),
             alt: element.getAttribute('alt'),
-            caption: element.getAttribute('caption'),
+            caption: element.getAttribute('caption') || '',
+            displayMode: element.getAttribute('displayMode') || 'center',
           }
           return obj
         },
@@ -84,7 +86,21 @@ const CuryteImage = (uploadFn: UploadFn) => {
     ],
 
     renderHTML({ HTMLAttributes }) {
-      return ['img', mergeAttributes(HTMLAttributes)]
+      return [
+        'div',
+        { class: 'my-8 lg:max-w-[50vw] mx-auto' },
+        [
+          'div',
+          {
+            class: classNames(
+              'w-full h-auto relative not-prose flex justify-center',
+              { 'opacity-50': HTMLAttributes.uploading }
+            ),
+            'data-drag-handle': '',
+          },
+          ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)],
+        ],
+      ]
     },
 
     addNodeView() {

@@ -4,17 +4,18 @@ import { CuryteImageAttrs } from './CuryteImageAttrs'
 
 const CuryteImageEditorComponent = ({
   src,
-  displayMode = 'center',
+  displayMode = 'full',
   title = '',
   alt = '',
-  caption = 'DO NOT SUBMIT',
+  caption = '',
 }: CuryteImageAttrs) => {
   return (
     <div
       className={classNames(
-        'h-min-content not-prose flex flex-col items-center gap-1 relative p-2',
+        'h-min-content flex flex-col items-center gap-1 relative p-2 mx-auto',
         {
-          'lg:max-w-[50vw] mx-auto': displayMode === 'center',
+          'w-full': displayMode === 'full',
+          'max-w-[50%]': displayMode === 'half',
         }
       )}
     >
