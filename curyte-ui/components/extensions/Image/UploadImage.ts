@@ -9,7 +9,7 @@ export type UploadFn = (image: File) => Promise<string>
 export const uploadImagePlugin = (upload: UploadFn) => {
   return new Plugin({
     props: {
-      handlePaste(view, event) {
+      handlePaste(view, event, slice) {
         const items = Array.from(event.clipboardData?.items || [])
         const { schema } = view.state
 
@@ -18,14 +18,20 @@ export const uploadImagePlugin = (upload: UploadFn) => {
 
           if (item.type.indexOf('image') === 0) {
             event.preventDefault()
+            event.stopPropagation()
+            // slice
+            console.log(slice)
+            debugger
 
             if (upload && image) {
               upload(image).then((src) => {
                 const node = schema.nodes.image.create({
                   src,
                 })
-                const transaction = view.state.tr.replaceSelectionWith(node)
-                view.dispatch(transaction)
+                // const transaction = view.state.tr.replaceSelectionWith(node)
+                // view.dispatch(transaction)
+                slice.content.replaceChild(0, node)
+                return true
               })
             }
           } else {
@@ -34,8 +40,10 @@ export const uploadImagePlugin = (upload: UploadFn) => {
               const node = schema.nodes.image.create({
                 src: readerEvent.target?.result,
               })
-              const transaction = view.state.tr.replaceSelectionWith(node)
-              view.dispatch(transaction)
+              // const transaction = view.state.tr.replaceSelectionWith(node)
+              // view.dispatch(transaction)
+              slice.content.replaceChild(0, node)
+              return true
             }
             if (!image) return false
             reader.readAsDataURL(image)
@@ -44,6 +52,7 @@ export const uploadImagePlugin = (upload: UploadFn) => {
 
         return false
       },
+
       handleDOMEvents: {
         drop(view, event) {
           const hasFiles = event.dataTransfer?.files?.length

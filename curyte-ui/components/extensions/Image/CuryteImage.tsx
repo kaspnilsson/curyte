@@ -106,6 +106,7 @@ const CuryteImage = (uploadFn: UploadFn) => {
           },
       }
     },
+
     addInputRules() {
       return [
         nodeInputRule({
