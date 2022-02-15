@@ -26,8 +26,7 @@ export default async function handler(
 
     found ? res.status(200).json(tag) : res.status(404)
     return
-  }
-  if (method === 'POST') {
+  } else if (method === 'POST') {
     const { user } = await supabase.auth.api.getUserByCookie(req)
     if (!user) {
       res.status(403).json({ error: 'Not logged in!' })
@@ -36,8 +35,26 @@ export default async function handler(
 
     const found = await prismaClient.tag.upsert({
       where: { tagText },
-      create: { ...body },
-      update: { ...body },
+      create: { ...JSON.parse(body) },
+      update: { ...JSON.parse(body) },
+    })
+
+    if (!found) {
+      res.status(401).json({ error: 'Update failed!' })
+      return
+    }
+
+    res.status(200).json(found)
+  } else if (method === 'PUT') {
+    const { user } = await supabase.auth.api.getUserByCookie(req)
+    if (!user) {
+      res.status(403).json({ error: 'Not logged in!' })
+      return
+    }
+
+    const found = await prismaClient.tag.update({
+      where: { tagText },
+      data: { ...JSON.parse(body) },
     })
 
     if (!found) {
