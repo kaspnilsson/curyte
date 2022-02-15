@@ -31,6 +31,8 @@ const Signup = () => {
     setIsLoading(true)
     setError('')
 
+    console.error(REDIRECT_URL_BASE)
+
     const { error } = await supabase.auth.signIn(
       {
         email,
