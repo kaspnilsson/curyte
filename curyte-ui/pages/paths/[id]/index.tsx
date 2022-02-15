@@ -1,10 +1,8 @@
 import { NextSeo } from 'next-seo'
 import ErrorPage from 'next/error'
 import React, { useEffect } from 'react'
-import { Lesson } from '../../../interfaces/lesson'
 import { GetServerSideProps } from 'next'
 import Layout from '../../../components/Layout'
-import { Author } from '../../../interfaces/author'
 import {
   accountRoute,
   accountRouteHrefPath,
@@ -12,14 +10,7 @@ import {
   pathRouteHrefPath,
 } from '../../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
-import {
-  logPathView,
-  getAuthor,
-  getPath,
-  getLesson,
-} from '../../../firebase/api'
 import { Badge, Center, Divider } from '@chakra-ui/react'
-import { Path } from '../../../interfaces/path'
 import { title } from 'process'
 import { computeClassesForTitle } from '../../../components/LessonTitle'
 import UnitOutline from '../../../components/UnitOutline'
@@ -27,18 +18,25 @@ import AuthorLink from '../../../components/AuthorLink'
 import PathActions from '../../../components/PathActions'
 import DateFormatter from '../../../components/DateFormatter'
 import CoverImage from '../../../components/CoverImage'
+import { Lesson } from '@prisma/client'
+import { Unit } from '../../../interfaces/unit'
+import { updatePath } from '../../../lib/apiHelpers'
+import prismaClient from '../../../lib/prisma'
+import { PathWithProfile } from '../../../interfaces/path_with_profile'
+import { LessonWithProfile } from '../../../interfaces/lesson_with_profile'
 
 interface Props {
-  lessonsMap: { [uid: string]: Lesson }
-  path: Path
-  author: Author
+  lessonsMap: { [uid: string]: LessonWithProfile }
+  path: PathWithProfile
 }
 
-const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
+const PublishedPathView = ({ lessonsMap, path }: Props) => {
   // Log views only on render of a published path
   useEffect(() => {
     if (path.private) return
-    logPathView(path.uid)
+    updatePath(path.uid, {
+      viewCount: { increment: 1 },
+    })
   }, [path])
 
   if (!path) return <ErrorPage statusCode={404} />
@@ -48,6 +46,8 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
     openGraphImages.push({ url: path.coverImageUrl })
   }
 
+  const units = (path.units || []) as unknown as Unit[]
+
   // const handleToggleFeatured = async () => {
   //   await setLessonFeatured(lesson.uid, !lesson.featured)
   //   toast({
@@ -56,12 +56,15 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
   // }
   return (
     <Layout
-      title={path.title}
+      title={path.title || 'Curyte'}
       breadcrumbs={[
         {
-          label: author.displayName,
+          label:
+            path.profiles.displayName ||
+            path.profiles.publicEmail ||
+            '(no name)',
           href: accountRouteHrefPath,
-          as: accountRoute(author.uid),
+          as: accountRoute(path.profiles.uid || ''),
         },
         {
           label: path.title || '(no title)',
@@ -71,12 +74,12 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
       ]}
     >
       <NextSeo
-        title={path.title}
-        description={path.title}
+        title={path.title || ''}
+        description={path.title || ''}
         openGraph={{
           url: pathRoute(path.uid),
-          title: path.title,
-          description: path.title,
+          title: path.title || '',
+          description: path.title || '',
           images: openGraphImages,
           site_name: 'Curyte',
         }}
@@ -101,7 +104,7 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
             </div>
           )}
           <div className="flex flex-wrap items-center justify-between gap-2 mb-6">
-            <AuthorLink author={author} />
+            <AuthorLink author={path.profiles} />
             <div className="flex items-center gap-1">
               <div className="flex items-center mr-4">
                 {path.private && (
@@ -120,7 +123,7 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
                         {path.updated &&
                           path.created !== path.updated &&
                           'Created'}
-                        <DateFormatter dateString={path.created} />
+                        <DateFormatter date={path.created} />
                       </span>
                       <Center className="w-6 h-4">
                         <Divider orientation="vertical" />
@@ -131,7 +134,7 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
                     <>
                       <span className="flex gap-1 text-sm">
                         Updated
-                        <DateFormatter dateString={path.updated} />
+                        <DateFormatter date={path.updated} />
                       </span>
                       <Center className="w-6 h-4">
                         <Divider orientation="vertical" />
@@ -146,7 +149,7 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
               <PathActions path={path} isReadOnlyView />
             </div>
           </div>
-          {path.units?.map((u, index) => (
+          {units.map((u, index) => (
             <UnitOutline
               unit={u}
               key={index}
@@ -155,9 +158,7 @@ const PublishedPathView = ({ lessonsMap, path, author }: Props) => {
               pathId={path.uid}
             />
           ))}
-          {!path.units?.length && (
-            <span className="text-zinc-700">(no units)</span>
-          )}
+          {!units.length && <span className="text-zinc-700">(no units)</span>}
         </div>
       </div>
     </Layout>
@@ -186,18 +187,21 @@ interface IParams extends ParsedUrlQuery {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params as IParams
 
-  // TODO - fetch path and path lessons & authors to render cards
-  const path = await getPath(id)
-  const author = await getAuthor(path.authorId)
+  const props = {
+    path: await prismaClient.path.findFirst({
+      where: { uid: id as string },
+      include: { profiles: true },
+    }),
+  } as Props
+
   const lessonIds = []
-  for (const u of path.units || []) {
+  for (const u of (props.path?.units || []) as unknown as Unit[]) {
     lessonIds.push(...(u?.lessonIds || []))
   }
-  const promises = []
-  for (const uid of lessonIds) {
-    promises.push(getLesson(uid))
-  }
-  const lessons = await Promise.all(promises)
+  const lessons = await prismaClient.lesson.findMany({
+    where: { uid: { in: lessonIds } },
+    include: { profiles: true },
+  })
   const lessonsMap: { [uid: string]: Lesson } = {}
   for (const l of lessons) {
     if (l) {
@@ -206,7 +210,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       // Lesson not found, TODO
     }
   }
-  return { props: { path, author, lessonsMap } }
+  return { props }
 }
 
 export default PublishedPathView

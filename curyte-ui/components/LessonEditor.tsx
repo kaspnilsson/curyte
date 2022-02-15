@@ -2,7 +2,6 @@ import React, { ReactNode, useState } from 'react'
 import { JSONContent } from '@tiptap/react'
 
 import Layout from './Layout'
-import { Lesson } from '../interfaces/lesson'
 import { computeClassesForTitle } from './LessonTitle'
 import TextareaAutosize from 'react-textarea-autosize'
 import FancyEditor from './FancyEditor'
@@ -17,6 +16,7 @@ import {
   editLessonRouteHrefPath,
   workspaceRoute,
 } from '../utils/routes'
+import { Lesson } from '@prisma/client'
 
 type Props = {
   lesson?: Lesson
@@ -65,10 +65,13 @@ const LessonEditor = ({
     handleUpdate({ ...lesson, coverImageUrl: url })
   }
 
-  const editor = useCuryteEditor({ content, onUpdate: handleContentUpdate }, [
-    lesson?.uid,
-    handleContentUpdate,
-  ])
+  const editor = useCuryteEditor(
+    {
+      content: content ? (content as JSONContent) : null,
+      onUpdate: handleContentUpdate,
+    },
+    [lesson?.uid, handleContentUpdate]
+  )
 
   return (
     <Layout

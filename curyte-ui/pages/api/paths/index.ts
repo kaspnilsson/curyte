@@ -8,8 +8,8 @@ export default async function handler(
   const { method, body } = req
 
   if (method === 'GET') {
-    const tags = await prismaClient.tag.findMany(body)
-    res.status(200).json({ tags })
+    const paths = await prismaClient.path.findMany(body)
+    res.status(200).json(paths)
     return
   } else {
     res.status(405).end(`Method ${method} Not Allowed`)

@@ -2,10 +2,10 @@ import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { loginRoute, editPathRoute } from '../../utils/routes'
-import { createPath } from '../../firebase/api'
-import { Path } from '../../interfaces/path'
 import { Timestamp } from 'firebase/firestore'
 import supabase from '../../supabase/client'
+import { Path } from '@prisma/client'
+import { createPath } from '../../lib/apiHelpers'
 
 const NewPathView = () => {
   const router = useRouter()
@@ -17,12 +17,12 @@ const NewPathView = () => {
       return
     }
     const createNewPath = async () => {
-      const newUid = await createPath({
+      const { uid } = await createPath({
         authorId: user.id,
-        created: Timestamp.now().toDate().toISOString(),
-        updated: Timestamp.now().toDate().toISOString(),
+        created: Timestamp.now().toDate(),
+        updated: Timestamp.now().toDate(),
       } as Path)
-      router.replace(editPathRoute(newUid))
+      router.replace(editPathRoute(uid))
     }
     createNewPath()
   }, [router, router.query.copyFrom, user])

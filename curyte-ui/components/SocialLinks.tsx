@@ -1,10 +1,10 @@
 //import a from 'next/link'
 import React from 'react'
-import { Author } from '../interfaces/author'
 import { IconButton } from '@chakra-ui/react'
+import { Profile } from '@prisma/client'
 
 type Props = {
-  author: Author
+  profile: Profile
 }
 
 const prefixUrlIfNeeded = (url: string) => {
@@ -12,13 +12,13 @@ const prefixUrlIfNeeded = (url: string) => {
   return url
 }
 
-const Socialas = ({ author }: Props) => {
+const Socialas = ({ profile }: Props) => {
   return (
     <div className="flex items-center">
-      {author.links?.twitter && (
+      {profile.twitterUrl && (
         <a
           target="_blank"
-          href={prefixUrlIfNeeded(author.links.twitter)}
+          href={prefixUrlIfNeeded(profile.twitterUrl)}
           rel="noreferrer"
         >
           <IconButton
@@ -41,10 +41,10 @@ const Socialas = ({ author }: Props) => {
           />
         </a>
       )}
-      {author.links?.personalSite && (
+      {profile.personalUrl && (
         <a
           target="_blank"
-          href={prefixUrlIfNeeded(author.links.personalSite)}
+          href={prefixUrlIfNeeded(profile.personalUrl)}
           rel="noreferrer"
         >
           <IconButton
@@ -67,10 +67,10 @@ const Socialas = ({ author }: Props) => {
           />
         </a>
       )}
-      {author.links?.linkedin && (
+      {profile.linkedinUrl && (
         <a
           target="_blank"
-          href={prefixUrlIfNeeded(author.links.linkedin)}
+          href={prefixUrlIfNeeded(profile.linkedinUrl)}
           rel="noreferrer"
         >
           <IconButton
@@ -93,10 +93,10 @@ const Socialas = ({ author }: Props) => {
           />
         </a>
       )}
-      {author.links?.publicEmail && (
+      {profile.publicEmail && (
         <a
           target="_blank"
-          href={`mailto:${author.links.publicEmail}`}
+          href={`mailto:${profile.publicEmail}`}
           rel="noreferrer"
         >
           <IconButton
@@ -119,10 +119,10 @@ const Socialas = ({ author }: Props) => {
           />
         </a>
       )}
-      {author.links?.venmo && (
+      {profile.venmoUrl && (
         <a
           target="_blank"
-          href={prefixUrlIfNeeded(author.links.venmo)}
+          href={prefixUrlIfNeeded(profile.venmoUrl)}
           rel="noreferrer"
         >
           <IconButton

@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Lesson } from '../interfaces/lesson'
-import { Tag } from '../interfaces/tag'
 import Layout from '../components/Layout'
 import { GetServerSideProps } from 'next'
 import LessonList from '../components/LessonList'
-import { Author } from '../interfaces/author'
 import {
   Button,
   Heading,
@@ -18,30 +15,29 @@ import TagList from '../components/TagList'
 import { exploreRoute, newLessonRoute } from '../utils/routes'
 import Link from 'next/link'
 import { XIcon } from '@heroicons/react/outline'
-import supabase from '../supabase/client'
-import { getLessons } from './api/lessons'
-import { PostgrestResponse, User } from '@supabase/supabase-js'
-import { getTags } from './api/tags'
-import { getAuthors } from './api/profiles'
+import { Tag } from '@prisma/client'
+import prismaClient from '../lib/prisma'
+import { useUser } from '../contexts/user'
+import { LessonWithProfile } from '../interfaces/lesson_with_profile'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 interface Props {
-  featuredLessons: Lesson[]
-  recentLessons: Lesson[]
-  popularLessons: Lesson[]
-  authors: Author[]
+  featuredLessons: LessonWithProfile[]
+  recentLessons: LessonWithProfile[]
+  popularLessons: LessonWithProfile[]
   tags: Tag[]
-  user: User | null
 }
 
 const ExplorePage = ({
   featuredLessons,
   recentLessons,
   popularLessons,
-  authors,
   tags,
-  user,
 }: Props) => {
   const [showHero, setShowHero] = useState(false)
+
+  const { userAndProfile, loading } = useUser()
+
   useEffect(() => {
     const hideShowHero = localStorage.getItem('hideStartWritingHero')
     setShowHero(!hideShowHero)
@@ -51,6 +47,8 @@ const ExplorePage = ({
     setShowHero(false)
     localStorage.setItem('hideStartWritingHero', 'true')
   }
+
+  if (loading) return <LoadingSpinner />
 
   return (
     <Layout
@@ -73,9 +71,9 @@ const ExplorePage = ({
         </div>
       }
     >
-      {(!user || showHero) && (
+      {(!userAndProfile || showHero) && (
         <section className="relative flex flex-col items-center p-12 mb-12 shadow-xl rounded-xl bg-zinc-100 group shadow-violet-500/20">
-          {user && (
+          {userAndProfile && (
             <Button
               onClick={hideHero}
               className="!absolute top-2 right-2 opacity-0 group-hover:opacity-100 ease-in-out transition-all duration-150"
@@ -111,21 +109,15 @@ const ExplorePage = ({
           </TabList>
           <TabPanels>
             <TabPanel className="!px-0">
-              {featuredLessons && (
-                <LessonList lessons={featuredLessons} authors={authors} />
-              )}
+              {featuredLessons && <LessonList lessons={featuredLessons} />}
               {!featuredLessons?.length && 'Nothing here yet!'}
             </TabPanel>
             <TabPanel className="!px-0">
-              {popularLessons && (
-                <LessonList lessons={popularLessons} authors={authors} />
-              )}
+              {popularLessons && <LessonList lessons={popularLessons} />}
               {!popularLessons?.length && 'Nothing here yet!'}
             </TabPanel>
             <TabPanel className="!px-0">
-              {recentLessons && (
-                <LessonList lessons={recentLessons} authors={authors} />
-              )}
+              {recentLessons && <LessonList lessons={recentLessons} />}
               {!recentLessons?.length && 'Nothing here yet!'}
             </TabPanel>
           </TabPanels>
@@ -135,53 +127,33 @@ const ExplorePage = ({
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const { user } = await supabase.auth.api.getUserByCookie(req)
+export const getServerSideProps: GetServerSideProps = async () => {
+  const [featuredLessons, popularLessons, recentLessons] = await Promise.all([
+    prismaClient.lesson.findMany({
+      take: 10,
+      include: { profiles: true },
+      where: { featured: true, private: { not: true } },
+    }),
+    prismaClient.lesson.findMany({
+      take: 10,
+      include: { profiles: true },
+      where: { private: { not: true } },
+      orderBy: { viewCount: 'desc' },
+    }),
+    prismaClient.lesson.findMany({
+      take: 10,
+      include: { profiles: true },
+      where: { private: { not: true } },
+      orderBy: { created: 'desc' },
+    }),
+  ])
 
-  const mapLessonFn = (res: PostgrestResponse<unknown>) =>
-    (res.body || []).map((data) => data as Lesson)
-
-  const [featuredLessons, popularLessons, recentLessons] = (
-    await Promise.all([
-      getLessons().eq('featured', true).neq('private', true).limit(10),
-      getLessons()
-        .neq('private', true)
-        .order('viewCount', { ascending: false })
-        .limit(10),
-      getLessons()
-        .neq('private', true)
-        .order('created', { ascending: false })
-        .limit(10),
-    ])
-  ).map((res) => mapLessonFn(res))
-
-  const authorIds = [
-    ...featuredLessons,
-    ...popularLessons,
-    ...recentLessons,
-  ].reduce(
-    (acc: Set<string>, curr: Lesson) => acc.add(curr.authorId),
-    new Set()
-  )
-
-  const authors = (
-    (await getAuthors().in('uid', Array.from(authorIds))).body || []
-  ).map((a) => a as Author)
-
-  const tags = (
-    (await getTags().order('viewCount', { ascending: false }).limit(16)).body ||
-    []
-  ).map((t) => t as Tag)
-
+  const tags = await prismaClient.tag.findMany({
+    take: 16,
+    orderBy: { viewCount: 'desc' },
+  })
   return {
-    props: {
-      featuredLessons,
-      popularLessons,
-      recentLessons,
-      authors,
-      tags,
-      user,
-    },
+    props: { featuredLessons, popularLessons, recentLessons, tags },
   }
 }
 

@@ -2,8 +2,8 @@ import { DocumentTextIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
 import React from 'react'
 import { Button } from '@chakra-ui/react'
-import { Lesson } from '../interfaces/lesson'
 import { lessonRoute, lessonRouteHrefPath } from '../utils/routes'
+import { Lesson } from '@prisma/client'
 
 interface Props {
   lesson: Lesson

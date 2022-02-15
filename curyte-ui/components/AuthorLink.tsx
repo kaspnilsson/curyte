@@ -1,17 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link'
-import { Author } from '../interfaces/author'
 import React from 'react'
 import Avatar from './Avatar'
 import { accountRoute, accountRouteHrefPath } from '../utils/routes'
 import classNames from 'classnames'
+import { Profile } from '@prisma/client'
 
 type Props = {
-  author: Author
+  author: Profile | null
   small?: boolean
 }
 
 const AuthorLink = ({ author, small = false }: Props) => {
+  if (!author) return null
   return (
     <>
       {!author && null}
@@ -23,7 +24,7 @@ const AuthorLink = ({ author, small = false }: Props) => {
         >
           <div className="flex items-center cursor-pointer group">
             <Avatar
-              author={author}
+              profile={author}
               className="shadow-xl shadow-zinc-900/10"
               size={small ? '2xs' : 'md'}
             />

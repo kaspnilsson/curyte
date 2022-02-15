@@ -1,51 +1,52 @@
-import { Button, Input, Textarea } from '@chakra-ui/react'
+import { Button, Input, Textarea, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { SyntheticEvent, useEffect, useState } from 'react'
-import { useErrorHandler } from 'react-error-boundary'
+import { SyntheticEvent, useState } from 'react'
 import AuthorLink from '../../components/AuthorLink'
 import Layout from '../../components/Layout'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import TextareaAutosize from 'react-textarea-autosize'
-import { getAuthor, updateAuthor } from '../../firebase/api'
 import { auth } from '../../firebase/clientApp'
-import { Author } from '../../interfaces/author'
-import { accountSettingsRoute, indexRoute } from '../../utils/routes'
+import {
+  accountSettingsRoute,
+  indexRoute,
+  loginRoute,
+} from '../../utils/routes'
 import supabase from '../../supabase/client'
+import { Profile } from '@prisma/client'
+import prismaClient from '../../lib/prisma'
+import { GetServerSideProps } from 'next'
+import { User } from '@supabase/supabase-js'
 
-const SettingsView = () => {
+interface Props {
+  user: User | null
+  profile: Profile | null
+}
+
+const SettingsView = ({ user, profile }: Props) => {
   const router = useRouter()
-  const handleError = useErrorHandler()
+  const toast = useToast()
 
-  const user = supabase.auth.user()
-  const [loading, setLoading] = useState(false)
-  const [author, setAuthor] = useState<Author | null>(null)
+  const [localProfile, setProfile] = useState<Profile | null>(profile)
   const [saving, setSaving] = useState(false)
-  const [authorChanged, setAuthorChanged] = useState(false)
+  const [profileChanged, setProfileChanged] = useState(false)
 
-  useEffect(() => {
-    if (user && !author) {
-      setLoading(true)
-      const fetchAuthor = async () => {
-        await getAuthor(user.id)
-          .then((author) => {
-            setAuthor(author)
-          })
-          .catch(handleError)
-      }
-
-      fetchAuthor().then(() => setLoading(false))
-    }
-  }, [author, handleError, user])
-
-  const modifyAuthor = (a: Author) => {
-    setAuthorChanged(true)
-    setAuthor(a)
+  const modifyProfile = (a: Profile) => {
+    setProfileChanged(true)
+    setProfile(a)
   }
+
   const handleSave = async (event: SyntheticEvent) => {
     event.preventDefault()
-    if (!author) return
+    if (!localProfile || !user) return
     setSaving(true)
-    await updateAuthor(author)
+    await fetch(`/api/profiles/${user.id}`, {
+      method: 'POST',
+      body: JSON.stringify(localProfile),
+    })
+    toast({
+      status: 'success',
+      title: 'Changes saved!',
+    })
     setSaving(false)
   }
 
@@ -67,12 +68,11 @@ const SettingsView = () => {
         },
       ]}
     >
-      {loading && <LoadingSpinner />}
       {saving && <LoadingSpinner />}
-      {author && !loading && (
+      {localProfile && (
         <>
           <div className="mb-4">
-            <AuthorLink author={author}></AuthorLink>
+            <AuthorLink author={localProfile}></AuthorLink>
           </div>
           <section className="flex flex-col my-8">
             <div className="flex items-center justify-between">
@@ -83,7 +83,7 @@ const SettingsView = () => {
                 colorScheme="black"
                 className="w-fit disabled:opacity-50"
                 onClick={handleSave}
-                disabled={!authorChanged}
+                disabled={!profileChanged}
               >
                 Save
               </Button>
@@ -95,10 +95,10 @@ const SettingsView = () => {
                 size="lg"
                 variant="outline"
                 placeholder="Full name"
-                value={author.displayName}
+                value={localProfile.displayName || ''}
                 onChange={(e) =>
-                  modifyAuthor({
-                    ...author,
+                  modifyProfile({
+                    ...localProfile,
                     displayName: e.target.value,
                   })
                 }
@@ -110,14 +110,14 @@ const SettingsView = () => {
                 as={TextareaAutosize}
                 className="w-full mt-1 border-0 resize-none"
                 placeholder="Bio"
-                value={author.bio}
+                value={localProfile.bio || ''}
                 onChange={(e) =>
-                  modifyAuthor({ ...author, bio: e.target.value })
+                  modifyProfile({ ...localProfile, bio: e.target.value })
                 }
               />
             </div>
           </section>
-          <section className="flex flex-col my-8">
+          {/* <section className="flex flex-col my-8">
             <h2 className="mb-4 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
               Email settings
             </h2>
@@ -130,13 +130,13 @@ const SettingsView = () => {
                 size="lg"
                 variant="outline"
                 placeholder="Email"
-                value={author.email}
+                value={profile.publicEmail || ''}
                 onChange={(e) =>
-                  modifyAuthor({ ...author, email: e.target.value })
+                  modifyProfile({ ...profile, publicEmail: e.target.value })
                 }
               />
             </div>
-          </section>
+          </section> */}
           <section className="flex flex-col my-8">
             <h2 className="mb-4 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
               Links
@@ -150,11 +150,11 @@ const SettingsView = () => {
                 size="lg"
                 variant="outline"
                 placeholder="Leave blank to remove from public profile."
-                value={author.links?.twitter || ''}
+                value={localProfile.twitterUrl || ''}
                 onChange={(e) =>
-                  modifyAuthor({
-                    ...author,
-                    links: { ...author.links, twitter: e.target.value },
+                  modifyProfile({
+                    ...localProfile,
+                    twitterUrl: e.target.value,
                   })
                 }
               />
@@ -168,14 +168,11 @@ const SettingsView = () => {
                 size="lg"
                 variant="outline"
                 placeholder="Leave blank to remove from public profile."
-                value={author.links?.linkedin || ''}
+                value={localProfile.linkedinUrl || ''}
                 onChange={(e) =>
-                  modifyAuthor({
-                    ...author,
-                    links: {
-                      ...author.links,
-                      linkedin: e.target.value,
-                    },
+                  modifyProfile({
+                    ...localProfile,
+                    linkedinUrl: e.target.value,
                   })
                 }
               />
@@ -189,14 +186,11 @@ const SettingsView = () => {
                 size="lg"
                 variant="outline"
                 placeholder="Leave blank to remove from public profile."
-                value={author.links?.personalSite || ''}
+                value={localProfile.personalUrl || ''}
                 onChange={(e) =>
-                  modifyAuthor({
-                    ...author,
-                    links: {
-                      ...author.links,
-                      personalSite: e.target.value,
-                    },
+                  modifyProfile({
+                    ...localProfile,
+                    personalUrl: e.target.value,
                   })
                 }
               />
@@ -210,14 +204,11 @@ const SettingsView = () => {
                 size="lg"
                 variant="outline"
                 placeholder="Leave blank to remove from public profile."
-                value={author.links?.publicEmail || ''}
+                value={localProfile.publicEmail || ''}
                 onChange={(e) =>
-                  modifyAuthor({
-                    ...author,
-                    links: {
-                      ...author.links,
-                      publicEmail: e.target.value,
-                    },
+                  modifyProfile({
+                    ...localProfile,
+                    publicEmail: e.target.value,
                   })
                 }
               />
@@ -231,14 +222,11 @@ const SettingsView = () => {
                 size="lg"
                 variant="outline"
                 placeholder="Leave blank to remove from public profile."
-                value={author.links?.venmo || ''}
+                value={localProfile.venmoUrl || ''}
                 onChange={(e) =>
-                  modifyAuthor({
-                    ...author,
-                    links: {
-                      ...author.links,
-                      venmo: e.target.value,
-                    },
+                  modifyProfile({
+                    ...localProfile,
+                    venmoUrl: e.target.value,
                   })
                 }
               />
@@ -254,4 +242,20 @@ const SettingsView = () => {
     </Layout>
   )
 }
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const { user } = await supabase.auth.api.getUserByCookie(req)
+  if (!user) {
+    return { props: {}, redirect: { destination: loginRoute() } }
+  }
+
+  return {
+    props: {
+      user,
+      profile: await prismaClient.profile.findFirst({
+        where: { uid: user.id },
+      }),
+    },
+  }
+}
+
 export default SettingsView

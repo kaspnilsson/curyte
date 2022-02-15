@@ -1,7 +1,5 @@
 import { UploadIcon, LockClosedIcon } from '@heroicons/react/solid'
 import { CheckIcon, PlusIcon, ExternalLinkIcon } from '@heroicons/react/outline'
-import { Author } from '../interfaces/author'
-import { Path, Unit } from '../interfaces/path'
 import Layout from './Layout'
 import { computeClassesForTitle } from './LessonTitle'
 import TextareaAutosize from 'react-textarea-autosize'
@@ -15,8 +13,6 @@ import {
   DropResult,
 } from 'react-beautiful-dnd'
 import UnitEditor from './UnitEditor'
-import { Lesson } from '../interfaces/lesson'
-import { getLesson } from '../firebase/api'
 import classNames from 'classnames'
 import { uuid } from '../utils/uuid'
 import Container from './Container'
@@ -24,10 +20,12 @@ import { useRouter } from 'next/router'
 import { pathRoute } from '../utils/routes'
 import { Confetti } from './Confetti'
 import EditableCoverImage from './EditableCoverImage'
+import { Path, Profile, Lesson } from '@prisma/client'
+import { Unit } from '../interfaces/unit'
 
 interface Props {
   path: Path
-  user: Author
+  user: Profile
   saving?: boolean
   dirty?: boolean
   handleUpdate: (p: Path) => Promise<void>
@@ -37,7 +35,9 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
   const router = useRouter()
   const toast = useToast()
   const [title, setTitle] = useState(path.title?.trim() || '')
-  const [units, setUnits] = useState(path.units || [])
+  const [units, setUnits] = useState<Unit[]>(
+    (path.units || []) as unknown as Unit[]
+  )
   const [isPrivate, setIsPrivate] = useState<boolean>(path.private || true)
   const [lessonsByUid, setLessonsByUid] = useState<{ [uid: string]: Lesson }>(
     {}
@@ -63,7 +63,10 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
     const unitsClone = [...units]
     unitsClone[index] = unit
     setUnits(unitsClone)
-    await handleUpdate({ ...path, units: unitsClone })
+    await handleUpdate({
+      ...path,
+      units: unitsClone,
+    })
   }
 
   const onUnitDelete = async (index: number) => {
@@ -91,7 +94,10 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
       const fetchLessons = async () => {
         const promises = []
         for (const lessonUid of toFetch) {
-          promises.push(getLesson(lessonUid))
+          const p = fetch(`/api/lessons/${lessonUid}`, { method: 'GET' }).then(
+            (res) => res.json()
+          )
+          promises.push(p)
         }
         const clone = { ...lessonsByUid }
         const newLessons = await Promise.all(promises)
@@ -106,7 +112,7 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
   }, [lessonsByUid, units])
 
   const canPublish =
-    path.title && path.units?.length && path.units?.[0]?.lessonIds?.length
+    path.title && units?.length && units?.[0]?.lessonIds?.length
 
   const toggleIsPrivate = async () => {
     const p = !isPrivate

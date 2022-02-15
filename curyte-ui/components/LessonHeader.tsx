@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Author } from '../interfaces/author'
 import AuthorLink from './AuthorLink'
 import DateFormatter from './DateFormatter'
 import LessonTitle from './LessonTitle'
-import { Lesson } from '../interfaces/lesson'
 import LessonLink from './LessonLink'
 import {
   IconButton,
@@ -16,7 +14,6 @@ import {
   MenuButton,
   Button,
   Portal,
-  useToast,
 } from '@chakra-ui/react'
 import {
   BookmarkIcon,
@@ -31,20 +28,16 @@ import { loginRoute, newLessonRoute } from '../utils/routes'
 import TagChip from './TagChip'
 import CoverImage from './CoverImage'
 import { black } from '../styles/theme/colors'
-import {
-  getCurrentUserHasSavedLesson,
-  getLesson,
-  removeSavedLessonForCurrentUser,
-  saveLessonForCurrentUser,
-} from '../firebase/api'
 import useConfirmDialog from '../hooks/useConfirmDialog'
 import Present from './icons/Present'
-import supabase from '../supabase/client'
+import { Lesson } from '@prisma/client'
+import { getLesson } from '../lib/apiHelpers'
+import { LessonWithProfile } from '../interfaces/lesson_with_profile'
+import { useUser } from '../contexts/user'
 
 type Props = {
-  lesson: Lesson
+  lesson: LessonWithProfile
   coverImage?: string
-  author: Author
   handleDelete?: () => void
   handleEdit?: () => void
   handlePublish?: () => void
@@ -54,7 +47,6 @@ type Props = {
 }
 
 const LessonHeader = ({
-  author,
   lesson,
   handleDelete,
   handleEdit,
@@ -64,16 +56,16 @@ const LessonHeader = ({
   handlePresent,
 }: Props) => {
   const router = useRouter()
-  const user = supabase.auth.user()
+  const { userAndProfile } = useUser()
   const [, setLoading] = useState(false)
   const [parentLesson, setParentLesson] = useState<Lesson | null>(null)
   const [isSaved, setIsSaved] = useState(false)
   const [featured, setFeatured] = useState(lesson.featured || false)
   const [isTemplate, setIsTemplate] = useState(lesson.template || false)
-  const toast = useToast()
+  // const toast = useToast()
 
   useEffect(() => {
-    if (!user) return
+    if (!userAndProfile) return
     setLoading(true)
     const fetchParent = async () => {
       if (lesson.parentLessonId) {
@@ -83,36 +75,39 @@ const LessonHeader = ({
       }
     }
     const fetchIsSaved = async () => {
-      setIsSaved(await getCurrentUserHasSavedLesson(lesson.uid))
+      // setIsSaved(await getCurrentUserHasSavedLesson(lesson.uid))
+      // TODO(kaspnilsson)
+      setIsSaved(false)
     }
     Promise.all([fetchParent(), fetchIsSaved()]).then(() => {
       setLoading(false)
     })
-  }, [lesson, user, lesson.parentLessonId])
+  }, [lesson, userAndProfile, lesson.parentLessonId])
 
   const toggleSaveLesson = async () => {
-    if (!user) {
+    if (!userAndProfile) {
       // logged out!
       router.push(loginRoute(router.asPath))
       return
     }
     setLoading(true)
     setIsSaved(!isSaved)
-    if (isSaved) {
-      await removeSavedLessonForCurrentUser(lesson.uid)
-      toast({ title: 'Lesson removed from bookmarks.' })
-    } else {
-      await saveLessonForCurrentUser(lesson.uid)
-      toast({
-        title: 'Lesson bookmarked! View bookmarked lessons in your workspace.',
-        status: 'success',
-      })
-    }
+    // TODO(kaspnilsson)
+    // if (isSaved) {
+    //   await removeSavedLessonForCurrentUser(lesson.uid)
+    //   toast({ title: 'Lesson removed from bookmarks.' })
+    // } else {
+    //   await saveLessonForCurrentUser(lesson.uid)
+    //   toast({
+    //     title: 'Lesson bookmarked! View bookmarked lessons in your workspace.',
+    //     status: 'success',
+    //   })
+    // }
     setLoading(false)
   }
 
   const handleMakeCopy = async () => {
-    if (!user) {
+    if (!userAndProfile) {
       // logged out!
       router.push(loginRoute(router.asPath))
       return
@@ -155,7 +150,7 @@ const LessonHeader = ({
         )}
       </div>
       <div className="flex flex-wrap items-center justify-between mb-6 gap-x-1 gap-y-2">
-        <AuthorLink author={author} />
+        <AuthorLink author={lesson.profiles} />
         <div className="flex items-center gap-1">
           {lesson.private && (
             <Badge variant="subtle" colorScheme="orange" className="mr-4 h-min">
@@ -170,7 +165,7 @@ const LessonHeader = ({
                     {lesson.updated &&
                       lesson.created !== lesson.updated &&
                       'Created'}
-                    <DateFormatter dateString={lesson.created} />
+                    <DateFormatter date={lesson.created} />
                   </span>
                   <Center className="w-6 h-4">
                     <Divider orientation="vertical" />
@@ -181,7 +176,7 @@ const LessonHeader = ({
                 <>
                   <span className="hidden gap-1 text-sm xl:flex">
                     Updated
-                    <DateFormatter dateString={lesson.updated} />
+                    <DateFormatter date={lesson.updated} />
                   </span>
                   <div className="hidden xl:flex">
                     <Center className="w-6 h-4">

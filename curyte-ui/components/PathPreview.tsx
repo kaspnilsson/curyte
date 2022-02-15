@@ -1,9 +1,10 @@
 import { Text, Center, Divider, Badge } from '@chakra-ui/react'
 import { AcademicCapIcon, DocumentTextIcon } from '@heroicons/react/outline'
+import { Path, Profile } from '@prisma/client'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Author } from '../interfaces/author'
-import { Path } from '../interfaces/path'
+import { Unit } from '../interfaces/unit'
+
 import {
   editPathRoute,
   editPathRouteHrefPath,
@@ -15,15 +16,16 @@ import DateFormatter from './DateFormatter'
 
 interface Props {
   path?: Path
-  author?: Author
+  author?: Profile | null
   onClick?: (p: Path) => void
 }
 
 const PathPreview = ({ path, author, onClick }: Props) => {
   if (!path) return null
 
-  const unitCount = (path.units || []).length
-  const lessonCount = (path.units || []).reduce(
+  const units = (path.units || []) as unknown as Unit[]
+  const unitCount = units.length
+  const lessonCount = units.reduce(
     (acc, curr) => (acc += curr.lessonIds?.length || 0),
     0
   )
@@ -46,7 +48,7 @@ const PathPreview = ({ path, author, onClick }: Props) => {
                 <Divider orientation="vertical" />
               </Center>
               <div className="text-zinc-500">
-                <DateFormatter dateString={path.created} />
+                <DateFormatter date={path.created} />
               </div>
             </>
           )}

@@ -1,27 +1,26 @@
 import { NodeViewWrapper } from '@tiptap/react'
 import { useEffect, useState } from 'react'
-import { Lesson } from '../../../interfaces/lesson'
 import { Spinner } from '@chakra-ui/react'
 import LessonPreview from '../../LessonPreview'
-import { Author } from '../../../interfaces/author'
-import { getLesson, getAuthor } from '../../../firebase/api'
+import { getLesson } from '../../../lib/apiHelpers'
+import { LessonWithProfile } from '../../../interfaces/lesson_with_profile'
 
 const CuryteLinkRenderer = (props: {
   node: { attrs: { lessonId: string; href: string } }
 }) => {
   const [loading, setLoading] = useState(false)
-  const [lesson, setLesson] = useState<Lesson | null>(null)
-  const [author, setAuthor] = useState<Author | null>(null)
+  const [lesson, setLesson] = useState<LessonWithProfile | null>(null)
+
   useEffect(() => {
     const fetch = async () => {
       const l = await getLesson(props.node.attrs.lessonId)
       setLesson(l)
-      setAuthor(await getAuthor(l.authorId))
       setLoading(false)
     }
     setLoading(true)
     fetch()
   }, [props.node.attrs.lessonId])
+
   return (
     <NodeViewWrapper>
       <div
@@ -30,9 +29,7 @@ const CuryteLinkRenderer = (props: {
         data-drag-handle=""
       >
         {loading && <Spinner color="black" size="xl" />}
-        {!loading && lesson && (
-          <LessonPreview lesson={lesson} author={author} />
-        )}
+        {!loading && lesson && <LessonPreview lesson={lesson} />}
       </div>
     </NodeViewWrapper>
   )

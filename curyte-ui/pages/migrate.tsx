@@ -17,7 +17,7 @@ const Migrate = () => {
 
     const fetchAndMigrate = async () => {
       if (confirm('Migrate lessons?')) {
-        const allLessons = (await getLessons([])).map((l) => ({
+        const allLessons = (await getLessons([], true)).map((l) => ({
           ...l,
           authorId: firebaseIdToSupabaseIdLookup[l.authorId],
           authorName: undefined,

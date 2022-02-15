@@ -1,5 +1,5 @@
 import { Modal, ModalOverlay, ModalContent, ModalBody } from '@chakra-ui/react'
-import { Lesson } from '../interfaces/lesson'
+import { Lesson } from '@prisma/client'
 import Search from './Search'
 
 interface Props {

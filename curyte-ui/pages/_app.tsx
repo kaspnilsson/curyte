@@ -11,8 +11,16 @@ import ErrorBoundary from '../components/ErrorBoundary'
 import theme from '../styles/theme'
 import supabase from '../supabase/client'
 import { AuthChangeEvent, Session } from '@supabase/supabase-js'
+import { UserAuthProvider } from '../contexts/user'
 
 export default function CuryteApp({ Component, pageProps }: AppProps) {
+  // see https://github.com/prisma/studio/issues/614
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  BigInt.prototype.toJSON = function () {
+    return this.toString()
+  }
+
   const router = useRouter()
   useEffect(() => {
     const handleRouteChange = (url: URL) => {
@@ -73,11 +81,13 @@ export default function CuryteApp({ Component, pageProps }: AppProps) {
 
   return (
     <ChakraProvider portalZIndex={20} theme={theme}>
-      <ImageUploadDialogProvider>
-        <ErrorBoundary>
-          <Component {...pageProps} />
-        </ErrorBoundary>
-      </ImageUploadDialogProvider>
+      <UserAuthProvider>
+        <ImageUploadDialogProvider>
+          <ErrorBoundary>
+            <Component {...pageProps} />
+          </ErrorBoundary>
+        </ImageUploadDialogProvider>
+      </UserAuthProvider>
     </ChakraProvider>
   )
 }

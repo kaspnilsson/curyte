@@ -1,25 +1,25 @@
 import { Heading } from '@chakra-ui/react'
-import { Lesson } from '../interfaces/lesson'
-import { Unit } from '../interfaces/path'
+import { LessonWithProfile } from '../interfaces/lesson_with_profile'
+import { Unit } from '../interfaces/unit'
 import LessonList from './LessonList'
 
 interface Props {
   unit: Unit
   unitIndex: number
-  lessonsMap: { [uid: string]: Lesson }
+  lessonsMap: { [uid: string]: LessonWithProfile }
   pathId: string
 }
 
 const UnitOutline = ({ unit, unitIndex, lessonsMap, pathId }: Props) => {
   const unitNumber = unitIndex + 1
-  const lessons: Lesson[] = []
+  const lessons: LessonWithProfile[] = []
   for (const uid of unit.lessonIds || []) {
     lessons.push(lessonsMap[uid])
   }
   return (
     <>
       <div className="flex items-center w-full gap-2 py-4 border-b-2">
-        <Heading className="flex flex-wrap flex-1 flex-grow gap-2 font-semibold tracking-tighter resize-none leading-tight">
+        <Heading className="flex flex-wrap flex-1 flex-grow gap-2 font-semibold leading-tight tracking-tighter resize-none">
           <span>{unitNumber}.</span>
           <span className="break-all">{unit.title || '(no unit title)'}</span>
         </Heading>

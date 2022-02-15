@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useState } from 'react'
+import { createContext, ReactNode, useState } from 'react'
 import ImageUploadDialog from './ImageUploadDialog'
 
 export const ImageUploadDialogContext = createContext({
@@ -10,7 +10,7 @@ export const ImageUploadDialogContext = createContext({
 
 export interface ImageUploadDialogProps {
   title?: string
-  description?: string | React.ReactNode
+  description?: string | ReactNode
   actionCallback: (src: string) => void
 }
 

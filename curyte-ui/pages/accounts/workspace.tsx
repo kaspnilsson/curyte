@@ -1,9 +1,8 @@
 /* eslint-disable react/jsx-filename-extension */
 import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Layout from '../../components/Layout'
-import { Author } from '../../interfaces/author'
 import {
   Button,
   Heading,
@@ -13,20 +12,15 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react'
-import LoadingSpinner from '../../components/LoadingSpinner'
-import { Lesson } from '../../interfaces/lesson'
-import { useErrorHandler } from 'react-error-boundary'
 import {
   discordInviteHref,
-  indexRoute,
+  loginRoute,
   newLessonRoute,
   newLessonRouteHref,
   newPathRoute,
   workspaceRoute,
 } from '../../utils/routes'
 import LessonList from '../../components/LessonList'
-import { where } from 'firebase/firestore'
-import { Path } from '../../interfaces/path'
 import PathPreview from '../../components/PathPreview'
 import Link from 'next/link'
 import {
@@ -36,88 +30,30 @@ import {
 } from '@heroicons/react/outline'
 import supabase from '../../supabase/client'
 import { GetServerSideProps } from 'next'
-import { PostgrestResponse } from '@supabase/supabase-js'
-import { getAuthors } from '../api/profiles'
-import { Tag } from '../../interfaces/tag'
-import { getLessons } from '../api/lessons'
-import { getTags } from '../api/tags'
+import prismaClient from '../../lib/prisma'
+import { useUser } from '../../contexts/user'
+import { PathWithProfile } from '../../interfaces/path_with_profile'
+import { LessonWithProfile } from '../../interfaces/lesson_with_profile'
+import LoadingSpinner from '../../components/LoadingSpinner'
 
-const WorkspaceView = () => {
+interface Props {
+  paths: PathWithProfile[]
+  lessons: LessonWithProfile[]
+}
+
+const WorkspaceView = ({ paths, lessons }: Props) => {
   const router = useRouter()
-  const handleError = useErrorHandler()
-
-  const user = supabase.auth.user()
-  const [author, setAuthor] = useState<Author | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [lessons, setLessons] = useState<Lesson[]>([])
-  const [paths, setPaths] = useState<Path[]>([])
-  const [savedLessons, setSavedLessons] = useState<Lesson[]>([])
+  const { userAndProfile, loading } = useUser()
 
   useEffect(() => {
-    if (!user) router.push(indexRoute)
-  }, [user, router])
+    if (!userAndProfile) router.push(loginRoute())
+  }, [userAndProfile, router])
 
-  useEffect(() => {
-    if (user && !author) {
-      setLoading(true)
-      const fetchAuthor = async () => {
-        await getAuthor(user.id)
-          .then((author) => {
-            setAuthor(author)
-            if (author.savedLessons?.length) {
-              return getLessons([where('uid', 'in', author.savedLessons || [])])
-                .then((res) => {
-                  res.sort(
-                    (a, b) =>
-                      // author.savedLessons has oldest saves first
-                      (author.savedLessons || []).indexOf(b.uid) -
-                      (author.savedLessons || []).indexOf(a.uid)
-                  )
-                  setSavedLessons(res)
-                })
-                .catch(handleError)
-            }
-          })
-          .catch(handleError)
-      }
-
-      const fetchLessons = async () => {
-        getLessons([where('authorId', '==', user.id)]).then((res) => {
-          // TODO(kasper): support sorting
-          setLessons(
-            res.sort((a, b) =>
-              (b.updated || b.created || '').localeCompare(
-                a.updated || a.created || ''
-              )
-            )
-          )
-        })
-      }
-
-      const fetchPaths = async () => {
-        getPaths([where('authorId', '==', user.id)]).then((res) =>
-          // TODO(kasper): support sorting
-          setPaths(
-            res.sort((a, b) =>
-              (b.updated || b.created || '').localeCompare(
-                a.updated || a.created || ''
-              )
-            )
-          )
-        )
-      }
-
-      Promise.all([fetchLessons(), fetchAuthor(), fetchPaths()]).then(() =>
-        setLoading(false)
-      )
-    }
-  }, [author, handleError, loading, user])
-
+  if (loading) return <LoadingSpinner />
   return (
     <>
-      {loading && <LoadingSpinner />}
-      {!user && <ErrorPage statusCode={403} />}
-      {author && !loading && (
+      {!userAndProfile && <ErrorPage statusCode={403} />}
+      {userAndProfile && (
         <Layout
           breadcrumbs={[
             {
@@ -224,7 +160,7 @@ const WorkspaceView = () => {
               <TabList>
                 <Tab>Lessons</Tab>
                 <Tab>Paths</Tab>
-                <Tab>Bookmarks</Tab>
+                {/* <Tab>Bookmarks</Tab> */}
               </TabList>
               <TabPanels>
                 <TabPanel className="!px-0">
@@ -240,17 +176,21 @@ const WorkspaceView = () => {
                   {!!paths.length && (
                     <div className="flex flex-wrap w-full gap-12">
                       {paths.map((p) => (
-                        <PathPreview path={p} key={p.uid} author={author} />
+                        <PathPreview
+                          path={p}
+                          key={p.uid}
+                          author={userAndProfile.profile}
+                        />
                       ))}
                     </div>
                   )}
                 </TabPanel>
-                <TabPanel className="!px-0">
+                {/* <TabPanel className="!px-0">
                   {!savedLessons.length && <div>Nothing here yet!</div>}
                   {!!savedLessons.length && (
                     <LessonList lessons={savedLessons} />
                   )}
-                </TabPanel>
+                </TabPanel> */}
               </TabPanels>
             </Tabs>
           </div>
@@ -262,44 +202,24 @@ const WorkspaceView = () => {
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const { user } = await supabase.auth.api.getUserByCookie(req)
-  const params = { props: { user } }
-  if (user) {
-    const mapLessonFn = (res: PostgrestResponse<unknown>) =>
-      (res.body || []).map((data) => data as Lesson)
-
-    const [featuredLessons, popularLessons, recentLessons] = (
-      await Promise.all([
-        getLessons().eq('featured', true).neq('private', true).limit(10),
-        getLessons()
-          .neq('private', true)
-          .order('viewCount', { ascending: false })
-          .limit(10),
-        getLessons()
-          .neq('private', true)
-          .order('created', { ascending: false })
-          .limit(10),
-      ])
-    ).map((res) => mapLessonFn(res))
-
-    const authorIds = [
-      ...featuredLessons,
-      ...popularLessons,
-      ...recentLessons,
-    ].reduce(
-      (acc: Set<string>, curr: Lesson) => acc.add(curr.authorId),
-      new Set()
-    )
-
-    const authors = (
-      (await getAuthors().in('uid', Array.from(authorIds))).body || []
-    ).map((a) => a as Author)
-
-    const tags = (
-      (await getTags().order('viewCount', { ascending: false }).limit(16))
-        .body || []
-    ).map((t) => t as Tag)
+  if (!user) {
+    return { props: {}, redirect: { destination: loginRoute() } }
   }
-  return params
+  // TODO(kasper): rework saved lessons
+  const [lessons, paths] = await Promise.all([
+    prismaClient.lesson.findMany({
+      where: { authorId: user.id },
+      orderBy: { updated: 'desc' },
+      include: { profiles: true },
+    }),
+    prismaClient.path.findMany({
+      where: { authorId: user.id },
+      orderBy: { updated: 'desc' },
+      include: { profiles: true },
+    }),
+  ])
+
+  return { props: { lessons, paths } }
 }
 
 export default WorkspaceView

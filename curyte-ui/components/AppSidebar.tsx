@@ -22,7 +22,7 @@ import classNames from 'classnames'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useRef } from 'react'
-import supabase from '../supabase/client'
+import { useUser } from '../contexts/user'
 import {
   accountRoute,
   accountRouteHrefPath,
@@ -51,7 +51,8 @@ const ListItem = ({
 }: ListItemProps) => {
   const router = useRouter()
   const isActive = router.pathname === href
-  const user = supabase.auth.user()
+  const { userAndProfile } = useUser()
+
   return (
     <div
       className={classNames('relative flex', {
@@ -63,9 +64,9 @@ const ListItem = ({
         <div className="z-10 w-1 h-6 my-auto -mr-1 rounded-r-full bg-zinc-900"></div>
       )}
       <Link
-        href={requiresLogin && !user ? loginRoute() : href}
+        href={requiresLogin && !userAndProfile ? loginRoute() : href}
         passHref
-        as={requiresLogin && !user ? loginRoute() : as}
+        as={requiresLogin && !userAndProfile ? loginRoute() : as}
       >
         <Button
           variant="ghost"
@@ -80,7 +81,7 @@ const ListItem = ({
 }
 
 const AppMenu = () => {
-  const user = supabase.auth.user()
+  const { userAndProfile: user } = useUser()
   const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -126,7 +127,7 @@ const AppMenu = () => {
       <ListItem
         icon={<HomeIcon className="h-6 w-6 !text-inherit" />}
         label="Profile"
-        as={accountRoute(user?.uid || '')}
+        as={accountRoute(user?.user?.id || '')}
         href={accountRouteHrefPath}
         requiresLogin
       />

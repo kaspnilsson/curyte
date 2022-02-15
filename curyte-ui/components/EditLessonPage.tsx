@@ -12,9 +12,6 @@ import {
 } from '@chakra-ui/react'
 import { Timestamp } from 'firebase/firestore'
 import Container from './Container'
-
-import { Lesson } from '../interfaces/lesson'
-import { Author } from '../interfaces/author'
 import LessonEditor from './LessonEditor'
 import {
   CheckIcon,
@@ -23,10 +20,11 @@ import {
   ExternalLinkIcon,
 } from '@heroicons/react/outline'
 import useConfirmDialog from '../hooks/useConfirmDialog'
+import { Lesson, Profile } from '@prisma/client'
 
 type Props = {
   lesson?: Lesson
-  user: Author
+  user: Profile
   saving: boolean
   dirty: boolean
   handleTogglePrivate: () => void
@@ -45,16 +43,19 @@ const EditLessonPage = ({
   handlePreview,
   handleDelete,
 }: Props) => {
-  const makeNewLessonLocally = (l: Partial<Lesson>, u: Author): Lesson => ({
+  const makeNewLessonLocally = (l: Partial<Lesson>, u: Profile): Lesson => ({
     ...lesson,
+    private: l.private || true,
+    featured: false,
+    template: false,
+    parentLessonId: '',
     content: l.content || null,
     description: l.description || '',
     tags: l.tags || [],
     title: l.title || '',
-    authorName: u?.displayName || '',
     authorId: u?.uid || '',
-    created: l?.created || Timestamp.now().toDate().toISOString(),
-    updated: Timestamp.now().toDate().toISOString(),
+    created: l?.created || Timestamp.now().toDate(),
+    updated: Timestamp.now().toDate(),
     saveCount: 0,
     viewCount: 0,
     uid: l?.uid || '',

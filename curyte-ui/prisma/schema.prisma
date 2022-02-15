@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Lesson {
+  private        Boolean?
+  authorId       String?   @db.Uuid
+  title          String?
+  uid            String    @id @default(dbgenerated("uuid_generate_v4()"))
+  content        Json?     @db.Json
+  saveCount      Int?
+  description    String?
+  tags           String[]
+  coverImageUrl  String?
+  created        DateTime? @default(now()) @db.Timestamp(6)
+  updated        DateTime? @db.Timestamp(6)
+  viewCount      Int?
+  featured       Boolean?  @default(false)
+  parentLessonId String?
+  template       Boolean   @default(false)
+  profiles       Profile?  @relation(fields: [authorId], references: [uid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("lessons")
+}
+
+model Path {
+  uid           String   @id @default(dbgenerated("uuid_generate_v4()"))
+  created       DateTime @default(now()) @db.Timestamp(6)
+  updated       DateTime @default(now()) @db.Timestamp(6)
+  authorId      String?  @db.Uuid
+  title         String?
+  units         Json?    @db.Json
+  private       Boolean? @default(true)
+  viewCount     Int?
+  coverImageUrl String?
+  profiles      Profile? @relation(fields: [authorId], references: [uid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("paths")
+}
+
+model Profile {
+  uid          String   @id @db.Uuid
+  displayName  String?
+  photoUrl     String?
+  bio          String?
+  twitterUrl   String?
+  linkedinUrl  String?
+  personalUrl  String?
+  publicEmail  String?
+  venmoUrl     String?
+  savedLessons String[]
+  savedPaths   String[]
+  lessons      Lesson[]
+  paths        Path[]
+
+  @@map("profiles")
+}
+
+model Tag {
+  viewCount Int      @default(0)
+  tagText   String   @id
+  lessonIds String[]
+
+  @@map("tags")
+}

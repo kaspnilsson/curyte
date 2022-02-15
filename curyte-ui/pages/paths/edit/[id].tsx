@@ -1,86 +1,53 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { GetServerSideProps } from 'next'
-import { Author } from '../../../interfaces/author'
-import { useRouter } from 'next/router'
 import LoadingSpinner from '../../../components/LoadingSpinner'
 import { debounce } from 'ts-debounce'
 import ErrorPage from 'next/error'
 
-import { loginRoute, newPathRoute } from '../../../utils/routes'
-import { getPath, updatePath } from '../../../firebase/api'
-import { Path } from '../../../interfaces/path'
+import { loginRoute } from '../../../utils/routes'
 import EditPathPage from '../../../components/EditPathPage'
-import { exception } from '../../../utils/gtag'
 import { Timestamp } from 'firebase/firestore'
 import supabase from '../../../supabase/client'
+import { Path } from '@prisma/client'
+import prismaClient from '../../../lib/prisma'
+import { useUser } from '../../../contexts/user'
 
 type Props = {
   id: string
+  path?: Path
 }
 
-const EditPathView = ({ id }: Props) => {
-  const router = useRouter()
-  const user = supabase.auth.user()
-  const [loading, setLoading] = useState(true)
-  const [path, setPath] = useState<Path | undefined>()
+const EditPathView = (props: Props) => {
+  const { userAndProfile, loading } = useUser()
+  const [path, setPath] = useState<Path | undefined>(props.path)
   const [savingPromise, setSavingPromise] = useState<Promise<unknown> | null>(
     null
   )
   const [dirty, setDirty] = useState(false)
 
-  useEffect(() => {
-    if (!user) {
-      router.push(loginRoute(router.asPath))
-      return
-    }
-  })
-
-  useEffect(() => {
-    if (!user) return
-    const fetchPath = async () => {
-      let d
-      try {
-        d = await getPath(id)
-        if (!d) {
-          router.replace(newPathRoute)
-        }
-      } catch (e) {
-        exception(e as string)
-      } finally {
-        setPath(d)
-        setLoading(false)
-      }
-    }
-    setLoading(true)
-    fetchPath()
-  }, [id, router, user])
-
-  //   const handleSubmit = async () => {
-  //     if (savingPromise) await savingPromise
-  //     if (!path) return
-  //     const uid = await publishPath(path, path.uid)
-  //     router.push(lessonRoute(uid))
-  //   }
-
   const debouncedUpdatePath = useMemo(
     () =>
       debounce(async (p: Path) => {
+        if (!path?.uid) return
         p = {
           ...p,
-          created: p?.created || Timestamp.now().toDate().toISOString(),
-          updated: Timestamp.now().toDate().toISOString(),
+          created: p?.created || Timestamp.now().toDate(),
+          updated: Timestamp.now().toDate(),
         }
-        const pathPromise = updatePath(p)
+        const pathPromise = fetch(`/api/paths/${path.uid}`, {
+          method: 'POST',
+          body: JSON.stringify(p),
+        })
         setSavingPromise(pathPromise)
         await pathPromise
         setPath(p)
         setSavingPromise(null)
       }, 500),
-    []
+    [path]
   )
 
   const handleUpdate = async (l: Path) => {
-    if (loading || !l.uid) return
+    if (!l.uid) return
     if (savingPromise) await savingPromise
     setDirty(true)
     await debouncedUpdatePath(l)
@@ -90,13 +57,15 @@ const EditPathView = ({ id }: Props) => {
   return (
     <>
       {loading && <LoadingSpinner />}
-      {!loading && !path && <ErrorPage statusCode={404} />}
-      {!loading && path && (
+      {!loading && (!path || !userAndProfile?.profile) && (
+        <ErrorPage statusCode={404} />
+      )}
+      {!loading && path && userAndProfile?.profile && (
         <EditPathPage
           path={path}
           saving={!!savingPromise}
           dirty={dirty}
-          user={user as unknown as Author}
+          user={userAndProfile.profile}
           handleUpdate={handleUpdate}
         />
       )}
@@ -104,9 +73,22 @@ const EditPathView = ({ id }: Props) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  query,
+  req,
+}) => {
+  const { user } = await supabase.auth.api.getUserByCookie(req)
+  if (!user) {
+    return { props: {}, redirect: { destination: loginRoute() } }
+  }
+  const id = query.id as string
+
+  const path = await prismaClient.path.findFirst({
+    where: { uid: id },
+  })
+
   return {
-    props: { id: query.id as string },
+    props: { id, path },
   }
 }
 

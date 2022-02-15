@@ -1,59 +1,34 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import ErrorPage from 'next/error'
+import React, { useMemo, useState } from 'react'
 import { GetServerSideProps } from 'next'
-import { Author } from '../../../interfaces/author'
 import { useRouter } from 'next/router'
 import EditLessonPage from '../../../components/EditLessonPage'
 import LoadingSpinner from '../../../components/LoadingSpinner'
-import { Lesson } from '../../../interfaces/lesson'
 import { debounce } from 'ts-debounce'
 
-import {
-  lessonRoute,
-  loginRoute,
-  newLessonRoute,
-  workspaceRoute,
-} from '../../../utils/routes'
-import { deleteLesson, getLesson, updateLesson } from '../../../firebase/api'
+import { lessonRoute, loginRoute, workspaceRoute } from '../../../utils/routes'
 import { Portal, useToast } from '@chakra-ui/react'
 import { Confetti } from '../../../components/Confetti'
 import supabase from '../../../supabase/client'
+import { Lesson } from '@prisma/client'
+import prismaClient from '../../../lib/prisma'
+import { useUser } from '../../../contexts/user'
 
-type Props = {
-  id: string
+interface Props {
+  lesson?: Lesson
 }
 
-const LessonView = ({ id }: Props) => {
+const LessonView = (props: Props) => {
   const router = useRouter()
   const toast = useToast()
-  const user = supabase.auth.user()
-  const [loading, setLoading] = useState(true)
+  const [deleting, setDeleting] = useState(false)
   const [dirty, setDirty] = useState(false)
-  const [lesson, setLesson] = useState<Lesson | undefined>()
+  const [lesson, setLesson] = useState<Lesson | undefined>(props.lesson)
   const [isFiringConfetti, setIsFiringConfetti] = useState(false)
   const [savingPromise, setSavingPromise] = useState<Promise<unknown> | null>(
     null
   )
-
-  useEffect(() => {
-    if (!user) {
-      router.push(loginRoute(router.asPath))
-      return
-    }
-  })
-
-  useEffect(() => {
-    if (!user) return
-    const fetchLesson = async () => {
-      const l = await getLesson(id)
-      if (!l) {
-        router.replace(newLessonRoute())
-      }
-      setLesson(l)
-      setLoading(false)
-    }
-    setLoading(true)
-    fetchLesson()
-  }, [id, router, user])
+  const { userAndProfile, loading } = useUser()
 
   const handleTogglePrivate = async () => {
     if (!lesson) return
@@ -75,7 +50,10 @@ const LessonView = ({ id }: Props) => {
   const debouncedUpdateLesson = useMemo(
     () =>
       debounce(async (l: Lesson) => {
-        const lessonPromise = updateLesson(l)
+        const lessonPromise = fetch(`/api/lessons/${l.uid}`, {
+          method: 'POST',
+          body: JSON.stringify(l),
+        })
         setSavingPromise(lessonPromise)
         await lessonPromise
         setLesson(l)
@@ -85,31 +63,36 @@ const LessonView = ({ id }: Props) => {
   )
 
   const handleUpdate = async (l: Lesson) => {
-    if (loading || !l.uid) return
+    if (deleting || !l.uid) return
     setDirty(true)
     await debouncedUpdateLesson(l)
     setDirty(false)
   }
   const handleDelete = async () => {
     if (!lesson) return
-    setLoading(true)
-    await deleteLesson(lesson.uid)
-    setLoading(false)
+    setDeleting(true)
+    await fetch(`/api/lessons/${lesson.uid}`, { method: 'DELETE' })
+    setDeleting(false)
     router.push(workspaceRoute)
   }
 
+  if (loading) return <LoadingSpinner />
+
+  if (!lesson || !userAndProfile || !userAndProfile.profile) {
+    return <ErrorPage statusCode={404} />
+  }
   return (
     <>
-      {loading && <LoadingSpinner />}
-      {!loading && (
+      {deleting && <LoadingSpinner />}
+      {!deleting && (
         <>
           <EditLessonPage
             lesson={lesson}
-            user={user as unknown as Author}
+            user={userAndProfile.profile}
             handleTogglePrivate={handleTogglePrivate}
             handleUpdate={handleUpdate}
             handlePreview={() => {
-              router.push(lessonRoute(id))
+              router.push(lessonRoute(lesson.uid))
             }}
             handleDelete={handleDelete}
             saving={!!savingPromise}
@@ -124,9 +107,21 @@ const LessonView = ({ id }: Props) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  query,
+}) => {
+  const { user } = await supabase.auth.api.getUserByCookie(req)
+  if (!user) {
+    return { props: {}, redirect: { destination: loginRoute() } }
+  }
+
+  const lesson = await prismaClient.lesson.findFirst({
+    where: { uid: query.id as string },
+  })
+
   return {
-    props: { id: query.id as string },
+    props: { lesson },
   }
 }
 

@@ -1,22 +1,26 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import supabase from '../../../supabase/client'
-
-export const getLessons = () => supabase.from('lessons').select('*')
+import prismaClient from '../../../lib/prisma'
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { method } = req
-
-  if (method === 'GET') {
-    const { data, error } = await getLessons()
-
-    if (error) {
-      res.status(401).json({ error })
-    }
-
-    res.status(200).json({ lessons: data })
+  const { method, body } = req
+  if (method === 'POST') {
+    const lessons = await prismaClient.lesson.findMany({
+      ...JSON.parse(body),
+      include: { profiles: true },
+    })
+    res.status(200).json(lessons)
     return
+  }
+  if (method === 'GET') {
+    const lessons = await prismaClient.lesson.findMany({
+      include: { profiles: true },
+    })
+    res.status(200).json(lessons)
+    return
+  } else {
+    res.status(405).end(`Method ${method} Not Allowed`)
   }
 }

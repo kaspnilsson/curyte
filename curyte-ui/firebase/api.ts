@@ -22,7 +22,7 @@ import {
   ref,
   uploadBytes,
 } from 'firebase/storage'
-import { Author, SavedLesson } from '../interfaces/author'
+import { Author } from '../interfaces/author'
 import { Lesson } from '../interfaces/lesson'
 import { Path } from '../interfaces/path'
 import { Tag } from '../interfaces/tag'
@@ -233,73 +233,74 @@ export async function updateAuthor(author: Author): Promise<void> {
   }
 }
 
-const computeSavedLessonUid = (savedLesson: SavedLesson): string =>
-  `${savedLesson.userId}:${savedLesson.lessonId}`
+// const computeSavedLessonUid = (savedLesson: SavedLesson): string =>
+//   `${savedLesson.userId}:${savedLesson.lessonId}`
 
-export async function saveLessonForCurrentUser(
-  lessonId: string
-): Promise<void> {
-  try {
-    if (!auth.currentUser) return
-    const savedLesson = {
-      lessonId,
-      userId: auth.currentUser?.uid || '',
-    }
-    await setDoc(
-      doc(
-        collection(firestore, 'savedLessons'),
-        computeSavedLessonUid(savedLesson)
-      ),
-      savedLesson
-    )
-  } catch (e) {
-    exception(e as string)
-    throw e
-  }
-}
+// export async function saveLessonForCurrentUser(
+//   lessonId: string
+// ): Promise<void> {
+//   try {
+//     if (!auth.currentUser) return
+//     const savedLesson = {
+//       lessonId,
+//       userId: auth.currentUser?.uid || '',
+//     }
+//     await setDoc(
+//       doc(
+//         collection(firestore, 'savedLessons'),
+//         computeSavedLessonUid(savedLesson)
+//       ),
+//       savedLesson
+//     )
+//   } catch (e) {
+//     exception(e as string)
+//     throw e
+//   }
+// }
 
-export async function removeSavedLessonForCurrentUser(
-  lessonId: string
-): Promise<void> {
-  try {
-    if (!auth.currentUser) return
-    const savedLesson = {
-      lessonId,
-      userId: auth.currentUser?.uid || '',
-    }
-    return await deleteDoc(
-      doc(
-        collection(firestore, 'savedLessons'),
-        computeSavedLessonUid(savedLesson)
-      )
-    )
-  } catch (e) {
-    exception(e as string)
-    throw e
-  }
-}
+// export async function removeSavedLessonForCurrentUser(
+//   lessonId: string
+// ): Promise<void> {
+//   try {
+//     if (!auth.currentUser) return
+//     const savedLesson = {
+//       lessonId,
+//       userId: auth.currentUser?.uid || '',
+//     }
+//     return await deleteDoc(
+//       doc(
+//         collection(firestore, 'savedLessons'),
+//         computeSavedLessonUid(savedLesson)
+//       )
+//     )
+//   } catch (e) {
+//     exception(e as string)
+//     throw e
+//   }
+// }
 
-export async function getCurrentUserHasSavedLesson(
-  lessonId: string
-): Promise<boolean> {
-  try {
-    if (!auth.currentUser) return false
-    return (
-      await getDoc(
-        doc(
-          collection(firestore, 'savedLessons'),
-          computeSavedLessonUid({
-            userId: auth.currentUser?.uid || '',
-            lessonId,
-          })
-        )
-      )
-    ).exists()
-  } catch (e) {
-    exception(e as string)
-    throw e
-  }
-}
+// export async function getCurrentUserHasSavedLesson(
+//   lessonId: string
+// ): Promise<boolean> {
+//   try {
+//     if (!auth.currentUser) return false
+//     return (
+//       await getDoc(
+//         doc(
+//           collection(firestore, 'savedLessons'),
+//           computeSavedLessonUid({
+//             userId: auth.currentUser?.uid || '',
+//             lessonId,
+//           })
+//         )
+//       )
+//     ).exists()
+//   } catch (e) {
+//     exception(e as string)
+//     throw e
+//   }
+// }
+
 /**
  * Gets tags from firestore by applying clauses.
  *

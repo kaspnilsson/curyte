@@ -24,7 +24,6 @@ import Link from '@tiptap/extension-link'
 import { CuryteLink } from '../components/extensions/CuryteLink/CuryteLink'
 import { MultipleChoice } from '../components/extensions/MultipleChoice/MultipleChoice'
 import { zinc } from '../styles/theme/colors'
-import { TrailingNode } from '../components/extensions/TrailingNode'
 import Details from '../components/extensions/Details/Details'
 import DetailsContent from '../components/extensions/Details/DetailsContent'
 import { getCurrentlySelectedNodes } from '../utils/prosemirror'
@@ -85,11 +84,8 @@ const useCuryteEditor = (
         }).configure({ levels: [1, 2, 3] }),
         GoogleDriveEmbed,
         CuryteImage(uploadImage),
-        // ImageEmbed,
-        // Image,
         TaskList,
         AutoId,
-        // TrailingNode,
         TaskItem.configure({
           nested: true,
         }),

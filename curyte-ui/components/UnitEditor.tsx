@@ -24,19 +24,18 @@ import {
   DropResult,
   DraggableProvidedDragHandleProps,
 } from 'react-beautiful-dnd'
-import { createLesson } from '../firebase/api'
-import { Author } from '../interfaces/author'
-import { Lesson } from '../interfaces/lesson'
-import { Unit } from '../interfaces/path'
 import { editLessonRoute } from '../utils/routes'
 import GripIcon from './GripIcon'
 import LessonSearchModal from './LessonSearchModal'
 import LoadingSpinner from './LoadingSpinner'
 import InputDialog, { InputDialogProps } from './InputDialog'
+import { Unit } from '../interfaces/unit'
+import { Lesson, Profile } from '@prisma/client'
+import { createLesson } from '../lib/apiHelpers'
 
 interface Props {
   unit: Unit
-  user: Author
+  user: Profile
   lessonsByUid: { [uid: string]: Lesson }
   onUpdate: (u: Unit) => Promise<void>
   onDelete: () => Promise<void>
@@ -63,7 +62,7 @@ const UnitEditor = ({
 
   const createNewLesson = async (title = '') => {
     setLoading(true)
-    const uid = await createLesson({
+    const { uid } = await createLesson({
       authorId: user.uid,
       private: true,
       title,
@@ -123,13 +122,13 @@ const UnitEditor = ({
   return (
     <>
       <div className="flex w-full gap-2 py-2 border-b-2">
-        <Heading className="flex flex-1 flex-grow gap-2 font-semibold tracking-tighter leading-tight">
+        <Heading className="flex flex-1 flex-grow gap-2 font-semibold leading-tight tracking-tighter">
           <span>{unitNumber}.</span>
           <TextareaAutosize
             value={title}
             onChange={(e) => onTitleUpdate(e.target.value)}
             placeholder="Add a unit title..."
-            className="flex-1 flex-grow font-semibold tracking-tighter bg-transparent border-0 resize-none text-inherit leading-tight"
+            className="flex-1 flex-grow font-semibold leading-tight tracking-tighter bg-transparent border-0 resize-none text-inherit"
           />
         </Heading>
         <div className="flex items-center gap-2">

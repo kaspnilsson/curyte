@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Lesson } from '../interfaces/lesson'
 import React from 'react'
 import { Badge, Center, Divider, Text } from '@chakra-ui/react'
 import {
@@ -12,19 +11,19 @@ import {
   lessonRouteHrefPath,
 } from '../utils/routes'
 import TagChip from './TagChip'
-import { Author } from '../interfaces/author'
 import AuthorLink from './AuthorLink'
 import DateFormatter from './DateFormatter'
 import { DocumentTextIcon } from '@heroicons/react/outline'
+import { Lesson } from '@prisma/client'
+import { LessonWithProfile } from '../interfaces/lesson_with_profile'
 
 type Props = {
-  lesson?: Lesson
-  author?: Author | null
+  lesson?: LessonWithProfile
   onClick?: (l: Lesson) => void
   pathId?: string
 }
 
-const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
+const LessonPreview = ({ lesson, onClick, pathId }: Props) => {
   if (!lesson) return null
   const card = (
     <div className="grid grid-cols-[1fr_min-content] w-full gap-3 cursor-pointer group lesson-preview py-8">
@@ -37,15 +36,14 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
           </Text>
         </div>
         <div className="flex flex-wrap items-center gap-2 pt-1 text-xs sm:pt-2">
-          {!author && <div className="font-bold">{lesson.authorName}</div>}
-          {author && <AuthorLink author={author} small />}
+          {lesson.profiles && <AuthorLink author={lesson.profiles} small />}
           {lesson.created && (
             <>
               <Center className="w-2 h-2">
                 <Divider orientation="vertical" />
               </Center>
               <div className="text-zinc-500">
-                <DateFormatter dateString={lesson.created} />
+                <DateFormatter date={lesson.created} />
               </div>
             </>
           )}
@@ -171,7 +169,11 @@ const LessonPreview = ({ lesson, author, onClick, pathId }: Props) => {
           )}
         </>
       )}
-      {onClick && <div onClick={() => onClick(lesson)}>{card}</div>}
+      {onClick && (
+        <div className="w-full" onClick={() => onClick(lesson)}>
+          {card}
+        </div>
+      )}
     </>
   )
 }

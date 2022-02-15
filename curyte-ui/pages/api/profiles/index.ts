@@ -1,22 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import supabase from '../../../supabase/client'
-
-export const getAuthors = () => supabase.from('profiles').select('*')
+import prismaClient from '../../../lib/prisma'
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { method } = req
+  const { method, body } = req
 
   if (method === 'GET') {
-    const { data, error } = await getAuthors()
-
-    if (error) {
-      res.status(401).json({ error })
-    }
-
-    res.status(200).json({ authors: data })
+    const profiles = await prismaClient.profile.findMany(body)
+    res.status(200).json(profiles)
     return
+  } else {
+    res.status(405).end(`Method ${method} Not Allowed`)
   }
 }

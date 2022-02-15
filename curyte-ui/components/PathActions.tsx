@@ -1,10 +1,9 @@
 import { IconButton, Tooltip } from '@chakra-ui/react'
 import { TrashIcon, PencilAltIcon, EyeIcon } from '@heroicons/react/outline'
+import { Path } from '@prisma/client'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { deletePath } from '../firebase/api'
 import useConfirmDialog from '../hooks/useConfirmDialog'
-import { Path } from '../interfaces/path'
 import supabase from '../supabase/client'
 import { userIsAdmin } from '../utils/hacks'
 import { editPathRoute, workspaceRoute, pathRoute } from '../utils/routes'
@@ -23,7 +22,7 @@ const PathActions = ({ path, isReadOnlyView }: Props) => {
     if (!user || !user.id) return
     try {
       setLoading(true)
-      await deletePath(path.uid)
+      await fetch(`/api/paths/${path.uid}`, { method: 'DELETE' })
 
       router.push(workspaceRoute)
     } finally {
