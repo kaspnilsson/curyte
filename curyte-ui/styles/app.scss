@@ -83,6 +83,7 @@
 
   mark {
     background: #fff8c5;
+    color: inherit;
   }
 
   .has-focus:not(.react-renderer) {
@@ -155,4 +156,17 @@ textarea:-ms-input-placeholder {
 
 textarea::placeholder {
   color: var(--chakra-colors-zinc-400);
+}
+
+.swiper-slide {
+  opacity: 0.2;
+  -webkit-transition: opacity 0.15s ease-in-out;
+  -moz-transition: opacity 0.15s ease-in-out;
+  transition: opacity 0.15s ease-in-out;
+  overflow: hidden;
+}
+
+.swiper-slide-active {
+  opacity: 1;
+  overflow: auto;
 }

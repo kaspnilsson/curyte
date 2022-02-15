@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react'
 import { SupportIcon, QuestionMarkCircleIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
+import { discordInviteHref } from '../utils/routes'
 
 const EditorHelpMenu = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -80,7 +81,7 @@ const EditorHelpMenu = () => {
           </MenuOptionGroup>
           <a
             target="_blank"
-            href="https://discord.gg/Axd7QgGYF9"
+            href={discordInviteHref}
             rel="noreferrer"
             className=""
           >

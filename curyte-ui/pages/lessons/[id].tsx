@@ -1,6 +1,5 @@
 import { NextSeo } from 'next-seo'
 import { auth } from '../../firebase/clientApp'
-import Head from 'next/head'
 import ErrorPage from 'next/error'
 import React, { useEffect, useState } from 'react'
 import { Lesson } from '../../interfaces/lesson'
@@ -18,6 +17,7 @@ import {
   editLessonRoute,
   lessonRoute,
   lessonRouteHrefPath,
+  presentLessonRoute,
   workspaceRoute,
 } from '../../utils/routes'
 import { ParsedUrlQuery } from 'querystring'
@@ -115,9 +115,6 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
             }}
           ></NextSeo>
           <article>
-            <Head>
-              <title>{lesson.title}</title>
-            </Head>
             <LessonHeader
               author={author}
               lesson={lesson}
@@ -135,6 +132,7 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
               handleToggleTemplate={
                 user && userIsAdmin(user.uid) ? handleToggleTemplate : undefined
               }
+              handlePresent={() => router.push(presentLessonRoute(lesson.uid))}
             />
             <FancyEditor readOnly editor={editor} />
           </article>
