@@ -21,14 +21,17 @@ const MenuItem = ({
 }: Props) => {
   return (
     <chakra.MenuItem
-      className={classNames('flex items-start gap-3 justify-items-center', {
-        'bg-zinc-200': isActive,
-      })}
+      className={classNames(
+        'flex items-start gap-3 justify-items-center max-w-sm',
+        {
+          'bg-zinc-200': isActive,
+        }
+      )}
       onClick={onClick}
       disabled={disabled}
     >
       {icon || null}
-      <div className="flex flex-col justify-center">
+      <div className="flex flex-col justify-center gap-1 my-1">
         <div className="flex space-between">
           <chakra.Heading fontSize="sm">{label}</chakra.Heading>
           <div className="flex-end">{shortcut || null}</div>

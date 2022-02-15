@@ -71,26 +71,6 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         isActive={editor.isActive('underline')}
         icon={<i className="text-lg ri-underline" />}
       />
-      <MenuIconButton
-        label="Highlight"
-        onClick={() => editor.chain().focus().toggleHighlight().run()}
-        isActive={editor.isActive('highlight')}
-        icon={<i className="text-lg ri-mark-pen-line" />}
-      />
-      <MenuIconButton
-        label="Code (inline)"
-        onClick={() => editor.chain().focus().toggleCode().run()}
-        isActive={editor.isActive('code')}
-        icon={<i className="text-lg ri-code-line" />}
-      />
-      <MenuIconButton
-        label="Clear formatting"
-        onClick={() => {
-          editor.chain().focus().unsetAllMarks().run()
-          editor.chain().focus().clearNodes().run()
-        }}
-        icon={<i className="text-lg ri-format-clear" />}
-      />
       <Center className="w-2 h-6">
         <Divider
           orientation="vertical"
@@ -115,12 +95,6 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         isActive={editor.isActive('orderedList')}
         icon={<i className="text-lg ri-list-ordered" />}
-      />
-      <MenuIconButton
-        label="To-do list"
-        onClick={() => editor.chain().focus().toggleTaskList().run()}
-        isActive={editor.isActive('taskList')}
-        icon={<i className="text-lg ri-list-check-2" />}
       />
       <MenuIconButton
         label="Block quote"

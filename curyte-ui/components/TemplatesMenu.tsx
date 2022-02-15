@@ -60,14 +60,14 @@ const TemplatesMenu = ({ editor }: Props) => {
   return (
     <>
       {templates.length ? (
-        <Menu
-          id="templates-menu"
-          isLazy
-          boundary="scrollParent"
-          colorScheme="zinc"
-        >
-          <MenuButton size="sm" as={Button} disabled={loading}>
-            <div className="flex items-center gap-1 text-sm text-zinc-900">
+        <Menu id="templates-menu" isLazy boundary="scrollParent">
+          <MenuButton
+            size="sm"
+            as={Button}
+            disabled={loading || !templates.length}
+            colorScheme="black"
+          >
+            <div className="flex items-center gap-1 text-sm">
               Templates
               {!loading && (
                 <i className="w-2 text-lg ri-arrow-drop-down-line"></i>
