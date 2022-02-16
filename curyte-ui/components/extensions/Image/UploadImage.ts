@@ -19,17 +19,12 @@ export const uploadImagePlugin = (upload: UploadFn) => {
           if (item.type.indexOf('image') === 0) {
             event.preventDefault()
             event.stopPropagation()
-            // slice
-            console.log(slice)
-            debugger
 
             if (upload && image) {
               upload(image).then((src) => {
                 const node = schema.nodes.image.create({
                   src,
                 })
-                // const transaction = view.state.tr.replaceSelectionWith(node)
-                // view.dispatch(transaction)
                 slice.content.replaceChild(0, node)
                 return true
               })
@@ -40,8 +35,6 @@ export const uploadImagePlugin = (upload: UploadFn) => {
               const node = schema.nodes.image.create({
                 src: readerEvent.target?.result,
               })
-              // const transaction = view.state.tr.replaceSelectionWith(node)
-              // view.dispatch(transaction)
               slice.content.replaceChild(0, node)
               return true
             }
