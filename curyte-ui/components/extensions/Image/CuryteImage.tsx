@@ -1,9 +1,13 @@
-import { nodeInputRule } from '@tiptap/core'
-import { mergeAttributes } from '@tiptap/react'
-import classNames from 'classnames'
+import { nodeInputRule, Attribute } from '@tiptap/core'
+import { mergeAttributes, ReactNodeViewRenderer } from '@tiptap/react'
 import Image from '@tiptap/extension-image'
 
 import { uploadImagePlugin, UploadFn } from './UploadImage'
+import { CuryteImageAttrs } from './CuryteImageAttrs'
+import CuryteImageRenderer from './CuryteImageRenderer'
+import classNames from 'classnames'
+
+type ExtensionAttrs = { [key in keyof CuryteImageAttrs]: Partial<Attribute> }
 
 /**
  * Tiptap Extension to upload images
@@ -26,9 +30,7 @@ const CuryteImage = (uploadFn: UploadFn) => {
     addOptions() {
       return {
         inline: true,
-        HTMLAttributes: {
-          class: 'image-wrapper w-auto h-full min-h-96 shadow-lg rounded-xl',
-        },
+        HTMLAttributes: {},
       }
     },
 
@@ -40,21 +42,30 @@ const CuryteImage = (uploadFn: UploadFn) => {
       return this.options.inline ? 'inline' : 'block'
     },
 
+    isolating: true,
     draggable: true,
+    selectable: true,
 
     addAttributes() {
       return {
         src: {
-          default: null,
+          default: '',
         },
         alt: {
-          default: null,
+          default: '',
         },
         title: {
-          default: null,
+          default: '',
         },
-      }
+        caption: {
+          default: '',
+        },
+        displayMode: {
+          default: 'center',
+        },
+      } as ExtensionAttrs
     },
+
     parseHTML: () => [
       {
         tag: 'img[src]',
@@ -66,6 +77,8 @@ const CuryteImage = (uploadFn: UploadFn) => {
             src: element.getAttribute('src'),
             title: element.getAttribute('title'),
             alt: element.getAttribute('alt'),
+            caption: element.getAttribute('caption') || '',
+            displayMode: element.getAttribute('displayMode') || 'center',
           }
           return obj
         },
@@ -75,12 +88,12 @@ const CuryteImage = (uploadFn: UploadFn) => {
     renderHTML({ HTMLAttributes }) {
       return [
         'div',
-        { class: 'mx-auto' },
+        { class: 'my-8 lg:max-w-[50vw] mx-auto' },
         [
           'div',
           {
             class: classNames(
-              'm-8 h-auto relative not-prose flex justify-center',
+              'w-full h-auto relative not-prose flex justify-center',
               { 'opacity-50': HTMLAttributes.uploading }
             ),
             'data-drag-handle': '',
@@ -88,6 +101,10 @@ const CuryteImage = (uploadFn: UploadFn) => {
           ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)],
         ],
       ]
+    },
+
+    addNodeView() {
+      return ReactNodeViewRenderer(CuryteImageRenderer)
     },
 
     addCommands() {
