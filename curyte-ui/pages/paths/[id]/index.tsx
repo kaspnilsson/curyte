@@ -187,15 +187,13 @@ interface IParams extends ParsedUrlQuery {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params as IParams
 
-  const props = {
-    path: await prismaClient.path.findFirst({
-      where: { uid: id as string },
-      include: { profiles: true },
-    }),
-  } as Props
+  const path = await prismaClient.path.findFirst({
+    where: { uid: id as string },
+    include: { profiles: true },
+  })
 
   const lessonIds = []
-  for (const u of (props.path?.units || []) as unknown as Unit[]) {
+  for (const u of (path?.units || []) as unknown as Unit[]) {
     lessonIds.push(...(u?.lessonIds || []))
   }
   const lessons = await prismaClient.lesson.findMany({
@@ -210,7 +208,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       // Lesson not found, TODO
     }
   }
-  return { props }
+  return { props: { path, lessonsMap } }
 }
 
 export default PublishedPathView

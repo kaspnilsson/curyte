@@ -26,7 +26,7 @@ type Props = {
 const LessonPreview = ({ lesson, onClick, pathId }: Props) => {
   if (!lesson) return null
   const card = (
-    <div className="grid grid-cols-[1fr_min-content] w-full gap-3 cursor-pointer group lesson-preview py-8">
+    <div className="grid grid-cols-[1fr_min-content] w-full gap-3 cursor-pointer group lesson-preview py-6">
       <div className="flex flex-col flex-1 gap-1">
         <div className="flex flex-col gap-2">
           <Text className="text-base font-bold leading-tight tracking-tighter line-clamp-2 md:text-2xl">
@@ -86,7 +86,7 @@ const LessonPreview = ({ lesson, onClick, pathId }: Props) => {
           </div>
         )}
       </div>
-      <div className="relative w-32 h-32 overflow-hidden border rounded md:w-40 md:h-40">
+      <div className="relative w-32 h-32 overflow-hidden border rounded md:w-40 md:h-40 xl:w-72">
         {lesson.coverImageUrl && (
           <Image
             src={lesson.coverImageUrl}

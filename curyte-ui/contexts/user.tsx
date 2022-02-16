@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import supabase from '../supabase/client'
 import { User } from '@supabase/supabase-js'
 import { Profile } from '@prisma/client'
+import { exploreRoute } from '../utils/routes'
 
 export const UserAuthContext = createContext<ContextProps>({
   userAndProfile: null,
@@ -65,7 +66,7 @@ export const UserAuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     await supabase.auth.signOut()
     setUser(null)
-    router.push('/')
+    router.push(exploreRoute)
   }
 
   return (

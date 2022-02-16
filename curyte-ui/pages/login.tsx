@@ -6,6 +6,7 @@ import {
   chakra,
   Input,
   useToast,
+  Spinner,
 } from '@chakra-ui/react'
 import supabase from '../supabase/client'
 import Link from 'next/link'
@@ -82,7 +83,7 @@ const Login = () => {
 
     setIsLoading(false)
   }
-
+  debugger
   return (
     <>
       <Head>
@@ -94,6 +95,7 @@ const Login = () => {
             <h2 className="flex items-center gap-2 text-2xl font-bold leading-tight tracking-tighter">
               <CuryteLogo />
               Curyte
+              {isLoading && <Spinner />}
             </h2>
           </Link>
         </Container>
@@ -112,13 +114,21 @@ const Login = () => {
             </div>
           </section>
           <section className="flex flex-col gap-2 mt-8 w-80">
-            <Button className="relative" onClick={signInWithGoogle}>
+            <Button
+              className="relative"
+              onClick={signInWithGoogle}
+              disabled={isLoading}
+            >
               <span className="absolute left-4">
                 <GoogleLogo />
               </span>
               Log in with Google
             </Button>
-            <Button className="relative" onClick={signInWithFacebook}>
+            <Button
+              className="relative"
+              onClick={signInWithFacebook}
+              disabled={isLoading}
+            >
               <span className="absolute left-4">
                 <FacebookLogo />
               </span>
@@ -127,6 +137,7 @@ const Login = () => {
             <chakra.form
               className="flex flex-col gap-2 mt-8"
               onSubmit={submitHandler}
+              disabled={isLoading}
             >
               <FormControl id="email">
                 <FormLabel className="font-semibold leading-tight tracking-tighter">

@@ -9,7 +9,7 @@ interface Props {
 }
 
 const LessonList = ({ lessons = [], pathId = '', onSelectLesson }: Props) => (
-  <div className="flex flex-wrap w-full divide-y">
+  <div className="flex flex-wrap w-full">
     {!!lessons.length &&
       lessons.map((l, key) => (
         <LessonPreview
