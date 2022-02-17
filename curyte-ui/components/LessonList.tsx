@@ -6,14 +6,14 @@ interface Props {
   lessons?: LessonWithProfile[]
   pathId?: string
   onSelectLesson?: (l: Lesson) => void
-  noCover?: boolean
+  small?: boolean
 }
 
 const LessonList = ({
   lessons = [],
   pathId = '',
   onSelectLesson,
-  noCover = false,
+  small = false,
 }: Props) => (
   <div className="flex flex-wrap w-full">
     {!!lessons.length &&
@@ -23,7 +23,7 @@ const LessonList = ({
           lesson={l}
           pathId={pathId}
           onClick={onSelectLesson}
-          noCover={noCover}
+          small={small}
         />
       ))}
   </div>

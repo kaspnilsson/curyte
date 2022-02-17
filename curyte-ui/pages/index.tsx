@@ -110,15 +110,21 @@ const ExplorePage = ({
           <TabPanels>
             <TabPanel className="!px-0">
               {featuredLessons && <LessonList lessons={featuredLessons} />}
-              {!featuredLessons?.length && 'Nothing here yet!'}
+              {!featuredLessons?.length && (
+                <div className="text-sm text-zinc-500">Nothing here yet!</div>
+              )}
             </TabPanel>
             <TabPanel className="!px-0">
               {popularLessons && <LessonList lessons={popularLessons} />}
-              {!popularLessons?.length && 'Nothing here yet!'}
+              {!popularLessons?.length && (
+                <div className="text-sm text-zinc-500">Nothing here yet!</div>
+              )}
             </TabPanel>
             <TabPanel className="!px-0">
               {recentLessons && <LessonList lessons={recentLessons} />}
-              {!recentLessons?.length && 'Nothing here yet!'}
+              {!recentLessons?.length && (
+                <div className="text-sm text-zinc-500">Nothing here yet!</div>
+              )}
             </TabPanel>
           </TabPanels>
         </Tabs>

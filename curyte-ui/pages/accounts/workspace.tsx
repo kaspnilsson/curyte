@@ -165,14 +165,18 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
               <TabPanels>
                 <TabPanel className="!px-0">
                   {!lessons.length && (
-                    <div className="flex flex-col items-start gap-2">
+                    <div className="text-sm text-zinc-500">
                       Nothing here yet!
                     </div>
                   )}
                   {!!lessons.length && <LessonList lessons={lessons} />}
                 </TabPanel>
                 <TabPanel className="!px-0">
-                  {!paths.length && <div className="">Nothing here yet!</div>}
+                  {!paths.length && (
+                    <div className="text-sm text-zinc-500">
+                      Nothing here yet!
+                    </div>
+                  )}
                   {!!paths.length && (
                     <div className="flex flex-wrap w-full divide-y">
                       {paths.map((p) => (
@@ -186,7 +190,7 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
                   )}
                 </TabPanel>
                 {/* <TabPanel className="!px-0">
-                  {!savedLessons.length && <div>Nothing here yet!</div>}
+                  {!savedLessons.length && <div className="text-sm text-zinc-500">Nothing here yet!</div>}
                   {!!savedLessons.length && (
                     <LessonList lessons={savedLessons} />
                   )}

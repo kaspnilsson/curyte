@@ -49,7 +49,9 @@ const UserView = ({ lessons, profile, favoriteTags }: Props) => {
             Lessons
           </h2>
           {lessons && <LessonList lessons={lessons} />}
-          {!lessons?.length && 'Nothing here yet!'}
+          {!lessons?.length && (
+            <div className="text-sm text-zinc-500">Nothing here yet!</div>
+          )}
         </div>
         <div className="w-full md:w-1/3 md:pl-8">
           <Heading
@@ -59,7 +61,9 @@ const UserView = ({ lessons, profile, favoriteTags }: Props) => {
             Favorite topics
           </Heading>
           {!!favoriteTags?.length && <TagList tags={favoriteTags} />}
-          {!favoriteTags?.length && 'Nothing here yet!'}
+          {!favoriteTags?.length && (
+            <div className="text-sm text-zinc-500">Nothing here yet!</div>
+          )}
         </div>
       </div>
     </Layout>

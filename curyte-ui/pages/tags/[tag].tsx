@@ -53,7 +53,9 @@ const TagView = ({ lessons, tag, tagText, relatedTags }: Props) => {
               Related topics
             </Heading>
             {!!relatedTags?.length && <TagList tags={relatedTags} />}
-            {!relatedTags?.length && 'Nothing here yet!'}
+            {!relatedTags?.length && (
+              <div className="text-sm text-zinc-500">Nothing here yet!</div>
+            )}
           </div>
         }
       >
@@ -71,7 +73,9 @@ const TagView = ({ lessons, tag, tagText, relatedTags }: Props) => {
               Lessons
             </h2>
             {lessons && <LessonList lessons={lessons} />}
-            {!lessons?.length && 'Nothing here yet!'}
+            {!lessons?.length && (
+              <div className="text-sm text-zinc-500">Nothing here yet!</div>
+            )}
           </div>
         </div>
       </Layout>

@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GetServerSideProps } from 'next'
 import Layout from '../components/Layout'
 import LessonList from '../components/LessonList'
+import AuthorLink from '../components/AuthorLink'
 import TagList from '../components/TagList'
 import {
   Heading,
@@ -11,16 +12,18 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react'
-import { searchRoute, searchRouteHrefPath } from '../utils/routes'
+import { searchRouteHrefPath } from '../utils/routes'
 import { Tag, Profile } from '@prisma/client'
 import { LessonWithProfile } from '../interfaces/lesson_with_profile'
 import { PathWithProfile } from '../interfaces/path_with_profile'
-import { searchPaths } from './api/paths/search'
-import { searchProfiles } from './api/profiles/search'
-import { searchTags } from './api/tags/search'
-import { searchLessons } from './api/lessons/search'
-import supabase from '../supabase/client'
 import PathPreview from '../components/PathPreview'
+import {
+  queryLessons,
+  queryPaths,
+  queryProfiles,
+  queryTags,
+} from '../lib/apiHelpers'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 type Props = {
   q: string
@@ -30,9 +33,30 @@ type Props = {
   profiles: Profile[]
 }
 
-const SearchView = ({ q, lessons, tags, paths, profiles }: Props) => {
+const SearchView = ({ q }: Props) => {
   const [activeTab, setActiveTab] = useState(0)
+  const [loading, setLoading] = useState(false)
+  const [lessons, setLessons] = useState<LessonWithProfile[]>([])
+  const [tags, setTags] = useState<Tag[]>([])
+  const [paths, setPaths] = useState<PathWithProfile[]>([])
+  const [profiles, setProfiles] = useState<Profile[]>([])
 
+  useEffect(() => {
+    const fetch = async () => {
+      if (!q) return
+      setLoading(true)
+      await Promise.all([
+        queryLessons(q).then(setLessons),
+        queryPaths(q).then(setPaths),
+        queryTags(q).then(setTags),
+        queryProfiles(q).then(setProfiles),
+      ])
+      setLoading(false)
+    }
+    fetch()
+  }, [q])
+
+  if (loading) return <LoadingSpinner />
   return (
     <>
       <Layout
@@ -40,8 +64,10 @@ const SearchView = ({ q, lessons, tags, paths, profiles }: Props) => {
         breadcrumbs={[
           {
             label: `Search results for '${q}'`,
-            href: searchRouteHrefPath,
-            as: searchRoute(q),
+            href: {
+              pathname: searchRouteHrefPath,
+              query: { q },
+            },
           },
         ]}
         rightContent={
@@ -55,26 +81,30 @@ const SearchView = ({ q, lessons, tags, paths, profiles }: Props) => {
                   Lessons matching {q}
                 </Heading>
                 {!lessons.length && (
-                  <div className="flex flex-col items-start gap-2">
+                  <div className="flex flex-col items-start gap-2 text-zinc-500">
                     Nothing here yet!
                   </div>
                 )}
-                {!!lessons.length && <LessonList noCover lessons={lessons} />}
+                {!!lessons.length && <LessonList small lessons={lessons} />}
               </div>
             )}
             {activeTab !== 1 && (
               <div className="pt-8">
                 <Heading
-                  className="mb-2 font-bold leading-tight tracking-tighter line-clamp-1"
+                  className="mb-6 font-bold leading-tight tracking-tighter line-clamp-1"
                   size="sm"
                 >
                   People matching {q}
                 </Heading>
-                {!profiles.length && <div>Nothing here yet!</div>}
-                {!!profiles.length &&
-                  profiles.map((p) => (
-                    <span key={p.uid}>{JSON.stringify(p)}</span>
-                  ))}
+                <div className="flex flex-col gap-4">
+                  {!profiles.length && (
+                    <div className="text-sm text-zinc-500">
+                      Nothing here yet!
+                    </div>
+                  )}
+                  {!!profiles.length &&
+                    profiles.map((p) => <AuthorLink author={p} key={p.uid} />)}
+                </div>
               </div>
             )}
             {activeTab !== 2 && (
@@ -85,7 +115,9 @@ const SearchView = ({ q, lessons, tags, paths, profiles }: Props) => {
                 >
                   Paths matching {q}
                 </Heading>
-                {!paths.length && <div className="">Nothing here yet!</div>}
+                {!paths.length && (
+                  <div className="text-sm text-zinc-500">Nothing here yet!</div>
+                )}
                 {!!paths.length && (
                   <div className="flex flex-wrap w-full divide-y">
                     {paths.map((p) => (
@@ -93,7 +125,7 @@ const SearchView = ({ q, lessons, tags, paths, profiles }: Props) => {
                         path={p}
                         key={p.uid}
                         author={p.profiles}
-                        noCover
+                        small
                       />
                     ))}
                   </div>
@@ -109,7 +141,9 @@ const SearchView = ({ q, lessons, tags, paths, profiles }: Props) => {
                   Topics matching {q}
                 </Heading>
                 {!!tags?.length && <TagList tags={tags} />}
-                {!tags?.length && 'Nothing here yet!'}
+                {!tags?.length && (
+                  <div className="text-sm text-zinc-500">Nothing here yet!</div>
+                )}
               </div>
             )}
           </div>
@@ -136,21 +170,25 @@ const SearchView = ({ q, lessons, tags, paths, profiles }: Props) => {
             <TabPanels>
               <TabPanel className="!px-0">
                 {!lessons.length && (
-                  <div className="flex flex-col items-start gap-2">
-                    Nothing here yet!
-                  </div>
+                  <div className="text-sm text-zinc-500">Nothing here yet!</div>
                 )}
                 {!!lessons.length && <LessonList lessons={lessons} />}
               </TabPanel>
               <TabPanel className="!px-0">
-                {!profiles.length && <div>Nothing here yet!</div>}
-                {!!profiles.length &&
-                  profiles.map((p) => (
-                    <span key={p.uid}>{JSON.stringify(p)}</span>
-                  ))}
+                <div className="flex flex-col gap-8 mt-4">
+                  {!profiles.length && (
+                    <div className="text-sm text-zinc-500">
+                      Nothing here yet!
+                    </div>
+                  )}
+                  {!!profiles.length &&
+                    profiles.map((p) => <AuthorLink author={p} key={p.uid} />)}
+                </div>
               </TabPanel>
               <TabPanel className="!px-0">
-                {!paths.length && <div className="">Nothing here yet!</div>}
+                {!paths.length && (
+                  <div className="text-sm text-zinc-500">Nothing here yet!</div>
+                )}
                 {!!paths.length && (
                   <div className="flex flex-wrap w-full divide-y">
                     {paths.map((p) => (
@@ -160,7 +198,9 @@ const SearchView = ({ q, lessons, tags, paths, profiles }: Props) => {
                 )}
               </TabPanel>
               <TabPanel className="!px-0">
-                {!tags.length && <div>Nothing here yet!</div>}
+                {!tags.length && (
+                  <div className="text-sm text-zinc-500">Nothing here yet!</div>
+                )}
                 {!!tags.length && <TagList tags={tags} />}
               </TabPanel>
             </TabPanels>
@@ -171,27 +211,12 @@ const SearchView = ({ q, lessons, tags, paths, profiles }: Props) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({
-  query,
-  req,
-}) => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const q = query.q as string
-  const { user } = await supabase.auth.api.getUserByCookie(req)
-
-  const [lessons, tags, profiles, paths] = await Promise.all([
-    searchLessons(q, user),
-    searchTags(q),
-    searchProfiles(q),
-    searchPaths(q, user),
-  ])
 
   return {
     props: {
       q,
-      lessons,
-      tags,
-      profiles,
-      paths,
     },
   }
 }

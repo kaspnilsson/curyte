@@ -117,4 +117,4 @@ export const updateProfile = async (
 export const queryProfiles = async (q: string) =>
   fetch(`/api/profiles/search?q=${q}`, {
     method: 'GET',
-  }).then(parseProfileJson)
+  }).then(parseProfilesJson)
