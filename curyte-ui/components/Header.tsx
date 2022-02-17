@@ -46,7 +46,6 @@ type Props = {
 
 const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
   const { userAndProfile } = useUser()
-  console.log(breadcrumbs)
 
   return (
     <>
