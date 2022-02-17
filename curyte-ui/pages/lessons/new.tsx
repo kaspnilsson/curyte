@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { editLessonRoute, loginRoute } from '../../utils/routes'
-import { Timestamp } from 'firebase/firestore'
+
 import supabase from '../../supabase/client'
 import { Lesson } from '@prisma/client'
 import { getLesson, createLesson } from '../../lib/apiHelpers'
@@ -25,16 +25,16 @@ const NewLessonView = () => {
           private: true,
           authorId: user.id,
           uid: '',
-          created: Timestamp.now().toDate(),
-          updated: Timestamp.now().toDate(),
+          created: new Date(),
+          updated: new Date(),
         })
         router.replace(editLessonRoute(newLesson.uid))
       } else {
         const newLesson = await createLesson({
           private: true,
           authorId: user.id,
-          created: Timestamp.now().toDate(),
-          updated: Timestamp.now().toDate(),
+          created: new Date(),
+          updated: new Date(),
         } as Lesson)
         router.replace(editLessonRoute(newLesson.uid))
       }

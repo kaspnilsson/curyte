@@ -83,7 +83,7 @@ const Login = () => {
 
     setIsLoading(false)
   }
-  debugger
+
   return (
     <>
       <Head>

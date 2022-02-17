@@ -1,10 +1,9 @@
-import { StorageError } from 'firebase/storage'
 import { useState, useEffect } from 'react'
 import { compressAndUploadImage } from '../utils/upload-image'
 
 const useSupabaseStorage = (file: File) => {
   const [progress, setProgress] = useState(0)
-  const [error, setError] = useState<StorageError | null>(null)
+  const [error, setError] = useState<Error | null>(null)
   const [url, setUrl] = useState<string | null>(null)
 
   useEffect(() => {
@@ -12,7 +11,7 @@ const useSupabaseStorage = (file: File) => {
       file,
       setProgress,
       setUrl,
-      (e) => setError(e as StorageError),
+      (e) => setError(e as Error),
       true
     )
   }, [file])

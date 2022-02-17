@@ -10,7 +10,7 @@ import {
   Spinner,
   Text,
 } from '@chakra-ui/react'
-import { Timestamp } from 'firebase/firestore'
+
 import Container from './Container'
 import LessonEditor from './LessonEditor'
 import {
@@ -54,8 +54,8 @@ const EditLessonPage = ({
     tags: l.tags || [],
     title: l.title || '',
     authorId: u?.uid || '',
-    created: l?.created || Timestamp.now().toDate(),
-    updated: Timestamp.now().toDate(),
+    created: l?.created || new Date(),
+    updated: new Date(),
     saveCount: 0,
     viewCount: 0,
     uid: l?.uid || '',
@@ -86,7 +86,7 @@ const EditLessonPage = ({
       lesson={lesson}
       handleUpdate={localHandleUpdate}
       stickyFooter={
-        <footer className="fixed bottom-0 left-0 z-20 w-full h-16 ml-0 bg-white border-t md:pl-48 xl:pl-64">
+        <footer className="fixed bottom-0 left-0 z-20 w-full h-16 pl-0 ml-0 bg-white border-t lg:pl-48 xl:pl-64">
           <Container className="flex items-center justify-end h-full">
             <div className="flex items-center gap-2 mr-auto italic text-zinc-500">
               {saving && (

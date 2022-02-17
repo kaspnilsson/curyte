@@ -18,9 +18,10 @@ interface Props {
   path?: Path
   author?: Profile | null
   onClick?: (p: Path) => void
+  noCover?: boolean
 }
 
-const PathPreview = ({ path, author, onClick }: Props) => {
+const PathPreview = ({ path, author, onClick, noCover = false }: Props) => {
   if (!path) return null
 
   const units = (path.units || []) as unknown as Unit[]
@@ -85,45 +86,47 @@ const PathPreview = ({ path, author, onClick }: Props) => {
             '(no units)'}
         </Text>
       </div>
-      <div className="relative w-32 h-32 overflow-hidden border rounded md:w-40 md:h-40 xl:w-72">
-        {path.coverImageUrl && (
-          <Image
-            src={path.coverImageUrl}
-            layout="fill"
-            objectFit="cover"
-            alt={`Cover Image for ${path.title}`}
-            className="image-wrapper"
-          />
-        )}
-        {!path.coverImageUrl && (
-          <div
-            className="w-full h-full"
-            style={{
-              background:
-                'radial-gradient(circle, rgba(255,255,255,1) 20%, rgba(200,200,200,1) 100%)',
-            }}
-          >
-            <AcademicCapIcon className="w-full h-full p-6" />
-          </div>
-        )}
-        <div className="absolute flex flex-col items-end gap-1 bottom-2 right-2 h-min">
-          {!!path.private && (
-            <Badge
-              variant="subtle"
-              colorScheme="orange"
-              className="h-min w-min"
-            >
-              Private
-            </Badge>
+      {!noCover && (
+        <div className="relative w-32 h-32 overflow-hidden border rounded md:w-40 md:h-40 xl:w-72">
+          {path.coverImageUrl && (
+            <Image
+              src={path.coverImageUrl}
+              layout="fill"
+              objectFit="cover"
+              alt={`Cover Image for ${path.title}`}
+              className="image-wrapper"
+            />
           )}
-          <Badge variant="subtle" colorScheme="zinc" className="h-min w-min">
-            <div className="flex items-center gap-1">
-              Path
-              <AcademicCapIcon className="w-3 h-3" />
+          {!path.coverImageUrl && (
+            <div
+              className="w-full h-full"
+              style={{
+                background:
+                  'radial-gradient(circle, rgba(255,255,255,1) 20%, rgba(200,200,200,1) 100%)',
+              }}
+            >
+              <AcademicCapIcon className="w-full h-full p-6" />
             </div>
-          </Badge>
+          )}
+          <div className="absolute flex flex-col items-end gap-1 bottom-2 right-2 h-min">
+            {!!path.private && (
+              <Badge
+                variant="subtle"
+                colorScheme="orange"
+                className="h-min w-min"
+              >
+                Private
+              </Badge>
+            )}
+            <Badge variant="subtle" colorScheme="zinc" className="h-min w-min">
+              <div className="flex items-center gap-1">
+                Path
+                <AcademicCapIcon className="w-3 h-3" />
+              </div>
+            </Badge>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
   return (

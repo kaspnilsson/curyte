@@ -21,9 +21,10 @@ type Props = {
   lesson?: LessonWithProfile
   onClick?: (l: Lesson) => void
   pathId?: string
+  noCover?: boolean
 }
 
-const LessonPreview = ({ lesson, onClick, pathId }: Props) => {
+const LessonPreview = ({ lesson, onClick, pathId, noCover = false }: Props) => {
   if (!lesson) return null
   const card = (
     <div className="grid grid-cols-[1fr_min-content] w-full gap-3 cursor-pointer group lesson-preview py-6">
@@ -86,50 +87,57 @@ const LessonPreview = ({ lesson, onClick, pathId }: Props) => {
           </div>
         )}
       </div>
-      <div className="relative w-32 h-32 overflow-hidden border rounded md:w-40 md:h-40 xl:w-72">
-        {lesson.coverImageUrl && (
-          <Image
-            src={lesson.coverImageUrl}
-            layout="fill"
-            objectFit="cover"
-            alt={`Cover Image for ${lesson.title}`}
-            className="image-wrapper"
-          />
-        )}
-        {!lesson.coverImageUrl && (
-          <div
-            className="w-full h-full"
-            style={{
-              background:
-                'radial-gradient(circle, rgba(255,255,255,1) 20%, rgba(200,200,200,1) 100%)',
-            }}
-          >
-            <DocumentTextIcon className="w-full h-full p-6" />
-          </div>
-        )}
-        <div className="absolute flex flex-col items-end gap-1 bottom-2 right-2 h-min">
-          {lesson.featured && (
-            <Badge variant="subtle" colorScheme="green" className="h-min w-min">
-              Featured
-            </Badge>
+      {!noCover && (
+        <div className="relative w-32 h-32 overflow-hidden border rounded md:w-40 md:h-40 xl:w-72">
+          {lesson.coverImageUrl && (
+            <Image
+              src={lesson.coverImageUrl}
+              layout="fill"
+              objectFit="cover"
+              alt={`Cover Image for ${lesson.title}`}
+              className="image-wrapper"
+            />
           )}
-          {lesson.private && (
-            <Badge
-              variant="subtle"
-              colorScheme="orange"
-              className="h-min w-min"
+          {!lesson.coverImageUrl && (
+            <div
+              className="w-full h-full"
+              style={{
+                background:
+                  'radial-gradient(circle, rgba(255,255,255,1) 20%, rgba(200,200,200,1) 100%)',
+              }}
             >
-              Private
-            </Badge>
-          )}
-          <Badge variant="subtle" colorScheme="zinc" className="h-min w-min">
-            <div className="flex items-center gap-1">
-              Lesson
-              <DocumentTextIcon className="w-3 h-3" />
+              <DocumentTextIcon className="w-full h-full p-6" />
             </div>
-          </Badge>
+          )}
+
+          <div className="absolute flex flex-col items-end gap-1 bottom-2 right-2 h-min">
+            {lesson.featured && (
+              <Badge
+                variant="subtle"
+                colorScheme="green"
+                className="h-min w-min"
+              >
+                Featured
+              </Badge>
+            )}
+            {lesson.private && (
+              <Badge
+                variant="subtle"
+                colorScheme="orange"
+                className="h-min w-min"
+              >
+                Private
+              </Badge>
+            )}
+            <Badge variant="subtle" colorScheme="zinc" className="h-min w-min">
+              <div className="flex items-center gap-1">
+                Lesson
+                <DocumentTextIcon className="w-3 h-3" />
+              </div>
+            </Badge>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
   return (

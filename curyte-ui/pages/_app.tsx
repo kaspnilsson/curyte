@@ -14,13 +14,6 @@ import { AuthChangeEvent, Session } from '@supabase/supabase-js'
 import { UserAuthProvider } from '../contexts/user'
 
 export default function CuryteApp({ Component, pageProps }: AppProps) {
-  // see https://github.com/prisma/studio/issues/614
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  BigInt.prototype.toJSON = function () {
-    return this.toString()
-  }
-
   const router = useRouter()
   useEffect(() => {
     const handleRouteChange = (url: URL) => {
@@ -40,7 +33,10 @@ export default function CuryteApp({ Component, pageProps }: AppProps) {
         updateSupabaseCookie(event, session)
         if (event === 'SIGNED_IN' && user) {
           // Ensure users always have profiles.
-          supabase.from('profiles').upsert({ id: user.id })
+          fetch(`/api/profiles/${user.id}`, {
+            method: 'POST',
+            body: JSON.stringify({ uid: user.id }),
+          })
         }
       }
     )

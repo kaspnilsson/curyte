@@ -1,5 +1,6 @@
 import {
   Button,
+  chakra,
   Drawer,
   DrawerContent,
   DrawerOverlay,
@@ -21,7 +22,7 @@ import {
 import classNames from 'classnames'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useRef } from 'react'
+import { SyntheticEvent, useEffect, useRef, useState } from 'react'
 import { useUser } from '../contexts/user'
 import {
   accountRoute,
@@ -30,10 +31,10 @@ import {
   exploreRoute,
   loginRoute,
   logOutRoute,
+  searchRoute,
   workspaceRoute,
 } from '../utils/routes'
 import CuryteLogo from './CuryteLogo'
-import LessonSearchModal from './LessonSearchModal'
 
 interface ListItemProps {
   href: string
@@ -83,7 +84,19 @@ const ListItem = ({
 const AppMenu = () => {
   const { userAndProfile: user } = useUser()
   const router = useRouter()
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [query, setQuery] = useState('')
+
+  const doSearch = (event: SyntheticEvent) => {
+    event.preventDefault()
+    if (!query) return
+    router.push(searchRoute(query))
+  }
+
+  useEffect(() => {
+    if (router.query['q']) {
+      setQuery(router.query['q'] as string)
+    }
+  }, [router])
 
   return (
     <div className="flex flex-col h-full gap-2">
@@ -98,19 +111,20 @@ const AppMenu = () => {
           </h2>
         </Button>
       </Link>
-      <div className="w-auto mx-4 mb-4" onClick={onOpen}>
+      <chakra.form onSubmit={doSearch} className="w-auto mx-4 mb-4">
         <InputGroup>
           <InputLeftElement>
             <SearchIcon className="w-5 h-5 text-zinc-500" />
           </InputLeftElement>
           <Input
-            isReadOnly
             placeholder="Search..."
             variant="filled"
             colorScheme="black"
+            value={query}
+            onChange={(e) => setQuery(e.currentTarget.value)}
           ></Input>
         </InputGroup>
-      </div>
+      </chakra.form>
       <ListItem
         icon={<GlobeAltIcon className="h-6 w-6 !text-inherit" />}
         label="Explore"
@@ -156,7 +170,6 @@ const AppMenu = () => {
           href={loginRoute(router.route || exploreRoute)}
         />
       )}
-      <LessonSearchModal isOpen={isOpen} onClose={onClose} />
     </div>
   )
 }

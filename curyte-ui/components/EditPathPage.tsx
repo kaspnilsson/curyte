@@ -137,7 +137,65 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
   return (
     <>
       {lessonsLoading && <Spinner />}
-      <Layout title={path.title || 'Edit path'}>
+      <Layout
+        title={path.title || 'Edit path'}
+        footer={
+          <footer className="fixed bottom-0 left-0 z-20 w-full h-16 pl-0 bg-white border-t border-accent-2 lg:pl-48 xl:pl-64">
+            <Container className="flex items-center justify-end h-full">
+              <div className="flex items-center gap-2 mr-auto italic text-zinc-500">
+                {saving && (
+                  <div className="flex items-center gap-2">
+                    Saving... <Spinner />
+                  </div>
+                )}
+                {dirty && !saving && (
+                  <>
+                    <Text>Unsaved changes...</Text>
+                  </>
+                )}
+                {!dirty && !saving && (
+                  <>
+                    <CheckIcon className="w-5 h-5" />
+                    <Text>Autosaved!</Text>
+                  </>
+                )}
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => router.push(pathRoute(path.uid))}
+                disabled={saving}
+                colorScheme="black"
+                className="flex items-center justify-between gap-2 mr-4 font-semibold disabled:opacity-50"
+              >
+                <ExternalLinkIcon className="w-5 h-5" />
+                Preview
+              </Button>
+              {isPrivate && (
+                <Button
+                  colorScheme="black"
+                  disabled={saving || !canPublish}
+                  className="flex items-center justify-between font-semibold disabled:opacity-50"
+                  onClick={toggleIsPrivate}
+                >
+                  <UploadIcon className="w-5 h-5 mr-2" />
+                  Publish
+                </Button>
+              )}
+              {!isPrivate && (
+                <Button
+                  colorScheme="black"
+                  disabled={saving}
+                  className="flex items-center justify-between font-semibold disabled:opacity-50"
+                  onClick={toggleIsPrivate}
+                >
+                  <LockClosedIcon className="w-5 h-5 mr-2" />
+                  Make private
+                </Button>
+              )}
+            </Container>
+          </footer>
+        }
+      >
         <div className="flex">
           <div className="flex flex-col flex-grow gap-2 overflow-hidden">
             <div className="flex items-center justify-between w-full">
@@ -222,60 +280,6 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
             </DragDropContext>
           </div>
         </div>
-        <footer className="fixed bottom-0 left-0 z-20 w-full h-16 bg-white border-t border-accent-2">
-          <Container className="flex items-center justify-end h-full">
-            <div className="flex items-center gap-2 mr-auto italic text-zinc-500">
-              {saving && (
-                <div className="flex items-center gap-2">
-                  Saving... <Spinner />
-                </div>
-              )}
-              {dirty && !saving && (
-                <>
-                  <Text>Unsaved changes...</Text>
-                </>
-              )}
-              {!dirty && !saving && (
-                <>
-                  <CheckIcon className="w-5 h-5" />
-                  <Text>Autosaved!</Text>
-                </>
-              )}
-            </div>
-            <Button
-              variant="outline"
-              onClick={() => router.push(pathRoute(path.uid))}
-              disabled={saving}
-              colorScheme="black"
-              className="flex items-center justify-between gap-2 mr-4 font-semibold disabled:opacity-50"
-            >
-              <ExternalLinkIcon className="w-5 h-5" />
-              Preview
-            </Button>
-            {isPrivate && (
-              <Button
-                colorScheme="black"
-                disabled={saving || !canPublish}
-                className="flex items-center justify-between font-semibold disabled:opacity-50"
-                onClick={toggleIsPrivate}
-              >
-                <UploadIcon className="w-5 h-5 mr-2" />
-                Publish
-              </Button>
-            )}
-            {!isPrivate && (
-              <Button
-                colorScheme="black"
-                disabled={saving}
-                className="flex items-center justify-between font-semibold disabled:opacity-50"
-                onClick={toggleIsPrivate}
-              >
-                <LockClosedIcon className="w-5 h-5 mr-2" />
-                Make private
-              </Button>
-            )}
-          </Container>
-        </footer>
         <Portal>
           <Confetti isFiring={isFiringConfetti} />
         </Portal>

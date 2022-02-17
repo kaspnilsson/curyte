@@ -69,3 +69,6 @@ export const privacyPolicyRoute = '/lessons/7VVYBD7pm450RvCG'
 export const dataDeletionInstructionsRoute = '/lessons/HL9wDt63rC04bL2M'
 
 export const discordInviteHref = 'https://discord.gg/Axd7QgGYF9'
+
+export const searchRoute = (q: string) => `/search?q=${q}`
+export const searchRouteHrefPath = `/search`

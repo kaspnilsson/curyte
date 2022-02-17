@@ -8,43 +8,47 @@ datasource db {
 }
 
 model Lesson {
-  private        Boolean?
-  authorId       String?   @db.Uuid
+  private        Boolean                  @default(true)
+  authorId       String?                  @db.Uuid
   title          String?
-  uid            String    @id @default(dbgenerated("uuid_generate_v4()"))
-  content        Json?     @db.Json
-  saveCount      Int?
+  uid            String                   @id @default(dbgenerated("uuid_generate_v4()"))
+  saveCount      Int                      @default(0)
   description    String?
   tags           String[]
   coverImageUrl  String?
-  created        DateTime? @default(now()) @db.Timestamp(6)
-  updated        DateTime? @db.Timestamp(6)
-  viewCount      Int?
-  featured       Boolean?  @default(false)
+  created        DateTime?                @default(now()) @db.Timestamp(6)
+  updated        DateTime?                @default(now()) @db.Timestamp(6)
+  viewCount      Int                      @default(0)
+  featured       Boolean                  @default(false)
   parentLessonId String?
-  template       Boolean   @default(false)
-  profiles       Profile?  @relation(fields: [authorId], references: [uid], onDelete: NoAction, onUpdate: NoAction)
+  template       Boolean                  @default(false)
+  content        Json?
+  fts            Unsupported("tsvector")?
+  profiles       Profile?                 @relation(fields: [authorId], references: [uid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([fts], map: "lessons_fts")
   @@map("lessons")
 }
 
 model Path {
-  uid           String   @id @default(dbgenerated("uuid_generate_v4()"))
-  created       DateTime @default(now()) @db.Timestamp(6)
-  updated       DateTime @default(now()) @db.Timestamp(6)
-  authorId      String?  @db.Uuid
+  uid           String                   @id @default(dbgenerated("uuid_generate_v4()"))
+  created       DateTime                 @default(now()) @db.Timestamp(6)
+  updated       DateTime                 @default(now()) @db.Timestamp(6)
+  authorId      String                   @db.Uuid
   title         String?
-  units         Json?    @db.Json
-  private       Boolean? @default(true)
-  viewCount     Int?
+  private       Boolean                  @default(true)
+  viewCount     Int                      @default(0)
   coverImageUrl String?
-  profiles      Profile? @relation(fields: [authorId], references: [uid], onDelete: NoAction, onUpdate: NoAction)
+  units         Json?
+  fts           Unsupported("tsvector")?
+  profiles      Profile                  @relation(fields: [authorId], references: [uid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([fts], map: "paths_fts")
   @@map("paths")
 }
 
 model Profile {
-  uid          String   @id @db.Uuid
+  uid          String                   @id @db.Uuid
   displayName  String?
   photoUrl     String?
   bio          String?
@@ -55,16 +59,20 @@ model Profile {
   venmoUrl     String?
   savedLessons String[]
   savedPaths   String[]
+  fts          Unsupported("tsvector")?
   lessons      Lesson[]
   paths        Path[]
 
+  @@index([fts], map: "profiles_fts")
   @@map("profiles")
 }
 
 model Tag {
-  viewCount Int      @default(0)
-  tagText   String   @id
+  viewCount Int                      @default(0)
+  tagText   String                   @id
   lessonIds String[]
+  fts       Unsupported("tsvector")?
 
+  @@index([fts], map: "tags_fts")
   @@map("tags")
 }

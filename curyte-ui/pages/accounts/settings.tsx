@@ -5,7 +5,6 @@ import AuthorLink from '../../components/AuthorLink'
 import Layout from '../../components/Layout'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import TextareaAutosize from 'react-textarea-autosize'
-import { auth } from '../../firebase/clientApp'
 import {
   accountSettingsRoute,
   indexRoute,
@@ -16,6 +15,9 @@ import { Profile } from '@prisma/client'
 import prismaClient from '../../lib/prisma'
 import { GetServerSideProps } from 'next'
 import { User } from '@supabase/supabase-js'
+import useConfirmDialog from '../../hooks/useConfirmDialog'
+import { useUser } from '../../contexts/user'
+import { updateProfile } from '../../lib/apiHelpers'
 
 interface Props {
   user: User | null
@@ -25,6 +27,24 @@ interface Props {
 const SettingsView = ({ user, profile }: Props) => {
   const router = useRouter()
   const toast = useToast()
+
+  const { logout } = useUser()
+
+  const handleDelete = async () => {
+    if (!user) return
+    setSaving(true)
+    await fetch(`/api/users/${user.id}`, { method: 'DELETE' })
+    logout()
+    setSaving(false)
+    router.push(indexRoute)
+  }
+
+  const { ConfirmDialog, onOpen } = useConfirmDialog({
+    title: 'Delete account',
+    body: 'Are you sure you want to delete your account? All lessons & content will be deleted forever!',
+    confirmText: 'Delete account permanently',
+    onConfirmClick: handleDelete || (() => null),
+  })
 
   const [localProfile, setProfile] = useState<Profile | null>(profile)
   const [saving, setSaving] = useState(false)
@@ -39,10 +59,7 @@ const SettingsView = ({ user, profile }: Props) => {
     event.preventDefault()
     if (!localProfile || !user) return
     setSaving(true)
-    await fetch(`/api/profiles/${user.id}`, {
-      method: 'POST',
-      body: JSON.stringify(localProfile),
-    })
+    await updateProfile(user.id, localProfile)
     toast({
       status: 'success',
       title: 'Changes saved!',
@@ -50,13 +67,11 @@ const SettingsView = ({ user, profile }: Props) => {
     setSaving(false)
   }
 
-  const handleDelete = async (event: SyntheticEvent) => {
+  const handleDeleteClick = (event: SyntheticEvent) => {
     event.preventDefault()
-    setSaving(true)
-    await auth.currentUser?.delete()
-    setSaving(false)
-    router.push(indexRoute)
+    onOpen()
   }
+
   return (
     <Layout
       title="Account settings"
@@ -68,6 +83,7 @@ const SettingsView = ({ user, profile }: Props) => {
         },
       ]}
     >
+      <ConfirmDialog />
       {saving && <LoadingSpinner />}
       {localProfile && (
         <>
@@ -233,7 +249,7 @@ const SettingsView = ({ user, profile }: Props) => {
             </div>
           </section>
           <section className="my-8">
-            <Button color="red" className="w-56" onClick={handleDelete}>
+            <Button color="red" className="w-56" onClick={handleDeleteClick}>
               Delete account
             </Button>
           </section>

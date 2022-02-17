@@ -6,7 +6,7 @@ import ErrorPage from 'next/error'
 
 import { loginRoute } from '../../../utils/routes'
 import EditPathPage from '../../../components/EditPathPage'
-import { Timestamp } from 'firebase/firestore'
+
 import supabase from '../../../supabase/client'
 import { Path } from '@prisma/client'
 import prismaClient from '../../../lib/prisma'
@@ -31,8 +31,8 @@ const EditPathView = (props: Props) => {
         if (!path?.uid) return
         p = {
           ...p,
-          created: p?.created || Timestamp.now().toDate(),
-          updated: Timestamp.now().toDate(),
+          created: p?.created || new Date(),
+          updated: new Date(),
         }
         const pathPromise = fetch(`/api/paths/${path.uid}`, {
           method: 'POST',
