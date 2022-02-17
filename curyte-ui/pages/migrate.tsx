@@ -1,3 +1,4 @@
+import { Lesson, Profile, Tag } from '@prisma/client'
 import ErrorPage from 'next/error'
 import { useEffect, useState } from 'react'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -39,7 +40,7 @@ const Migrate = () => {
       if (confirm('Migrate tags?')) {
         const allTags = (await getTags([])).map(
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (t) => ({ ...t, tag: undefined })
+          (t) => ({ ...t, tag: undefined } as Tag)
         )
         for (const t of allTags) {
           const { error } = await supabase.from('tags').upsert([t])
@@ -73,19 +74,22 @@ const Migrate = () => {
       }
 
       if (confirm('Migrate profiles?')) {
-        const allAuthors = (await getAuthors([])).map((a) => ({
-          id: firebaseIdToSupabaseIdLookup[a.uid],
-          displayName: a.displayName,
-          photoUrl: a.photoURL,
-          bio: a.bio,
-          twitterUrl: a.links?.twitter || '',
-          linkedinUrl: a.links?.linkedin || '',
-          personalUrl: a.links?.personalSite || '',
-          publicEmail: a.links?.publicEmail || '',
-          venmoUrl: a.links?.venmo || '',
-          savedLessons: a.savedLessons || [],
-          savedPaths: [],
-        }))
+        const allAuthors = (await getAuthors([])).map(
+          (a) =>
+            ({
+              uid: firebaseIdToSupabaseIdLookup[a.uid],
+              displayName: a.displayName,
+              photoUrl: a.photoURL,
+              bio: a.bio,
+              twitterUrl: a.links?.twitter || '',
+              linkedinUrl: a.links?.linkedin || '',
+              personalUrl: a.links?.personalSite || '',
+              publicEmail: a.links?.publicEmail || '',
+              venmoUrl: a.links?.venmo || '',
+              savedLessons: a.savedLessons || [],
+              savedPaths: [],
+            } as Profile)
+        )
         for (const a of allAuthors) {
           const { error } = await supabase.from('profiles').upsert([a])
 
