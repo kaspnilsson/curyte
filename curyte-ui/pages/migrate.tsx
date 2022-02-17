@@ -1,4 +1,4 @@
-import { Lesson, Profile, Tag } from '@prisma/client'
+import { Profile, Tag } from '@prisma/client'
 import ErrorPage from 'next/error'
 import { useEffect, useState } from 'react'
 import LoadingSpinner from '../components/LoadingSpinner'
