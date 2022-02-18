@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from 'react'
+import React, { SyntheticEvent, useEffect, useState } from 'react'
 import { UploadIcon, LockClosedIcon } from '@heroicons/react/solid'
 import {
   Button,
@@ -21,6 +21,8 @@ import {
 } from '@heroicons/react/outline'
 import useConfirmDialog from '../hooks/useConfirmDialog'
 import { Lesson, Profile } from '@prisma/client'
+import LessonEditorHints from './LessonEditorHints'
+import EditorHelpMenu from './EditorHelpMenu'
 
 type Props = {
   lesson?: Lesson
@@ -43,6 +45,7 @@ const EditLessonPage = ({
   handlePreview,
   handleDelete,
 }: Props) => {
+  const [shouldShowHints, setShowHints] = useState(false)
   const makeNewLessonLocally = (l: Partial<Lesson>, u: Profile): Lesson => ({
     ...lesson,
     private: l.private || true,
@@ -81,13 +84,33 @@ const EditLessonPage = ({
     onConfirmClick: handleDelete || (() => null),
   })
 
+  useEffect(() => {
+    const hideShowHints = localStorage.getItem('hideEditorHints')
+    setShowHints(!hideShowHints)
+  }, [])
+
+  const hideHints = () => {
+    setShowHints(false)
+    localStorage.setItem('hideEditorHints', 'true')
+  }
+
+  const showHints = () => {
+    setShowHints(true)
+    localStorage.removeItem('hideEditorHints')
+  }
+
   return (
     <LessonEditor
       lesson={lesson}
       handleUpdate={localHandleUpdate}
       stickyFooter={
-        <footer className="fixed bottom-0 left-0 z-20 w-full h-16 pl-0 ml-0 bg-white border-t lg:pl-48 xl:pl-64">
-          <Container className="flex items-center justify-end h-full">
+        <footer className="sticky bottom-0 left-0 z-20 w-full pl-0 ml-0 bg-white border-t">
+          {shouldShowHints && (
+            <div className="w-full">
+              <LessonEditorHints onHide={hideHints} />
+            </div>
+          )}
+          <Container className="flex items-center justify-end h-16">
             <div className="flex items-center gap-2 mr-auto italic text-zinc-500">
               {saving && (
                 <>
@@ -107,6 +130,7 @@ const EditLessonPage = ({
                 </>
               )}
             </div>
+            <EditorHelpMenu showHints={showHints} />
             <Menu>
               <MenuButton
                 as={IconButton}

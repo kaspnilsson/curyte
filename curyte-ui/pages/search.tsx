@@ -75,7 +75,7 @@ const SearchView = ({ q }: Props) => {
             {activeTab !== 0 && (
               <div className="pt-8">
                 <Heading
-                  className="mb-2 font-bold leading-tight tracking-tighter line-clamp-1"
+                  className="mb-2 font-bold leading-tight tracking-tighter break-all line-clamp-1"
                   size="sm"
                 >
                   Lessons matching {q}
@@ -91,7 +91,7 @@ const SearchView = ({ q }: Props) => {
             {activeTab !== 1 && (
               <div className="pt-8">
                 <Heading
-                  className="mb-6 font-bold leading-tight tracking-tighter line-clamp-1"
+                  className="mb-6 font-bold leading-tight tracking-tighter break-all line-clamp-1"
                   size="sm"
                 >
                   People matching {q}
@@ -110,7 +110,7 @@ const SearchView = ({ q }: Props) => {
             {activeTab !== 2 && (
               <div className="pt-8">
                 <Heading
-                  className="mb-2 font-bold leading-tight tracking-tighter line-clamp-1"
+                  className="mb-2 font-bold leading-tight tracking-tighter break-all line-clamp-1"
                   size="sm"
                 >
                   Paths matching {q}
@@ -135,7 +135,7 @@ const SearchView = ({ q }: Props) => {
             {activeTab !== 3 && (
               <div className="pt-8">
                 <Heading
-                  className="mb-2 font-bold leading-tight tracking-tighter line-clamp-1"
+                  className="mb-2 font-bold leading-tight tracking-tighter break-all line-clamp-1"
                   size="sm"
                 >
                   Topics matching {q}
@@ -150,7 +150,7 @@ const SearchView = ({ q }: Props) => {
         }
       >
         <section className="flex flex-col">
-          <h1 className="pb-2 text-4xl font-bold leading-tight tracking-tighter md:text-6xl text-zinc-500 line-clamp-1">
+          <h1 className="pb-2 text-4xl font-bold leading-tight tracking-tighter break-all md:text-6xl text-zinc-500 line-clamp-1">
             Results for <span className="text-zinc-900">{q}</span>
           </h1>
         </section>

@@ -9,8 +9,6 @@ import { ImageUploadDialogProvider } from '../components/dialogs/ImageUploadDial
 import { exception, pageview } from '../utils/gtag'
 import ErrorBoundary from '../components/ErrorBoundary'
 import theme from '../styles/theme'
-import supabase from '../supabase/client'
-import { AuthChangeEvent, Session } from '@supabase/supabase-js'
 import { UserAuthProvider } from '../contexts/user'
 
 export default function CuryteApp({ Component, pageProps }: AppProps) {
@@ -25,37 +23,6 @@ export default function CuryteApp({ Component, pageProps }: AppProps) {
       router.events.off('routeChangeComplete', handleRouteChange)
     }
   }, [router.events])
-
-  useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        const user = supabase.auth.user()
-        updateSupabaseCookie(event, session)
-        if (event === 'SIGNED_IN' && user) {
-          // Ensure users always have profiles.
-          fetch(`/api/profiles/${user.id}`, {
-            method: 'POST',
-            body: JSON.stringify({ uid: user.id }),
-          })
-        }
-      }
-    )
-
-    return () => {
-      authListener?.unsubscribe()
-    }
-  })
-
-  const updateSupabaseCookie = async (
-    event: AuthChangeEvent,
-    session: Session | null
-  ) =>
-    await fetch('/api/auth', {
-      method: 'POST',
-      headers: new Headers({ 'Content-Type': 'application/json' }),
-      credentials: 'same-origin',
-      body: JSON.stringify({ event, session }),
-    })
 
   useEffect(() => {
     window.onerror = function (msg, source, lineNo, columnNo, error) {

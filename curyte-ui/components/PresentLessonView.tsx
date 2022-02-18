@@ -17,6 +17,7 @@ import EnterFullscreen from '../components/icons/EnterFullscreen'
 import 'swiper/css'
 import useKeypress from '../hooks/useKeypress'
 import classNames from 'classnames'
+
 import { LessonWithProfile } from '../interfaces/lesson_with_profile'
 
 // If we're this close to the beginning or the end of the slide, skip.

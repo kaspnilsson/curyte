@@ -7,7 +7,7 @@ import {
 } from 'react'
 import { useRouter } from 'next/router'
 import supabase from '../supabase/client'
-import { User } from '@supabase/supabase-js'
+import { User, AuthChangeEvent, Session } from '@supabase/supabase-js'
 import { Profile } from '@prisma/client'
 import { exploreRoute } from '../utils/routes'
 
@@ -33,9 +33,10 @@ export interface UserAndProfile {
 export const UserAuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter()
   const [user, setUser] = useState<UserAndProfile | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    setLoading(true)
     const getUserProfile = async () => {
       const sessionUser = supabase.auth.user()
 
@@ -53,15 +54,38 @@ export const UserAuthProvider = ({ children }: { children: ReactNode }) => {
           })
           setLoading(false)
         }
+      } else {
+        setUser(null)
+        setLoading(false)
       }
     }
 
     getUserProfile()
 
-    supabase.auth.onAuthStateChange(() => {
-      getUserProfile()
-    })
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        setLoading(true)
+        await updateSupabaseCookie(event, session)
+        await getUserProfile()
+        setLoading(false)
+      }
+    )
+
+    return () => {
+      authListener?.unsubscribe()
+    }
   }, [])
+
+  const updateSupabaseCookie = async (
+    event: AuthChangeEvent,
+    session: Session | null
+  ) =>
+    await fetch('/api/auth', {
+      method: 'POST',
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      credentials: 'same-origin',
+      body: JSON.stringify({ event, session }),
+    })
 
   const logout = async () => {
     await supabase.auth.signOut()

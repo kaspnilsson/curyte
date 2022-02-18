@@ -10,7 +10,6 @@ import EditableCoverImage from './EditableCoverImage'
 import useCuryteEditor from '../hooks/useCuryteEditor'
 import LessonOutline from './LessonOutline'
 import { uuid } from '../utils/uuid'
-import EditorHelpMenu from './EditorHelpMenu'
 import {
   editLessonRoute,
   editLessonRouteHrefPath,
@@ -79,9 +78,6 @@ const LessonEditor = ({
       rightContent={
         <div className="flex flex-col gap-8 mb-4">
           <LessonOutline editor={editor} />
-          <div className="flex flex-col items-start w-full">
-            <EditorHelpMenu />
-          </div>
         </div>
       }
       rightContentWrapBehavior="reverse"

@@ -171,7 +171,7 @@ const LessonInPathView = ({
                     </Button>
                   </Link>
                   <Text
-                    className="mr-2 text-zinc-500 line-clamp-1"
+                    className="mr-2 break-all text-zinc-500 line-clamp-1"
                     fontSize="sm"
                   >
                     {prevLesson.title || '(no title)'}
@@ -191,7 +191,7 @@ const LessonInPathView = ({
                     </Button>
                   </Link>
                   <Text
-                    className="mr-2 text-zinc-500 line-clamp-1"
+                    className="mr-2 break-all text-zinc-500 line-clamp-1"
                     fontSize="sm"
                   >
                     Return to path
@@ -214,7 +214,7 @@ const LessonInPathView = ({
                     </Button>
                   </Link>
                   <Text
-                    className="ml-2 text-zinc-500 line-clamp-1"
+                    className="ml-2 break-all text-zinc-500 line-clamp-1"
                     fontSize="sm"
                   >
                     {nextLesson.title || '(no title)'}
@@ -237,7 +237,7 @@ const LessonInPathView = ({
                     </Button>
                   </Link>
                   <Text
-                    className="mr-2 text-zinc-500 line-clamp-1"
+                    className="mr-2 break-all text-zinc-500 line-clamp-1"
                     fontSize="sm"
                   >
                     Return to path

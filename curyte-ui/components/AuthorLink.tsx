@@ -13,6 +13,7 @@ type Props = {
 
 const AuthorLink = ({ author, small = false }: Props) => {
   if (!author) return null
+
   return (
     <>
       {!author && null}
@@ -38,7 +39,7 @@ const AuthorLink = ({ author, small = false }: Props) => {
                 {author.displayName || '(no name)'}
               </a>
               {author.bio && !small && (
-                <span className="text-xs line-clamp-1 text-zinc-500">
+                <span className="text-xs break-all line-clamp-1 text-zinc-500">
                   {author.bio}
                 </span>
               )}

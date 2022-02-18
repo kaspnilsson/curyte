@@ -1,37 +1,42 @@
-import { Prisma } from '@prisma/client'
+// import { Prisma } from '@prisma/client'
 import { NextApiRequest, NextApiResponse } from 'next'
 import prismaClient from '../../../lib/prisma'
 
 const MAX_RESULTS = 20
 
-interface rawResults {
-  rank: number
-  tagText: string
-}
+// interface rawResults {
+//   rank: number
+//   tagText: string
+// }
 
 export const searchTags = async (q: string) => {
-  const queryStr = `
-    select
-        ts_rank(fts,websearch_to_tsquery('english', '${q as string}')) as rank,
-        "tagText"
-      from public.tags
-      where 
-        fts @@ websearch_to_tsquery('english', '${q as string}')
-      order by rank desc
-      limit ${MAX_RESULTS};
-      `
-  const idsRanked = await prismaClient.$queryRaw<rawResults[]>(
-    Prisma.sql([queryStr])
-  )
-  const rankMap: { [key: string]: number } = {}
-  for (const result of idsRanked) {
-    rankMap[result.tagText] = result.rank
-  }
+  // Index performing worse than just a regular sort
+  // const queryStr = `
+  //   select
+  //       ts_rank(fts,websearch_to_tsquery('english', '${q as string}')) as rank,
+  //       "tagText"
+  //     from public.tags
+  //     where
+  //       fts @@ websearch_to_tsquery('english', '${q as string}')
+  //     order by rank desc
+  //     limit ${MAX_RESULTS};
+  //     `
+  // const idsRanked = await prismaClient.$queryRaw<rawResults[]>(
+  //   Prisma.sql([queryStr])
+  // )
+  // const rankMap: { [key: string]: number } = {}
+  // for (const result of idsRanked) {
+  //   rankMap[result.tagText] = result.rank
+  // }
 
+  // const tags = await prismaClient.tag.findMany({
+  //   where: { tagText: { in: Object.keys(rankMap) } },
+  // })
+  // tags.sort((a, b) => rankMap[b.tagText] - rankMap[a.tagText])
   const tags = await prismaClient.tag.findMany({
-    where: { tagText: { in: Object.keys(rankMap) } },
+    where: { tagText: { contains: q, mode: 'insensitive' } },
+    take: MAX_RESULTS,
   })
-  tags.sort((a, b) => rankMap[b.tagText] - rankMap[a.tagText])
   return tags
 }
 

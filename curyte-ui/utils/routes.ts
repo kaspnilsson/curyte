@@ -72,3 +72,7 @@ export const discordInviteHref = 'https://discord.gg/Axd7QgGYF9'
 
 export const searchRoute = (q: string) => `/search?q=${q}`
 export const searchRouteHrefPath = `/search`
+
+export const nextStepsRoute = '/next-steps'
+
+export const successRoute = '/success'

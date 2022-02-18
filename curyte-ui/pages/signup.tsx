@@ -36,7 +36,7 @@ const Signup = () => {
         email,
       },
       {
-        redirectTo: `${REDIRECT_URL_BASE}/what-is-curyte`,
+        redirectTo: `${REDIRECT_URL_BASE}/next-steps`,
       }
     )
     toast({ title: 'Check your email for a sign in link!' })
@@ -56,7 +56,7 @@ const Signup = () => {
         provider: 'google',
       },
       {
-        redirectTo: `${REDIRECT_URL_BASE}/what-is-curyte`,
+        redirectTo: `${REDIRECT_URL_BASE}/next-steps`,
       }
     )
     if (error) {
@@ -75,7 +75,7 @@ const Signup = () => {
         provider: 'facebook',
       },
       {
-        redirectTo: `${REDIRECT_URL_BASE}/what-is-curyte`,
+        redirectTo: `${REDIRECT_URL_BASE}/next-steps`,
       }
     )
     if (error) {
@@ -100,7 +100,7 @@ const Signup = () => {
           </Link>
         </Container>
         <Container className="flex flex-col items-center justify-center flex-1 my-16">
-          <section className="flex flex-row w-80">
+          <section className="flex flex-row items-center justify-center w-96">
             <div className="flex flex-col gap-4">
               <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
                 Sign up
@@ -113,14 +113,14 @@ const Signup = () => {
               </h3>
             </div>
           </section>
-          <section className="flex flex-col gap-2 mt-8 w-80">
-            <Button className="relative" onClick={signInWithGoogle}>
+          <section className="flex flex-col gap-2 mt-8 w-96">
+            <Button size="lg" className="relative" onClick={signInWithGoogle}>
               <span className="absolute left-4">
                 <GoogleLogo />
               </span>
               Sign up with Google
             </Button>
-            <Button className="relative" onClick={signInWithFacebook}>
+            <Button size="lg" className="relative" onClick={signInWithFacebook}>
               <span className="absolute left-4">
                 <FacebookLogo />
               </span>
@@ -137,6 +137,7 @@ const Signup = () => {
                 <Input
                   name="email"
                   type="email"
+                  size="lg"
                   autoComplete="email"
                   required
                   value={email}
@@ -146,8 +147,9 @@ const Signup = () => {
               {error && <span className="text-red-500">{error}</span>}
               <Button
                 colorScheme="black"
-                className="justify-end mt-4 ml-auto"
+                className="justify-end w-full mt-4"
                 type="submit"
+                size="lg"
                 disabled={isLoading}
               >
                 Continue

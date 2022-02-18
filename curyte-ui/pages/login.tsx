@@ -100,8 +100,8 @@ const Login = () => {
           </Link>
         </Container>
         <Container className="flex flex-col items-center justify-center flex-1 my-16">
-          <section className="flex flex-row w-80">
-            <div className="flex flex-col gap-4">
+          <section className="flex flex-row w-96">
+            <div className="flex flex-col items-center justify-center gap-4">
               <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
                 Log in
               </h1>
@@ -113,7 +113,7 @@ const Login = () => {
               </h3>
             </div>
           </section>
-          <section className="flex flex-col gap-2 mt-8 w-80">
+          <section className="flex flex-col gap-2 mt-8 w-96">
             <Button
               className="relative"
               onClick={signInWithGoogle}

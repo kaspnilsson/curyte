@@ -170,3 +170,8 @@ textarea::placeholder {
   opacity: 1;
   overflow: auto;
 }
+
+:root {
+  --swiper-navigation-color: var(--chakra-colors-zinc-700) !important;
+  --swiper-theme-color: var(--chakra-colors-zinc-700) !important;
+}

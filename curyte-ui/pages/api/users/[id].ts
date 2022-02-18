@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import prismaClient from '../../../lib/prisma'
-import supabase from '../../../supabase/client'
+import supabaseAdmin from '../../../supabase/admin'
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,7 +16,7 @@ export default async function handler(
     return
   }
 
-  const { user } = await supabase.auth.api.getUserByCookie(req)
+  const { user } = await supabaseAdmin.auth.api.getUserByCookie(req)
   const uid = id as string
 
   if (method === 'DELETE') {
@@ -34,9 +34,9 @@ export default async function handler(
     await prismaClient.path.deleteMany({
       where: { authorId: uid },
     })
-
-    supabase.auth.signOut()
-    res.status(200)
+    await supabaseAdmin.auth.api.deleteUser(uid)
+    supabaseAdmin.auth.signOut()
+    res.status(200).json({})
   } else {
     res.status(405).end(`Method ${method} Not Allowed`)
   }

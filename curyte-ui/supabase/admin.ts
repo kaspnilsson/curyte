@@ -14,3 +14,5 @@ export const getUser = async (token: string) => {
 
   return data
 }
+
+export default supabaseAdmin

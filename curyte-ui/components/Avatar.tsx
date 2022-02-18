@@ -11,6 +11,7 @@ type Props = {
 
 const CuryteAvatar = ({ profile, className, size = 'md' }: Props) => {
   if (!profile) return null
+
   return (
     <Avatar
       src={profile.photoUrl || undefined}
