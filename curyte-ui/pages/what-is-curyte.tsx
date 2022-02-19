@@ -1,22 +1,13 @@
 import React from 'react'
 import CuryteLogo from '../components/CuryteLogo'
-import { useRouter } from 'next/router'
 import { exploreRoute, newLessonRoute } from '../utils/routes'
 import Link from 'next/link'
 import { Button, Heading, Text } from '@chakra-ui/react'
 import AutoPlaySilentVideo from '../components/AutoPlaySilentVideo'
 import Footer from '../components/Footer'
 import Container from '../components/Container'
-import supabase from '../supabase/client'
 
 const WhatIsCuryteView = () => {
-  const router = useRouter()
-  const user = supabase.auth.user()
-
-  if (user && process.env.NODE_ENV === 'production') {
-    router.replace(exploreRoute)
-  }
-
   return (
     <>
       <Container className="mt-24">
