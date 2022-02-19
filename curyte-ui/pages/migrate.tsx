@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { getAuthors, getLessons, getPaths, getTags } from '../firebase/api'
 import supabase from '../supabase/client'
+import { uuid } from '../utils/uuid'
 
 /**
  * ThE BIGGEST HACK EVER
@@ -17,10 +18,37 @@ const Migrate = () => {
     if (!user || user.email !== 'kaspnilsson@gmail.com') return
 
     const fetchAndMigrate = async () => {
+      const lookup =
+        window && window.localStorage.getItem('firebaseIdMap')
+          ? JSON.parse(window.localStorage.getItem('firebaseIdMap') as string)
+          : firebaseIdToSupabaseIdLookup
+      if (confirm('Migrate users?')) {
+        const allAuthors = await getAuthors([])
+        for (const a of allAuthors) {
+          if (!a.email) continue
+          const { user, error } = await supabase.auth.signUp({
+            email: a.email,
+            password: uuid(),
+          })
+          if (error) {
+            if (error.status === 400) continue
+            console.log(error)
+            console.log(a)
+          } else {
+            if (!user) {
+              debugger
+              return
+            }
+            lookup[a.uid] = user.id
+            console.log('created new user profile for firebase user ', a)
+          }
+        }
+      }
+      window.localStorage.setItem('firebaseIdMap', JSON.stringify(lookup))
       if (confirm('Migrate lessons?')) {
         const allLessons = (await getLessons([], true)).map((l) => ({
           ...l,
-          authorId: firebaseIdToSupabaseIdLookup[l.authorId],
+          authorId: lookup[l.authorId],
           authorName: undefined,
         }))
 
@@ -58,7 +86,7 @@ const Migrate = () => {
       if (confirm('Migrate paths?')) {
         const allPaths = (await getPaths([])).map((p) => ({
           ...p,
-          authorId: firebaseIdToSupabaseIdLookup[p.authorId],
+          authorId: lookup[p.authorId],
         }))
         for (const p of allPaths) {
           const { error } = await supabase.from('paths').upsert([p])
@@ -77,7 +105,7 @@ const Migrate = () => {
         const allAuthors = (await getAuthors([])).map(
           (a) =>
             ({
-              uid: firebaseIdToSupabaseIdLookup[a.uid],
+              uid: lookup[a.uid],
               displayName: a.displayName,
               photoUrl: a.photoURL,
               bio: a.bio,
@@ -109,6 +137,7 @@ const Migrate = () => {
   }, [user])
 
   if (!user || user.email !== 'kaspnilsson@gmail.com') {
+    console.error('not kasp! ', user)
     return <ErrorPage statusCode={403} />
   }
 
@@ -218,6 +247,16 @@ export const firebaseIdToSupabaseIdLookup: { [key: string]: string } = {
   wjHxzphFnwRQODbt0mSc0PV7C1k1: '5ae45089-49ff-41c0-8c1d-6c1217f7c3d9',
   yvMPtJFDa8T3HHhiZHAH1XQaMxt1: '7fa616dd-5dd5-46f9-8dae-6a2de11eca1e',
   zU54Vn8U0WPh78B7dNzueKfBzeh2: '35048c6d-e92e-441c-947f-ceb080d4f9dc',
+  '0cCLkaGk67cpE76q3TB3ySqgtFz1': '0c1d2251-3733-4822-af44-b3e86797c3c5',
+  '2WyBeFDfWQTI3kiwRJzXlyNVVSr1': '75ab0c60-eb3f-408e-97e5-8f90763ee4f4',
+  B8DkfEuQLjRjTnUXPg6HaDrxed32: '5a43803b-1416-4cb9-a85e-7c962e9c0028',
+  RS76b6Gfc4WZ805ULdvQ7S0ERdG3: '4c6ca974-f792-4f8d-a0b9-85e941765bb8',
+  StSyMHV9KLdAe4KzOoRLuKBeKCF2: 'aedb2d3a-4b57-4e14-b693-901a784403e7',
+  b1bDexocBefpNkYs6OBcU0Y43Bs1: '082f5944-6c09-454e-a19b-5742c9ca2a4e',
+  n0rwEAG6n4YJFrMJjqxEDmWyE9u2: '1dc89899-7725-4f93-865b-253dd5c95892',
+  vAzIx9gxQQVtLJRpFLDIES5tMDw2: '60a01d43-0175-400e-a4b5-07d6876443bd',
+  z3Jn5oo7P5VNmXbkXjnc9v4WBPe2: 'f9a68a39-fe05-416f-aa30-c1290b59105d',
+  z6aF2GI7IdhSK7jPgSHxf7pKE9q2: '9137d6a2-8a1b-454d-b446-cde8034adcd6',
 }
 
 export default Migrate
