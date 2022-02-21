@@ -1,17 +1,13 @@
 import { NextSeo } from 'next-seo'
-import { auth } from '../../../firebase/clientApp'
 import Head from 'next/head'
 import ErrorPage from 'next/error'
 import React, { useEffect, useState } from 'react'
-import { Lesson } from '../../../interfaces/lesson'
 import { GetServerSideProps } from 'next'
 import Layout from '../../../components/Layout'
-import { Author } from '../../../interfaces/author'
 import LessonHeader from '../../../components/LessonHeader'
 import FancyEditor from '../../../components/FancyEditor'
 import LoadingSpinner from '../../../components/LoadingSpinner'
 import { useRouter } from 'next/router'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/outline'
 import {
   accountRoute,
@@ -29,23 +25,19 @@ import {
 import { ParsedUrlQuery } from 'querystring'
 import useCuryteEditor from '../../../hooks/useCuryteEditor'
 import LessonOutline from '../../../components/LessonOutline'
-import {
-  logLessonView,
-  deleteLesson,
-  getLesson,
-  getAuthor,
-  setLessonFeatured,
-  getPath,
-  logPathView,
-} from '../../../firebase/api'
 import { userIsAdmin } from '../../../utils/hacks'
 import { Button, useToast, Text } from '@chakra-ui/react'
-import { Path } from '../../../interfaces/path'
 import Link from 'next/link'
+import supabase from '../../../supabase/client'
+import { Lesson, Path } from '@prisma/client'
+import { JSONContent } from '@tiptap/core'
+import { deleteLesson, updateLesson, updatePath } from '../../../lib/apiHelpers'
+import prismaClient from '../../../lib/prisma'
+import { Unit } from '../../../interfaces/unit'
+import { LessonWithProfile } from '../../../interfaces/lesson_with_profile'
 
 interface Props {
-  lesson: Lesson
-  author: Author
+  lesson: LessonWithProfile
   path: Path
   nextLesson: Lesson | null
   prevLesson: Lesson | null
@@ -53,21 +45,24 @@ interface Props {
 
 const LessonInPathView = ({
   lesson,
-  author,
   path,
   nextLesson = null,
   prevLesson = null,
 }: Props) => {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const [user, userLoading] = useAuthState(auth)
+  const user = supabase.auth.user()
   const toast = useToast()
 
   // Log views only on render of a published lesson in published path
   useEffect(() => {
     if (lesson.private || path.private) return
-    logLessonView(lesson.uid)
-    logPathView(path.uid)
+    updateLesson(lesson.uid, {
+      viewCount: { increment: 1 },
+    })
+    updatePath(path.uid, {
+      viewCount: { increment: 1 },
+    })
   }, [lesson.private, lesson.uid, path.private, path.uid])
 
   const handleDelete = async () => {
@@ -77,7 +72,10 @@ const LessonInPathView = ({
     router.push(workspaceRoute)
   }
 
-  const editor = useCuryteEditor({ content: lesson.content }, [lesson])
+  const editor = useCuryteEditor(
+    { content: lesson.content ? (lesson.content as JSONContent) : null },
+    [lesson]
+  )
 
   if (!lesson) return <ErrorPage statusCode={404} />
 
@@ -90,7 +88,9 @@ const LessonInPathView = ({
   }
 
   const handleToggleFeatured = async () => {
-    await setLessonFeatured(lesson.uid, !lesson.featured)
+    await updateLesson(lesson.uid, {
+      featured: !lesson.featured,
+    })
     toast({
       title: `Lesson featured state set to ${!lesson.featured}`,
     })
@@ -98,16 +98,19 @@ const LessonInPathView = ({
 
   return (
     <>
-      {(loading || userLoading) && <LoadingSpinner />}
-      {!(loading || userLoading) && (
+      {loading && <LoadingSpinner />}
+      {!loading && (
         <Layout
-          title={lesson.title}
+          title={lesson.title || ''}
           rightContent={<LessonOutline editor={editor} />}
           breadcrumbs={[
             {
-              label: author.displayName,
+              label:
+                lesson.profiles.displayName ||
+                lesson.profiles.publicEmail ||
+                '(no name)',
               href: accountRouteHrefPath,
-              as: accountRoute(author.uid),
+              as: accountRoute(lesson.profiles.uid || ''),
             },
             {
               label: path.title || '(no title)',
@@ -122,11 +125,11 @@ const LessonInPathView = ({
           ]}
         >
           <NextSeo
-            title={lesson.title}
+            title={lesson.title || ''}
             description={openGraphDescription}
             openGraph={{
               url: lessonInPathRoute(path.uid, lesson.uid),
-              title: lesson.title,
+              title: lesson.title || '',
               description: openGraphDescription,
               images: openGraphImages,
               site_name: 'Curyte',
@@ -134,21 +137,20 @@ const LessonInPathView = ({
           ></NextSeo>
           <article>
             <Head>
-              <title>{lesson.title}</title>
+              <title>{lesson.title || ''}</title>
             </Head>
             <LessonHeader
-              author={author}
               lesson={lesson}
               handleDelete={
-                user && user.uid === lesson.authorId ? handleDelete : undefined
+                user && user.id === lesson.authorId ? handleDelete : undefined
               }
               handleEdit={
-                user && user.uid === lesson.authorId
+                user && user.id === lesson.authorId
                   ? () => router.push(editLessonRoute(lesson.uid))
                   : undefined
               }
               handleToggleFeatured={
-                user && userIsAdmin(user.uid) ? handleToggleFeatured : undefined
+                user && userIsAdmin(user.id) ? handleToggleFeatured : undefined
               }
               handlePresent={() =>
                 router.push(presentLessonInPathRoute(path.uid, lesson.uid))
@@ -169,7 +171,7 @@ const LessonInPathView = ({
                     </Button>
                   </Link>
                   <Text
-                    className="mr-2 text-zinc-500 line-clamp-1"
+                    className="mr-2 break-all text-zinc-500 line-clamp-1"
                     fontSize="sm"
                   >
                     {prevLesson.title || '(no title)'}
@@ -189,7 +191,7 @@ const LessonInPathView = ({
                     </Button>
                   </Link>
                   <Text
-                    className="mr-2 text-zinc-500 line-clamp-1"
+                    className="mr-2 break-all text-zinc-500 line-clamp-1"
                     fontSize="sm"
                   >
                     Return to path
@@ -212,7 +214,7 @@ const LessonInPathView = ({
                     </Button>
                   </Link>
                   <Text
-                    className="ml-2 text-zinc-500 line-clamp-1"
+                    className="ml-2 break-all text-zinc-500 line-clamp-1"
                     fontSize="sm"
                   >
                     {nextLesson.title || '(no title)'}
@@ -235,7 +237,7 @@ const LessonInPathView = ({
                     </Button>
                   </Link>
                   <Text
-                    className="mr-2 text-zinc-500 line-clamp-1"
+                    className="mr-2 break-all text-zinc-500 line-clamp-1"
                     fontSize="sm"
                   >
                     Return to path
@@ -271,29 +273,40 @@ interface IParams extends ParsedUrlQuery {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id, lessonId } = context.params as IParams
-  const lesson = await getLesson(lessonId as string)
-  const author = await getAuthor(lesson.authorId)
 
-  const path = await getPath(id as string)
+  const lesson = await prismaClient.lesson.findFirst({
+    where: { uid: lessonId as string },
+    include: { profiles: true },
+  })
+  const path = await prismaClient.path.findFirst({
+    where: { uid: id as string },
+    include: { profiles: true },
+  })
 
-  let flattened: string[] = []
-  for (const u of path.units || []) {
-    flattened = [...flattened, ...(u.lessonIds || [])]
-  }
+  const flattened: string[] = ((path?.units || []) as unknown as Unit[]).reduce(
+    (acc: string[], curr) => [...acc, ...(curr.lessonIds || [])],
+    []
+  )
 
+  const index = flattened.findIndex((uid) => uid === lessonId)
   let nextLesson = null,
     prevLesson = null
-  const index = flattened.findIndex((uid) => uid === lessonId)
   if (index !== -1) {
     nextLesson = flattened[index + 1]
-      ? await getLesson(flattened[index + 1])
+      ? await prismaClient.lesson.findFirst({
+          where: { uid: flattened[index + 1] },
+          include: { profiles: true },
+        })
       : null
     prevLesson = flattened[index - 1]
-      ? await getLesson(flattened[index - 1])
+      ? await prismaClient.lesson.findFirst({
+          where: { uid: flattened[index - 1] },
+          include: { profiles: true },
+        })
       : null
   }
 
-  return { props: { lesson, author, path, nextLesson, prevLesson } }
+  return { props: { lesson, path, nextLesson, prevLesson } }
 }
 
 export default LessonInPathView

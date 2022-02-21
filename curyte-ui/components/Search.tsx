@@ -1,7 +1,7 @@
 import React, { FormEvent, useState } from 'react'
 import algoliasearch from 'algoliasearch/lite'
 import { InstantSearch, connectSearchBox } from 'react-instantsearch-dom'
-import { Lesson } from '../interfaces/lesson'
+import { Lesson } from '@prisma/client'
 import {
   Button,
   Input,

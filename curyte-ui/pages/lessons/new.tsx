@@ -1,19 +1,17 @@
-import { auth } from '../../firebase/clientApp'
 import React, { useEffect } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { Lesson } from '../../interfaces/lesson'
 import { useRouter } from 'next/router'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { editLessonRoute, loginRoute } from '../../utils/routes'
-import { getLesson, createLesson } from '../../firebase/api'
-import { Timestamp } from 'firebase/firestore'
+
+import supabase from '../../supabase/client'
+import { Lesson } from '@prisma/client'
+import { getLesson, createLesson } from '../../lib/apiHelpers'
 
 const NewLessonView = () => {
   const router = useRouter()
-  const [user, userLoading] = useAuthState(auth)
+  const user = supabase.auth.user()
 
   useEffect(() => {
-    if (userLoading) return
     if (!user) {
       router.push(loginRoute(router.asPath))
       return
@@ -21,30 +19,28 @@ const NewLessonView = () => {
     const createNewDraft = async () => {
       if (router.query.copyFrom) {
         const l = await getLesson(router.query.copyFrom as string)
-        const newUid = await createLesson({
+        const newLesson = await createLesson({
           ...l,
           parentLessonId: l.uid,
           private: true,
-          authorId: user.uid,
-          authorName: user.displayName || '',
+          authorId: user.id,
           uid: '',
-          created: Timestamp.now().toDate().toISOString(),
-          updated: Timestamp.now().toDate().toISOString(),
+          created: new Date(),
+          updated: new Date(),
         })
-        router.replace(editLessonRoute(newUid))
+        router.replace(editLessonRoute(newLesson.uid))
       } else {
-        const newUid = await createLesson({
+        const newLesson = await createLesson({
           private: true,
-          authorId: user.uid,
-          authorName: user.displayName,
-          created: Timestamp.now().toDate().toISOString(),
-          updated: Timestamp.now().toDate().toISOString(),
+          authorId: user.id,
+          created: new Date(),
+          updated: new Date(),
         } as Lesson)
-        router.replace(editLessonRoute(newUid))
+        router.replace(editLessonRoute(newLesson.uid))
       }
     }
     createNewDraft()
-  }, [router, router.query.copyFrom, user, userLoading])
+  }, [router, router.query.copyFrom, user])
 
   return <LoadingSpinner message="Building lesson..." />
 }

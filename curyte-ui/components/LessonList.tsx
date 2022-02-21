@@ -1,29 +1,29 @@
-import { Author } from '../interfaces/author'
-import { Lesson } from '../interfaces/lesson'
+import { Lesson } from '@prisma/client'
+import { LessonWithProfile } from '../interfaces/lesson_with_profile'
 import LessonPreview from './LessonPreview'
 
 interface Props {
-  lessons?: Lesson[]
-  authors?: Author[]
+  lessons?: LessonWithProfile[]
   pathId?: string
   onSelectLesson?: (l: Lesson) => void
+  small?: boolean
 }
 
 const LessonList = ({
   lessons = [],
-  authors = [],
   pathId = '',
   onSelectLesson,
+  small = false,
 }: Props) => (
-  <div className="flex flex-wrap w-full gap-12">
+  <div className="flex flex-wrap w-full">
     {!!lessons.length &&
       lessons.map((l, key) => (
         <LessonPreview
           key={key}
           lesson={l}
-          author={authors.find((a) => a.uid === l.authorId) || null}
           pathId={pathId}
           onClick={onSelectLesson}
+          small={small}
         />
       ))}
   </div>

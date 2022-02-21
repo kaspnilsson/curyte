@@ -1,12 +1,7 @@
-import React from 'react'
-import { Lesson } from '../interfaces/lesson'
-import { Tag } from '../interfaces/tag'
+import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import { GetServerSideProps } from 'next'
-import { getAuthor, getLessons, getTags } from '../firebase/api'
 import LessonList from '../components/LessonList'
-import { limit, orderBy, where } from 'firebase/firestore'
-import { Author } from '../interfaces/author'
 import {
   Button,
   Heading,
@@ -18,17 +13,18 @@ import {
 } from '@chakra-ui/react'
 import TagList from '../components/TagList'
 import { exploreRoute, newLessonRoute } from '../utils/routes'
-import useLocalStorage from '../hooks/useLocalStorage'
 import Link from 'next/link'
 import { XIcon } from '@heroicons/react/outline'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { auth } from '../firebase/clientApp'
+import { Tag } from '@prisma/client'
+import prismaClient from '../lib/prisma'
+import { useUser } from '../contexts/user'
+import { LessonWithProfile } from '../interfaces/lesson_with_profile'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 interface Props {
-  featuredLessons: Lesson[]
-  recentLessons: Lesson[]
-  popularLessons: Lesson[]
-  authors: Author[]
+  featuredLessons: LessonWithProfile[]
+  recentLessons: LessonWithProfile[]
+  popularLessons: LessonWithProfile[]
   tags: Tag[]
 }
 
@@ -36,11 +32,24 @@ const ExplorePage = ({
   featuredLessons,
   recentLessons,
   popularLessons,
-  authors,
   tags,
 }: Props) => {
-  const [showHero, setShowHero] = useLocalStorage('showStartWritingHero', true)
-  const [user] = useAuthState(auth)
+  const [showHero, setShowHero] = useState(false)
+
+  const { userAndProfile, loading } = useUser()
+
+  useEffect(() => {
+    const hideShowHero = localStorage.getItem('hideStartWritingHero')
+    setShowHero(!hideShowHero)
+  }, [])
+
+  const hideHero = () => {
+    setShowHero(false)
+    localStorage.setItem('hideStartWritingHero', 'true')
+  }
+
+  if (loading) return <LoadingSpinner />
+
   return (
     <Layout
       breadcrumbs={[
@@ -62,11 +71,11 @@ const ExplorePage = ({
         </div>
       }
     >
-      {(!user || showHero) && (
+      {(!userAndProfile || showHero) && (
         <section className="relative flex flex-col items-center p-12 mb-12 shadow-xl rounded-xl bg-zinc-100 group shadow-violet-500/20">
-          {user && (
+          {userAndProfile && (
             <Button
-              onClick={() => setShowHero(false)}
+              onClick={hideHero}
               className="!absolute top-2 right-2 opacity-0 group-hover:opacity-100 ease-in-out transition-all duration-150"
               size="xs"
             >
@@ -80,7 +89,7 @@ const ExplorePage = ({
             A better lesson builder -- for teachers, by teachers.
           </Heading>
           <Link href={newLessonRoute()} passHref>
-            <Button colorScheme="black" onClick={() => setShowHero(false)}>
+            <Button colorScheme="black" onClick={hideHero}>
               Start writing
             </Button>
           </Link>
@@ -100,22 +109,22 @@ const ExplorePage = ({
           </TabList>
           <TabPanels>
             <TabPanel className="!px-0">
-              {featuredLessons && (
-                <LessonList lessons={featuredLessons} authors={authors} />
+              {featuredLessons && <LessonList lessons={featuredLessons} />}
+              {!featuredLessons?.length && (
+                <div className="text-sm text-zinc-500">Nothing here yet!</div>
               )}
-              {!featuredLessons?.length && 'Nothing here yet!'}
             </TabPanel>
             <TabPanel className="!px-0">
-              {popularLessons && (
-                <LessonList lessons={popularLessons} authors={authors} />
+              {popularLessons && <LessonList lessons={popularLessons} />}
+              {!popularLessons?.length && (
+                <div className="text-sm text-zinc-500">Nothing here yet!</div>
               )}
-              {!popularLessons?.length && 'Nothing here yet!'}
             </TabPanel>
             <TabPanel className="!px-0">
-              {recentLessons && (
-                <LessonList lessons={recentLessons} authors={authors} />
+              {recentLessons && <LessonList lessons={recentLessons} />}
+              {!recentLessons?.length && (
+                <div className="text-sm text-zinc-500">Nothing here yet!</div>
               )}
-              {!recentLessons?.length && 'Nothing here yet!'}
             </TabPanel>
           </TabPanels>
         </Tabs>
@@ -125,42 +134,33 @@ const ExplorePage = ({
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const featuredLessons = await getLessons([
-    where('featured', '==', true),
-    where('private', '==', false),
-    limit(10),
+  const [featuredLessons, popularLessons, recentLessons] = await Promise.all([
+    prismaClient.lesson.findMany({
+      take: 10,
+      include: { profiles: true },
+      where: { featured: true, private: { not: true } },
+    }),
+    prismaClient.lesson.findMany({
+      take: 10,
+      include: { profiles: true },
+      where: { private: { not: true } },
+      orderBy: { viewCount: 'desc' },
+    }),
+    prismaClient.lesson.findMany({
+      take: 10,
+      include: { profiles: true },
+      where: { private: { not: true } },
+      orderBy: { created: 'desc' },
+    }),
   ])
 
-  const popularLessons = await getLessons([
-    where('private', '==', false),
-    orderBy('viewCount', 'desc'),
-    limit(10),
-  ])
-
-  const recentLessons = await getLessons([
-    where('private', '==', false),
-    orderBy('created', 'desc'),
-    limit(10),
-  ])
-
-  const authorIds = [
-    ...featuredLessons,
-    ...popularLessons,
-    ...recentLessons,
-  ].reduce(
-    (acc: Set<string>, curr: Lesson) => acc.add(curr.authorId),
-    new Set()
-  )
-
-  const authors = []
-  for (const id of Array.from(authorIds)) {
-    authors.push(await getAuthor(id))
-  }
-
-  const tags = await getTags([orderBy('viewCount', 'desc'), limit(16)])
-
+  const tags = await prismaClient.tag.findMany({
+    take: 16,
+    orderBy: { viewCount: 'desc' },
+  })
   return {
-    props: { featuredLessons, popularLessons, recentLessons, authors, tags },
+    props: { featuredLessons, popularLessons, recentLessons, tags },
   }
 }
+
 export default ExplorePage

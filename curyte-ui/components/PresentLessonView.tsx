@@ -1,7 +1,5 @@
 import Head from 'next/head'
 import React, { ReactNode, useCallback, useRef, useState } from 'react'
-import { Lesson } from '../interfaces/lesson'
-import { Author } from '../interfaces/author'
 import LessonHeader from '../components/LessonHeader'
 import FancyEditor from '../components/FancyEditor'
 import useCuryteEditor from '../hooks/useCuryteEditor'
@@ -19,6 +17,8 @@ import EnterFullscreen from '../components/icons/EnterFullscreen'
 import 'swiper/css'
 import useKeypress from '../hooks/useKeypress'
 import classNames from 'classnames'
+
+import { LessonWithProfile } from '../interfaces/lesson_with_profile'
 
 // If we're this close to the beginning or the end of the slide, skip.
 const SCROLL_THRESHOLD_PX = 48
@@ -76,13 +76,12 @@ const EditorContentSlide = ({ content }: EditorContentSlideProps) => {
 }
 
 interface Props {
-  lesson: Lesson
-  author: Author
+  lesson: LessonWithProfile
   backUrl: string
   backUrlHref: string
 }
 
-const PresentLessonView = ({ lesson, author, backUrl, backUrlHref }: Props) => {
+const PresentLessonView = ({ lesson, backUrl, backUrlHref }: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [progress, setProgress] = useState(0)
   const [swiper, setSwiper] = useState<SwiperClass | null>(null)
@@ -124,13 +123,15 @@ const PresentLessonView = ({ lesson, author, backUrl, backUrlHref }: Props) => {
   useKeypress(upOrBack, ['ArrowLeft', 'ArrowUp'])
   useKeypress(downOrNext, ['ArrowDown', 'ArrowRight'])
 
-  const partitioned = partitionDocForPresentationMode(lesson.content).map(
-    (content, index) => <EditorContentSlide content={content} key={index} />
-  )
+  const partitioned = partitionDocForPresentationMode(
+    lesson.content ? (lesson.content as JSONContent) : null
+  ).map((content, index) => (
+    <EditorContentSlide content={content} key={index} />
+  ))
 
   const items: ReactNode[] = [
     <div key={-1} className="w-full my-auto">
-      <LessonHeader author={author} lesson={lesson} />
+      <LessonHeader lesson={lesson} />
     </div>,
     ...partitioned,
     <div className="flex flex-col items-center gap-8" key={-2}>

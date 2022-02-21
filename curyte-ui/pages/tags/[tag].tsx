@@ -1,32 +1,32 @@
 import React, { useEffect } from 'react'
-import { Lesson } from '../../interfaces/lesson'
 import { GetServerSideProps } from 'next'
 import Layout from '../../components/Layout'
-import { Tag } from '../../interfaces/tag'
-import { auth } from '../../firebase/clientApp'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { getAuthor, getLessons, getTag, logTagView } from '../../firebase/api'
 import LessonList from '../../components/LessonList'
-import { where } from 'firebase/firestore'
-import { Author } from '../../interfaces/author'
 import TagList from '../../components/TagList'
 import { Heading } from '@chakra-ui/react'
 import { exploreRoute, tagRoute, tagRouteHrefPath } from '../../utils/routes'
+import { Tag, Lesson } from '@prisma/client'
+import prismaClient from '../../lib/prisma'
+import { useUser } from '../../contexts/user'
+import { updateTag } from '../../lib/apiHelpers'
+import { LessonWithProfile } from '../../interfaces/lesson_with_profile'
 
 type Props = {
   tagText: string
   tag: Tag | null
-  lessons: Lesson[] | null
-  authors: Author[]
+  lessons: LessonWithProfile[] | null
   relatedTags: Tag[]
 }
 
-const TagView = ({ lessons, tag, tagText, authors, relatedTags }: Props) => {
-  const [user, userLoading] = useAuthState(auth)
+const TagView = ({ lessons, tag, tagText, relatedTags }: Props) => {
+  const { userAndProfile } = useUser()
+
   useEffect(() => {
-    if (!user || userLoading || !tag) return
-    logTagView(tagText)
-  }, [tag, tagText, user, userLoading])
+    if (!userAndProfile?.user || !tag) return
+    updateTag(tagText, {
+      viewCount: { increment: 1 },
+    })
+  }, [tag, tagText, userAndProfile])
 
   return (
     <>
@@ -53,7 +53,9 @@ const TagView = ({ lessons, tag, tagText, authors, relatedTags }: Props) => {
               Related topics
             </Heading>
             {!!relatedTags?.length && <TagList tags={relatedTags} />}
-            {!relatedTags?.length && 'Nothing here yet!'}
+            {!relatedTags?.length && (
+              <div className="text-sm text-zinc-500">Nothing here yet!</div>
+            )}
           </div>
         }
       >
@@ -70,8 +72,10 @@ const TagView = ({ lessons, tag, tagText, authors, relatedTags }: Props) => {
             <h2 className="mb-2 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
               Lessons
             </h2>
-            {lessons && <LessonList lessons={lessons} authors={authors} />}
-            {!lessons?.length && 'Nothing here yet!'}
+            {lessons && <LessonList lessons={lessons} />}
+            {!lessons?.length && (
+              <div className="text-sm text-zinc-500">Nothing here yet!</div>
+            )}
           </div>
         </div>
       </Layout>
@@ -82,23 +86,13 @@ const TagView = ({ lessons, tag, tagText, authors, relatedTags }: Props) => {
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const tagText = query.tag as string
   const [tag = null, lessons = null] = await Promise.all([
-    getTag(query.tag as string),
+    prismaClient.tag.findFirst({ where: { tagText } }),
     // Could also use the lesson IDs from the tag directly
-    getLessons([
-      where('tags', 'array-contains', query.tag as string),
-      where('private', '==', false),
-    ]),
+    prismaClient.lesson.findMany({
+      where: { tags: { has: tagText }, private: false },
+      include: { profiles: true },
+    }),
   ])
-
-  const authorIds = (lessons || []).reduce(
-    (acc: Set<string>, curr: Lesson) => acc.add(curr.authorId),
-    new Set()
-  )
-
-  const authors = []
-  for (const id of Array.from(authorIds)) {
-    authors.push(await getAuthor(id))
-  }
 
   const tagNames = (lessons || []).reduce((acc: Set<string>, curr: Lesson) => {
     for (const tagName of curr.tags || []) acc.add(tagName)
@@ -110,7 +104,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       tag,
       lessons,
       tagText,
-      authors,
       relatedTags: Array.from(tagNames || [])
         .map((tagText) => ({ tagText } as Tag))
         .splice(0, 48),

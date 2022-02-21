@@ -1,23 +1,20 @@
 import React from 'react'
-import { Lesson } from '../../../interfaces/lesson'
 import { GetServerSideProps } from 'next'
-import { Author } from '../../../interfaces/author'
 import { ParsedUrlQuery } from 'querystring'
-import { getLesson, getAuthor } from '../../../firebase/api'
 // Import Swiper styles
 import 'swiper/css'
 import { lessonRouteHrefPath, lessonRoute } from '../../../utils/routes'
 import PresentLessonView from '../../../components/PresentLessonView'
+import prismaClient from '../../../lib/prisma'
+import { LessonWithProfile } from '../../../interfaces/lesson_with_profile'
 
 interface Props {
-  lesson: Lesson
-  author: Author
+  lesson: LessonWithProfile
 }
 
-const PresentLesson = ({ lesson, author }: Props) => (
+const PresentLesson = ({ lesson }: Props) => (
   <PresentLessonView
     lesson={lesson}
-    author={author}
     backUrl={lessonRoute(lesson.uid)}
     backUrlHref={lessonRouteHrefPath}
   />
@@ -44,10 +41,12 @@ interface IParams extends ParsedUrlQuery {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params as IParams
-  const lesson = await getLesson(id)
-  const author = await getAuthor(lesson.authorId)
+  const lesson = await prismaClient.lesson.findFirst({
+    where: { uid: id },
+    include: { profiles: true },
+  })
 
-  return { props: { lesson, author } }
+  return { props: { lesson } }
 }
 
 export default PresentLesson

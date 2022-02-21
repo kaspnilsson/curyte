@@ -1,4 +1,4 @@
-import { Tag } from '../interfaces/tag'
+import { Tag } from '@prisma/client'
 import TagChip from './TagChip'
 
 interface Props {

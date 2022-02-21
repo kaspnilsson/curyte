@@ -1,16 +1,12 @@
 import { NextSeo } from 'next-seo'
-import { auth } from '../../firebase/clientApp'
 import ErrorPage from 'next/error'
 import React, { useEffect, useState } from 'react'
-import { Lesson } from '../../interfaces/lesson'
-import { GetServerSideProps } from 'next'
+import { GetStaticPaths, GetStaticProps } from 'next'
 import Layout from '../../components/Layout'
-import { Author } from '../../interfaces/author'
 import LessonHeader from '../../components/LessonHeader'
 import FancyEditor from '../../components/FancyEditor'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { useRouter } from 'next/router'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import {
   accountRoute,
   accountRouteHrefPath,
@@ -23,43 +19,60 @@ import {
 import { ParsedUrlQuery } from 'querystring'
 import useCuryteEditor from '../../hooks/useCuryteEditor'
 import LessonOutline from '../../components/LessonOutline'
-import {
-  logLessonView,
-  deleteLesson,
-  getLesson,
-  getAuthor,
-  setLessonFeatured,
-  setLessonTemplate,
-} from '../../firebase/api'
 import { userIsAdmin } from '../../utils/hacks'
 import { useToast } from '@chakra-ui/react'
+import supabase from '../../supabase/client'
+import { Profile } from '@prisma/client'
+import prismaClient from '../../lib/prisma'
+import { JSONContent } from '@tiptap/core'
+import { deleteLesson, getLesson, updateLesson } from '../../lib/apiHelpers'
+import { LessonWithProfile } from '../../interfaces/lesson_with_profile'
 
 interface Props {
-  lesson: Lesson
-  author: Author
+  lesson: LessonWithProfile | null
+  author: Profile | null
 }
 
-const PublishedLessonView = ({ lesson, author }: Props) => {
+const PublishedLessonView = (props: Props) => {
+  const { author } = props
+  const [lesson, setLesson] = useState(props.lesson)
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const [user, userLoading] = useAuthState(auth)
+  const user = supabase.auth.user()
   const toast = useToast()
   // Log views only on render of a published lesson
   useEffect(() => {
-    if (lesson.private) return
-    logLessonView(lesson.uid)
-  }, [lesson.private, lesson.uid])
+    if (!lesson || lesson.private) return
+    updateLesson(lesson.uid, {
+      viewCount: { increment: 1 },
+    })
+  }, [lesson])
+
+  useEffect(() => {
+    if (!lesson) return
+    const fetchLesson = async () => {
+      setLesson(await getLesson(lesson.uid))
+    }
+
+    fetchLesson()
+    // Fetch lesson on load anyway to get updated view counts.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleDelete = async () => {
+    if (!lesson) return
     setLoading(true)
     await deleteLesson(lesson.uid)
     setLoading(false)
     router.push(workspaceRoute)
   }
 
-  const editor = useCuryteEditor({ content: lesson.content }, [lesson])
+  const editor = useCuryteEditor(
+    { content: lesson?.content ? (lesson.content as JSONContent) : null },
+    [lesson]
+  )
 
-  if (!lesson) return <ErrorPage statusCode={404} />
+  if (!lesson || !author) return <ErrorPage statusCode={404} />
 
   const openGraphDescription = `${lesson.description}, tags:${[
     lesson.tags || [],
@@ -70,29 +83,32 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
   }
 
   const handleToggleFeatured = async () => {
-    await setLessonFeatured(lesson.uid, !lesson.featured)
+    await updateLesson(lesson.uid, {
+      featured: !lesson.featured,
+    })
     toast({
       title: `Lesson featured state set to ${!lesson.featured}`,
     })
   }
 
   const handleToggleTemplate = async () => {
-    await setLessonTemplate(lesson.uid, !lesson.template)
+    await updateLesson(lesson.uid, {
+      template: !lesson.template,
+    })
     toast({
       title: `Lesson template state set to ${!lesson.template}`,
     })
   }
-
   return (
     <>
-      {(loading || userLoading) && <LoadingSpinner />}
-      {!(loading || userLoading) && (
+      {loading && <LoadingSpinner />}
+      {!loading && (
         <Layout
-          title={lesson.title}
+          title={lesson.title || ''}
           rightContent={<LessonOutline editor={editor} />}
           breadcrumbs={[
             {
-              label: author.displayName,
+              label: author.displayName || '(no name)',
               href: accountRouteHrefPath,
               as: accountRoute(author.uid),
             },
@@ -104,11 +120,11 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
           ]}
         >
           <NextSeo
-            title={lesson.title}
+            title={lesson.title || ''}
             description={openGraphDescription}
             openGraph={{
               url: lessonRoute(lesson.uid),
-              title: lesson.title,
+              title: lesson.title || '',
               description: openGraphDescription,
               images: openGraphImages,
               site_name: 'Curyte',
@@ -116,21 +132,20 @@ const PublishedLessonView = ({ lesson, author }: Props) => {
           ></NextSeo>
           <article>
             <LessonHeader
-              author={author}
               lesson={lesson}
               handleDelete={
-                user && user.uid === lesson.authorId ? handleDelete : undefined
+                user && user.id === lesson.authorId ? handleDelete : undefined
               }
               handleEdit={
-                user && user.uid === lesson.authorId
+                user && user.id === lesson.authorId
                   ? () => router.push(editLessonRoute(lesson.uid))
                   : undefined
               }
               handleToggleFeatured={
-                user && userIsAdmin(user.uid) ? handleToggleFeatured : undefined
+                user && userIsAdmin(user.id) ? handleToggleFeatured : undefined
               }
               handleToggleTemplate={
-                user && userIsAdmin(user.uid) ? handleToggleTemplate : undefined
+                user && userIsAdmin(user.id) ? handleToggleTemplate : undefined
               }
               handlePresent={() => router.push(presentLessonRoute(lesson.uid))}
             />
@@ -146,27 +161,31 @@ interface IParams extends ParsedUrlQuery {
   id: string
 }
 
-// export const getStaticPaths: GetStaticPaths = async () => {
-//   const lessons = await getLessons([where('private', '==', false)])
-//   const paths = lessons.map(({ uid }) => ({
-//     params: { id: uid },
-//   }))
-//   return { paths, fallback: 'blocking' }
-// }
+export const getStaticPaths: GetStaticPaths = async () => {
+  const lessons = await prismaClient.lesson.findMany({
+    where: { private: { not: true } },
+  })
+  const paths = lessons.map(({ uid }) => ({
+    params: { id: uid },
+  }))
+  return { paths, fallback: 'blocking' }
+}
 
-// export const getStaticProps: GetStaticProps = async (context) => {
-//   const { id } = context.params as IParams
-//   const lesson = await getLesson(id)
-//   const author = await getAuthor(lesson.authorId)
-//   return { props: { lesson, author } }
-// }
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticProps: GetStaticProps = async (context) => {
   const { id } = context.params as IParams
-  const lesson = await getLesson(id)
-  const author = await getAuthor(lesson.authorId)
 
-  return { props: { lesson, author } }
+  const props = {
+    lesson: await prismaClient.lesson.findFirst({
+      where: { uid: id },
+      include: { profiles: true },
+    }),
+  } as Props
+  if (props.lesson && props.lesson.authorId) {
+    props.author = await prismaClient.profile.findFirst({
+      where: { uid: props.lesson.authorId },
+    })
+  }
+  return { props }
 }
 
 export default PublishedLessonView

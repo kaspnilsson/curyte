@@ -1,9 +1,11 @@
-import { Text, Center, Divider, Badge } from '@chakra-ui/react'
+import { Text, Badge } from '@chakra-ui/react'
 import { AcademicCapIcon, DocumentTextIcon } from '@heroicons/react/outline'
+import { Path, Profile } from '@prisma/client'
+import classNames from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Author } from '../interfaces/author'
-import { Path } from '../interfaces/path'
+import { Unit } from '../interfaces/unit'
+
 import {
   editPathRoute,
   editPathRouteHrefPath,
@@ -15,65 +17,64 @@ import DateFormatter from './DateFormatter'
 
 interface Props {
   path?: Path
-  author?: Author
+  author?: Profile | null
   onClick?: (p: Path) => void
+  small?: boolean
 }
 
-const PathPreview = ({ path, author, onClick }: Props) => {
+const PathPreview = ({ path, author, onClick, small = false }: Props) => {
   if (!path) return null
 
-  const unitCount = (path.units || []).length
-  const lessonCount = (path.units || []).reduce(
+  const units = (path.units || []) as unknown as Unit[]
+  const unitCount = units.length
+  const lessonCount = units.reduce(
     (acc, curr) => (acc += curr.lessonIds?.length || 0),
     0
   )
 
   const card = (
-    <div className="grid grid-cols-[1fr_min-content] w-full gap-3 cursor-pointer group lesson-preview">
+    <div className="grid grid-cols-[1fr_min-content] w-full gap-3 cursor-pointer group lesson-preview py-6">
       <div className="flex flex-col flex-1 h-full gap-1">
         <div className="flex flex-col gap-2">
-          <Text className="text-base font-bold leading-tight tracking-tighter line-clamp-2 md:text-2xl">
+          <Text
+            className={classNames(
+              'text-base font-bold leading-tight tracking-tighter line-clamp-2',
+              { 'md:text-2xl': !small }
+            )}
+          >
             <a className="hover:underline group-hover:underline">
               {path.title || '(no title)'}
             </a>
           </Text>
         </div>
-        <div className="flex items-center gap-2 pt-2 text-xs">
+        <div className="flex flex-wrap items-center gap-2 pt-2 text-xs divide-x">
           {author && <AuthorLink author={author} small />}
           {path.created && (
-            <>
-              <Center className="w-2 h-2">
-                <Divider orientation="vertical" />
-              </Center>
-              <div className="text-zinc-500">
-                <DateFormatter dateString={path.created} />
-              </div>
-            </>
+            <div className="pl-2 text-zinc-500">
+              <DateFormatter date={path.created} />
+            </div>
           )}
-          <div className="items-center hidden gap-2 md:flex">
-            <Center className="w-2 h-2">
-              <Divider orientation="vertical" />
-            </Center>
-            {/* <Text
+          {/* <Text
               fontSize="xs"
               className="leading-tight tracking-tighter text-zinc-500 proportional-nums"
             >
               {path.saveCount || 0}
               &nbsp;{path.saveCount === 1 ? 'save' : 'saves'}
-            </Text> 
-            <Center className="w-2 h-2">
-              <Divider orientation="vertical" />
-            </Center> */}
-            <Text
-              fontSize="xs"
-              className="leading-tight tracking-tighter text-zinc-500 proportional-nums"
-            >
-              {path.viewCount || 0}
-              &nbsp;{path.viewCount === 1 ? 'view' : 'views'}
-            </Text>
-          </div>
+            </Text>  */}
+          <Text
+            fontSize="xs"
+            className="pl-2 leading-tight tracking-tighter text-zinc-500 proportional-nums"
+          >
+            {path.viewCount || 0}
+            &nbsp;{path.viewCount === 1 ? 'view' : 'views'}
+          </Text>
         </div>
-        <Text className="flex items-center gap-1 mt-2 text-base font-bold">
+        <Text
+          className={classNames('flex items-center gap-1 mt-2 font-semibold', {
+            'text-base': !small,
+            'text-sm': small,
+          })}
+        >
           <DocumentTextIcon className="w-5 h-5" />
           {(unitCount &&
             lessonCount &&
@@ -83,45 +84,47 @@ const PathPreview = ({ path, author, onClick }: Props) => {
             '(no units)'}
         </Text>
       </div>
-      <div className="relative w-32 h-32 overflow-hidden border rounded sm:w-64 md:w-40 md:h-40 lg:w-80">
-        {path.coverImageUrl && (
-          <Image
-            src={path.coverImageUrl}
-            layout="fill"
-            objectFit="cover"
-            alt={`Cover Image for ${path.title}`}
-            className="image-wrapper"
-          />
-        )}
-        {!path.coverImageUrl && (
-          <div
-            className="w-full h-full"
-            style={{
-              background:
-                'radial-gradient(circle, rgba(255,255,255,1) 20%, rgba(200,200,200,1) 100%)',
-            }}
-          >
-            <AcademicCapIcon className="w-full h-full p-6" />
-          </div>
-        )}
-        <div className="absolute flex flex-col items-end gap-1 bottom-2 right-2 h-min">
-          {!!path.private && (
-            <Badge
-              variant="subtle"
-              colorScheme="orange"
-              className="h-min w-min"
-            >
-              Private
-            </Badge>
+      {!small && (
+        <div className="relative w-32 h-32 overflow-hidden border rounded md:w-40 md:h-40 xl:w-72">
+          {path.coverImageUrl && (
+            <Image
+              src={path.coverImageUrl}
+              layout="fill"
+              objectFit="cover"
+              alt={`Cover Image for ${path.title}`}
+              className="image-wrapper"
+            />
           )}
-          <Badge variant="subtle" colorScheme="zinc" className="h-min w-min">
-            <div className="flex items-center gap-1">
-              Path
-              <AcademicCapIcon className="w-3 h-3" />
+          {!path.coverImageUrl && (
+            <div
+              className="w-full h-full"
+              style={{
+                background:
+                  'radial-gradient(circle, rgba(255,255,255,1) 20%, rgba(200,200,200,1) 100%)',
+              }}
+            >
+              <AcademicCapIcon className="w-full h-full p-6" />
             </div>
-          </Badge>
+          )}
+          <div className="absolute flex flex-col items-end gap-1 bottom-2 right-2 h-min">
+            {!!path.private && (
+              <Badge
+                variant="subtle"
+                colorScheme="orange"
+                className="h-min w-min"
+              >
+                Private
+              </Badge>
+            )}
+            <Badge variant="subtle" colorScheme="zinc" className="h-min w-min">
+              <div className="flex items-center gap-1">
+                Path
+                <AcademicCapIcon className="w-3 h-3" />
+              </div>
+            </Badge>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
   return (
@@ -150,7 +153,11 @@ const PathPreview = ({ path, author, onClick }: Props) => {
           )}
         </>
       )}
-      {onClick && <div onClick={() => onClick(path)}>{card}</div>}
+      {onClick && (
+        <div className="w-full" onClick={() => onClick(path)}>
+          {card}
+        </div>
+      )}
     </>
   )
 }

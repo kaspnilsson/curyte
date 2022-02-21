@@ -1,33 +1,31 @@
-import { auth } from '../../firebase/clientApp'
 import React, { useEffect } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { useRouter } from 'next/router'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { loginRoute, editPathRoute } from '../../utils/routes'
-import { createPath } from '../../firebase/api'
-import { Path } from '../../interfaces/path'
-import { Timestamp } from 'firebase/firestore'
+
+import supabase from '../../supabase/client'
+import { Path } from '@prisma/client'
+import { createPath } from '../../lib/apiHelpers'
 
 const NewPathView = () => {
   const router = useRouter()
-  const [user, userLoading] = useAuthState(auth)
+  const user = supabase.auth.user()
 
   useEffect(() => {
-    if (userLoading) return
     if (!user) {
       router.push(loginRoute(router.asPath))
       return
     }
     const createNewPath = async () => {
-      const newUid = await createPath({
-        authorId: user.uid,
-        created: Timestamp.now().toDate().toISOString(),
-        updated: Timestamp.now().toDate().toISOString(),
+      const { uid } = await createPath({
+        authorId: user.id,
+        created: new Date(),
+        updated: new Date(),
       } as Path)
-      router.replace(editPathRoute(newUid))
+      router.replace(editPathRoute(uid))
     }
     createNewPath()
-  }, [router, router.query.copyFrom, user, userLoading])
+  }, [router, router.query.copyFrom, user])
 
   return <LoadingSpinner message="Building path..." />
 }

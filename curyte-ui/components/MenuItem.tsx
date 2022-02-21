@@ -1,4 +1,4 @@
-import * as chakra from '@chakra-ui/react'
+import { Heading, Text, MenuItem as ChakraMenuItem } from '@chakra-ui/react'
 import classNames from 'classnames'
 interface Props {
   onClick: () => void
@@ -18,27 +18,28 @@ const MenuItem = ({
   isActive,
   disabled,
   description,
-}: Props) => {
-  return (
-    <chakra.MenuItem
-      className={classNames('flex items-start gap-3 justify-items-center', {
+}: Props) => (
+  <ChakraMenuItem
+    className={classNames(
+      'flex items-start gap-3 justify-items-center max-w-sm',
+      {
         'bg-zinc-200': isActive,
-      })}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      {icon || null}
-      <div className="flex flex-col justify-center">
-        <div className="flex space-between">
-          <chakra.Heading fontSize="sm">{label}</chakra.Heading>
-          <div className="flex-end">{shortcut || null}</div>
-        </div>
-        <chakra.Text fontSize="xs" className="text-zinc-500">
-          {description}
-        </chakra.Text>
+      }
+    )}
+    onClick={onClick}
+    disabled={disabled}
+  >
+    {icon || null}
+    <div className="flex flex-col justify-center gap-1 my-1">
+      <div className="flex space-between">
+        <Heading fontSize="sm">{label}</Heading>
+        <div className="flex-end">{shortcut || null}</div>
       </div>
-    </chakra.MenuItem>
-  )
-}
+      <Text fontSize="xs" className="text-zinc-500">
+        {description}
+      </Text>
+    </div>
+  </ChakraMenuItem>
+)
 
 export default MenuItem

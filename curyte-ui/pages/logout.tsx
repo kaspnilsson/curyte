@@ -1,15 +1,13 @@
-import { auth } from '../firebase/clientApp'
-import { useRouter } from 'next/router'
-import { exploreRoute } from '../utils/routes'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { useEffect } from 'react'
+import { useUser } from '../contexts/user'
 
 const Logout = () => {
-  const router = useRouter()
+  const { logout } = useUser()
   useEffect(() => {
-    auth.signOut()
-    router.push(exploreRoute)
-  })
+    logout()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   return <LoadingSpinner message="Bye!!! 😭" />
 }
 

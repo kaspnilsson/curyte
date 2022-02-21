@@ -63,11 +63,11 @@ const Footer = () => {
               What is Curyte?
             </Button>
           </Link>
-          <a href={discordInviteHref} target="_blank" rel="noreferrer">
+          <Link href={discordInviteHref} passHref>
             <Button variant="link" colorScheme="violet">
               Join the community!
             </Button>
-          </a>
+          </Link>
         </div>
       </Container>
     </footer>

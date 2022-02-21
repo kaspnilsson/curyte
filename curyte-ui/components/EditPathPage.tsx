@@ -1,7 +1,5 @@
 import { UploadIcon, LockClosedIcon } from '@heroicons/react/solid'
 import { CheckIcon, PlusIcon, ExternalLinkIcon } from '@heroicons/react/outline'
-import { Author } from '../interfaces/author'
-import { Path, Unit } from '../interfaces/path'
 import Layout from './Layout'
 import { computeClassesForTitle } from './LessonTitle'
 import TextareaAutosize from 'react-textarea-autosize'
@@ -15,8 +13,6 @@ import {
   DropResult,
 } from 'react-beautiful-dnd'
 import UnitEditor from './UnitEditor'
-import { Lesson } from '../interfaces/lesson'
-import { getLesson } from '../firebase/api'
 import classNames from 'classnames'
 import { uuid } from '../utils/uuid'
 import Container from './Container'
@@ -24,10 +20,12 @@ import { useRouter } from 'next/router'
 import { pathRoute } from '../utils/routes'
 import { Confetti } from './Confetti'
 import EditableCoverImage from './EditableCoverImage'
+import { Path, Profile, Lesson } from '@prisma/client'
+import { Unit } from '../interfaces/unit'
 
 interface Props {
   path: Path
-  user: Author
+  user: Profile
   saving?: boolean
   dirty?: boolean
   handleUpdate: (p: Path) => Promise<void>
@@ -37,7 +35,9 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
   const router = useRouter()
   const toast = useToast()
   const [title, setTitle] = useState(path.title?.trim() || '')
-  const [units, setUnits] = useState(path.units || [])
+  const [units, setUnits] = useState<Unit[]>(
+    (path.units || []) as unknown as Unit[]
+  )
   const [isPrivate, setIsPrivate] = useState<boolean>(path.private || true)
   const [lessonsByUid, setLessonsByUid] = useState<{ [uid: string]: Lesson }>(
     {}
@@ -63,7 +63,10 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
     const unitsClone = [...units]
     unitsClone[index] = unit
     setUnits(unitsClone)
-    await handleUpdate({ ...path, units: unitsClone })
+    await handleUpdate({
+      ...path,
+      units: unitsClone,
+    })
   }
 
   const onUnitDelete = async (index: number) => {
@@ -91,7 +94,10 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
       const fetchLessons = async () => {
         const promises = []
         for (const lessonUid of toFetch) {
-          promises.push(getLesson(lessonUid))
+          const p = fetch(`/api/lessons/${lessonUid}`, { method: 'GET' }).then(
+            (res) => res.json()
+          )
+          promises.push(p)
         }
         const clone = { ...lessonsByUid }
         const newLessons = await Promise.all(promises)
@@ -106,7 +112,7 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
   }, [lessonsByUid, units])
 
   const canPublish =
-    path.title && path.units?.length && path.units?.[0]?.lessonIds?.length
+    path.title && units?.length && units?.[0]?.lessonIds?.length
 
   const toggleIsPrivate = async () => {
     const p = !isPrivate
@@ -131,7 +137,65 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
   return (
     <>
       {lessonsLoading && <Spinner />}
-      <Layout title={path.title || 'Edit path'}>
+      <Layout
+        title={path.title || 'Edit path'}
+        footer={
+          <footer className="sticky bottom-0 left-0 z-20 w-full h-16 pl-0 bg-white border-t border-accent-2">
+            <Container className="flex items-center justify-end h-full">
+              <div className="flex items-center gap-2 mr-auto italic text-zinc-500">
+                {saving && (
+                  <div className="flex items-center gap-2">
+                    Saving... <Spinner />
+                  </div>
+                )}
+                {dirty && !saving && (
+                  <>
+                    <Text>Unsaved changes...</Text>
+                  </>
+                )}
+                {!dirty && !saving && (
+                  <>
+                    <CheckIcon className="w-5 h-5" />
+                    <Text>Autosaved!</Text>
+                  </>
+                )}
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => router.push(pathRoute(path.uid))}
+                disabled={saving}
+                colorScheme="black"
+                className="flex items-center justify-between gap-2 mr-4 font-semibold disabled:opacity-50"
+              >
+                <ExternalLinkIcon className="w-5 h-5" />
+                Preview
+              </Button>
+              {isPrivate && (
+                <Button
+                  colorScheme="black"
+                  disabled={saving || !canPublish}
+                  className="flex items-center justify-between font-semibold disabled:opacity-50"
+                  onClick={toggleIsPrivate}
+                >
+                  <UploadIcon className="w-5 h-5 mr-2" />
+                  Publish
+                </Button>
+              )}
+              {!isPrivate && (
+                <Button
+                  colorScheme="black"
+                  disabled={saving}
+                  className="flex items-center justify-between font-semibold disabled:opacity-50"
+                  onClick={toggleIsPrivate}
+                >
+                  <LockClosedIcon className="w-5 h-5 mr-2" />
+                  Make private
+                </Button>
+              )}
+            </Container>
+          </footer>
+        }
+      >
         <div className="flex">
           <div className="flex flex-col flex-grow gap-2 overflow-hidden">
             <div className="flex items-center justify-between w-full">
@@ -216,60 +280,6 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
             </DragDropContext>
           </div>
         </div>
-        <footer className="fixed bottom-0 left-0 z-20 w-full h-16 bg-white border-t border-accent-2">
-          <Container className="flex items-center justify-end h-full">
-            <div className="flex items-center gap-2 mr-auto italic text-zinc-500">
-              {saving && (
-                <div className="flex items-center gap-2">
-                  Saving... <Spinner />
-                </div>
-              )}
-              {dirty && !saving && (
-                <>
-                  <Text>Unsaved changes...</Text>
-                </>
-              )}
-              {!dirty && !saving && (
-                <>
-                  <CheckIcon className="w-5 h-5" />
-                  <Text>Autosaved!</Text>
-                </>
-              )}
-            </div>
-            <Button
-              variant="outline"
-              onClick={() => router.push(pathRoute(path.uid))}
-              disabled={saving}
-              colorScheme="black"
-              className="flex items-center justify-between gap-2 mr-4 font-semibold disabled:opacity-50"
-            >
-              <ExternalLinkIcon className="w-5 h-5" />
-              Preview
-            </Button>
-            {isPrivate && (
-              <Button
-                colorScheme="black"
-                disabled={saving || !canPublish}
-                className="flex items-center justify-between font-semibold disabled:opacity-50"
-                onClick={toggleIsPrivate}
-              >
-                <UploadIcon className="w-5 h-5 mr-2" />
-                Publish
-              </Button>
-            )}
-            {!isPrivate && (
-              <Button
-                colorScheme="black"
-                disabled={saving}
-                className="flex items-center justify-between font-semibold disabled:opacity-50"
-                onClick={toggleIsPrivate}
-              >
-                <LockClosedIcon className="w-5 h-5 mr-2" />
-                Make private
-              </Button>
-            )}
-          </Container>
-        </footer>
         <Portal>
           <Confetti isFiring={isFiringConfetti} />
         </Portal>

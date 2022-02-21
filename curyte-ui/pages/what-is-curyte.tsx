@@ -1,8 +1,5 @@
 import React from 'react'
 import CuryteLogo from '../components/CuryteLogo'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { useRouter } from 'next/router'
-import { auth } from '../firebase/clientApp'
 import { exploreRoute, newLessonRoute } from '../utils/routes'
 import Link from 'next/link'
 import { Button, Heading, Text } from '@chakra-ui/react'
@@ -11,13 +8,6 @@ import Footer from '../components/Footer'
 import Container from '../components/Container'
 
 const WhatIsCuryteView = () => {
-  const router = useRouter()
-  const [user] = useAuthState(auth)
-
-  if (user && process.env.NODE_ENV === 'production') {
-    router.replace(exploreRoute)
-  }
-
   return (
     <>
       <Container className="mt-24">

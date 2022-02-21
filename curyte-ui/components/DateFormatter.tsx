@@ -1,16 +1,21 @@
-import { parseISO } from 'date-fns'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
 import ReactTimeAgo from 'react-time-ago'
+import { parseISO } from 'date-fns'
 
 TimeAgo.addDefaultLocale(en)
 
 type Props = {
-  dateString: string
+  date: Date | string
 }
 
-const DateFormatter = ({ dateString }: Props) => {
-  return <ReactTimeAgo date={parseISO(dateString)} timeStyle="round-minute" />
+const DateFormatter = ({ date }: Props) => {
+  return (
+    <ReactTimeAgo
+      date={typeof date === 'string' ? parseISO(date) : date}
+      timeStyle="round-minute"
+    />
+  )
 }
 
 export default DateFormatter

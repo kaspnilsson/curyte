@@ -1,22 +1,23 @@
 /* eslint-disable @next/next/no-img-element */
-import { Author } from '../interfaces/author'
 import { Avatar } from '@chakra-ui/react'
+import { Profile } from '@prisma/client'
 import React from 'react'
 
 type Props = {
-  author: Author
+  profile: Profile
   className?: string
   size?: '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
 }
 
-const CuryteAvatar = ({ author, className, size = 'md' }: Props) => {
-  if (!author) return null
+const CuryteAvatar = ({ profile, className, size = 'md' }: Props) => {
+  if (!profile) return null
+
   return (
     <Avatar
-      src={author.photoURL}
-      name={author.displayName}
+      src={profile.photoUrl || undefined}
+      name={profile.displayName || '(no name)'}
       className={'shadow-xl shadow-zinc-900/10 ' + className}
-      alt={author.displayName}
+      alt={profile.displayName}
       size={size}
     />
   )

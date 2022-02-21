@@ -1,44 +1,165 @@
-import Layout from '../components/Layout'
-import React from 'react'
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-import { auth } from '../firebase/clientApp'
-import { Box } from '@chakra-ui/react'
-import { GoogleAuthProvider, EmailAuthProvider } from 'firebase/auth'
-import { useRouter } from 'next/router'
-import { accountSettingsRoute } from '../utils/routes'
+import React, { SyntheticEvent, useState } from 'react'
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  chakra,
+  Input,
+  useToast,
+} from '@chakra-ui/react'
+import supabase from '../supabase/client'
+import Link from 'next/link'
+import { exploreRoute, loginRoute } from '../utils/routes'
+import GoogleLogo from '../components/icons/GoogleLogo'
+import FacebookLogo from '../components/icons/FacebookLogo'
+import Footer from '../components/Footer'
+import CuryteLogo from '../components/CuryteLogo'
+import Head from 'next/head'
+import Container from '../components/Container'
+
+const REDIRECT_URL_BASE =
+  process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com'
 
 const Signup = () => {
-  const router = useRouter()
-  const signInSuccessWithAuthResult = () => {
-    router.push(
-      router.query.referrer
-        ? (router.query.referrer as string)
-        : accountSettingsRoute
+  const toast = useToast()
+  const [email, setEmail] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  const submitHandler = async (event: SyntheticEvent) => {
+    event.preventDefault()
+    setIsLoading(true)
+    setError('')
+
+    const { error } = await supabase.auth.signIn(
+      {
+        email,
+      },
+      {
+        redirectTo: `${REDIRECT_URL_BASE}/next-steps`,
+      }
     )
-    return false
+    toast({ title: 'Check your email for a sign in link!' })
+    if (error) {
+      setError(error.message)
+    }
+
+    setIsLoading(false)
   }
-  const uiConfig = {
-    signInOptions: [
-      GoogleAuthProvider.PROVIDER_ID,
-      EmailAuthProvider.PROVIDER_ID,
-    ],
-    signInFlow: 'popup',
-    callbacks: { signInSuccessWithAuthResult },
+
+  const signInWithGoogle = async () => {
+    setIsLoading(true)
+    setError('')
+
+    const { error } = await supabase.auth.signIn(
+      {
+        provider: 'google',
+      },
+      {
+        redirectTo: `${REDIRECT_URL_BASE}/next-steps`,
+      }
+    )
+    if (error) {
+      setError(error.message)
+    }
+
+    setIsLoading(false)
+  }
+
+  const signInWithFacebook = async () => {
+    setIsLoading(true)
+    setError('')
+
+    const { error } = await supabase.auth.signIn(
+      {
+        provider: 'facebook',
+      },
+      {
+        redirectTo: `${REDIRECT_URL_BASE}/next-steps`,
+      }
+    )
+    if (error) {
+      setError(error.message)
+    }
+
+    setIsLoading(false)
   }
 
   return (
-    <Layout>
-      <Box
-        rounded={'lg'}
-        className="flex flex-col items-center p-8 m-auto w-96"
-        boxShadow={'lg'}
-      >
-        <h2 className="mb-4 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
-          Sign up
-        </h2>
-        <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
-      </Box>
-    </Layout>
+    <>
+      <Head>
+        <title>Curyte: Sign up</title>
+      </Head>
+      <div className="flex flex-col items-center justify-center w-full min-h-screen">
+        <Container className="flex items-center w-full gap-2 my-4">
+          <Link href={exploreRoute} passHref>
+            <h2 className="flex items-center gap-2 text-2xl font-bold leading-tight tracking-tighter">
+              <CuryteLogo />
+              Curyte
+            </h2>
+          </Link>
+        </Container>
+        <Container className="flex flex-col items-center justify-center flex-1 my-16">
+          <section className="flex flex-row items-center justify-center w-96">
+            <div className="flex flex-col gap-4">
+              <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
+                Sign up
+              </h1>
+              <h3 className="flex items-center gap-1 text-xl font-semibold leading-tight tracking-tighter text-zinc-500">
+                Already a member?
+                <Link href={loginRoute()} passHref>
+                  <a className="underline text-violet-500">Log in</a>
+                </Link>
+              </h3>
+            </div>
+          </section>
+          <section className="flex flex-col gap-2 mt-8 w-96">
+            <Button size="lg" className="relative" onClick={signInWithGoogle}>
+              <span className="absolute left-4">
+                <GoogleLogo />
+              </span>
+              Sign up with Google
+            </Button>
+            <Button size="lg" className="relative" onClick={signInWithFacebook}>
+              <span className="absolute left-4">
+                <FacebookLogo />
+              </span>
+              Sign up with Facebook
+            </Button>
+            <chakra.form
+              className="flex flex-col gap-2 mt-8"
+              onSubmit={submitHandler}
+            >
+              <FormControl id="email">
+                <FormLabel className="font-semibold leading-tight tracking-tighter">
+                  Or, sign up with email
+                </FormLabel>
+                <Input
+                  name="email"
+                  type="email"
+                  size="lg"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.currentTarget.value)}
+                />
+              </FormControl>
+              {error && <span className="text-red-500">{error}</span>}
+              <Button
+                colorScheme="black"
+                className="justify-end w-full mt-4"
+                type="submit"
+                size="lg"
+                disabled={isLoading}
+              >
+                Continue
+              </Button>
+            </chakra.form>
+          </section>
+        </Container>
+        <Footer />
+      </div>
+    </>
   )
 }
 

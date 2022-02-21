@@ -5,13 +5,12 @@ import {
   Menu,
   MenuList,
   useToast,
+  Spinner,
 } from '@chakra-ui/react'
-import { Editor } from '@tiptap/react'
-import { where } from 'firebase/firestore'
+import { Lesson } from '@prisma/client'
+import { Editor, JSONContent } from '@tiptap/react'
 import { useEffect, useState } from 'react'
-import { getLessons } from '../firebase/api'
 import useConfirmDialog from '../hooks/useConfirmDialog'
-import { Lesson } from '../interfaces/lesson'
 import MenuItem from './MenuItem'
 
 interface Props {
@@ -22,20 +21,26 @@ const TemplatesMenu = ({ editor }: Props) => {
   const [templates, setTemplates] = useState<Lesson[]>([])
   const [selectedTemplate, setSelectedTemplate] = useState<Lesson | null>(null)
   const toast = useToast()
+  const [loading, setLoading] = useState(false)
+
   useEffect(() => {
     const getTemplates = async () => {
-      const fetched = await getLessons(
-        [where('template', '==', true), where('private', '==', false)],
-        true
-      )
-      setTemplates(fetched)
+      setLoading(true)
+      const fetched = await fetch('/api/lessons', {
+        method: 'POST',
+        body: JSON.stringify({ where: { template: true } }),
+      })
+      if (!fetched.ok) return
+
+      setTemplates(await fetched.json())
+      setLoading(false)
     }
     getTemplates()
   }, [])
 
   const applyTemplate = () => {
-    if (!editor || !selectedTemplate) return
-    editor.commands.setContent(selectedTemplate.content)
+    if (!editor || !selectedTemplate || !selectedTemplate.content) return
+    editor.commands.setContent(selectedTemplate.content as JSONContent)
     setSelectedTemplate(null)
     toast({ title: 'Template applied!', status: 'success' })
   }
@@ -55,16 +60,19 @@ const TemplatesMenu = ({ editor }: Props) => {
   return (
     <>
       {templates.length ? (
-        <Menu
-          id="templates-menu"
-          isLazy
-          boundary="scrollParent"
-          colorScheme="zinc"
-        >
-          <MenuButton size="sm" as={Button}>
-            <div className="flex items-center gap-1 text-sm text-zinc-900">
+        <Menu id="templates-menu" isLazy boundary="scrollParent">
+          <MenuButton
+            size="sm"
+            as={Button}
+            disabled={loading || !templates.length}
+            colorScheme="black"
+          >
+            <div className="flex items-center gap-1 text-sm">
               Templates
-              <i className="w-2 text-lg ri-arrow-drop-down-line"></i>
+              {!loading && (
+                <i className="w-2 text-lg ri-arrow-drop-down-line"></i>
+              )}
+              {loading && <Spinner size="xs" />}
             </div>
           </MenuButton>
           <Portal>

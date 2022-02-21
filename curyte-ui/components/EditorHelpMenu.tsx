@@ -1,84 +1,85 @@
 import {
-  useDisclosure,
   MenuButton,
   MenuList,
   Button,
   Menu,
   MenuItem,
   MenuOptionGroup,
-  Portal,
+  MenuDivider,
 } from '@chakra-ui/react'
 import { SupportIcon, QuestionMarkCircleIcon } from '@heroicons/react/outline'
-import classNames from 'classnames'
 import { discordInviteHref } from '../utils/routes'
 
-const EditorHelpMenu = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+interface Props {
+  showHints?: () => void
+}
+
+const EditorHelpMenu = ({ showHints }: Props) => {
   return (
-    <Menu isOpen={isOpen}>
-      <MenuButton
-        onMouseEnter={onOpen}
-        onMouseLeave={onClose}
-        className={classNames('text-zinc-300 hover:text-zinc-700 p-2 -mx-2', {
-          'text-zinc-700': isOpen,
-        })}
-      >
+    <Menu>
+      <MenuButton className="p-2 text-zinc-900">
         <div className="flex items-center gap-1 font-bold leading-tight tracking-tighter">
-          Help <QuestionMarkCircleIcon className="w-5 h-5" />
+          <QuestionMarkCircleIcon className="w-6 h-6" />
         </div>
       </MenuButton>
-      <Portal>
-        <MenuList onMouseEnter={onOpen} onMouseLeave={onClose}>
-          <MenuOptionGroup
-            title="Resources"
-            className="uppercase text-zinc-700"
-          >
-            <MenuItem className="hover:underline">
-              <a
-                href="https://www.curyte.com/lessons/aa19daf3-3399-40db-bfda-be3c7f64f083"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Getting started with Curyte
-              </a>
+      <MenuList>
+        <MenuOptionGroup
+          title="Resources"
+          className="uppercase text-zinc-700 !mb-0"
+        >
+          <MenuItem className="hover:underline">
+            <a
+              href="https://www.curyte.com/lessons/aa19daf3-3399-40db-bfda-be3c7f64f083"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Getting started with Curyte
+            </a>
+          </MenuItem>
+          <MenuItem className="hover:underline">
+            <a
+              href="http://curyte.com/lessons/writing-a-lesson-on-curyte-1639450877617"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Writing your first lesson
+            </a>
+          </MenuItem>
+          <MenuItem className="hover:underline">
+            <a
+              href="http://curyte.com/lessons/4Jhyh_peR2IJyLo8"
+              target="_blank"
+              rel="noreferrer"
+            >
+              The 5E Method
+            </a>
+          </MenuItem>
+          <MenuItem className="hover:underline">
+            <a
+              href="http://curyte.com/lessons/8e7265ed-5aba-4283-939a-cd3c20bbdf5d"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Adding embedded content
+            </a>
+          </MenuItem>
+          <MenuItem className="hover:underline">
+            <a
+              href="http://curyte.com/lessons/WxzMiQtgkuigQeM7"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Curriculum and copyright
+            </a>
+          </MenuItem>
+        </MenuOptionGroup>
+        <MenuDivider />
+        <MenuOptionGroup title="Help" className="uppercase text-zinc-700 !mb-0">
+          {showHints && (
+            <MenuItem className="hover:underline" onClick={showHints}>
+              Show editor hints
             </MenuItem>
-            <MenuItem className="hover:underline">
-              <a
-                href="http://curyte.com/lessons/writing-a-lesson-on-curyte-1639450877617"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Writing your first lesson
-              </a>
-            </MenuItem>
-            <MenuItem className="hover:underline">
-              <a
-                href="http://curyte.com/lessons/4Jhyh_peR2IJyLo8"
-                target="_blank"
-                rel="noreferrer"
-              >
-                The 5E Method
-              </a>
-            </MenuItem>
-            <MenuItem className="hover:underline">
-              <a
-                href="http://curyte.com/lessons/8e7265ed-5aba-4283-939a-cd3c20bbdf5d"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Adding embedded content
-              </a>
-            </MenuItem>
-            <MenuItem className="hover:underline">
-              <a
-                href="http://curyte.com/lessons/WxzMiQtgkuigQeM7"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Curriculum and copyright
-              </a>
-            </MenuItem>
-          </MenuOptionGroup>
+          )}
           <a
             target="_blank"
             href={discordInviteHref}
@@ -86,12 +87,12 @@ const EditorHelpMenu = () => {
             className=""
           >
             <Button className="flex items-center gap-1 mx-3 my-2" size="sm">
-              Get help
+              Get support
               <SupportIcon className="w-4 h-4" />
             </Button>
           </a>
-        </MenuList>
-      </Portal>
+        </MenuOptionGroup>
+      </MenuList>
     </Menu>
   )
 }

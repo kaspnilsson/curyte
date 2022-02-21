@@ -2,7 +2,6 @@ import React, { ReactNode, useState } from 'react'
 import { JSONContent } from '@tiptap/react'
 
 import Layout from './Layout'
-import { Lesson } from '../interfaces/lesson'
 import { computeClassesForTitle } from './LessonTitle'
 import TextareaAutosize from 'react-textarea-autosize'
 import FancyEditor from './FancyEditor'
@@ -11,12 +10,12 @@ import EditableCoverImage from './EditableCoverImage'
 import useCuryteEditor from '../hooks/useCuryteEditor'
 import LessonOutline from './LessonOutline'
 import { uuid } from '../utils/uuid'
-import EditorHelpMenu from './EditorHelpMenu'
 import {
   editLessonRoute,
   editLessonRouteHrefPath,
   workspaceRoute,
 } from '../utils/routes'
+import { Lesson } from '@prisma/client'
 
 type Props = {
   lesson?: Lesson
@@ -65,10 +64,13 @@ const LessonEditor = ({
     handleUpdate({ ...lesson, coverImageUrl: url })
   }
 
-  const editor = useCuryteEditor({ content, onUpdate: handleContentUpdate }, [
-    lesson?.uid,
-    handleContentUpdate,
-  ])
+  const editor = useCuryteEditor(
+    {
+      content: content ? (content as JSONContent) : null,
+      onUpdate: handleContentUpdate,
+    },
+    [lesson?.uid, handleContentUpdate]
+  )
 
   return (
     <Layout
@@ -76,9 +78,6 @@ const LessonEditor = ({
       rightContent={
         <div className="flex flex-col gap-8 mb-4">
           <LessonOutline editor={editor} />
-          <div className="flex flex-col items-start w-full">
-            <EditorHelpMenu />
-          </div>
         </div>
       }
       rightContentWrapBehavior="reverse"

@@ -1,8 +1,5 @@
-import { auth } from '../firebase/clientApp'
 import Link from 'next/link'
 import React from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { Author } from '../interfaces/author'
 import {
   Button,
   Menu,
@@ -33,11 +30,13 @@ import {
 import { MobileSidebar } from './AppSidebar'
 import Container from './Container'
 import classNames from 'classnames'
+import { useUser } from '../contexts/user'
+import { UrlObject } from 'url'
 
 export interface BreadcrumbProps {
-  href: string
+  href: string | UrlObject
   label: string
-  as: string
+  as?: string
 }
 
 type Props = {
@@ -46,7 +45,7 @@ type Props = {
 }
 
 const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
-  const [user] = useAuthState(auth)
+  const { userAndProfile } = useUser()
 
   return (
     <>
@@ -115,7 +114,7 @@ const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
                 </Breadcrumb>
               ) : null}
             </div>
-            {!user && (
+            {!userAndProfile?.profile && (
               <div className="flex items-center gap-2">
                 <Link passHref href={loginRoute()}>
                   <Button variant="outline">Log in</Button>
@@ -125,7 +124,7 @@ const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
                 </Link>
               </div>
             )}
-            {user && (
+            {userAndProfile?.profile && (
               <div className="flex items-center gap-2">
                 <div className="relative">
                   <Menu>
@@ -172,7 +171,7 @@ const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
                 <div className="flex">
                   <Menu>
                     <MenuButton>
-                      <Avatar author={user as unknown as Author} />
+                      <Avatar profile={userAndProfile?.profile} />
                     </MenuButton>
                     <Portal>
                       <MenuList className="!shadow-md">
@@ -186,7 +185,7 @@ const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
                         </Link>
                         <Link
                           passHref
-                          as={accountRoute(user.uid)}
+                          as={accountRoute(userAndProfile?.profile.uid)}
                           href={accountRouteHrefPath}
                         >
                           <MenuItem className="flex-col !items-start">
@@ -225,5 +224,4 @@ const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
     </>
   )
 }
-
 export default Header

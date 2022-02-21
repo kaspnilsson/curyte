@@ -27,9 +27,10 @@ import { zinc } from '../styles/theme/colors'
 import Details from '../components/extensions/Details/Details'
 import DetailsContent from '../components/extensions/Details/DetailsContent'
 import { getCurrentlySelectedNodes } from '../utils/prosemirror'
-import { uploadImage } from '../firebase/api'
+import { uploadImage } from '../utils/upload-image'
 import CuryteImage from '../components/extensions/Image/CuryteImage'
 import Heading from '@tiptap/extension-heading'
+import { useToast } from '@chakra-ui/react'
 
 interface EditorProps {
   content: JSONContent | null
@@ -40,6 +41,7 @@ const useCuryteEditor = (
   { content, onUpdate }: EditorProps,
   deps: DependencyList = []
 ) => {
+  const toast = useToast()
   return useEditor(
     {
       extensions: [
@@ -83,9 +85,23 @@ const useCuryteEditor = (
           },
         }).configure({ levels: [1, 2, 3] }),
         GoogleDriveEmbed,
-        CuryteImage(uploadImage),
-        // ImageEmbed,
-        // Image,
+        CuryteImage(
+          (image: File) =>
+            new Promise((resolve, reject) => {
+              uploadImage(
+                image,
+                (progress: number) => {
+                  console.log('progress: ', progress)
+                },
+                (url: string) => {
+                  toast({ title: 'Image uploaded!', status: 'success' })
+                  resolve(url)
+                },
+                reject,
+                true
+              )
+            })
+        ),
         TaskList,
         AutoId,
         TaskItem.configure({

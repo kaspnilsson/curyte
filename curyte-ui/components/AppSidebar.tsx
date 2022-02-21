@@ -1,5 +1,6 @@
 import {
   Button,
+  chakra,
   Drawer,
   DrawerContent,
   DrawerOverlay,
@@ -21,9 +22,8 @@ import {
 import classNames from 'classnames'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useRef } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { auth } from '../firebase/clientApp'
+import { SyntheticEvent, useEffect, useRef, useState } from 'react'
+import { useUser } from '../contexts/user'
 import {
   accountRoute,
   accountRouteHrefPath,
@@ -31,10 +31,10 @@ import {
   exploreRoute,
   loginRoute,
   logOutRoute,
+  searchRoute,
   workspaceRoute,
 } from '../utils/routes'
 import CuryteLogo from './CuryteLogo'
-import LessonSearchModal from './LessonSearchModal'
 
 interface ListItemProps {
   href: string
@@ -52,7 +52,8 @@ const ListItem = ({
 }: ListItemProps) => {
   const router = useRouter()
   const isActive = router.pathname === href
-  const [user] = useAuthState(auth)
+  const { userAndProfile } = useUser()
+
   return (
     <div
       className={classNames('relative flex', {
@@ -64,9 +65,9 @@ const ListItem = ({
         <div className="z-10 w-1 h-6 my-auto -mr-1 rounded-r-full bg-zinc-900"></div>
       )}
       <Link
-        href={requiresLogin && !user ? loginRoute() : href}
+        href={requiresLogin && !userAndProfile ? loginRoute() : href}
         passHref
-        as={requiresLogin && !user ? loginRoute() : as}
+        as={requiresLogin && !userAndProfile ? loginRoute() : as}
       >
         <Button
           variant="ghost"
@@ -81,10 +82,22 @@ const ListItem = ({
 }
 
 const AppMenu = () => {
-  const [user, userLoading] = useAuthState(auth)
+  const { userAndProfile: user } = useUser()
   const router = useRouter()
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  if (userLoading) return null
+  const [query, setQuery] = useState('')
+
+  const doSearch = (event: SyntheticEvent) => {
+    event.preventDefault()
+    if (!query) return
+    router.push(searchRoute(query))
+  }
+
+  useEffect(() => {
+    if (router.query['q']) {
+      setQuery(router.query['q'] as string)
+    }
+  }, [router])
+
   return (
     <div className="flex flex-col h-full gap-2">
       <Link href={exploreRoute} passHref>
@@ -98,19 +111,20 @@ const AppMenu = () => {
           </h2>
         </Button>
       </Link>
-      <div className="w-auto mx-4 mb-4" onClick={onOpen}>
+      <chakra.form onSubmit={doSearch} className="w-auto mx-4 mb-4">
         <InputGroup>
           <InputLeftElement>
             <SearchIcon className="w-5 h-5 text-zinc-500" />
           </InputLeftElement>
           <Input
-            isReadOnly
             placeholder="Search..."
             variant="filled"
             colorScheme="black"
+            value={query}
+            onChange={(e) => setQuery(e.currentTarget.value)}
           ></Input>
         </InputGroup>
-      </div>
+      </chakra.form>
       <ListItem
         icon={<GlobeAltIcon className="h-6 w-6 !text-inherit" />}
         label="Explore"
@@ -127,7 +141,7 @@ const AppMenu = () => {
       <ListItem
         icon={<HomeIcon className="h-6 w-6 !text-inherit" />}
         label="Profile"
-        as={accountRoute(user?.uid || '')}
+        as={accountRoute(user?.user?.id || '')}
         href={accountRouteHrefPath}
         requiresLogin
       />
@@ -156,7 +170,6 @@ const AppMenu = () => {
           href={loginRoute(router.route || exploreRoute)}
         />
       )}
-      <LessonSearchModal isOpen={isOpen} onClose={onClose} />
     </div>
   )
 }
