@@ -10,22 +10,22 @@ datasource db {
 
 model Lesson {
   private        Boolean                  @default(true)
-  authorId       String?                  @db.Uuid
+  authorId       String                   @db.Uuid
   title          String?
   uid            String                   @id @default(dbgenerated("uuid_generate_v4()"))
   saveCount      Int                      @default(0)
   description    String?
   tags           String[]
   coverImageUrl  String?
-  created        DateTime?                @default(now()) @db.Timestamp(6)
-  updated        DateTime?                @default(now()) @db.Timestamp(6)
+  created        DateTime                 @default(now()) @db.Timestamp(6)
+  updated        DateTime                 @default(now()) @db.Timestamp(6)
   viewCount      Int                      @default(0)
   featured       Boolean                  @default(false)
   parentLessonId String?
   template       Boolean                  @default(false)
   content        Json?
   fts            Unsupported("tsvector")?
-  profiles       Profile?                 @relation(fields: [authorId], references: [uid], onDelete: NoAction, onUpdate: NoAction)
+  profiles       Profile                  @relation(fields: [authorId], references: [uid], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([fts], map: "lessons_fts")
   @@map("lessons")
