@@ -66,7 +66,7 @@ const LessonPreview = ({ lesson, onClick, pathId, small = false }: Props) => {
         </div>
         <div className="hidden mt-1 sm:mt-2 xs:inline">
           <Text
-            className="break-words break-all line-clamp-1 md:line-clamp-2 text-zinc-700"
+            className="break-words line-clamp-1 md:line-clamp-2 text-zinc-700"
             fontSize={small ? 'xs' : 'sm'}
           >
             {lesson.description}
