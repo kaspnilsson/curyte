@@ -27,7 +27,7 @@ import { zinc } from '../styles/theme/colors'
 import Details from '../components/extensions/Details/Details'
 import DetailsContent from '../components/extensions/Details/DetailsContent'
 import { getCurrentlySelectedNodes } from '../utils/prosemirror'
-import { uploadImage } from '../utils/upload-image'
+import { uploadFile } from '../utils/upload-image'
 import CuryteImage from '../components/extensions/Image/CuryteImage'
 import Heading from '@tiptap/extension-heading'
 import { useToast } from '@chakra-ui/react'
@@ -88,7 +88,7 @@ const useCuryteEditor = (
         CuryteImage(
           (image: File) =>
             new Promise((resolve, reject) => {
-              uploadImage(
+              uploadFile(
                 image,
                 (progress: number) => {
                   console.log('progress: ', progress)

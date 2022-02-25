@@ -88,7 +88,7 @@ const CuryteImage = (uploadFn: UploadFn) => {
     renderHTML({ HTMLAttributes }) {
       return [
         'div',
-        { class: 'my-8 lg:max-w-[50vw] mx-auto' },
+        { class: 'my-8 lg:max-w-[50vw] mx-auto px-4' },
         [
           'div',
           {

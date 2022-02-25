@@ -14,7 +14,7 @@ const compressOptions = {
 
 const SUPABASE_STORAGE_BUCKET_URL = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/`
 
-export const uploadImage = async (
+export const uploadFile = async (
   file: File,
   onProgress: (p: number) => void,
   onSuccess: (url: string) => void,
@@ -61,7 +61,7 @@ export const compressAndUploadImage = async (
   useSupabase = false
 ) => {
   f = await compressImage(f)
-  await uploadImage(f, onProgress, onSuccess, onError, useSupabase)
+  await uploadFile(f, onProgress, onSuccess, onError, useSupabase)
 }
 
 export const compressImage = async (f: File): Promise<File> => {

@@ -10,6 +10,7 @@ import { exception, pageview } from '../utils/gtag'
 import ErrorBoundary from '../components/ErrorBoundary'
 import theme from '../styles/theme'
 import { UserAuthProvider } from '../contexts/user'
+import { FileUploadDialogProvider } from '../components/dialogs/FileUploadDialog/FileUploadDialogContext'
 
 export default function CuryteApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -46,9 +47,11 @@ export default function CuryteApp({ Component, pageProps }: AppProps) {
     <ChakraProvider portalZIndex={20} theme={theme}>
       <UserAuthProvider>
         <ImageUploadDialogProvider>
-          <ErrorBoundary>
-            <Component {...pageProps} />
-          </ErrorBoundary>
+          <FileUploadDialogProvider>
+            <ErrorBoundary>
+              <Component {...pageProps} />
+            </ErrorBoundary>
+          </FileUploadDialogProvider>
         </ImageUploadDialogProvider>
       </UserAuthProvider>
     </ChakraProvider>
