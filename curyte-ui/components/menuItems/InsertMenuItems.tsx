@@ -12,6 +12,7 @@ import {
 } from '../embeds/matchers'
 import CuryteLogo from '../CuryteLogo'
 import useImageUploadDialog from '../../hooks/useImageUploadDialog'
+import useFileUploadDialog from '../../hooks/useFileUploadDialog'
 
 interface Props {
   editor: Editor
@@ -19,6 +20,7 @@ interface Props {
 }
 const InsertMenuItems = ({ editor, openDialog }: Props) => {
   const { getImageSrc } = useImageUploadDialog()
+  const { getFileSrc } = useFileUploadDialog()
 
   return (
     <>
@@ -126,6 +128,19 @@ const InsertMenuItems = ({ editor, openDialog }: Props) => {
         description="Embed an image, either uploaded or from another site."
       />
       <MenuItem
+        onClick={async () => {
+          const src = await getFileSrc({
+            title: 'Upload a PDF',
+          })
+          if (src) {
+            editor.chain().focus().setIFrame({ src }).run()
+          }
+        }}
+        icon={<i className="ri-2x ri-file-pdf-line" />}
+        label="PDF"
+        description="Embed a PDF, either uploaded or from another site."
+      />
+      <MenuItem
         onClick={() => {
           openDialog({
             isOpen: true,
@@ -138,7 +153,7 @@ const InsertMenuItems = ({ editor, openDialog }: Props) => {
         }}
         icon={<i className="ri-2x ri-window-line" />}
         label="Webpage"
-        description="Embed any webpage or PDF on the internet."
+        description="Embed any webpage on the internet."
       />
       <MenuItem
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}

@@ -81,6 +81,16 @@
   //   margin: 0;
   // }
 
+  td > :first-child,
+  th > :first-child {
+    margin-top: 0 !important;
+  }
+
+  td > :last-child,
+  th > :last-child {
+    margin-bottom: 0 !important;
+  }
+
   mark {
     background: #fff8c5;
     color: inherit;

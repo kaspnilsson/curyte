@@ -5,10 +5,16 @@ interface Props {
   file: File
   onSuccess: (url: string) => void
   onError: (msg: string) => void
+  shouldCompress?: boolean
 }
 
-const UploadProgressBar = ({ file, onSuccess, onError }: Props) => {
-  const { progress, url, error } = useSupabaseStorage(file)
+const UploadProgressBar = ({
+  file,
+  onSuccess,
+  onError,
+  shouldCompress = false,
+}: Props) => {
+  const { progress, url, error } = useSupabaseStorage(file, shouldCompress)
 
   useEffect(() => {
     if (url) {

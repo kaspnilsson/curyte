@@ -1,20 +1,24 @@
 import { useState, useEffect } from 'react'
-import { compressAndUploadImage } from '../utils/upload-image'
+import { compressAndUploadImage, uploadFile } from '../utils/upload-image'
 
-const useSupabaseStorage = (file: File) => {
+const useSupabaseStorage = (file: File, shouldCompress: boolean) => {
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState<Error | null>(null)
   const [url, setUrl] = useState<string | null>(null)
 
   useEffect(() => {
-    compressAndUploadImage(
-      file,
-      setProgress,
-      setUrl,
-      (e) => setError(e as Error),
-      true
-    )
-  }, [file])
+    if (shouldCompress) {
+      compressAndUploadImage(
+        file,
+        setProgress,
+        setUrl,
+        (e) => setError(e as Error),
+        true
+      )
+    } else {
+      uploadFile(file, setProgress, setUrl, (e) => setError(e as Error), true)
+    }
+  }, [file, shouldCompress])
 
   return { progress, url, error }
 }

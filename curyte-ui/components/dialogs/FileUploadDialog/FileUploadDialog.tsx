@@ -11,37 +11,39 @@ import {
 import React, { useRef, useState } from 'react'
 import UploadProgressBar from '../../UploadProgressBar'
 import { useDropzone } from 'react-dropzone'
-import { imageUrlMatchRegex } from '../../embeds/matchers'
+import { pdfUrlMatchRegex } from '../../embeds/matchers'
 import { exception } from '../../../utils/gtag'
-import { compressImage } from '../../../utils/upload-image'
 
-interface ImageUploadDialogProps {
+interface FileUploadDialogProps {
   title: string
   description?: string | React.ReactNode
   isOpen: boolean
   onClose: () => void
   onSuccess: (url: string) => void
+  acceptType?: string | string[]
+  dropzoneText?: string
 }
 
-const ImageUploadDialog = ({
+const FileUploadDialog = ({
   title,
   description,
   isOpen,
   onClose,
   onSuccess,
-}: ImageUploadDialogProps) => {
+  acceptType = '.pdf',
+  dropzoneText = 'Drop a pdf here, or click to select a pdf',
+}: FileUploadDialogProps) => {
   const ref = useRef(null)
   const [loading, setLoading] = useState(false)
 
   const onDropAccepted = async (files: File[]) => {
-    const f = files[0]
-    setFile(await compressImage(f))
+    setFile(files[0])
     setError('')
   }
 
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 1,
-    accept: 'image/*',
+    accept: acceptType,
     onDropAccepted,
     disabled: loading,
   })
@@ -66,7 +68,7 @@ const ImageUploadDialog = ({
   const handleUrlChange = async (input: string) => {
     setUrl(input)
     setError('')
-    if (imageUrlMatchRegex.test(input)) {
+    if (pdfUrlMatchRegex.test(input)) {
       setLoading(true)
       try {
         const blob = await fetch(input, { mode: 'cors' }).then((res) =>
@@ -104,7 +106,7 @@ const ImageUploadDialog = ({
               <Input
                 disabled={loading}
                 placeholder="Paste a URL to an image"
-                isInvalid={!!(url && !imageUrlMatchRegex.test(url))}
+                isInvalid={!!(url && !pdfUrlMatchRegex.test(url))}
                 value={url}
                 onChange={(e) => handleUrlChange(e.target.value)}
               />
@@ -119,7 +121,7 @@ const ImageUploadDialog = ({
               >
                 <input {...getInputProps()} />
                 <p className="font-semibold text-center text-zinc-500">
-                  Drop a photo here, or click to select a file
+                  {dropzoneText}
                 </p>
               </div>
               <div className="w-full mt-4">
@@ -136,7 +138,7 @@ const ImageUploadDialog = ({
                     file={file}
                     onSuccess={localOnSuccess}
                     onError={setError}
-                    shouldCompress
+                    shouldCompress={false}
                   />
                 )}
               </div>
@@ -148,4 +150,4 @@ const ImageUploadDialog = ({
   )
 }
 
-export default ImageUploadDialog
+export default FileUploadDialog

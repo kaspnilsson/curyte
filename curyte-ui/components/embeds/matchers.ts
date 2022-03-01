@@ -2,6 +2,8 @@ export const imageUrlMatchRegex = new RegExp(
   /(http)?s?:?(\/\/[^"']*\.(?:png|jpg|jpeg|gif|png|svg))/i
 )
 
+export const pdfUrlMatchRegex = new RegExp(/(http)?s?:?(\/\/[^"']*\.(?:pdf))/i)
+
 export const urlMatchRegex = new RegExp(
   /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/i
 )
