@@ -18,14 +18,6 @@ export const loginRoute = (referrer = '') => {
   return out
 }
 
-export const signupRoute = (referrer = '') => {
-  let out = '/signup'
-  if (referrer) {
-    out = `${out}?referrer=${referrer}`
-  }
-  return out
-}
-
 export const indexRoute = '/'
 
 export const logOutRoute = '/logout'
