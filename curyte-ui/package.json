@@ -117,6 +117,7 @@
     "swr": "^1.2.1",
     "tippy.js": "^6.3.7",
     "ts-debounce": "^4.0.0",
+    "unsplash-js": "^7.0.15",
     "webpack": "^5.62.1"
   },
   "devDependencies": {
