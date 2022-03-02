@@ -31,6 +31,7 @@ import { uploadFile } from '../utils/upload-image'
 import CuryteImage from '../components/extensions/Image/CuryteImage'
 import Heading from '@tiptap/extension-heading'
 import { useToast } from '@chakra-ui/react'
+import { TrailingNode } from '../components/extensions/TrailingNode'
 
 interface EditorProps {
   content: JSONContent | null
@@ -107,6 +108,7 @@ const useCuryteEditor = (
         TaskItem.configure({
           nested: true,
         }),
+        TrailingNode,
         Placeholder.configure({
           showOnlyWhenEditable: true,
           placeholder: ({ editor, node, pos }) => {

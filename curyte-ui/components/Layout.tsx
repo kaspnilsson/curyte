@@ -30,9 +30,9 @@ const Layout = ({
       <nav className="relative z-[11] hidden w-48 bg-white border-r xl:w-64 lg:flex flex-0">
         <FullSidebar />
       </nav>
-      <main className="flex flex-col flex-1 max-w-full min-w-0">
+      <main className="relative flex flex-col flex-1 max-w-full min-w-0">
         <Header title={title} breadcrumbs={breadcrumbs}></Header>
-        <div className="relative flex flex-col justify-between flex-1 pt-12">
+        <div className="flex flex-col justify-between flex-1 pt-12">
           <Container className="mb-24">
             {!rightContent && children}
             {rightContent && (
@@ -45,7 +45,7 @@ const Layout = ({
                   }
                 )}
               >
-                <div className="flex-1 min-w-0">{children}</div>
+                <div className="flex-1 max-w-full min-w-0">{children}</div>
                 <div className="md:sticky md:top-20 md:w-40 xl:w-64">
                   {rightContent}
                 </div>

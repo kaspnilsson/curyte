@@ -140,7 +140,7 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
       <Layout
         title={path.title || 'Edit path'}
         footer={
-          <footer className="sticky bottom-0 left-0 z-20 w-full h-16 pl-0 bg-white border-t border-accent-2">
+          <footer className="absolute bottom-0 left-0 z-20 w-full h-16 pl-0 bg-white border-t border-accent-2">
             <Container className="flex items-center justify-end h-full">
               <div className="flex items-center gap-2 mr-auto italic text-zinc-500">
                 {saving && (
