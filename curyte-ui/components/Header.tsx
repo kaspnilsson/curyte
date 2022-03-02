@@ -20,7 +20,6 @@ import {
   loginRoute,
   workspaceRoute,
   newLessonRoute,
-  signupRoute,
   accountSettingsRoute,
   accountRoute,
   accountRouteHrefPath,
@@ -119,7 +118,7 @@ const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
                 <Link passHref href={loginRoute()}>
                   <Button variant="outline">Log in</Button>
                 </Link>
-                <Link passHref href={signupRoute()}>
+                <Link passHref href={loginRoute()}>
                   <Button colorScheme="black">Sign up</Button>
                 </Link>
               </div>
