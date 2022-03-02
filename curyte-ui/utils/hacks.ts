@@ -1,6 +1,6 @@
 // Hacks that we should feel ashamed of.
-const KASPER_UID = 'PoX0rTaDEJeb3fw28o2kSM5oABA2'
-const MARVIN_UID = 'FcLTIdF6tOhMMZZzOnsSHmCQVjt1'
+const KASPER_UID = '1c343052-84c6-4abb-90d8-e1ac6d9400fa'
+const MARVIN_UID = '96e774b1-f93a-4a71-8f33-028aa2099438'
 
 export const userIsAdmin = (uid: string) =>
   uid && (uid === KASPER_UID || uid === MARVIN_UID)
