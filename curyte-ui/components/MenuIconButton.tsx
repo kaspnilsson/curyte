@@ -25,6 +25,7 @@ const MenuIconButton = ({
           {shortcut || null}
         </div>
       }
+      zIndex={20}
     >
       <chakra.IconButton
         size="sm"

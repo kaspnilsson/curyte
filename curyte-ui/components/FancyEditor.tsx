@@ -55,7 +55,7 @@ const FancyEditor = ({
                 <TextBubbleMenu editor={editor} />
                 <FloatingMenu
                   editor={editor}
-                  tippyOptions={{ zIndex: 40 }}
+                  tippyOptions={{ zIndex: 11 }}
                   shouldShow={({ view }) => {
                     return (
                       view.endOfTextblock('forward') &&

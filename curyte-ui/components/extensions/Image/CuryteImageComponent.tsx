@@ -15,7 +15,7 @@ const CuryteImageEditorComponent = ({
         'h-min-content flex flex-col items-center gap-1 relative p-2 mx-auto',
         {
           'w-full': displayMode === 'full',
-          'max-w-[50%]': displayMode === 'half',
+          'w-full md:max-w-[50%]': displayMode === 'half',
         }
       )}
     >
