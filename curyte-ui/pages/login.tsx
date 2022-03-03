@@ -26,7 +26,6 @@ const Login = () => {
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-  console.log(REDIRECT_URL_BASE)
 
   const submitHandler = async (event: SyntheticEvent) => {
     event.preventDefault()
