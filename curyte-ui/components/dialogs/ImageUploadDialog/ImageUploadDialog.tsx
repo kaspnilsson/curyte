@@ -172,13 +172,13 @@ const ImageUploadDialog = ({
               <Heading fontSize="lg" className="my-4">
                 OR
               </Heading>
-              <form onSubmit={onSearch} className="w-full">
+              <form onSubmit={onSearch} className="flex flex-col w-full gap-2">
                 <InputGroup className="w-full">
                   <InputLeftElement>
                     <SearchIcon className="w-5 h-5 text-zinc-500" />
                   </InputLeftElement>
                   <Input
-                    placeholder="Search Unsplash for images"
+                    placeholder="Search for images"
                     variant="filled"
                     autoFocus
                     colorScheme="black"
@@ -197,6 +197,17 @@ const ImageUploadDialog = ({
                     </Button>
                   </InputRightElement>
                 </InputGroup>
+                <span className="text-xs text-zinc-500">
+                  Powered by{' '}
+                  <a
+                    href="https://unsplash.com/"
+                    target="_blank"
+                    className="underline"
+                    rel="noreferrer"
+                  >
+                    Unsplash
+                  </a>
+                </span>
               </form>
               {searchResults && (
                 <div className="grid gap-6 py-8 md:grid-cols-3">

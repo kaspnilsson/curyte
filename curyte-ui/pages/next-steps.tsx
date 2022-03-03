@@ -71,14 +71,14 @@ const NextStepsView = () => {
           </Link>
         </Container>
         <Container className="flex flex-col items-center justify-center flex-1 my-16">
-          <section className="flex flex-row w-96">
+          <section className="flex flex-row w-72">
             <div className="flex flex-col items-center justify-center w-full gap-4">
               <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
                 Add your info
               </h1>
             </div>
           </section>
-          <section className="flex items-center mt-8 w-96">
+          <section className="flex items-center mt-8 w-72">
             <chakra.form
               className="flex flex-col w-full gap-4"
               onSubmit={onSubmit}
@@ -132,7 +132,7 @@ const NextStepsView = () => {
                 />
               </FormControl>
               <div className="flex flex-col gap-2 my-8">
-                <span className="text-zinc-500">
+                <span className="text-sm text-zinc-500">
                   This is how you will appear to other Curyte users.
                 </span>
                 <AuthorLink author={localProfile} />
