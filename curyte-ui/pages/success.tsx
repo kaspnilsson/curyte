@@ -58,7 +58,7 @@ const NextStepsView = () => {
               }}
               passHref
             >
-              <div className="flex flex-col justify-between gap-4 p-8 border shadow-xl cursor-pointer rounded-xl hover:animate-wiggle w-80">
+              <div className="flex flex-col justify-between gap-4 p-8 border shadow-xl cursor-pointer rounded-xl hover:animate-wiggle w-72">
                 <Image
                   height="256px"
                   width="256px"
@@ -75,7 +75,7 @@ const NextStepsView = () => {
               </div>
             </Link>
             <Link href={exploreRoute} passHref>
-              <div className="flex flex-col justify-between gap-4 p-8 border shadow-xl cursor-pointer rounded-xl hover:animate-wiggle w-80">
+              <div className="flex flex-col justify-between gap-4 p-8 border shadow-xl cursor-pointer rounded-xl hover:animate-wiggle w-72">
                 <Image
                   height="256px"
                   width="256px"

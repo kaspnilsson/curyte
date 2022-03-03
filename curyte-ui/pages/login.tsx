@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react'
 import supabase from '../supabase/client'
 import Link from 'next/link'
-import { exploreRoute, signupRoute } from '../utils/routes'
+import { exploreRoute } from '../utils/routes'
 import GoogleLogo from '../components/icons/GoogleLogo'
 import FacebookLogo from '../components/icons/FacebookLogo'
 import Footer from '../components/Footer'
@@ -19,7 +19,7 @@ import Head from 'next/head'
 import Container from '../components/Container'
 
 const REDIRECT_URL_BASE =
-  process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com'
+  process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com/redirect'
 
 const Login = () => {
   const toast = useToast()
@@ -92,7 +92,7 @@ const Login = () => {
       <div className="flex flex-col items-center justify-center w-full min-h-screen">
         <Container className="flex items-center w-full gap-2 my-4">
           <Link href={exploreRoute} passHref>
-            <h2 className="flex items-center gap-2 text-2xl font-bold leading-tight tracking-tighter">
+            <h2 className="flex items-center gap-2 text-2xl font-bold leading-tight tracking-tighter cursor-pointer hover:underline">
               <CuryteLogo />
               Curyte
               {isLoading && <Spinner />}
@@ -100,20 +100,18 @@ const Login = () => {
           </Link>
         </Container>
         <Container className="flex flex-col items-center justify-center flex-1 my-16">
-          <section className="flex flex-row w-96">
-            <div className="flex flex-col items-center justify-center gap-4">
+          <section className="flex flex-row w-72">
+            <div className="flex flex-col items-start justify-center gap-4">
               <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
                 Log in
               </h1>
-              <h3 className="flex items-center gap-1 text-xl font-semibold leading-tight tracking-tighter text-zinc-500">
-                Not a member?
-                <Link href={signupRoute()} passHref>
-                  <a className="underline text-violet-500">Sign up</a>
-                </Link>
+              <h3 className="flex items-center gap-1 font-semibold leading-tight tracking-tighter text-zinc-500">
+                Not a member? Just log in and Curyte will create an account for
+                you!
               </h3>
             </div>
           </section>
-          <section className="flex flex-col gap-2 mt-8 w-96">
+          <section className="flex flex-col gap-2 mt-8 w-72">
             <Button
               className="relative"
               onClick={signInWithGoogle}

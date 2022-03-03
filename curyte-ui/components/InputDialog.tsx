@@ -47,7 +47,11 @@ const InputDialog = ({
     >
       <AlertDialogOverlay>
         <AlertDialogContent>
-          <AlertDialogHeader fontSize="lg" fontWeight="bold">
+          <AlertDialogHeader
+            fontSize="lg"
+            fontWeight="bold"
+            className="leading-tight tracking-tighter"
+          >
             {title}
           </AlertDialogHeader>
           <AlertDialogCloseButton />

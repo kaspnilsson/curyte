@@ -16,7 +16,7 @@ interface Props {
 
 const EditorHelpMenu = ({ showHints }: Props) => {
   return (
-    <Menu>
+    <Menu placement="top" isLazy>
       <MenuButton className="p-2 text-zinc-900">
         <div className="flex items-center gap-1 font-bold leading-tight tracking-tighter">
           <QuestionMarkCircleIcon className="w-6 h-6" />

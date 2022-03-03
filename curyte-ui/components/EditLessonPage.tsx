@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 
 import Container from './Container'
-import LessonEditor from './LessonEditor'
+import LessonEditor, { initialLessonContent } from './LessonEditor'
 import {
   CheckIcon,
   CogIcon,
@@ -52,7 +52,7 @@ const EditLessonPage = ({
     featured: false,
     template: false,
     parentLessonId: '',
-    content: l.content || null,
+    content: l.content || initialLessonContent,
     description: l.description || '',
     tags: l.tags || [],
     title: l.title || '',
@@ -104,7 +104,7 @@ const EditLessonPage = ({
       lesson={lesson}
       handleUpdate={localHandleUpdate}
       stickyFooter={
-        <footer className="sticky bottom-0 left-0 z-20 w-full pl-0 ml-0 bg-white border-t">
+        <footer className="sticky bottom-0 z-20 self-start w-full pl-0 ml-0 bg-white border-t">
           {shouldShowHints && (
             <div className="w-full">
               <LessonEditorHints onHide={hideHints} />
@@ -131,7 +131,7 @@ const EditLessonPage = ({
               )}
             </div>
             <EditorHelpMenu showHints={showHints} />
-            <Menu>
+            <Menu placement="top" isLazy>
               <MenuButton
                 as={IconButton}
                 className="mr-4"

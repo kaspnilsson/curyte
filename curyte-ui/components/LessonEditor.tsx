@@ -17,6 +17,17 @@ import {
 } from '../utils/routes'
 import { Lesson } from '@prisma/client'
 
+export const initialLessonContent = {
+  type: 'doc',
+  content: [
+    {
+      type: 'heading',
+      attrs: { id: uuid(), level: 1 },
+    },
+    { type: 'paragraph' },
+  ],
+}
+
 type Props = {
   lesson?: Lesson
   children?: ReactNode
@@ -39,16 +50,7 @@ const LessonEditor = ({
   )
   const [tagsStr, setTagsStr] = useState(lesson?.tags?.join(', ') || '')
   const [content, setContent] = useState(
-    lesson?.content || {
-      type: 'doc',
-      content: [
-        {
-          type: 'heading',
-          attrs: { id: uuid(), level: 1 },
-        },
-        { type: 'paragraph' },
-      ],
-    }
+    lesson?.content || initialLessonContent
   )
   const [coverImageUrl, setCoverImageUrl] = useState(
     lesson?.coverImageUrl || ''

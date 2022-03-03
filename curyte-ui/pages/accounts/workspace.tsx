@@ -165,16 +165,36 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
               <TabPanels>
                 <TabPanel className="!px-0">
                   {!lessons.length && (
-                    <div className="text-sm text-zinc-500">
-                      Nothing here yet!
+                    <div className="flex flex-col items-start gap-2">
+                      <div className="text-sm text-zinc-500">
+                        Nothing here yet!
+                      </div>
+                      <Link
+                        as={newLessonRoute()}
+                        href={newLessonRouteHref}
+                        passHref
+                      >
+                        <Button className="flex items-center w-auto gap-1">
+                          Create a lesson
+                          <DocumentTextIcon className="w-5 h-5" />
+                        </Button>
+                      </Link>
                     </div>
                   )}
                   {!!lessons.length && <LessonList lessons={lessons} />}
                 </TabPanel>
                 <TabPanel className="!px-0">
                   {!paths.length && (
-                    <div className="text-sm text-zinc-500">
-                      Nothing here yet!
+                    <div className="flex flex-col items-start gap-2">
+                      <div className="text-sm text-zinc-500">
+                        Nothing here yet!
+                      </div>
+                      <Link as={newPathRoute} href={newPathRoute} passHref>
+                        <Button className="flex items-center gap-1">
+                          Create a path
+                          <AcademicCapIcon className="w-5 h-5" />
+                        </Button>
+                      </Link>
                     </div>
                   )}
                   {!!paths.length && (

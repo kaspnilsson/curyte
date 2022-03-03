@@ -10,6 +10,7 @@ module.exports = withBundleAnalyzer({
     domains: [
       'firebasestorage.googleapis.com',
       'ufrlknboiuzkwcshtwry.supabase.co',
+      'images.unsplash.com',
     ],
   },
   async redirects() {

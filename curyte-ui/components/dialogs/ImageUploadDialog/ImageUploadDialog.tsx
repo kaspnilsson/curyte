@@ -5,15 +5,22 @@ import {
   AlertDialogContent,
   AlertDialogHeader,
   AlertDialogOverlay,
+  Button,
   Heading,
   Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
 } from '@chakra-ui/react'
-import React, { useRef, useState } from 'react'
+import React, { FormEvent, useRef, useState } from 'react'
 import UploadProgressBar from '../../UploadProgressBar'
 import { useDropzone } from 'react-dropzone'
 import { imageUrlMatchRegex } from '../../embeds/matchers'
 import { exception } from '../../../utils/gtag'
 import { compressImage } from '../../../utils/upload-image'
+import { searchImages, trackUnsplashDownload } from '../../../lib/apiHelpers'
+import { AttributedPhoto } from '../../../interfaces/attributed_photo'
+import { SearchIcon } from '@heroicons/react/outline'
 
 interface ImageUploadDialogProps {
   title: string
@@ -30,8 +37,10 @@ const ImageUploadDialog = ({
   onClose,
   onSuccess,
 }: ImageUploadDialogProps) => {
+  const [query, setQuery] = useState('')
   const ref = useRef(null)
   const [loading, setLoading] = useState(false)
+  const [searchResults, setSearchResults] = useState<AttributedPhoto[]>([])
 
   const onDropAccepted = async (files: File[]) => {
     const f = files[0]
@@ -55,6 +64,8 @@ const ImageUploadDialog = ({
     setFile(null)
     setUrl('')
     setError('')
+    setQuery('')
+    setSearchResults([])
     onClose()
   }
 
@@ -85,16 +96,34 @@ const ImageUploadDialog = ({
     }
   }
 
+  const onSearch = async (e: FormEvent) => {
+    e.preventDefault()
+    if (!query) return
+    setLoading(true)
+    setSearchResults((await searchImages(query)) || [])
+    setLoading(false)
+  }
+
+  const onPhotoClick = (a: AttributedPhoto) => {
+    trackUnsplashDownload(a.downloadUrl)
+    localOnSuccess(a.url)
+  }
+
   return (
     <AlertDialog
       isOpen={isOpen}
       onClose={localOnClose}
       leastDestructiveRef={ref}
       motionPreset="slideInBottom"
+      size="4xl"
     >
       <AlertDialogOverlay>
         <AlertDialogContent>
-          <AlertDialogHeader fontSize="lg" fontWeight="bold">
+          <AlertDialogHeader
+            fontSize="lg"
+            fontWeight="bold"
+            className="leading-tight tracking-tighter"
+          >
             {title}
           </AlertDialogHeader>
           <AlertDialogCloseButton />
@@ -122,7 +151,7 @@ const ImageUploadDialog = ({
                   Drop a photo here, or click to select a file
                 </p>
               </div>
-              <div className="w-full mt-4">
+              <div className="w-full">
                 {error && (
                   <div className="flex flex-wrap text-lg font-semibold text-red-500 error">
                     {error}
@@ -140,6 +169,72 @@ const ImageUploadDialog = ({
                   />
                 )}
               </div>
+              <Heading fontSize="lg" className="my-4">
+                OR
+              </Heading>
+              <form onSubmit={onSearch} className="flex flex-col w-full gap-2">
+                <InputGroup className="w-full">
+                  <InputLeftElement>
+                    <SearchIcon className="w-5 h-5 text-zinc-500" />
+                  </InputLeftElement>
+                  <Input
+                    placeholder="Search for images"
+                    variant="filled"
+                    autoFocus
+                    colorScheme="black"
+                    value={query}
+                    onSubmit={onSearch}
+                    onChange={(e) => setQuery(e.currentTarget.value)}
+                  />
+                  <InputRightElement>
+                    <Button
+                      colorScheme="black"
+                      className="mr-2"
+                      size="sm"
+                      type="submit"
+                    >
+                      Go
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+                <span className="text-xs text-zinc-500">
+                  Powered by{' '}
+                  <a
+                    href="https://unsplash.com/"
+                    target="_blank"
+                    className="underline"
+                    rel="noreferrer"
+                  >
+                    Unsplash
+                  </a>
+                </span>
+              </form>
+              {searchResults && (
+                <div className="grid gap-6 py-8 md:grid-cols-3">
+                  {searchResults.map((res, index) => (
+                    <div key={index} className="flex flex-col gap-2 group">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={res.smallUrl}
+                        alt={res.alt}
+                        className="rounded-xl shadow cursor-pointer hover:opacity-60 aspect-[16/9] object-cover w-full"
+                        onClick={() => onPhotoClick(res)}
+                      />
+                      <span className="text-sm text-zinc-500">
+                        by{' '}
+                        <a
+                          href={res.unsplashUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="underline text-violet-500"
+                        >
+                          {res.owner}
+                        </a>
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </AlertDialogBody>
         </AlertDialogContent>

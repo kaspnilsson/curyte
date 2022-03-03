@@ -159,23 +159,9 @@ const LessonHeader = ({
           )}
           <div className="flex items-center mr-4">
             <div className="items-center hidden lg:flex">
-              {lesson.created && (
-                <>
-                  <span className="flex gap-1 text-sm">
-                    {lesson.updated &&
-                      lesson.created !== lesson.updated &&
-                      'Created'}
-                    <DateFormatter date={lesson.created} />
-                  </span>
-                  <Center className="w-6 h-4">
-                    <Divider orientation="vertical" />
-                  </Center>
-                </>
-              )}
-              {lesson.updated && lesson.updated !== lesson.created && (
+              {lesson.updated && (
                 <>
                   <span className="hidden gap-1 text-sm xl:flex">
-                    Updated
                     <DateFormatter date={lesson.updated} />
                   </span>
                   <div className="hidden xl:flex">

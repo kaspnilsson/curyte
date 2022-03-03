@@ -53,7 +53,7 @@ const WhatIsCuryteView = () => {
               className="w-full"
             />
           </div>
-          <div className="relative grid grid-cols-1 gap-12 mx-16 md:grid-cols-3">
+          <div className="relative grid grid-cols-1 gap-12 md:mx-16 md:grid-cols-3">
             <div className="flex flex-col items-center gap-4 p-4 text-center">
               <div className="w-20 h-20 text-6xl">🕓</div>
               <Heading
@@ -105,7 +105,7 @@ const WhatIsCuryteView = () => {
         </p>
       </section>
       <section className="flex flex-col flex-wrap items-center justify-around w-full gap-8 mb-16 md:items-start md:mb-32 lg:flex-row colums-lg">
-        <div className="flex flex-col items-center flex-1 text-base w-80 md:w-96 md:text-xl">
+        <div className="flex flex-col items-center flex-1 text-base w-72 md:w-96 md:text-xl">
           <ul className="flex-1">
             <h3 className="mb-4 text-2xl font-bold leading-tight tracking-tighter text-center">
               Browse
@@ -136,7 +136,7 @@ const WhatIsCuryteView = () => {
             </li>
           </ul>
         </div>
-        <div className="flex flex-col items-center flex-1 text-base w-80 md:w-96 md:text-xl">
+        <div className="flex flex-col items-center flex-1 text-base w-72 md:w-96 md:text-xl">
           <ul className="flex-1">
             <h3 className="mb-4 text-2xl font-bold leading-tight tracking-tighter text-center">
               Build

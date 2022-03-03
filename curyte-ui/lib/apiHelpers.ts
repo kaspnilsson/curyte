@@ -1,4 +1,5 @@
 import { Lesson, Path, Prisma, Profile, Tag } from '@prisma/client'
+import { AttributedPhoto } from '../interfaces/attributed_photo'
 import { LessonWithProfile } from '../interfaces/lesson_with_profile'
 import { PathWithProfile } from '../interfaces/path_with_profile'
 
@@ -118,3 +119,15 @@ export const queryProfiles = async (q: string) =>
   fetch(`/api/profiles/search?q=${q}`, {
     method: 'GET',
   }).then(parseProfilesJson)
+
+export const searchImages = async (
+  q: string
+): Promise<AttributedPhoto[] | undefined> =>
+  fetch(`/api/unsplash/search?q=${q}`, {
+    method: 'GET',
+  }).then((res) => res.json())
+
+export const trackUnsplashDownload = async (url: string) =>
+  fetch(`/api/unsplash/mark_download?url=${url}`, {
+    method: 'PUT',
+  }).then((res) => res.json())
