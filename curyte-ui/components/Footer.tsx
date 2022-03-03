@@ -56,7 +56,7 @@ const Footer = () => {
             className="font-bold leading-tight tracking-tighter "
             size="sm"
           >
-            Company
+            About
           </Heading>
           <Link href={whatIsCuryteRoute} passHref>
             <Button variant="link" colorScheme="violet">
