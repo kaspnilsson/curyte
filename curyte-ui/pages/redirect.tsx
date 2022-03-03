@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { useUser } from '../contexts/user'
-import { exploreRoute, nextStepsRoute } from '../utils/routes'
+import { nextStepsRoute, workspaceRoute } from '../utils/routes'
 
 const NewPathView = () => {
   const router = useRouter()
@@ -12,7 +12,7 @@ const NewPathView = () => {
     if (loading) return
     if (userAndProfile?.profile?.displayName) {
       // If user has name, they probably went thru the walkthrough
-      router.push(exploreRoute)
+      router.push(workspaceRoute)
     } else {
       router.push(nextStepsRoute)
     }

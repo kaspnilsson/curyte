@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 
 import Container from './Container'
-import LessonEditor from './LessonEditor'
+import LessonEditor, { initialLessonContent } from './LessonEditor'
 import {
   CheckIcon,
   CogIcon,
@@ -52,7 +52,7 @@ const EditLessonPage = ({
     featured: false,
     template: false,
     parentLessonId: '',
-    content: l.content || null,
+    content: l.content || initialLessonContent,
     description: l.description || '',
     tags: l.tags || [],
     title: l.title || '',

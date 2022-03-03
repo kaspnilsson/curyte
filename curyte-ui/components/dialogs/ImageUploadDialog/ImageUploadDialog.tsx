@@ -178,7 +178,7 @@ const ImageUploadDialog = ({
                     <SearchIcon className="w-5 h-5 text-zinc-500" />
                   </InputLeftElement>
                   <Input
-                    placeholder="Search Unsplash for royalty free images"
+                    placeholder="Search Unsplash for images"
                     variant="filled"
                     autoFocus
                     colorScheme="black"
@@ -206,7 +206,7 @@ const ImageUploadDialog = ({
                       <img
                         src={res.smallUrl}
                         alt={res.alt}
-                        className="rounded-xl shadow cursor-pointer hover:opacity-60 aspect-[16/9] object-cover"
+                        className="rounded-xl shadow cursor-pointer hover:opacity-60 aspect-[16/9] object-cover w-full"
                         onClick={() => onPhotoClick(res)}
                       />
                       <span className="text-sm text-zinc-500">
