@@ -19,13 +19,14 @@ import Head from 'next/head'
 import Container from '../components/Container'
 
 const REDIRECT_URL_BASE =
-  process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com'
+  process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com/redirect'
 
 const Login = () => {
   const toast = useToast()
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  console.log(REDIRECT_URL_BASE)
 
   const submitHandler = async (event: SyntheticEvent) => {
     event.preventDefault()
