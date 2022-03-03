@@ -127,7 +127,7 @@ const LessonHeader = ({
       <ConfirmDialog />
       <LessonTitle title={lesson?.title || '(no title)'} />
       <div className="flex items-center mb-4 h-min">
-        {parentLesson && (
+        {parentLesson && parentLesson.uid && (
           <div className="flex items-center h-min">
             <span className="mr-2">➜</span>
             <h1 className="mr-2 font-bold leading-tight tracking-tighter text-center md:leading-none md:text-left">
