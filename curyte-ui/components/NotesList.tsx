@@ -38,12 +38,10 @@ const NotesList = ({ lessonId }: Props) => {
   return (
     <div className="flex flex-col w-full">
       <Heading className="font-bold leading-tight tracking-tighter" size="md">
-        Notes
+        Student notebooks
       </Heading>
       {!notes?.length && (
-        <div className="flex flex-col items-start gap-2 text-zinc-500">
-          Nothing here yet!
-        </div>
+        <div className="mt-2 text-zinc-500">Nothing here yet!</div>
       )}
       <div className="flex flex-col gap-4 divide-y">
         {notes.map((n, index) => (

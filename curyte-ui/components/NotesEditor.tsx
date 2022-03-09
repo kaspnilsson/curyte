@@ -55,7 +55,7 @@ const NotesEditor = ({ lessonId }: Props) => {
     <div className="flex-col w-full mt-8">
       <div className="flex items-center gap-3">
         <Heading className="uppercase text-zinc-700" size="xs">
-          NOTES
+          NOTEBOOK
         </Heading>
         {loading && <Spinner size="xs" />}
       </div>
