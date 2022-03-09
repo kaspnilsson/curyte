@@ -5,7 +5,6 @@ import React, { useEffect } from 'react'
 import Layout from '../../components/Layout'
 import {
   Button,
-  Heading,
   Tab,
   TabList,
   TabPanel,
@@ -66,12 +65,9 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
           rightContent={
             <div className="flex flex-col w-full gap-8">
               <section>
-                <Heading
-                  className="mb-2 font-bold leading-tight tracking-tighter"
-                  size="md"
-                >
+                <div className="mb-2 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
                   Create
-                </Heading>
+                </div>
                 <div className="flex flex-col items-start gap-2">
                   <Link
                     as={newLessonRoute()}
@@ -92,12 +88,9 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
                 </div>
               </section>
               <section>
-                <Heading
-                  className="mb-2 font-bold leading-tight tracking-tighter"
-                  size="md"
-                >
+                <div className="mb-2 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
                   Resources
-                </Heading>
+                </div>
                 <ul className="flex flex-col items-start gap-2 ml-6 list-disc list-outside">
                   <li className="hover:underline">
                     <Link

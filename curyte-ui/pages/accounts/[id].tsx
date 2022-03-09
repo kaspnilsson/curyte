@@ -4,7 +4,6 @@ import Layout from '../../components/Layout'
 import SocialLinks from '../../components/SocialLinks'
 import Avatar from '../../components/Avatar'
 import LessonList from '../../components/LessonList'
-import { Heading } from '@chakra-ui/react'
 import TagList from '../../components/TagList'
 import { accountRouteHrefPath, accountRoute } from '../../utils/routes'
 import { Lesson, Profile, Tag } from '@prisma/client'
@@ -54,12 +53,9 @@ const UserView = ({ lessons, profile, favoriteTags }: Props) => {
           )}
         </div>
         <div className="w-full md:w-1/3 md:pl-8">
-          <Heading
-            className="mb-4 font-bold leading-tight tracking-tighter"
-            size="md"
-          >
+          <div className="mb-4 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
             Favorite topics
-          </Heading>
+          </div>
           {!!favoriteTags?.length && <TagList tags={favoriteTags} />}
           {!favoriteTags?.length && (
             <div className="text-sm text-zinc-500">Nothing here yet!</div>

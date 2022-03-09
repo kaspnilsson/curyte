@@ -28,13 +28,15 @@ import LessonOutline from '../../../components/LessonOutline'
 import { userIsAdmin } from '../../../utils/hacks'
 import { Button, useToast, Text } from '@chakra-ui/react'
 import Link from 'next/link'
-import supabase from '../../../supabase/client'
 import { Lesson, Path } from '@prisma/client'
 import { JSONContent } from '@tiptap/core'
 import { deleteLesson, updateLesson, updatePath } from '../../../lib/apiHelpers'
 import prismaClient from '../../../lib/prisma'
 import { Unit } from '../../../interfaces/unit'
 import { LessonWithProfile } from '../../../interfaces/lesson_with_profile'
+import NotesList from '../../../components/NotesList'
+import NotesEditor from '../../../components/NotesEditor'
+import { useUser } from '../../../contexts/user'
 
 interface Props {
   lesson: LessonWithProfile
@@ -51,7 +53,8 @@ const LessonInPathView = ({
 }: Props) => {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const user = supabase.auth.user()
+  const { userAndProfile } = useUser()
+  const user = userAndProfile?.user
   const toast = useToast()
 
   // Log views only on render of a published lesson in published path
@@ -101,8 +104,18 @@ const LessonInPathView = ({
       {loading && <LoadingSpinner />}
       {!loading && (
         <Layout
+          rightContentWrapBehavior="reverse"
           title={lesson.title || ''}
-          rightContent={<LessonOutline editor={editor} />}
+          rightContent={
+            <>
+              <LessonOutline editor={editor} />
+              {user && (
+                <div className="hidden md:flex">
+                  <NotesEditor lessonId={lesson.uid} />
+                </div>
+              )}
+            </>
+          }
           breadcrumbs={[
             {
               label:
@@ -157,6 +170,9 @@ const LessonInPathView = ({
               }
             />
             <FancyEditor readOnly editor={editor} />
+            {user && (user.id === lesson.authorId || userIsAdmin(user.id)) && (
+              <NotesList lessonId={lesson.uid} />
+            )}
             <div className="flex items-center justify-between">
               {prevLesson && (
                 <div className="flex flex-col items-start gap-2 mr-auto">

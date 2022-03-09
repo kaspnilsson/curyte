@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import prismaClient from '../../../lib/prisma'
-import supabase from '../../../supabase/client'
+import supabaseAdmin from '../../../supabase/admin'
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,7 +12,7 @@ export default async function handler(
     // includeContent = false,
     query: { id },
   } = req
-  const { user } = await supabase.auth.api.getUserByCookie(req)
+  const { user } = await supabaseAdmin.auth.api.getUserByCookie(req)
 
   if (!id) {
     res.status(400).json({ error: 'No lesson UID!' })

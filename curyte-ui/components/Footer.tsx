@@ -1,6 +1,6 @@
 import Container from './Container'
 import { HeartIcon } from '@heroicons/react/outline'
-import { Button, Heading } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import Link from 'next/link'
 import {
   dataDeletionInstructionsRoute,
@@ -14,27 +14,18 @@ const Footer = () => {
     <footer className="flex w-full bg-white border-t">
       <Container className="flex flex-col-reverse items-start justify-between gap-8 py-8 md:flex-row">
         <div className="flex flex-col flex-wrap items-start flex-1 h-full gap-2">
-          <Heading
-            size="sm"
-            className="flex flex-wrap items-center gap-1 text-base font-bold leading-tight tracking-tighter"
-          >
+          <span className="flex flex-wrap items-center gap-1 text-base font-bold leading-tight tracking-tighter">
             Made with <HeartIcon className="w-6 h-6" fill="red" /> in San
             Francisco
-          </Heading>
-          <Heading
-            size="sm"
-            className="text-base !font-normal leading-tight tracking-tighter"
-          >
+          </span>
+          <span className="text-base !font-normal leading-tight tracking-tighter">
             © 2021 Curyte
-          </Heading>
+          </span>
         </div>
         <div className="flex flex-col items-start gap-2">
-          <Heading
-            className="font-bold leading-tight tracking-tighter "
-            size="sm"
-          >
+          <span className="font-bold leading-tight tracking-tighter">
             Resources
-          </Heading>
+          </span>
           <Link href={privacyPolicyRoute} passHref>
             <Button variant="link" colorScheme="violet">
               Privacy Policy
@@ -52,12 +43,9 @@ const Footer = () => {
           </Link>
         </div>
         <div className="flex flex-col items-start gap-2">
-          <Heading
-            className="font-bold leading-tight tracking-tighter "
-            size="sm"
-          >
+          <span className="font-bold leading-tight tracking-tighter ">
             About
-          </Heading>
+          </span>
           <Link href={whatIsCuryteRoute} passHref>
             <Button variant="link" colorScheme="violet">
               What is Curyte?

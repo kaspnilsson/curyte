@@ -19,6 +19,8 @@ import useKeypress from '../hooks/useKeypress'
 import classNames from 'classnames'
 
 import { LessonWithProfile } from '../interfaces/lesson_with_profile'
+import NotebookDrawerButton from './NotebookDrawerButton'
+import { useUser } from '../contexts/user'
 
 // If we're this close to the beginning or the end of the slide, skip.
 const SCROLL_THRESHOLD_PX = 48
@@ -82,6 +84,7 @@ interface Props {
 }
 
 const PresentLessonView = ({ lesson, backUrl, backUrlHref }: Props) => {
+  const { userAndProfile } = useUser()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [progress, setProgress] = useState(0)
   const [swiper, setSwiper] = useState<SwiperClass | null>(null)
@@ -232,14 +235,19 @@ const PresentLessonView = ({ lesson, backUrl, backUrlHref }: Props) => {
               <ArrowLeftIcon className="w-4 h-4" />
               Back
             </Button>
-            <Button
-              ref={(node) => setNextEl(node)}
-              className="flex items-center gap-2"
-              colorScheme="black"
-            >
-              Next
-              <ArrowRightIcon className="w-4 h-4" />
-            </Button>
+            <div className="flex items-center gap-2">
+              {userAndProfile?.user && (
+                <NotebookDrawerButton lessonId={lesson.uid} style="small" />
+              )}
+              <Button
+                ref={(node) => setNextEl(node)}
+                className="flex items-center gap-2"
+                colorScheme="black"
+              >
+                Next
+                <ArrowRightIcon className="w-4 h-4" />
+              </Button>
+            </div>
           </Container>
         </div>
       </article>

@@ -6,7 +6,6 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,
-  Heading,
   Input,
   InputGroup,
   InputLeftElement,
@@ -137,9 +136,9 @@ const ImageUploadDialog = ({
                 value={url}
                 onChange={(e) => handleUrlChange(e.target.value)}
               />
-              <Heading fontSize="lg" className="my-4">
+              <div className="my-4 text-lg font-bold leading-tight tracking-tighter">
                 OR
-              </Heading>
+              </div>
               <div
                 {...getRootProps({
                   className:
@@ -169,9 +168,9 @@ const ImageUploadDialog = ({
                   />
                 )}
               </div>
-              <Heading fontSize="lg" className="my-4">
+              <div className="my-4 text-lg font-bold leading-tight tracking-tighter">
                 OR
-              </Heading>
+              </div>
               <form onSubmit={onSearch} className="flex flex-col w-full gap-2">
                 <InputGroup className="w-full">
                   <InputLeftElement>

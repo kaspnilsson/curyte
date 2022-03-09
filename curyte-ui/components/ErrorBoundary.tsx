@@ -1,13 +1,13 @@
-import { Button, Heading, Link } from '@chakra-ui/react'
+import { Button, Link } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary'
 import { exception } from '../utils/gtag'
 
 const ErrorFallback = ({ error }: { error: Error }) => (
   <div className="flex flex-col items-center justify-center w-screen h-screen gap-8">
-    <Heading className="font-bold leading-tight tracking-tighter">
+    <span className="font-bold leading-tight tracking-tighter font-xl">
       Something went wrong :/
-    </Heading>
+    </span>
     <pre>{error.name}</pre>
     <pre>{error.message}</pre>
     {error.stack && <pre>{error.stack}</pre>}

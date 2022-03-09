@@ -2,7 +2,7 @@ import React from 'react'
 import CuryteLogo from '../components/CuryteLogo'
 import { exploreRoute, newLessonRoute } from '../utils/routes'
 import Link from 'next/link'
-import { Button, Heading, Text } from '@chakra-ui/react'
+import { Button, Text } from '@chakra-ui/react'
 import AutoPlaySilentVideo from '../components/AutoPlaySilentVideo'
 import Footer from '../components/Footer'
 import Container from '../components/Container'
@@ -56,12 +56,9 @@ const WhatIsCuryteView = () => {
           <div className="relative grid grid-cols-1 gap-12 md:mx-16 md:grid-cols-3">
             <div className="flex flex-col items-center gap-4 p-4 text-center">
               <div className="w-20 h-20 text-6xl">🕓</div>
-              <Heading
-                fontSize="x-large"
-                className="font-bold leading-tight tracking-tighter"
-              >
+              <span className="text-4xl font-bold leading-tight tracking-tighter">
                 Stop reinventing the wheel every week
-              </Heading>
+              </span>
               <Text className="text-zinc-700">
                 Explore an open-source curriculum with hundreds of lessons about
                 anything from atoms to zygotes.
@@ -69,12 +66,9 @@ const WhatIsCuryteView = () => {
             </div>
             <div className="flex flex-col items-center gap-4 p-4 text-center">
               <div className="w-20 h-20 text-6xl">🔨</div>
-              <Heading
-                fontSize="x-large"
-                className="font-bold leading-tight tracking-tighter"
-              >
+              <span className="text-4xl font-bold leading-tight tracking-tighter">
                 Create and curate in an editor built for teachers
-              </Heading>
+              </span>
               <Text className="text-zinc-700">
                 Keep your students focused with embedded videos, interactive
                 questions, simulations, and entire websites.
@@ -82,12 +76,9 @@ const WhatIsCuryteView = () => {
             </div>
             <div className="flex flex-col items-center gap-4 p-4 text-center">
               <div className="w-20 h-20 text-6xl">🔗</div>
-              <Heading
-                fontSize="x-large"
-                className="font-bold leading-tight tracking-tighter"
-              >
+              <span className="text-4xl font-bold leading-tight tracking-tighter">
                 Share everything learners need with one link
-              </Heading>
+              </span>
               <Text className="text-zinc-700">
                 Student-facing lessons with transparent objectives. No login, no
                 class codes, no data collection.
