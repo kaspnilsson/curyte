@@ -16,6 +16,7 @@ import {
   workspaceRoute,
 } from '../utils/routes'
 import { Lesson } from '@prisma/client'
+import TemplatesMenu from './TemplatesMenu'
 
 export const initialLessonContent = {
   type: 'doc',
@@ -133,6 +134,9 @@ const LessonEditor = ({
               })
             }}
           />
+          <div className="mt-2">
+            <TemplatesMenu editor={editor}></TemplatesMenu>
+          </div>
           <EditableCoverImage
             title={lesson?.title || ''}
             src={coverImageUrl}
