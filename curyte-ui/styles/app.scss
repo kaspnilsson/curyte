@@ -115,8 +115,14 @@
     color: inherit;
   }
 
-  .has-focus:not(.react-renderer) {
-    background-color: var(--chakra-colors-violet-50);
+  .has-focus {
+    &:not(.react-renderer):not(pre) {
+      background-color: var(--chakra-colors-violet-50);
+    }
+  }
+
+  pre.has-focus {
+    background-color: var(--chakra-colors-zinc-700);
   }
 
   .ProseMirror-separator {
