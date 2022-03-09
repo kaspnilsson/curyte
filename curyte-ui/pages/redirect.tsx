@@ -9,7 +9,7 @@ const NewPathView = () => {
   const { userAndProfile, loading } = useUser()
 
   useEffect(() => {
-    if (loading) return
+    if (loading || !userAndProfile) return
     if (userAndProfile?.profile?.displayName) {
       // If user has name, they probably went thru the walkthrough
       router.push(workspaceRoute)

@@ -2,7 +2,6 @@ import { Editor } from '@tiptap/react'
 import { InputDialogProps } from '../InputDialog'
 import MenuItem from '../MenuItem'
 import {
-  curyteLessonUrlMatchRegex,
   googleDocsUrlMatchRegex,
   googleDrawingsUrlMatchRegex,
   googleDriveUrlMatchRegex,
@@ -10,15 +9,20 @@ import {
   googleSlidesUrlMatchRegex,
   youtubeUrlMatchRegex,
 } from '../embeds/matchers'
-import CuryteLogo from '../CuryteLogo'
 import useImageUploadDialog from '../../hooks/useImageUploadDialog'
 import useFileUploadDialog from '../../hooks/useFileUploadDialog'
+import { initialLessonContent } from '../LessonEditor'
 
 interface Props {
   editor: Editor
   openDialog: (input: Partial<InputDialogProps>) => void
+  forceInsertAtEnd?: boolean
 }
-const InsertMenuItems = ({ editor, openDialog }: Props) => {
+const InsertMenuItems = ({
+  editor,
+  openDialog,
+  forceInsertAtEnd = false,
+}: Props) => {
   const { getImageSrc } = useImageUploadDialog()
   const { getFileSrc } = useFileUploadDialog()
 
@@ -26,22 +30,14 @@ const InsertMenuItems = ({ editor, openDialog }: Props) => {
     <>
       <MenuItem
         onClick={() => {
-          openDialog({
-            isOpen: true,
-            title: 'Enter a lesson URL',
-            description: 'Enter the URL for a Curyte lesson.',
-            onConfirm: (src: string) => {
-              editor.commands.setCuryteLink({ src })
-            },
-            initialValue: '',
-            validator: (input: string) => {
-              return curyteLessonUrlMatchRegex.test(input)
-            },
-          })
+          if (forceInsertAtEnd) {
+            editor.commands.focus('end', { scrollIntoView: true })
+          }
+          editor.chain().insertContent(initialLessonContent).run()
         }}
-        icon={<CuryteLogo width="32px" height="32px" />}
-        label="Curyte Lesson"
-        description="Embed a Curyte lesson."
+        icon={<i className="ri-2x ri-input-method-line" />}
+        label="Section"
+        description="Add a new section."
       />
       <MenuItem
         onClick={() => {
@@ -51,10 +47,16 @@ const InsertMenuItems = ({ editor, openDialog }: Props) => {
             description: 'Paste a link from either Youtube or Vimeo.',
             onConfirm: (src: string) => {
               if (youtubeUrlMatchRegex.test(src)) {
+                if (forceInsertAtEnd) {
+                  editor.commands.focus('end', { scrollIntoView: true })
+                }
                 editor.commands.setYoutubeVideo({
                   src,
                 })
               } else {
+                if (forceInsertAtEnd) {
+                  editor.commands.focus('end', { scrollIntoView: true })
+                }
                 // It's vimeo
                 editor.commands.setVimeoVideo({
                   src,
@@ -91,6 +93,9 @@ const InsertMenuItems = ({ editor, openDialog }: Props) => {
               </span>
             ),
             onConfirm: (src: string) => {
+              if (forceInsertAtEnd) {
+                editor.commands.focus('end', { scrollIntoView: true })
+              }
               editor
                 .chain()
                 .focus()
@@ -120,6 +125,9 @@ const InsertMenuItems = ({ editor, openDialog }: Props) => {
             title: 'Upload an image',
           })
           if (src) {
+            if (forceInsertAtEnd) {
+              editor.commands.focus('end', { scrollIntoView: true })
+            }
             editor.chain().focus().setImage({ src }).run()
           }
         }}
@@ -133,6 +141,9 @@ const InsertMenuItems = ({ editor, openDialog }: Props) => {
             title: 'Upload a PDF',
           })
           if (src) {
+            if (forceInsertAtEnd) {
+              editor.commands.focus('end', { scrollIntoView: true })
+            }
             editor.chain().focus().setIFrame({ src }).run()
           }
         }}
@@ -147,6 +158,9 @@ const InsertMenuItems = ({ editor, openDialog }: Props) => {
             title: 'Enter a URL',
             description: 'Enter the URL for another website.',
             onConfirm: (src: string) => {
+              if (forceInsertAtEnd) {
+                editor.commands.focus('end', { scrollIntoView: true })
+              }
               editor.chain().focus().setIFrame({ src }).run()
             },
           })
@@ -156,34 +170,74 @@ const InsertMenuItems = ({ editor, openDialog }: Props) => {
         description="Embed any webpage on the internet."
       />
       <MenuItem
-        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+        onClick={() => {
+          if (forceInsertAtEnd) {
+            editor.commands.focus('end', { scrollIntoView: true })
+          }
+          editor.chain().focus().toggleCodeBlock().run()
+        }}
         icon={<i className="ri-2x ri-code-box-line" />}
         label="Code block"
         description="Insert a code block."
       />
       <MenuItem
-        onClick={() => editor.commands.addMultipleChoice()}
+        onClick={() => {
+          if (forceInsertAtEnd) {
+            editor.commands.focus('end', { scrollIntoView: true })
+          }
+          editor.commands.addMultipleChoice()
+        }}
         icon={<i className="ri-2x ri-survey-line" />}
         label="Quiz question"
         description="Insert a multiple choice question."
       />
       <MenuItem
-        onClick={() => editor.commands.toggleDetails()}
+        onClick={() => {
+          if (forceInsertAtEnd) {
+            editor.commands.focus('end', { scrollIntoView: true })
+          }
+          editor.commands.toggleDetails()
+        }}
         icon={<i className="ri-2x ri-split-cells-vertical" />}
         label="Collapsible section"
         description="Insert a collapsible section."
       />
       <MenuItem
-        onClick={() =>
+        onClick={() => {
+          if (forceInsertAtEnd) {
+            editor.commands.focus('end', { scrollIntoView: true })
+          }
           editor
             .chain()
             .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
             .run()
-        }
+        }}
         icon={<i className="ri-2x ri-grid-line" />}
         label="Table"
         description="Insert a table."
       />
+      {/* <MenuItem
+        onClick={() => {
+          openDialog({
+            isOpen: true,
+            title: 'Enter a lesson URL',
+            description: 'Enter the URL for a Curyte lesson.',
+            onConfirm: (src: string) => {
+              if (forceInsertAtEnd) {
+                editor.commands.focus('end', { scrollIntoView: true })
+              }
+              editor.commands.setCuryteLink({ src })
+            },
+            initialValue: '',
+            validator: (input: string) => {
+              return curyteLessonUrlMatchRegex.test(input)
+            },
+          })
+        }}
+        icon={<CuryteLogo width="32px" height="32px" />}
+        label="Curyte Lesson"
+        description="Embed a Curyte lesson."
+      /> */}
     </>
   )
 }
