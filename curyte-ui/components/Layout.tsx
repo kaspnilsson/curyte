@@ -27,7 +27,7 @@ const Layout = ({
 }: Props) => {
   return (
     <div className={'relative min-h-screen max-w-[100vw] flex ' + className}>
-      <nav className="relative z-[11] hidden w-48 bg-white border-r xl:w-64 lg:flex flex-0">
+      <nav className="relative z-[11] hidden w-16 bg-white border-r md:flex flex-0">
         <FullSidebar />
       </nav>
       <main className="relative flex flex-col flex-1 max-w-full min-w-0">
@@ -46,7 +46,7 @@ const Layout = ({
                 )}
               >
                 <div className="flex-1 max-w-full min-w-0">{children}</div>
-                <div className="md:sticky md:top-20 md:w-40 xl:w-64">
+                <div className="md:sticky md:top-20 md:w-48 lg:w-64 xl:w-72 2xl:w-96">
                   {rightContent}
                 </div>
               </div>
