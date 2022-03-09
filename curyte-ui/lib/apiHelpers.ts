@@ -1,4 +1,4 @@
-import { Lesson, Path, Prisma, Profile, Tag } from '@prisma/client'
+import { Lesson, Notes, Path, Prisma, Profile, Tag } from '@prisma/client'
 import { AttributedPhoto } from '../interfaces/attributed_photo'
 import { LessonWithProfile } from '../interfaces/lesson_with_profile'
 import { PathWithProfile } from '../interfaces/path_with_profile'
@@ -131,3 +131,28 @@ export const trackUnsplashDownload = async (url: string) =>
   fetch(`/api/unsplash/mark_download?url=${url}`, {
     method: 'PUT',
   }).then((res) => res.json())
+
+export const parseNotesJson = async (res: Response) =>
+  res.json().then((n) => n as Notes)
+
+export const parseNotesArrJson = async (res: Response) =>
+  res.json().then((notes) => notes.map((n: unknown) => n as Notes))
+
+export const queryNotesForLesson = async (lessonId: string) =>
+  fetch(`/api/notes/search?lessonId=${lessonId}`, {
+    method: 'GET',
+  }).then(parseNotesArrJson)
+
+export const getNotes = async (lessonId: string) =>
+  fetch(`/api/notes?lessonId=${lessonId}`, { method: 'GET' }).then(
+    parseNotesJson
+  )
+
+export const updateNotes = async (
+  lessonId: string,
+  args: Prisma.XOR<Prisma.NotesUpdateInput, Prisma.NotesUncheckedUpdateInput>
+) =>
+  fetch(`/api/notes?lessonId=${lessonId}`, {
+    method: 'PUT',
+    body: JSON.stringify(args),
+  }).then(parseNotesJson)

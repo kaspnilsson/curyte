@@ -26,6 +26,7 @@ model Lesson {
   content        Json?
   fts            Unsupported("tsvector")?
   profiles       Profile                  @relation(fields: [authorId], references: [uid], onDelete: NoAction, onUpdate: NoAction)
+  notes          Notes[]                  @relation("lessonsTonotes")
 
   @@index([fts], map: "lessons_fts")
   @@map("lessons")
@@ -62,6 +63,7 @@ model Profile {
   savedPaths   String[]
   fts          Unsupported("tsvector")?
   lessons      Lesson[]
+  notes        Notes[]                  @relation("notesToprofiles")
   paths        Path[]
 
   @@index([fts], map: "profiles_fts")
@@ -76,4 +78,16 @@ model Tag {
 
   @@index([fts], map: "tags_fts")
   @@map("tags")
+}
+
+model Notes {
+  lessonId String
+  userId   String   @db.Uuid
+  content  Json?
+  updated  DateTime @default(now()) @db.Timestamp(6)
+  lessons  Lesson   @relation("lessonsTonotes", fields: [lessonId], references: [uid], onDelete: NoAction, onUpdate: NoAction)
+  profiles Profile  @relation("notesToprofiles", fields: [userId], references: [uid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([userId, lessonId])
+  @@map("notes")
 }

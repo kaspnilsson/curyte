@@ -172,6 +172,10 @@ textarea:focus {
 }
 
 textarea::-webkit-input-placeholder {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
   color: var(--chakra-colors-zinc-400);
 }
 
