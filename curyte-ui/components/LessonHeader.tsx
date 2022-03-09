@@ -13,6 +13,7 @@ import {
   MenuItem,
   MenuButton,
   Portal,
+  ButtonGroup,
 } from '@chakra-ui/react'
 import {
   BookmarkIcon,
@@ -20,7 +21,6 @@ import {
   PencilAltIcon,
   DuplicateIcon,
   MenuIcon,
-  UploadIcon,
 } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
 import { loginRoute, newLessonRoute } from '../utils/routes'
@@ -40,7 +40,6 @@ type Props = {
   coverImage?: string
   handleDelete?: () => void
   handleEdit?: () => void
-  handlePublish?: () => void
   handleToggleFeatured?: () => void
   handleToggleTemplate?: () => void
   handlePresent?: () => void
@@ -50,7 +49,6 @@ const LessonHeader = ({
   lesson,
   handleDelete,
   handleEdit,
-  handlePublish,
   handleToggleFeatured,
   handleToggleTemplate,
   handlePresent,
@@ -158,7 +156,7 @@ const LessonHeader = ({
               Private
             </Badge>
           )}
-          <div className="flex items-center">
+          <div className="flex items-center mr-2">
             <div className="items-center hidden lg:flex">
               {lesson.updated && (
                 <>
@@ -175,110 +173,100 @@ const LessonHeader = ({
             </div>
             <span className="text-sm">{`${lesson.viewCount || 0} views`}</span>
           </div>
-          <div className="flex items-center gap-1">
-            {!lesson.private && (
-              <ShareLessonButton lesson={lesson} style="small" />
-            )}
-            {handlePresent && (
-              <Button
-                onClick={handlePresent}
-                aria-label="Present as slides"
-                size="sm"
-                variant="ghost"
-                colorScheme="black"
-              >
-                <Present />
-              </Button>
-            )}
-            {handlePublish && (
-              <Button
-                size="sm"
-                variant="ghost"
-                colorScheme="black"
-                className="flex items-center justify-between mr-2 font-semibold"
-                onClick={handlePublish}
-              >
-                <UploadIcon className="w-5 h-5" />
-                <div className="hidden ml-2 md:flex">Publish</div>
-              </Button>
-            )}
-            {!lesson.private && (
-              <Button
-                size="sm"
-                variant="ghost"
-                colorScheme="black"
-                aria-label={isSaved ? 'Saved' : 'Save'}
-                onClick={() => toggleSaveLesson()}
-              >
-                <BookmarkIcon
-                  className="w-5 h-5 text-inherit"
-                  style={{ fill: isSaved ? black[900] : 'transparent' }}
-                />
-              </Button>
-            )}
-            <Menu id="more-menu" isLazy>
-              <MenuButton
-                as={Button}
-                aria-label="Options"
-                size="sm"
-                variant="ghost"
-                colorScheme="black"
-              >
-                <MenuIcon className="w-5 h-5 text-inherit" />
-              </MenuButton>
-              <Portal>
-                <MenuList>
-                  {!lesson.private && (
-                    <MenuItem onClick={handleMakeCopy}>
-                      <DuplicateIcon className="w-5 h-5 mr-4 text-inherit" />
-                      Make a copy
-                    </MenuItem>
-                  )}
-                  {handleEdit && (
-                    <MenuItem onClick={handleEdit}>
-                      <PencilAltIcon className="w-5 h-5 mr-4 text-inherit" />
-                      Edit lesson
-                    </MenuItem>
-                  )}
-                  {handleToggleFeatured && (
-                    <MenuItem
-                      onClick={() => {
-                        setFeatured(!featured)
-                        handleToggleFeatured()
-                      }}
-                    >
-                      {featured ? (
-                        <i className="mr-4 text-lg ri-lightbulb-flash-line text-inherit" />
-                      ) : (
-                        <i className="mr-4 text-lg ri-lightbulb-flash-fill text-inherit" />
-                      )}
-                      {featured ? 'Unfeature' : 'Feature'} lesson
-                    </MenuItem>
-                  )}
-                  {handleToggleTemplate && (
-                    <MenuItem
-                      onClick={() => {
-                        setIsTemplate(!isTemplate)
-                        handleToggleTemplate()
-                      }}
-                    >
-                      {isTemplate ? (
-                        <i className="mr-4 text-lg ri-t-box-line text-inherit" />
-                      ) : (
-                        <i className="mr-4 text-lg ri-t-box-fill text-inherit" />
-                      )}
-                      {isTemplate ? 'Unmark' : 'Mark'} lesson as template
-                    </MenuItem>
-                  )}
-                  {handleDelete && (
-                    <MenuItem onClick={onOpen}>
-                      <DocumentRemoveIcon className="w-5 h-5 mr-4 text-inherit" />
-                      Delete lesson
-                    </MenuItem>
-                  )}
-                </MenuList>
-              </Portal>
-            </Menu>
+          <div className="flex items-center">
+            <ButtonGroup isAttached>
+              {!lesson.private && (
+                <ShareLessonButton lesson={lesson} style="small" />
+              )}
+              {handlePresent && (
+                <Button
+                  onClick={handlePresent}
+                  aria-label="Present as slides"
+                  size="xs"
+                  variant="ghost"
+                  colorScheme="black"
+                >
+                  <Present />
+                </Button>
+              )}
+              {!lesson.private && (
+                <Button
+                  size="xs"
+                  variant="ghost"
+                  colorScheme="black"
+                  aria-label={isSaved ? 'Saved' : 'Save'}
+                  onClick={() => toggleSaveLesson()}
+                >
+                  <BookmarkIcon
+                    className="w-5 h-5 text-inherit"
+                    style={{ fill: isSaved ? black[900] : 'transparent' }}
+                  />
+                </Button>
+              )}
+              <Menu id="more-menu" isLazy>
+                <MenuButton
+                  as={Button}
+                  aria-label="Options"
+                  size="xs"
+                  variant="ghost"
+                  colorScheme="black"
+                >
+                  <MenuIcon className="w-5 h-5 text-inherit" />
+                </MenuButton>
+                <Portal>
+                  <MenuList>
+                    {!lesson.private && (
+                      <MenuItem onClick={handleMakeCopy}>
+                        <DuplicateIcon className="w-5 h-5 mr-4 text-inherit" />
+                        Make a copy
+                      </MenuItem>
+                    )}
+                    {handleEdit && (
+                      <MenuItem onClick={handleEdit}>
+                        <PencilAltIcon className="w-5 h-5 mr-4 text-inherit" />
+                        Edit lesson
+                      </MenuItem>
+                    )}
+                    {handleToggleFeatured && (
+                      <MenuItem
+                        onClick={() => {
+                          setFeatured(!featured)
+                          handleToggleFeatured()
+                        }}
+                      >
+                        {featured ? (
+                          <i className="mr-4 text-lg ri-lightbulb-flash-line text-inherit" />
+                        ) : (
+                          <i className="mr-4 text-lg ri-lightbulb-flash-fill text-inherit" />
+                        )}
+                        {featured ? 'Unfeature' : 'Feature'} lesson
+                      </MenuItem>
+                    )}
+                    {handleToggleTemplate && (
+                      <MenuItem
+                        onClick={() => {
+                          setIsTemplate(!isTemplate)
+                          handleToggleTemplate()
+                        }}
+                      >
+                        {isTemplate ? (
+                          <i className="mr-4 text-lg ri-t-box-line text-inherit" />
+                        ) : (
+                          <i className="mr-4 text-lg ri-t-box-fill text-inherit" />
+                        )}
+                        {isTemplate ? 'Unmark' : 'Mark'} lesson as template
+                      </MenuItem>
+                    )}
+                    {handleDelete && (
+                      <MenuItem onClick={onOpen}>
+                        <DocumentRemoveIcon className="w-5 h-5 mr-4 text-inherit" />
+                        Delete lesson
+                      </MenuItem>
+                    )}
+                  </MenuList>
+                </Portal>
+              </Menu>
+            </ButtonGroup>
           </div>
         </div>
       </div>

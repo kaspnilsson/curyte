@@ -69,7 +69,7 @@ const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
         variant={style === 'large' ? 'solid' : 'ghost'}
         onClick={onOpen}
         className="flex items-center gap-2"
-        size={style === 'large' ? 'lg' : 'sm'}
+        size={style === 'large' ? 'lg' : 'xs'}
       >
         <ShareIcon className="w-5 h-5" />
         {style === 'large' && 'Share'}
