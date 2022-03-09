@@ -4,14 +4,7 @@ import Layout from '../components/Layout'
 import LessonList from '../components/LessonList'
 import AuthorLink from '../components/AuthorLink'
 import TagList from '../components/TagList'
-import {
-  Heading,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-} from '@chakra-ui/react'
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import { searchRouteHrefPath } from '../utils/routes'
 import { Tag, Profile } from '@prisma/client'
 import { LessonWithProfile } from '../interfaces/lesson_with_profile'
@@ -74,12 +67,9 @@ const SearchView = ({ q }: Props) => {
           <div className="flex flex-col w-full gap-8 divide-y">
             {activeTab !== 0 && (
               <div className="pt-8">
-                <Heading
-                  className="mb-2 font-bold leading-tight tracking-tighter break-all line-clamp-1"
-                  size="sm"
-                >
+                <span className="mb-2 text-lg font-bold leading-tight tracking-tighter break-all line-clamp-1">
                   Lessons matching {q}
-                </Heading>
+                </span>
                 {!lessons.length && (
                   <div className="flex flex-col items-start gap-2 text-zinc-500">
                     Nothing here yet!
@@ -90,12 +80,9 @@ const SearchView = ({ q }: Props) => {
             )}
             {activeTab !== 1 && (
               <div className="pt-8">
-                <Heading
-                  className="mb-6 font-bold leading-tight tracking-tighter break-all line-clamp-1"
-                  size="sm"
-                >
+                <span className="mb-6 text-lg font-bold leading-tight tracking-tighter break-all line-clamp-1">
                   People matching {q}
-                </Heading>
+                </span>
                 <div className="flex flex-col gap-4">
                   {!profiles.length && (
                     <div className="text-sm text-zinc-500">
@@ -109,12 +96,9 @@ const SearchView = ({ q }: Props) => {
             )}
             {activeTab !== 2 && (
               <div className="pt-8">
-                <Heading
-                  className="mb-2 font-bold leading-tight tracking-tighter break-all line-clamp-1"
-                  size="sm"
-                >
+                <span className="mb-2 text-lg font-bold leading-tight tracking-tighter break-all line-clamp-1">
                   Paths matching {q}
-                </Heading>
+                </span>
                 {!paths.length && (
                   <div className="text-sm text-zinc-500">Nothing here yet!</div>
                 )}
@@ -134,12 +118,9 @@ const SearchView = ({ q }: Props) => {
             )}
             {activeTab !== 3 && (
               <div className="pt-8">
-                <Heading
-                  className="mb-2 font-bold leading-tight tracking-tighter break-all line-clamp-1"
-                  size="sm"
-                >
+                <span className="mb-2 text-lg font-bold leading-tight tracking-tighter break-all line-clamp-1">
                   Topics matching {q}
-                </Heading>
+                </span>
                 {!!tags?.length && <TagList tags={tags} />}
                 {!tags?.length && (
                   <div className="text-sm text-zinc-500">Nothing here yet!</div>

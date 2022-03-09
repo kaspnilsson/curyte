@@ -1,9 +1,9 @@
-import { Heading, Spinner } from '@chakra-ui/react'
+import { Spinner } from '@chakra-ui/react'
 import { JSONContent } from '@tiptap/core'
 import { useState, useEffect } from 'react'
+import { useUser } from '../contexts/user'
 import { NotesWithProfile } from '../interfaces/notes_with_profile'
 import { queryNotesForLesson } from '../lib/apiHelpers'
-import supabase from '../supabase/client'
 import AuthorLink from './AuthorLink'
 import DateFormatter from './DateFormatter'
 import NotesRenderer from './NotesRenderer'
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const NotesList = ({ lessonId }: Props) => {
-  const user = supabase.auth.user()
+  const { userAndProfile } = useUser()
   const [notes, setNotes] = useState<NotesWithProfile[]>([])
   const [loading, setLoading] = useState(false)
 
@@ -27,7 +27,7 @@ const NotesList = ({ lessonId }: Props) => {
     fetchNotes()
   }, [lessonId])
 
-  if (!user) return null
+  if (!userAndProfile?.user) return null
   if (loading) {
     return (
       <div className="flex items-center justify-center w-full h-32">
@@ -36,10 +36,10 @@ const NotesList = ({ lessonId }: Props) => {
     )
   }
   return (
-    <div className="flex flex-col w-full">
-      <Heading className="font-bold leading-tight tracking-tighter" size="md">
+    <div className="flex flex-col w-full pb-8 my-8">
+      <span className="text-2xl font-bold leading-tight tracking-tighter">
         Student notebooks
-      </Heading>
+      </span>
       {!notes?.length && (
         <div className="mt-2 text-zinc-500">Nothing here yet!</div>
       )}

@@ -5,7 +5,6 @@ import {
   AlertDialogContent,
   AlertDialogHeader,
   AlertDialogOverlay,
-  Heading,
   Input,
 } from '@chakra-ui/react'
 import React, { useRef, useState } from 'react'
@@ -114,9 +113,9 @@ const FileUploadDialog = ({
                 value={url}
                 onChange={(e) => handleUrlChange(e.target.value)}
               />
-              <Heading fontSize="lg" className="my-4">
+              <div className="my-4 text-lg font-bold leading-tight tracking-tighter">
                 OR
-              </Heading>
+              </div>
               <div
                 {...getRootProps({
                   className:

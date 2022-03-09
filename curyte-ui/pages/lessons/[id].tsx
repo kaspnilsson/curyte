@@ -21,7 +21,6 @@ import useCuryteEditor from '../../hooks/useCuryteEditor'
 import LessonOutline from '../../components/LessonOutline'
 import { userIsAdmin } from '../../utils/hacks'
 import { useToast } from '@chakra-ui/react'
-import supabase from '../../supabase/client'
 import { Profile } from '@prisma/client'
 import prismaClient from '../../lib/prisma'
 import { JSONContent } from '@tiptap/core'
@@ -29,6 +28,8 @@ import { deleteLesson, getLesson, updateLesson } from '../../lib/apiHelpers'
 import { LessonWithProfile } from '../../interfaces/lesson_with_profile'
 import NotesEditor from '../../components/NotesEditor'
 import NotesList from '../../components/NotesList'
+import NotebookDrawerButton from '../../components/NotebookDrawerButton'
+import { useUser } from '../../contexts/user'
 
 interface Props {
   lesson: LessonWithProfile | null
@@ -40,7 +41,8 @@ const PublishedLessonView = (props: Props) => {
   const [lesson, setLesson] = useState(props.lesson)
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const user = supabase.auth.user()
+  const { userAndProfile } = useUser()
+  const user = userAndProfile?.user
   const toast = useToast()
   // Log views only on render of a published lesson
   useEffect(() => {
@@ -110,7 +112,11 @@ const PublishedLessonView = (props: Props) => {
           rightContent={
             <>
               <LessonOutline editor={editor} />
-              {user && <NotesEditor lessonId={lesson.uid} />}
+              {user && (
+                <div className="hidden md:flex">
+                  <NotesEditor lessonId={lesson.uid} />
+                </div>
+              )}
             </>
           }
           breadcrumbs={[
@@ -125,6 +131,7 @@ const PublishedLessonView = (props: Props) => {
               as: lessonRoute(lesson.uid),
             },
           ]}
+          rightContentWrapBehavior="reverse"
         >
           <NextSeo
             title={lesson.title || ''}
@@ -157,7 +164,14 @@ const PublishedLessonView = (props: Props) => {
               handlePresent={() => router.push(presentLessonRoute(lesson.uid))}
             />
             <FancyEditor readOnly editor={editor} />
-            {user && <NotesList lessonId={lesson.uid} />}
+            {user && (user.id === lesson.authorId || userIsAdmin(user.id)) && (
+              <NotesList lessonId={lesson.uid} />
+            )}
+            {user && (
+              <div className="fixed md:hidden bottom-4 right-4">
+                <NotebookDrawerButton lessonId={lesson.uid} />
+              </div>
+            )}
           </article>
         </Layout>
       )}

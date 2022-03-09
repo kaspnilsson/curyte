@@ -3,7 +3,6 @@ import { GetServerSideProps } from 'next'
 import Layout from '../../components/Layout'
 import LessonList from '../../components/LessonList'
 import TagList from '../../components/TagList'
-import { Heading } from '@chakra-ui/react'
 import { exploreRoute, tagRoute, tagRouteHrefPath } from '../../utils/routes'
 import { Tag, Lesson } from '@prisma/client'
 import prismaClient from '../../lib/prisma'
@@ -46,12 +45,9 @@ const TagView = ({ lessons, tag, tagText, relatedTags }: Props) => {
         ]}
         rightContent={
           <div className="w-full">
-            <Heading
-              className="mb-2 font-bold leading-tight tracking-tighter"
-              size="md"
-            >
+            <div className="mb-2 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
               Related topics
-            </Heading>
+            </div>
             {!!relatedTags?.length && <TagList tags={relatedTags} />}
             {!relatedTags?.length && (
               <div className="text-sm text-zinc-500">Nothing here yet!</div>

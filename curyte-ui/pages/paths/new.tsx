@@ -3,13 +3,14 @@ import { useRouter } from 'next/router'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { loginRoute, editPathRoute } from '../../utils/routes'
 
-import supabase from '../../supabase/client'
 import { Path } from '@prisma/client'
 import { createPath } from '../../lib/apiHelpers'
+import { useUser } from '../../contexts/user'
 
 const NewPathView = () => {
   const router = useRouter()
-  const user = supabase.auth.user()
+  const { userAndProfile } = useUser()
+  const user = userAndProfile?.user
 
   useEffect(() => {
     if (!user) {

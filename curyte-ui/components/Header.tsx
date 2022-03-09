@@ -49,11 +49,6 @@ const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
   return (
     <>
       <Head>
-        {/* Material Icons Link */}
-        <link
-          href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          rel="stylesheet"
-        />
         <link
           rel="icon"
           href="/static/curyte_logo_black.svg"

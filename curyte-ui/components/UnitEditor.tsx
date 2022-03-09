@@ -3,7 +3,6 @@ import {
   Button,
   IconButton,
   Tooltip,
-  Heading,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
@@ -122,7 +121,7 @@ const UnitEditor = ({
   return (
     <>
       <div className="flex w-full gap-2 py-2 border-b-2">
-        <Heading className="flex flex-1 flex-grow gap-2 font-semibold leading-tight tracking-tighter">
+        <span className="flex flex-1 flex-grow gap-2 text-4xl font-semibold leading-tight tracking-tighter">
           <span>{unitNumber}.</span>
           <TextareaAutosize
             value={title}
@@ -130,7 +129,7 @@ const UnitEditor = ({
             placeholder="Add a unit title..."
             className="flex-1 flex-grow font-semibold leading-tight tracking-tighter bg-transparent border-0 resize-none text-inherit"
           />
-        </Heading>
+        </span>
         <div className="flex items-center gap-2">
           <Tooltip label="Remove unit">
             <IconButton

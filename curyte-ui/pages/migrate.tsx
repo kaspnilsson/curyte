@@ -2,6 +2,7 @@ import { Profile, Tag } from '@prisma/client'
 import ErrorPage from 'next/error'
 import { useEffect, useState } from 'react'
 import LoadingSpinner from '../components/LoadingSpinner'
+import { useUser } from '../contexts/user'
 import { getAuthors, getLessons, getPaths, getTags } from '../firebase/api'
 import supabase from '../supabase/client'
 import { uuid } from '../utils/uuid'
@@ -10,7 +11,8 @@ import { uuid } from '../utils/uuid'
  * ThE BIGGEST HACK EVER
  */
 const Migrate = () => {
-  const user = supabase.auth.user()
+  const { userAndProfile } = useUser()
+  const user = userAndProfile?.user
 
   const [migrating, setMigrating] = useState(true)
 

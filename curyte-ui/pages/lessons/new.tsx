@@ -3,13 +3,14 @@ import { useRouter } from 'next/router'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { editLessonRoute, loginRoute } from '../../utils/routes'
 
-import supabase from '../../supabase/client'
 import { Lesson } from '@prisma/client'
 import { getLesson, createLesson } from '../../lib/apiHelpers'
+import { useUser } from '../../contexts/user'
 
 const NewLessonView = () => {
   const router = useRouter()
-  const user = supabase.auth.user()
+  const { userAndProfile } = useUser()
+  const user = userAndProfile?.user
 
   useEffect(() => {
     if (!user) {
