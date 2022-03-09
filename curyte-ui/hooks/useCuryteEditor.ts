@@ -32,6 +32,7 @@ import CuryteImage from '../components/extensions/Image/CuryteImage'
 import Heading from '@tiptap/extension-heading'
 import { useToast } from '@chakra-ui/react'
 import { TrailingNode } from '../components/extensions/TrailingNode'
+import { DragHandle } from '../components/extensions/DragHandle'
 
 interface EditorProps {
   content: JSONContent | null
@@ -104,6 +105,7 @@ const useCuryteEditor = (
   if (fancy) {
     extensions.push(
       ...[
+        DragHandle,
         Details,
         Focus.configure({
           mode: 'deepest',
