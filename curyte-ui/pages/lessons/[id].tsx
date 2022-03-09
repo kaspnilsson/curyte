@@ -30,6 +30,7 @@ import NotesEditor from '../../components/NotesEditor'
 import NotesList from '../../components/NotesList'
 import NotebookDrawerButton from '../../components/NotebookDrawerButton'
 import { useUser } from '../../contexts/user'
+import ShareLessonButton from '../../components/ShareLessonButton'
 
 interface Props {
   lesson: LessonWithProfile | null
@@ -143,6 +144,11 @@ const PublishedLessonView = (props: Props) => {
               images: openGraphImages,
               site_name: 'Curyte',
             }}
+            twitter={{
+              cardType: 'summary_large_image',
+              site: 'http://curyte.com',
+              handle: '@curyte',
+            }}
           ></NextSeo>
           <article>
             <LessonHeader
@@ -164,6 +170,9 @@ const PublishedLessonView = (props: Props) => {
               handlePresent={() => router.push(presentLessonRoute(lesson.uid))}
             />
             <FancyEditor readOnly editor={editor} />
+            <div className="flex items-center justify-center w-full h-32 gap-8">
+              <ShareLessonButton lesson={lesson} />
+            </div>
             {user && (user.id === lesson.authorId || userIsAdmin(user.id)) && (
               <NotesList lessonId={lesson.uid} />
             )}

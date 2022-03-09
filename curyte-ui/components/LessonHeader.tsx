@@ -4,7 +4,7 @@ import DateFormatter from './DateFormatter'
 import LessonTitle from './LessonTitle'
 import LessonLink from './LessonLink'
 import {
-  IconButton,
+  Button,
   Badge,
   Center,
   Divider,
@@ -12,7 +12,6 @@ import {
   MenuList,
   MenuItem,
   MenuButton,
-  Button,
   Portal,
 } from '@chakra-ui/react'
 import {
@@ -34,6 +33,7 @@ import { Lesson } from '@prisma/client'
 import { getLesson } from '../lib/apiHelpers'
 import { LessonWithProfile } from '../interfaces/lesson_with_profile'
 import { useUser } from '../contexts/user'
+import ShareLessonButton from './ShareLessonButton'
 
 type Props = {
   lesson: LessonWithProfile
@@ -158,7 +158,7 @@ const LessonHeader = ({
               Private
             </Badge>
           )}
-          <div className="flex items-center mr-4">
+          <div className="flex items-center">
             <div className="items-center hidden lg:flex">
               {lesson.updated && (
                 <>
@@ -176,19 +176,24 @@ const LessonHeader = ({
             <span className="text-sm">{`${lesson.viewCount || 0} views`}</span>
           </div>
           <div className="flex items-center gap-1">
+            {!lesson.private && (
+              <ShareLessonButton lesson={lesson} style="small" />
+            )}
             {handlePresent && (
-              <IconButton
-                borderRadius="full"
-                size="sm"
+              <Button
                 onClick={handlePresent}
                 aria-label="Present as slides"
+                size="sm"
+                variant="ghost"
+                colorScheme="black"
               >
                 <Present />
-              </IconButton>
+              </Button>
             )}
             {handlePublish && (
               <Button
                 size="sm"
+                variant="ghost"
                 colorScheme="black"
                 className="flex items-center justify-between mr-2 font-semibold"
                 onClick={handlePublish}
@@ -198,9 +203,10 @@ const LessonHeader = ({
               </Button>
             )}
             {!lesson.private && (
-              <IconButton
-                borderRadius="full"
+              <Button
                 size="sm"
+                variant="ghost"
+                colorScheme="black"
                 aria-label={isSaved ? 'Saved' : 'Save'}
                 onClick={() => toggleSaveLesson()}
               >
@@ -208,16 +214,18 @@ const LessonHeader = ({
                   className="w-5 h-5 text-inherit"
                   style={{ fill: isSaved ? black[900] : 'transparent' }}
                 />
-              </IconButton>
+              </Button>
             )}
             <Menu id="more-menu" isLazy>
               <MenuButton
-                borderRadius="full"
-                size="sm"
-                as={IconButton}
+                as={Button}
                 aria-label="Options"
-                icon={<MenuIcon className="w-5 h-5 text-inherit" />}
-              />
+                size="sm"
+                variant="ghost"
+                colorScheme="black"
+              >
+                <MenuIcon className="w-5 h-5 text-inherit" />
+              </MenuButton>
               <Portal>
                 <MenuList>
                   {!lesson.private && (
