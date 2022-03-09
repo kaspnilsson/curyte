@@ -36,79 +36,83 @@ import { TrailingNode } from '../components/extensions/TrailingNode'
 interface EditorProps {
   content: JSONContent | null
   onUpdate?: (json: JSONContent) => void
+  fancy?: boolean
 }
 
 const useCuryteEditor = (
-  { content, onUpdate }: EditorProps,
+  { content, onUpdate, fancy = true }: EditorProps,
   deps: DependencyList = []
 ) => {
   const toast = useToast()
-  return useEditor(
-    {
-      extensions: [
-        Highlight,
+
+  const extensions = [
+    Highlight,
+    Typography,
+    Link,
+    Superscript,
+    Subscript,
+    Table,
+    TableCell,
+    TableHeader,
+    TableRow,
+    Color,
+    Underline,
+    StarterKit.configure({
+      dropcursor: {
+        color: zinc[500],
+      },
+      heading: false,
+    }),
+    Heading.extend({
+      // Force headings to be one level lower, as we only offer three and
+      renderHTML({ node, HTMLAttributes }) {
+        const hasLevel = this.options.levels.includes(node.attrs.level)
+        const level = hasLevel ? node.attrs.level : this.options.levels[0]
+
+        return [
+          `h${level + 1}`,
+          mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
+          0,
+        ]
+      },
+    }).configure({ levels: [1, 2, 3] }),
+    CuryteImage(
+      (image: File) =>
+        new Promise((resolve, reject) => {
+          uploadFile(
+            image,
+            (progress: number) => {
+              console.log('progress: ', progress)
+            },
+            (url: string) => {
+              toast({ title: 'Image uploaded!', status: 'success' })
+              resolve(url)
+            },
+            reject,
+            true
+          )
+        })
+    ),
+    TaskList,
+    AutoId,
+    TaskItem.configure({
+      nested: true,
+    }),
+    TrailingNode,
+  ]
+
+  if (fancy) {
+    extensions.push(
+      ...[
         Details,
-        DetailsContent,
-        Typography,
-        Link,
-        Superscript,
-        Subscript,
-        Table,
-        TableCell,
-        TableHeader,
-        TableRow,
-        IFrameEmbed,
-        YoutubeEmbed,
-        Color,
         Focus.configure({
           mode: 'deepest',
         }),
-        Underline,
+        DetailsContent,
+        IFrameEmbed,
+        YoutubeEmbed,
         CuryteLink,
         VimeoEmbed,
-        StarterKit.configure({
-          dropcursor: {
-            color: zinc[500],
-          },
-          heading: false,
-        }),
-        Heading.extend({
-          // Force headings to be one level lower, as we only offer three and
-          renderHTML({ node, HTMLAttributes }) {
-            const hasLevel = this.options.levels.includes(node.attrs.level)
-            const level = hasLevel ? node.attrs.level : this.options.levels[0]
-
-            return [
-              `h${level + 1}`,
-              mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
-              0,
-            ]
-          },
-        }).configure({ levels: [1, 2, 3] }),
-        GoogleDriveEmbed,
-        CuryteImage(
-          (image: File) =>
-            new Promise((resolve, reject) => {
-              uploadFile(
-                image,
-                (progress: number) => {
-                  console.log('progress: ', progress)
-                },
-                (url: string) => {
-                  toast({ title: 'Image uploaded!', status: 'success' })
-                  resolve(url)
-                },
-                reject,
-                true
-              )
-            })
-        ),
-        TaskList,
-        AutoId,
-        TaskItem.configure({
-          nested: true,
-        }),
-        TrailingNode,
         Placeholder.configure({
           showOnlyWhenEditable: true,
           placeholder: ({ editor, node, pos }) => {
@@ -134,7 +138,23 @@ const useCuryteEditor = (
           includeChildren: true,
         }),
         MultipleChoice,
-      ],
+        GoogleDriveEmbed,
+      ]
+    )
+  } else {
+    extensions.push(
+      ...[
+        Placeholder.configure({
+          showOnlyWhenEditable: true,
+          placeholder: 'Add notes',
+        }),
+      ]
+    )
+  }
+
+  return useEditor(
+    {
+      extensions,
       content,
       editable: !!onUpdate,
       onUpdate: ({ editor }) => {
