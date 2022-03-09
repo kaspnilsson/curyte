@@ -10,6 +10,7 @@ import InsertMenuItems from './menuItems/InsertMenuItems'
 import InputDialog, { InputDialogProps } from './InputDialog'
 import { Heading, MenuDivider } from '@chakra-ui/react'
 import classNames from 'classnames'
+import FancyEditorMenuFooter from './FancyEditorMenuFooter'
 
 interface Props {
   editor: Editor | null
@@ -47,6 +48,7 @@ const FancyEditor = ({
           spellCheck
           editor={editor}
         />
+        {!readOnly && <FancyEditorMenuFooter editor={editor} />}
         {editor && (
           <>
             {!readOnly && (

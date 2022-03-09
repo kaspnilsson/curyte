@@ -71,14 +71,14 @@ const NextStepsView = () => {
           </Link>
         </Container>
         <Container className="flex flex-col items-center justify-center flex-1 my-16">
-          <section className="flex flex-row w-72">
+          <section className="flex flex-row w-72 md:w-96">
             <div className="flex flex-col items-center justify-center w-full gap-4">
               <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl">
                 Add your info
               </h1>
             </div>
           </section>
-          <section className="flex items-center mt-8 w-72">
+          <section className="flex items-center mt-8 w-72 md:w-96">
             <chakra.form
               className="flex flex-col w-full gap-4"
               onSubmit={onSubmit}

@@ -13,7 +13,6 @@ import MenuIconButton from './MenuIconButton'
 import InsertMenuItems from './menuItems/InsertMenuItems'
 import InputDialog, { InputDialogProps } from './InputDialog'
 import StyleMenuButton from './StyleMenuButton'
-import TemplatesMenu from './TemplatesMenu'
 
 interface Props {
   editor: Editor | null
@@ -108,11 +107,11 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
           className="opacity-100 border-zinc-200"
         />
       </Center>
-      <MenuIconButton
+      {/* <MenuIconButton
         label="Add a line"
         onClick={() => editor.chain().focus().setHorizontalRule().run()}
         icon={<i className="text-lg ri-separator" />}
-      />
+      /> */}
       <Menu id="insert-menu" isLazy boundary="scrollParent" colorScheme="zinc">
         <MenuButton size="sm" variant="ghost" colorScheme="zinc" as={Button}>
           <div className="flex items-center gap-1 text-sm text-zinc-900">
@@ -126,7 +125,6 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
           </MenuList>
         </Portal>
       </Menu>
-      <TemplatesMenu editor={editor}></TemplatesMenu>
     </div>
   )
 }
