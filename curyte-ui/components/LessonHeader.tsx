@@ -77,6 +77,7 @@ const LessonHeader = ({
     const fetchIsSaved = async () => {
       // setIsSaved(await getCurrentUserHasSavedLesson(lesson.uid))
       // TODO(kaspnilsson)
+
       setIsSaved(false)
     }
     Promise.all([fetchParent(), fetchIsSaved()]).then(() => {
