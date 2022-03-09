@@ -26,13 +26,21 @@ const InsertMenuItems = ({
   const { getImageSrc } = useImageUploadDialog()
   const { getFileSrc } = useFileUploadDialog()
 
+  const maybeFocusAndAppendToEnd = () => {
+    if (forceInsertAtEnd) {
+      editor
+        .chain()
+        .focus('end', { scrollIntoView: true })
+        .insertContent({ type: 'paragraph' })
+        .run()
+    }
+  }
+
   return (
     <>
       <MenuItem
         onClick={() => {
-          if (forceInsertAtEnd) {
-            editor.commands.focus('end', { scrollIntoView: true })
-          }
+          maybeFocusAndAppendToEnd()
           editor.chain().insertContent(initialLessonContent).run()
         }}
         icon={<i className="ri-2x ri-input-method-line" />}
@@ -47,16 +55,12 @@ const InsertMenuItems = ({
             description: 'Paste a link from either Youtube or Vimeo.',
             onConfirm: (src: string) => {
               if (youtubeUrlMatchRegex.test(src)) {
-                if (forceInsertAtEnd) {
-                  editor.commands.focus('end', { scrollIntoView: true })
-                }
+                maybeFocusAndAppendToEnd()
                 editor.commands.setYoutubeVideo({
                   src,
                 })
               } else {
-                if (forceInsertAtEnd) {
-                  editor.commands.focus('end', { scrollIntoView: true })
-                }
+                maybeFocusAndAppendToEnd()
                 // It's vimeo
                 editor.commands.setVimeoVideo({
                   src,
@@ -93,9 +97,7 @@ const InsertMenuItems = ({
               </span>
             ),
             onConfirm: (src: string) => {
-              if (forceInsertAtEnd) {
-                editor.commands.focus('end', { scrollIntoView: true })
-              }
+              maybeFocusAndAppendToEnd()
               editor
                 .chain()
                 .focus()
@@ -125,9 +127,7 @@ const InsertMenuItems = ({
             title: 'Upload an image',
           })
           if (src) {
-            if (forceInsertAtEnd) {
-              editor.commands.focus('end', { scrollIntoView: true })
-            }
+            maybeFocusAndAppendToEnd()
             editor.chain().focus().setImage({ src }).run()
           }
         }}
@@ -141,9 +141,7 @@ const InsertMenuItems = ({
             title: 'Upload a PDF',
           })
           if (src) {
-            if (forceInsertAtEnd) {
-              editor.commands.focus('end', { scrollIntoView: true })
-            }
+            maybeFocusAndAppendToEnd()
             editor.chain().focus().setIFrame({ src }).run()
           }
         }}
@@ -158,9 +156,7 @@ const InsertMenuItems = ({
             title: 'Enter a URL',
             description: 'Enter the URL for another website.',
             onConfirm: (src: string) => {
-              if (forceInsertAtEnd) {
-                editor.commands.focus('end', { scrollIntoView: true })
-              }
+              maybeFocusAndAppendToEnd()
               editor.chain().focus().setIFrame({ src }).run()
             },
           })
@@ -171,9 +167,7 @@ const InsertMenuItems = ({
       />
       <MenuItem
         onClick={() => {
-          if (forceInsertAtEnd) {
-            editor.commands.focus('end', { scrollIntoView: true })
-          }
+          maybeFocusAndAppendToEnd()
           editor.chain().focus().toggleCodeBlock().run()
         }}
         icon={<i className="ri-2x ri-code-box-line" />}
@@ -182,9 +176,7 @@ const InsertMenuItems = ({
       />
       <MenuItem
         onClick={() => {
-          if (forceInsertAtEnd) {
-            editor.commands.focus('end', { scrollIntoView: true })
-          }
+          maybeFocusAndAppendToEnd()
           editor.commands.addMultipleChoice()
         }}
         icon={<i className="ri-2x ri-survey-line" />}
@@ -193,9 +185,7 @@ const InsertMenuItems = ({
       />
       <MenuItem
         onClick={() => {
-          if (forceInsertAtEnd) {
-            editor.commands.focus('end', { scrollIntoView: true })
-          }
+          maybeFocusAndAppendToEnd()
           editor.commands.toggleDetails()
         }}
         icon={<i className="ri-2x ri-split-cells-vertical" />}
@@ -204,9 +194,7 @@ const InsertMenuItems = ({
       />
       <MenuItem
         onClick={() => {
-          if (forceInsertAtEnd) {
-            editor.commands.focus('end', { scrollIntoView: true })
-          }
+          maybeFocusAndAppendToEnd()
           editor
             .chain()
             .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
@@ -223,9 +211,7 @@ const InsertMenuItems = ({
             title: 'Enter a lesson URL',
             description: 'Enter the URL for a Curyte lesson.',
             onConfirm: (src: string) => {
-              if (forceInsertAtEnd) {
-                editor.commands.focus('end', { scrollIntoView: true })
-              }
+              maybeFocusAndAppendToEnd()
               editor.commands.setCuryteLink({ src })
             },
             initialValue: '',
