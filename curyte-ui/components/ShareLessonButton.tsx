@@ -15,6 +15,7 @@ import { getLessonLinkExternal } from '../utils/routes'
 import LessonPreview from './LessonPreview'
 
 import copyToCliboard from '../utils/copy-to-clipboard'
+import classNames from 'classnames'
 
 interface Props {
   lesson?: LessonWithProfile
@@ -61,38 +62,40 @@ const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
     copyToCliboard(getLessonLinkExternal(lesson.uid))
     toast({ title: 'Copied URL to clipboard.' })
   }
+  const isLarge = style === 'large'
   if (!lesson) return null
   return (
     <>
       <Button
         colorScheme="black"
-        variant={style === 'large' ? 'solid' : 'ghost'}
+        variant={isLarge ? 'solid' : 'ghost'}
         onClick={onOpen}
-        className="flex items-center gap-2"
-        size={style === 'large' ? 'lg' : 'xs'}
+        className={classNames('flex items-center gap-2', {
+          'shadow-2xl shadow-violet-500/50': isLarge,
+        })}
+        size={isLarge ? 'lg' : 'xs'}
       >
         <ShareIcon className="w-5 h-5" />
-        {style === 'large' && 'Share'}
+        {isLarge && 'Share'}
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose} size="2xl">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>
+          <ModalHeader className="!pb-0">
             <div className="text-2xl font-bold leading-tight tracking-tighter">
               Share this lesson
             </div>
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody className="!pt-0">
             <LessonPreview lesson={lesson} />
-            <div className="flex items-center justify-between gap-8 my-4">
-              <Button className="flex items-center gap-2" onClick={onCopy}>
-                <LinkIcon className="w-5 h-5" />
-                Copy link
-              </Button>
+            <div className="grid items-center grid-cols-4 gap-4 my-4 justify-evenly">
               <a href={makeTwitterUrl(lesson)} target="_blank" rel="noreferrer">
-                <Button className="flex items-center gap-2">
+                <Button
+                  colorScheme="black"
+                  className="flex !w-full items-center gap-2 shadow-2xl shadow-violet-500/50"
+                >
                   <i className="text-xl ri-twitter-line" />
                   Twitter
                 </Button>
@@ -102,17 +105,31 @@ const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
                 target="_blank"
                 rel="noreferrer"
               >
-                <Button className="flex items-center gap-2">
+                <Button
+                  colorScheme="black"
+                  className="flex !w-full items-center gap-2 shadow-2xl shadow-violet-500/50"
+                >
                   <i className="text-xl ri-facebook-circle-line" />
                   Facebook
                 </Button>
               </a>
               <a href={makeMailtoUrl(lesson)} target="_blank" rel="noreferrer">
-                <Button className="flex items-center gap-2">
+                <Button
+                  colorScheme="black"
+                  className="flex !w-full items-center gap-2 shadow-2xl shadow-violet-500/50"
+                >
                   <MailIcon className="w-5 h-5" />
                   Email
                 </Button>
               </a>
+              <Button
+                colorScheme="black"
+                className="flex !w-full items-center gap-2 shadow-2xl shadow-violet-500/50"
+                onClick={onCopy}
+              >
+                <LinkIcon className="w-5 h-5" />
+                Copy link
+              </Button>
             </div>
           </ModalBody>
         </ModalContent>
