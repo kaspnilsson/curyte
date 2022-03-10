@@ -56,7 +56,7 @@ const NotesEditor = ({ lessonId }: Props) => {
   if (!user) return null
   return (
     <div className="flex-col w-full pt-2 mt-8">
-      <div className="flex items-center gap-3 p-3 rounded-t-xl bg-zinc-100">
+      <div className="flex items-center gap-3 p-3 shadow-lg rounded-t-xl bg-zinc-100">
         <Tooltip label="Notebook entries will be visible to the creator of the lesson.">
           <div className="flex items-center gap-1">
             <span className="text-sm font-bold uppercase text-zinc-700">
@@ -67,7 +67,7 @@ const NotesEditor = ({ lessonId }: Props) => {
         </Tooltip>
         {loading && <Spinner size="xs" />}
       </div>
-      <div className="p-3 rounded-b-xl bg-zinc-50">
+      <div className="p-3 shadow-lg rounded-b-xl bg-zinc-50">
         {/* <span className="text-xs text-zinc-500">
         Anything written here will be visible to the author of this lesson.
       </span> */}

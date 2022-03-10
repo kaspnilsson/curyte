@@ -44,13 +44,13 @@ const NotesList = ({ lessonId }: Props) => {
       <div className="flex flex-wrap gap-4">
         {notes.map((n, index) => (
           <div key={index} className="w-80">
-            <div className="flex items-center justify-between p-4 rounded-t-xl bg-zinc-100">
+            <div className="flex items-center justify-between p-4 shadow-lg rounded-t-xl bg-zinc-100">
               <AuthorLink author={n.profiles} />
               <div className="text-sm text-zinc-700">
                 <DateFormatter date={n.updated} />
               </div>
             </div>
-            <div className="p-4 rounded-b-xl bg-zinc-50">
+            <div className="p-4 shadow-lg rounded-b-xl bg-zinc-50">
               <NotesRenderer
                 content={n.content ? (n.content as JSONContent) : null}
               />
