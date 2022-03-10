@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { JSONContent } from '@tiptap/react'
 
-import { useDebounceCallback } from '@react-hook/debounce'
 import useCuryteEditor from '../hooks/useCuryteEditor'
 import { Notes } from '@prisma/client'
 import SimpleEditor from './SimpleEditor'
@@ -9,6 +8,7 @@ import { Spinner, Tooltip } from '@chakra-ui/react'
 import { getNotes, updateNotes } from '../lib/apiHelpers'
 import { InformationCircleIcon } from '@heroicons/react/outline'
 import { useUser } from '../contexts/user'
+import { debounce } from 'ts-debounce'
 
 interface Props {
   lessonId: string
@@ -33,15 +33,16 @@ const NotesEditor = ({ lessonId }: Props) => {
     fetchNotes()
   }, [lessonId])
 
-  const handleUpdate = async (content: JSONContent) => {
-    setLoading(true)
-    await updateNotes(lessonId, content)
-    setLoading(false)
-  }
-
-  const handleContentUpdate = useDebounceCallback((json: JSONContent) => {
-    handleUpdate(json)
-  }, 100)
+  const handleContentUpdate = useMemo(() => {
+    const handleUpdate = async (content: JSONContent) => {
+      setLoading(true)
+      await updateNotes(lessonId, content)
+      setLoading(false)
+    }
+    return debounce((json: JSONContent) => {
+      handleUpdate(json)
+    }, 100)
+  }, [lessonId])
 
   const editor = useCuryteEditor(
     {
@@ -54,8 +55,8 @@ const NotesEditor = ({ lessonId }: Props) => {
 
   if (!user) return null
   return (
-    <div className="flex-col w-full mt-8">
-      <div className="flex items-center gap-3">
+    <div className="flex-col w-full pt-2 mt-8">
+      <div className="flex items-center gap-3 p-3 shadow-lg rounded-t-xl bg-zinc-100">
         <Tooltip label="Notebook entries will be visible to the creator of the lesson.">
           <div className="flex items-center gap-1">
             <span className="text-sm font-bold uppercase text-zinc-700">
@@ -66,10 +67,12 @@ const NotesEditor = ({ lessonId }: Props) => {
         </Tooltip>
         {loading && <Spinner size="xs" />}
       </div>
-      {/* <span className="text-xs text-zinc-500">
+      <div className="p-3 shadow-lg rounded-b-xl bg-zinc-50">
+        {/* <span className="text-xs text-zinc-500">
         Anything written here will be visible to the author of this lesson.
       </span> */}
-      {editor && <SimpleEditor editor={editor} />}
+        {editor && <SimpleEditor editor={editor} />}
+      </div>
     </div>
   )
 }
