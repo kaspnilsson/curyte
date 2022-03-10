@@ -37,24 +37,24 @@ const NotesList = ({ lessonId }: Props) => {
   }
   return (
     <div className="flex flex-col w-full pb-8 my-8">
-      <span className="text-2xl font-bold leading-tight tracking-tighter">
+      <div className="mb-4 text-2xl font-bold leading-tight tracking-tighter">
         Student notebooks
-      </span>
-      {!notes?.length && (
-        <div className="mt-2 text-zinc-500">Nothing here yet!</div>
-      )}
-      <div className="flex flex-col gap-4 divide-y">
+      </div>
+      {!notes?.length && <div className="text-zinc-500">Nothing here yet!</div>}
+      <div className="flex flex-wrap gap-4">
         {notes.map((n, index) => (
-          <div key={index} className="w-full pt-8">
-            <div className="flex items-center justify-between mb-4">
+          <div key={index} className="w-80">
+            <div className="flex items-center justify-between p-4 shadow-lg rounded-t-xl bg-zinc-100">
               <AuthorLink author={n.profiles} />
               <div className="text-sm text-zinc-700">
                 <DateFormatter date={n.updated} />
               </div>
             </div>
-            <NotesRenderer
-              content={n.content ? (n.content as JSONContent) : null}
-            />
+            <div className="p-4 shadow-lg rounded-b-xl bg-zinc-50">
+              <NotesRenderer
+                content={n.content ? (n.content as JSONContent) : null}
+              />
+            </div>
           </div>
         ))}
       </div>
