@@ -123,22 +123,24 @@ const AppMenu = ({ withLabel = true }: AppMenuProps) => {
   return (
     <div className="flex flex-col h-full gap-2">
       <Tooltip label="Home" hasArrow placement="right">
-        <Link href={exploreRoute} passHref>
-          <Button
-            variant="ghost"
-            className={classNames('flex items-center gap-2 mb-4', {
-              '!justify-start': withLabel,
-              'justify-center': !withLabel,
-            })}
-          >
-            <CuryteLogo />
-            {withLabel && (
-              <h2 className="text-2xl font-bold leading-tight tracking-tighter">
-                Curyte
-              </h2>
-            )}
-          </Button>
-        </Link>
+        <div className="flex items-center justify-center w-full mb-4">
+          <Link href={exploreRoute} passHref>
+            <Button
+              variant="ghost"
+              className={classNames('flex items-center gap-2', {
+                '!justify-start': withLabel,
+                'justify-center': !withLabel,
+              })}
+            >
+              <CuryteLogo />
+              {withLabel && (
+                <h2 className="text-2xl font-bold leading-tight tracking-tighter">
+                  Curyte
+                </h2>
+              )}
+            </Button>
+          </Link>
+        </div>
       </Tooltip>
       {withLabel && (
         <div className="mx-2">

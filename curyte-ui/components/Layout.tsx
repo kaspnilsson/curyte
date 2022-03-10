@@ -38,7 +38,7 @@ const Layout = ({
             {rightContent && (
               <div
                 className={classNames(
-                  'flex items-start gap-8 xl:gap-12 2xl:gap-16 md:flex-row',
+                  'flex items-start gap-4 lg:gap-8 xl:gap-12 2xl:gap-16 md:flex-row',
                   {
                     'flex-col': rightContentWrapBehavior === 'normal',
                     'flex-col-reverse': rightContentWrapBehavior === 'reverse',
