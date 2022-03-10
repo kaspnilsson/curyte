@@ -90,7 +90,7 @@ const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
           <ModalCloseButton />
           <ModalBody className="!pt-0">
             <LessonPreview lesson={lesson} />
-            <div className="grid items-center grid-cols-4 gap-4 my-4 justify-evenly">
+            <div className="grid items-center grid-cols-2 gap-4 my-4 lg:grid-cols-4 justify-evenly">
               <a href={makeTwitterUrl(lesson)} target="_blank" rel="noreferrer">
                 <Button
                   colorScheme="black"
