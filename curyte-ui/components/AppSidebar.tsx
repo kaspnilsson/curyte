@@ -7,6 +7,13 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Tooltip,
   useDisclosure,
 } from '@chakra-ui/react'
 import {
@@ -42,6 +49,7 @@ interface ListItemProps {
   label: string
   icon?: React.ReactNode
   requiresLogin?: boolean
+  withLabel?: boolean
 }
 const ListItem = ({
   href,
@@ -49,42 +57,56 @@ const ListItem = ({
   label,
   icon,
   requiresLogin = false,
+  withLabel = true,
 }: ListItemProps) => {
   const router = useRouter()
   const isActive = router.pathname === href
   const { userAndProfile } = useUser()
 
   return (
-    <div
-      className={classNames('relative flex', {
-        'text-zinc-500': !isActive,
-        'text-zinc-900': isActive,
-      })}
-    >
-      {isActive && (
-        <div className="z-10 w-1 h-6 my-auto -mr-1 rounded-r-full bg-zinc-900"></div>
-      )}
-      <Link
-        href={requiresLogin && !userAndProfile ? loginRoute() : href}
-        passHref
-        as={requiresLogin && !userAndProfile ? loginRoute() : as}
+    <Tooltip label={label} hasArrow placement="right">
+      <div
+        className={classNames('relative flex', {
+          'text-zinc-500': !isActive,
+          'text-zinc-900': isActive,
+        })}
       >
-        <Button
-          variant="ghost"
-          className="flex !justify-start !w-full gap-3 text-inherit font-bold leading-tight tracking-tighter"
+        {isActive && (
+          <div className="z-10 w-1 h-6 my-auto -mr-1 rounded-r-full bg-zinc-900"></div>
+        )}
+        <Link
+          href={requiresLogin && !userAndProfile ? loginRoute() : href}
+          passHref
+          as={requiresLogin && !userAndProfile ? loginRoute() : as}
         >
-          {icon || null}
-          {label}
-        </Button>
-      </Link>
-    </div>
+          <Button
+            variant="ghost"
+            className={classNames(
+              'flex !w-full gap-3 text-inherit font-bold leading-tight tracking-tighter',
+              {
+                '!justify-start': withLabel,
+                'justify-center': !withLabel,
+              }
+            )}
+          >
+            {icon || null}
+            {withLabel && label}
+          </Button>
+        </Link>
+      </div>
+    </Tooltip>
   )
 }
 
-const AppMenu = () => {
+interface AppMenuProps {
+  withLabel?: boolean
+}
+
+const AppMenu = ({ withLabel = true }: AppMenuProps) => {
   const { userAndProfile: user } = useUser()
   const router = useRouter()
   const [query, setQuery] = useState('')
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const doSearch = (event: SyntheticEvent) => {
     event.preventDefault()
@@ -100,40 +122,66 @@ const AppMenu = () => {
 
   return (
     <div className="flex flex-col h-full gap-2">
-      <Link href={exploreRoute} passHref>
-        <Button
-          variant="ghost"
-          className="flex items-center gap-2 !justify-start mb-4"
-        >
-          <CuryteLogo />
-          <h2 className="text-2xl font-bold leading-tight tracking-tighter">
-            Curyte
-          </h2>
-        </Button>
-      </Link>
-      <chakra.form onSubmit={doSearch} className="w-auto mx-4 mb-4">
-        <InputGroup>
-          <InputLeftElement>
+      <Tooltip label="Home" hasArrow placement="right">
+        <div className="flex items-center justify-center w-full mb-4">
+          <Link href={exploreRoute} passHref>
+            <Button
+              variant="ghost"
+              className={classNames('flex items-center gap-2', {
+                '!justify-start': withLabel,
+                'justify-center': !withLabel,
+              })}
+            >
+              <CuryteLogo />
+              {withLabel && (
+                <h2 className="text-2xl font-bold leading-tight tracking-tighter">
+                  Curyte
+                </h2>
+              )}
+            </Button>
+          </Link>
+        </div>
+      </Tooltip>
+      {withLabel && (
+        <div className="mx-2">
+          <InputGroup onClick={onOpen}>
+            <InputLeftElement>
+              <SearchIcon className="w-5 h-5 text-zinc-500" />
+            </InputLeftElement>
+            <Input
+              placeholder="Search..."
+              variant="filled"
+              colorScheme="black"
+              unselectable="on"
+            ></Input>
+          </InputGroup>
+        </div>
+      )}
+      {!withLabel && (
+        <Tooltip label="Search Curyte" hasArrow placement="right">
+          <Button
+            onClick={onOpen}
+            variant="ghost"
+            className={classNames(
+              'flex !w-full gap-3 text-inherit font-bold leading-tight tracking-tighter',
+              { '!justify-start': withLabel, 'justify-center': !withLabel }
+            )}
+          >
             <SearchIcon className="w-5 h-5 text-zinc-500" />
-          </InputLeftElement>
-          <Input
-            placeholder="Search..."
-            variant="filled"
-            colorScheme="black"
-            value={query}
-            onChange={(e) => setQuery(e.currentTarget.value)}
-          ></Input>
-        </InputGroup>
-      </chakra.form>
+          </Button>
+        </Tooltip>
+      )}
       <ListItem
         icon={<GlobeAltIcon className="h-6 w-6 !text-inherit" />}
         label="Explore"
+        withLabel={withLabel}
         as={exploreRoute}
         href={exploreRoute}
       />
       <ListItem
         icon={<CollectionIcon className="h-6 w-6 !text-inherit" />}
         label="Workspace"
+        withLabel={withLabel}
         as={workspaceRoute}
         href={workspaceRoute}
         requiresLogin
@@ -141,6 +189,7 @@ const AppMenu = () => {
       <ListItem
         icon={<HomeIcon className="h-6 w-6 !text-inherit" />}
         label="Profile"
+        withLabel={withLabel}
         as={accountRoute(user?.user?.id || '')}
         href={accountRouteHrefPath}
         requiresLogin
@@ -148,6 +197,7 @@ const AppMenu = () => {
       <ListItem
         icon={<CogIcon className="h-6 w-6 !text-inherit" />}
         label="Account settings"
+        withLabel={withLabel}
         as={accountSettingsRoute}
         href={accountSettingsRoute}
         requiresLogin
@@ -158,6 +208,7 @@ const AppMenu = () => {
         <ListItem
           icon={<LogoutIcon className="h-6 w-6 !text-inherit" />}
           label="Log out of Curyte"
+          withLabel={withLabel}
           as={logOutRoute}
           href={logOutRoute}
         />
@@ -166,18 +217,53 @@ const AppMenu = () => {
         <ListItem
           icon={<LoginIcon className="h-6 w-6 !text-inherit" />}
           label="Log in to Curyte"
+          withLabel={withLabel}
           as={loginRoute(router.route || exploreRoute)}
           href={loginRoute(router.route || exploreRoute)}
         />
       )}
+      <Modal isOpen={isOpen} onClose={onClose} size="2xl" autoFocus>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            <span className="text-2xl font-bold leading-tight tracking-tighter">
+              Search for lessons, topics, and more
+            </span>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <chakra.form
+              onSubmit={doSearch}
+              className="flex flex-col w-auto gap-8 mb-4"
+            >
+              <InputGroup>
+                <InputLeftElement>
+                  <SearchIcon className="w-5 h-5 text-zinc-500" />
+                </InputLeftElement>
+                <Input
+                  placeholder="Search Curyte..."
+                  variant="filled"
+                  colorScheme="black"
+                  value={query}
+                  autoFocus
+                  onChange={(e) => setQuery(e.currentTarget.value)}
+                ></Input>
+              </InputGroup>
+              <Button type="submit" colorScheme="black" className="self-end">
+                Search
+              </Button>
+            </chakra.form>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </div>
   )
 }
 
 export const FullSidebar = () => {
   return (
-    <div className="fixed w-48 h-full pt-4 pb-3 xl:w-64">
-      <AppMenu />
+    <div className="fixed w-16 h-full pt-4 pb-3">
+      <AppMenu withLabel={false} />
     </div>
   )
 }

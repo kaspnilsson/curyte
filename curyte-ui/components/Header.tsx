@@ -70,7 +70,7 @@ const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
         <Container>
           <div className="flex items-center justify-between h-16 py-4">
             <div className="flex items-center gap-2 md:gap-4">
-              <div className="lg:hidden">
+              <div className="md:hidden">
                 <MobileSidebar />
               </div>
               {breadcrumbs.length ? (
