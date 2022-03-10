@@ -26,7 +26,7 @@ export default async function handler(
       url: photo.urls.full,
       smallUrl: photo.urls.small,
       owner: photo.user.name || 'Unknown',
-      unsplashUrl: photo.urls.raw,
+      unsplashUrl: `${photo.user.links.html}?utm_source=curyte&utm_medium=referral`,
       alt: photo.description || photo.alt_description || '',
       downloadUrl: photo.links.download_location,
     })

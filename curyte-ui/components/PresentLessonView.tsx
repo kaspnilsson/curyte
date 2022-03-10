@@ -21,6 +21,7 @@ import classNames from 'classnames'
 import { LessonWithProfile } from '../interfaces/lesson_with_profile'
 import NotebookDrawerButton from './NotebookDrawerButton'
 import { useUser } from '../contexts/user'
+import ShareLessonButton from './ShareLessonButton'
 
 // If we're this close to the beginning or the end of the slide, skip.
 const SCROLL_THRESHOLD_PX = 48
@@ -141,6 +142,7 @@ const PresentLessonView = ({ lesson, backUrl, backUrlHref }: Props) => {
       <h1 className="text-6xl font-bold leading-tight tracking-tighter md:text-8xl">
         Fin.
       </h1>
+      <ShareLessonButton style="small" lesson={lesson} />
       <Link passHref href={backUrlHref} as={backUrl}>
         <Button
           colorScheme="black"

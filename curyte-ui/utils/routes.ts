@@ -68,3 +68,8 @@ export const searchRouteHrefPath = `/search`
 export const nextStepsRoute = '/next-steps'
 
 export const successRoute = '/success'
+
+// -------------
+
+export const getLessonLinkExternal = (uid: string) =>
+  `http://curyte.com${lessonRoute(uid)}`
