@@ -49,7 +49,7 @@ const DetailsWrapper = ({
         {editor.isEditable && (
           <TextareaAutosize
             autoFocus
-            className="w-full text-lg font-bold leading-tight tracking-tighter border-0 resize-none"
+            className="w-full overflow-hidden text-lg font-bold leading-tight tracking-tighter border-0 resize-none"
             value={summary}
             placeholder="Ask a question..."
             onChange={({ currentTarget }) =>
@@ -60,7 +60,7 @@ const DetailsWrapper = ({
         )}
         {!editor.isEditable && (
           <summary
-            className="w-full text-lg font-bold leading-tight tracking-tighter list-none cursor-pointer"
+            className="w-full text-lg font-bold leading-tight tracking-tighter list-none select-all"
             onClick={() => handleSetOpen(!open)}
           >
             {summary}
