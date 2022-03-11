@@ -66,6 +66,11 @@ export const createLesson = async (data: Lesson) =>
     method: 'POST',
   }).then(parseLessonJson)
 
+export const copyLesson = async (uid: string) =>
+  await fetch(`/api/lessons/create?copyFrom=${uid}`, {
+    method: 'POST',
+  }).then(parseLessonJson)
+
 export const getLesson = async (uid: string) =>
   fetch(`/api/lessons/${uid}`, {
     method: 'GET',

@@ -33,6 +33,7 @@ export interface UserAndProfile {
 export const UserAuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter()
   const [user, setUser] = useState<UserAndProfile | null>(null)
+  const [, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -65,6 +66,7 @@ export const UserAuthProvider = ({ children }: { children: ReactNode }) => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         setLoading(true)
+        setSession(session)
         await updateSupabaseCookie(event, session)
         await getUserProfile()
         setLoading(false)

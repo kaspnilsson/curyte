@@ -54,8 +54,8 @@ const LessonHeader = ({
   handlePresent,
 }: Props) => {
   const router = useRouter()
-  const { userAndProfile } = useUser()
-  const [, setLoading] = useState(false)
+  const { userAndProfile, loading } = useUser()
+  const [, setFetching] = useState(false)
   const [parentLesson, setParentLesson] = useState<Lesson | null>(null)
   const [isSaved, setIsSaved] = useState(false)
   const [featured, setFeatured] = useState(lesson.featured || false)
@@ -63,8 +63,8 @@ const LessonHeader = ({
   // const toast = useToast()
 
   useEffect(() => {
-    if (!userAndProfile) return
-    setLoading(true)
+    if (!userAndProfile || loading) return
+    setFetching(true)
     const fetchParent = async () => {
       if (lesson.parentLessonId) {
         setParentLesson(await getLesson(lesson.parentLessonId))
@@ -79,9 +79,9 @@ const LessonHeader = ({
       setIsSaved(false)
     }
     Promise.all([fetchParent(), fetchIsSaved()]).then(() => {
-      setLoading(false)
+      setFetching(false)
     })
-  }, [lesson, userAndProfile, lesson.parentLessonId])
+  }, [lesson, userAndProfile, lesson.parentLessonId, loading])
 
   const toggleSaveLesson = async () => {
     if (!userAndProfile) {
@@ -89,7 +89,7 @@ const LessonHeader = ({
       router.push(loginRoute(router.asPath))
       return
     }
-    setLoading(true)
+    setFetching(true)
     setIsSaved(!isSaved)
     // TODO(kaspnilsson)
     // if (isSaved) {
@@ -102,7 +102,7 @@ const LessonHeader = ({
     //     status: 'success',
     //   })
     // }
-    setLoading(false)
+    setFetching(false)
   }
 
   const handleMakeCopy = async () => {
