@@ -195,6 +195,15 @@ const InsertMenuItems = ({
       <MenuItem
         onClick={() => {
           maybeFocusAndAppendToEnd()
+          editor.commands.toggleNotice()
+        }}
+        icon={<i className="ri-2x ri-lightbulb-line" />}
+        label="Notice"
+        description="Insert a separate block for emphasis."
+      />
+      <MenuItem
+        onClick={() => {
+          maybeFocusAndAppendToEnd()
           editor
             .chain()
             .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
