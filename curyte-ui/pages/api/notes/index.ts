@@ -14,7 +14,7 @@ export default async function handler(
   const { user } = await supabaseAdmin.auth.api.getUserByCookie(req)
 
   if (!user) {
-    res.status(403).json({ error: 'Not logged in!' })
+    res.status(403).end('Not logged in!')
     return
   }
 
@@ -43,7 +43,7 @@ export default async function handler(
   }
   if (method === 'GET') {
     if (!lessonId) {
-      res.status(400).json({ error: 'No lesson UID!' })
+      res.status(400).end('No lesson UID!')
       return
     }
     const notes = await prismaClient.notes.upsert({

@@ -1,5 +1,3 @@
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
-import { storage } from '../firebase/clientApp'
 import supabase from '../supabase/client'
 import { uuid } from './uuid'
 
@@ -18,50 +16,30 @@ export const uploadFile = async (
   file: File,
   onProgress: (p: number) => void,
   onSuccess: (url: string) => void,
-  onError: (e: unknown) => void,
-  useSupabase = false
+  onError: (e: unknown) => void
 ) => {
-  if (useSupabase) {
-    const { data, error } = await supabase.storage
-      .from('public-bucket')
-      .upload(uuid(), file, { cacheControl: '31536000' })
-    if (error) {
-      onError(error)
-      return
-    }
-    if (!data) {
-      onError('Upload failed!')
-      return
-    }
-    onSuccess(`${SUPABASE_STORAGE_BUCKET_URL}${data.Key}`)
-  } else {
-    const storageRef = ref(storage, uuid())
-
-    uploadBytesResumable(storageRef, file).on(
-      'state_changed',
-      (snap) => {
-        const percentage = (snap.bytesTransferred / snap.totalBytes) * 100
-        onProgress(percentage)
-      },
-      (err) => {
-        onError(err)
-      },
-      async () => {
-        onSuccess(await getDownloadURL(storageRef))
-      }
-    )
+  const { data, error } = await supabase.storage
+    .from('public-bucket')
+    .upload(uuid(), file, { cacheControl: '31536000' })
+  if (error) {
+    onError(error)
+    return
   }
+  if (!data) {
+    onError('Upload failed!')
+    return
+  }
+  onSuccess(`${SUPABASE_STORAGE_BUCKET_URL}${data.Key}`)
 }
 
 export const compressAndUploadImage = async (
   f: File,
   onProgress: (p: number) => void,
   onSuccess: (url: string) => void,
-  onError: (e: unknown) => void,
-  useSupabase = false
+  onError: (e: unknown) => void
 ) => {
   f = await compressImage(f)
-  await uploadFile(f, onProgress, onSuccess, onError, useSupabase)
+  await uploadFile(f, onProgress, onSuccess, onError)
 }
 
 export const compressImage = async (f: File): Promise<File> => {

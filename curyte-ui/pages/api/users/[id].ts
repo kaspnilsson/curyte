@@ -12,7 +12,7 @@ export default async function handler(
   } = req
 
   if (!id) {
-    res.status(400).json({ error: 'No profile UID!' })
+    res.status(400).end('No profile UID!')
     return
   }
 
@@ -21,9 +21,7 @@ export default async function handler(
 
   if (method === 'DELETE') {
     if (!user || user.id !== uid) {
-      res
-        .status(403)
-        .json({ error: "Not allowed to delete other peoples' content!" })
+      res.status(403).end("Not allowed to delete other peoples' content!")
     }
     await prismaClient.profile.delete({
       where: { uid },

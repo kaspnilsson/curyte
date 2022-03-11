@@ -88,8 +88,7 @@ const useCuryteEditor = (
               toast({ title: 'Image uploaded!', status: 'success' })
               resolve(url)
             },
-            reject,
-            true
+            reject
           )
         })
     ),

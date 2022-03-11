@@ -13,7 +13,7 @@ export default async function handler(
   } = req
 
   if (!id) {
-    res.status(400).json({ error: 'No profile UID!' })
+    res.status(400).end('No profile UID!')
     return
   }
 
@@ -26,13 +26,13 @@ export default async function handler(
     })
 
     if (!profile) {
-      res.status(401).json({ error: 'Not found!' })
+      res.status(401).end('Not found!')
       return
     }
     res.status(200).json(profile)
   } else if (method === 'POST') {
     if (!user) {
-      res.status(403).json({ error: 'Not logged in!' })
+      res.status(403).end('Not logged in!')
       return
     }
     const profile = await prismaClient.profile.upsert({
@@ -42,13 +42,13 @@ export default async function handler(
     })
 
     if (!profile) {
-      res.status(401).json({ error: 'Update failed!' })
+      res.status(401).end('Update failed!')
       return
     }
     res.status(200).json(profile)
   } else if (method === 'PUT') {
     if (!user) {
-      res.status(403).json({ error: 'Not logged in!' })
+      res.status(403).end('Not logged in!')
       return
     }
     const profile = await prismaClient.profile.update({
@@ -57,17 +57,17 @@ export default async function handler(
     })
 
     if (!profile) {
-      res.status(401).json({ error: 'Update failed!' })
+      res.status(401).end('Update failed!')
       return
     }
     res.status(200).json(profile)
   } else if (method === 'DELETE') {
     if (!user) {
-      res.status(403).json({ error: 'Not logged in!' })
+      res.status(403).end('Not logged in!')
       return
     }
     if (uid !== user.id) {
-      res.status(403).json({ error: 'Forbiddden!' })
+      res.status(403).end('Forbiddden!')
       return
     }
     await prismaClient.lesson.delete({ where: { uid } })

@@ -45,8 +45,9 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
   const { userAndProfile, loading } = useUser()
 
   useEffect(() => {
+    if (loading) return
     if (!userAndProfile) router.push(loginRoute())
-  }, [userAndProfile, router])
+  }, [userAndProfile, router, loading])
 
   if (loading) return <LoadingSpinner />
   return (

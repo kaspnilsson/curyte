@@ -8,15 +8,11 @@ const useSupabaseStorage = (file: File, shouldCompress: boolean) => {
 
   useEffect(() => {
     if (shouldCompress) {
-      compressAndUploadImage(
-        file,
-        setProgress,
-        setUrl,
-        (e) => setError(e as Error),
-        true
+      compressAndUploadImage(file, setProgress, setUrl, (e) =>
+        setError(e as Error)
       )
     } else {
-      uploadFile(file, setProgress, setUrl, (e) => setError(e as Error), true)
+      uploadFile(file, setProgress, setUrl, (e) => setError(e as Error))
     }
   }, [file, shouldCompress])
 

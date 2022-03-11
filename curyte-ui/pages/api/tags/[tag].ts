@@ -13,7 +13,7 @@ export default async function handler(
   } = req
 
   if (!tag) {
-    res.status(400).json({ error: 'No tag specified!' })
+    res.status(400).end('No tag specified!')
     return
   }
 
@@ -29,7 +29,7 @@ export default async function handler(
   } else if (method === 'POST') {
     const { user } = await supabase.auth.api.getUserByCookie(req)
     if (!user) {
-      res.status(403).json({ error: 'Not logged in!' })
+      res.status(403).end('Not logged in!')
       return
     }
 
@@ -40,7 +40,7 @@ export default async function handler(
     })
 
     if (!found) {
-      res.status(401).json({ error: 'Update failed!' })
+      res.status(401).end('Update failed!')
       return
     }
 
@@ -48,7 +48,7 @@ export default async function handler(
   } else if (method === 'PUT') {
     const { user } = await supabase.auth.api.getUserByCookie(req)
     if (!user) {
-      res.status(403).json({ error: 'Not logged in!' })
+      res.status(403).end('Not logged in!')
       return
     }
 
@@ -58,7 +58,7 @@ export default async function handler(
     })
 
     if (!found) {
-      res.status(401).json({ error: 'Update failed!' })
+      res.status(401).end('Update failed!')
       return
     }
 
@@ -66,7 +66,7 @@ export default async function handler(
   } else if (method === 'DELETE') {
     const { user } = await supabase.auth.api.getUserByCookie(req)
     if (!user) {
-      res.status(403).json({ error: 'Not logged in!' })
+      res.status(403).end('Not logged in!')
       return
     }
     await prismaClient.tag.delete({ where: { tagText } })
