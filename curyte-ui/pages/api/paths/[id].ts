@@ -14,7 +14,7 @@ export default async function handler(
   const { user } = await supabase.auth.api.getUserByCookie(req)
 
   if (!id) {
-    res.status(400).json({ error: 'No path UID!' })
+    res.status(400).end('No path UID!')
     return
   }
 
@@ -24,14 +24,14 @@ export default async function handler(
     const path = await prismaClient.path.findFirst({ where: { uid } })
 
     if (!path) {
-      res.status(401).json({ error: 'Lesson not found!' })
+      res.status(401).end('Lesson not found!')
       return
     }
 
     res.status(200).json(path)
   } else if (method === 'POST') {
     if (!user) {
-      res.status(403).json({ error: 'Not logged in!' })
+      res.status(403).end('Not logged in!')
       return
     }
 
@@ -42,13 +42,13 @@ export default async function handler(
     })
 
     if (!path) {
-      res.status(401).json({ error: 'Update failed!' })
+      res.status(401).end('Update failed!')
       return
     }
     res.status(200).json(path)
   } else if (method === 'PUT') {
     if (!user) {
-      res.status(403).json({ error: 'Not logged in!' })
+      res.status(403).end('Not logged in!')
       return
     }
 
@@ -58,18 +58,18 @@ export default async function handler(
     })
 
     if (!path) {
-      res.status(401).json({ error: 'Update failed!' })
+      res.status(401).end('Update failed!')
       return
     }
     res.status(200).json(path)
   } else if (method === 'DELETE') {
     if (!user) {
-      res.status(403).json({ error: 'Not logged in!' })
+      res.status(403).end('Not logged in!')
       return
     }
     const path = await prismaClient.path.findFirst({ where: { uid } })
     if (user.id !== path?.authorId) {
-      res.status(403).json({ error: 'Forbiddden!' })
+      res.status(403).end('Forbiddden!')
       return
     }
     await prismaClient.path.delete({ where: { uid } })

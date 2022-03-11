@@ -24,7 +24,7 @@ export default async function handler(
       })
 
       if (!original) {
-        res.status(404).json({ error: 'Lesson to be copied from not found!' })
+        res.status(404).end('Lesson to be copied from not found!')
         return
       }
       const data: Prisma.LessonUncheckedCreateInput = {
