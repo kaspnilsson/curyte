@@ -195,6 +195,15 @@ const InsertMenuItems = ({
       <MenuItem
         onClick={() => {
           maybeFocusAndAppendToEnd()
+          editor.commands.toggleNotice()
+        }}
+        icon={<i className="ri-2x ri-lightbulb-line" />}
+        label="Notice"
+        description="Insert a separate block for emphasis."
+      />
+      <MenuItem
+        onClick={() => {
+          maybeFocusAndAppendToEnd()
           editor
             .chain()
             .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
@@ -203,6 +212,33 @@ const InsertMenuItems = ({
         icon={<i className="ri-2x ri-grid-line" />}
         label="Table"
         description="Insert a table."
+      />
+      <MenuItem
+        description="Create a simple bulleted list."
+        label="Bulleted list"
+        onClick={() => editor.chain().focus().toggleBulletList().run()}
+        isActive={editor.isActive('bulletList')}
+        icon={<i className="ri-2x ri-list-unordered" />}
+      />
+      <MenuItem
+        description="Create a list with sequential numbering."
+        label="Numbered list"
+        onClick={() => editor.chain().focus().toggleOrderedList().run()}
+        isActive={editor.isActive('orderedList')}
+        icon={<i className="ri-2x ri-list-ordered" />}
+      />
+      <MenuItem
+        description="Capture a quote."
+        label="Quote"
+        onClick={() => editor.chain().focus().toggleBlockquote().run()}
+        isActive={editor.isActive('blockquote')}
+        icon={<i className="ri-2x ri-double-quotes-l" />}
+      />
+      <MenuItem
+        description="Visually divide sections."
+        label="Divider"
+        onClick={() => editor.chain().focus().setHorizontalRule().run()}
+        icon={<i className="ri-2x ri-separator" />}
       />
       {/* <MenuItem
         onClick={() => {

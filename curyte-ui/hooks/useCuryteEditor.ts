@@ -32,6 +32,8 @@ import CuryteImage from '../components/extensions/Image/CuryteImage'
 import Heading from '@tiptap/extension-heading'
 import { useToast } from '@chakra-ui/react'
 import { TrailingNode } from '../components/extensions/TrailingNode'
+import Notice from '../components/extensions/Notice/Notice'
+import NoticeContent from '../components/extensions/Notice/NoticeContent'
 
 interface EditorProps {
   content: JSONContent | null
@@ -104,13 +106,15 @@ const useCuryteEditor = (
     extensions.push(
       ...[
         Details,
+        DetailsContent,
         Focus.configure({
           mode: 'deepest',
         }),
-        DetailsContent,
         IFrameEmbed,
         YoutubeEmbed,
         CuryteLink,
+        Notice,
+        NoticeContent,
         VimeoEmbed,
         Placeholder.configure({
           showOnlyWhenEditable: true,

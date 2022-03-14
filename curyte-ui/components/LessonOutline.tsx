@@ -64,33 +64,35 @@ const LessonOutline = ({ editor }: Props) => {
             Outline
           </span>
           <List listStyleType="none">
-            {items.map((item, index) => (
-              <a
-                href={`#${item.id}`}
-                key={index}
-                className={classNames(
-                  'py-2 md:py-1 flex text-zinc-500 hover:text-zinc-900 rounded',
-                  { 'bg-zinc-500 text-white': item.isActive }
-                )}
-              >
-                <ListItem
+            {items
+              .filter((item) => !!item.text)
+              .map((item, index) => (
+                <a
+                  href={`#${item.id}`}
+                  key={index}
                   className={classNames(
-                    'truncate w-full text-base',
-                    // Cannot use string concatenation to compute: https://v2.tailwindcss.com/docs/just-in-time-mode
-                    {
-                      'pl-0 font-semibold 2xl:text-lg leading-tight tracking-tighter':
-                        item.level === minHeadingLevel,
-                      'pl-3 text-sm 2xl:text-base':
-                        item.level === minHeadingLevel + 1,
-                      'pl-6 text-sm 2xl:text-base':
-                        item.level === minHeadingLevel + 2,
-                    }
+                    'py-2 md:py-1 flex text-zinc-500 hover:text-zinc-900 rounded',
+                    { 'bg-zinc-500 text-white': item.isActive }
                   )}
                 >
-                  {item.text || <span className="italic">(no text)</span>}
-                </ListItem>
-              </a>
-            ))}
+                  <ListItem
+                    className={classNames(
+                      'truncate w-full text-base',
+                      // Cannot use string concatenation to compute: https://v2.tailwindcss.com/docs/just-in-time-mode
+                      {
+                        'pl-0 font-semibold 2xl:text-lg leading-tight tracking-tighter':
+                          item.level === minHeadingLevel,
+                        'pl-3 text-sm 2xl:text-base':
+                          item.level === minHeadingLevel + 1,
+                        'pl-6 text-sm 2xl:text-base':
+                          item.level === minHeadingLevel + 2,
+                      }
+                    )}
+                  >
+                    {item.text || <span className="italic">(no text)</span>}
+                  </ListItem>
+                </a>
+              ))}
           </List>
         </div>
       )}

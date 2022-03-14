@@ -31,7 +31,8 @@ const EditableCoverImage = ({ title, src, onEditUrl }: Props) => {
       >
         <Button
           className={classNames('m-auto', {
-            'invisible group-hover:visible': !!src,
+            'opacity-0 invisible group-hover:opacity-100 group-hover:visible':
+              !!src,
           })}
           ref={buttonRef}
           onClick={onEditImage}
