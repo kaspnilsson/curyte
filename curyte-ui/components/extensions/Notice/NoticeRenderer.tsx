@@ -12,6 +12,28 @@ export interface NoticeRendererProps {
   updateAttributes: (attr: NoticeAttrs) => void
 }
 
+const colorToEmoji = (color: Color) => {
+  if (color === 'red') {
+    return '🛑'
+  }
+  if (color === 'yellow') {
+    return '⚠️'
+  }
+  if (color === 'green') {
+    return '✅'
+  }
+  if (color === 'blue') {
+    return 'ℹ️'
+  }
+  if (color === 'violet') {
+    return 'ℹ️'
+  }
+  if (color === 'gray') {
+    return '✏️'
+  }
+  return '✏️'
+}
+
 const NoticeWrapper = ({
   editor,
   node,
@@ -46,17 +68,20 @@ const NoticeWrapper = ({
             />
           </div>
         )}
-        <NodeViewContent
-          className={classNames('w-full col-start-2 details-content', {
-            '!text-red-900': backgroundColor === 'red',
-            '!text-yellow-900': backgroundColor === 'yellow',
-            '!text-green-900': backgroundColor === 'green',
-            '!text-blue-900': backgroundColor === 'blue',
-            '!text-violet-900': backgroundColor === 'violet',
-            '!text-zinc-900':
-              backgroundColor === 'gray' || backgroundColor === 'transparent',
-          })}
-        ></NodeViewContent>
+        <div className="flex items-start justify-start w-full gap-4">
+          <h2 className="!m-0 flex-0">{colorToEmoji(backgroundColor)}</h2>
+          <NodeViewContent
+            className={classNames('w-full col-start-2 flex-1 details-content', {
+              '!text-red-900': backgroundColor === 'red',
+              '!text-yellow-900': backgroundColor === 'yellow',
+              '!text-green-900': backgroundColor === 'green',
+              '!text-blue-900': backgroundColor === 'blue',
+              '!text-violet-900': backgroundColor === 'violet',
+              '!text-zinc-900':
+                backgroundColor === 'gray' || backgroundColor === 'transparent',
+            })}
+          ></NodeViewContent>
+        </div>
       </div>
     </NodeViewWrapper>
   )
