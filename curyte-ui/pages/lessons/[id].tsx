@@ -177,7 +177,7 @@ const PublishedLessonView = (props: Props) => {
               <NotesList lessonId={lesson.uid} />
             )}
             {user && (
-              <div className="fixed md:hidden bottom-4 right-4">
+              <div className="fixed shadow-xl md:hidden bottom-4 right-4">
                 <NotebookDrawerButton lessonId={lesson.uid} />
               </div>
             )}

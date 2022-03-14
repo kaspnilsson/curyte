@@ -45,7 +45,9 @@ const Layout = ({
                   }
                 )}
               >
-                <div className="flex-1 max-w-full min-w-0">{children}</div>
+                <div className="flex-1 w-full max-w-full min-w-0">
+                  {children}
+                </div>
                 <div className="md:sticky md:top-20 md:w-48 lg:w-64 xl:w-72 2xl:w-80">
                   {rightContent}
                 </div>
