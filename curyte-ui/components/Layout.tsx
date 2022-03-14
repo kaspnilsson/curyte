@@ -33,7 +33,7 @@ const Layout = ({
       <main className="relative flex flex-col flex-1 max-w-full min-w-0">
         <Header title={title} breadcrumbs={breadcrumbs}></Header>
         <div className="flex flex-col justify-between flex-1 pt-12">
-          <Container className="mb-24">
+          <Container className="mb-24 z-[1]">
             {!rightContent && children}
             {rightContent && (
               <div
