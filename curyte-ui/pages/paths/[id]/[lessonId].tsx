@@ -35,8 +35,8 @@ import prismaClient from '../../../lib/prisma'
 import { Unit } from '../../../interfaces/unit'
 import { LessonWithProfile } from '../../../interfaces/lesson_with_profile'
 import NotesList from '../../../components/NotesList'
-import NotesEditor from '../../../components/NotesEditor'
 import { useUser } from '../../../contexts/user'
+import NotebookDrawerButton from '../../../components/NotebookDrawerButton'
 
 interface Props {
   lesson: LessonWithProfile
@@ -106,16 +106,7 @@ const LessonInPathView = ({
         <Layout
           rightContentWrapBehavior="reverse"
           title={lesson.title || ''}
-          rightContent={
-            <>
-              <LessonOutline editor={editor} />
-              {user && (
-                <div className="hidden md:flex">
-                  <NotesEditor lessonId={lesson.uid} />
-                </div>
-              )}
-            </>
-          }
+          rightContent={<LessonOutline editor={editor} />}
           breadcrumbs={[
             {
               label:
@@ -261,6 +252,11 @@ const LessonInPathView = ({
                 </div>
               )}
             </div>
+            {user && (
+              <div className="fixed shadow-xl bottom-4 right-4">
+                <NotebookDrawerButton lessonId={lesson.uid} />
+              </div>
+            )}
           </article>
         </Layout>
       )}

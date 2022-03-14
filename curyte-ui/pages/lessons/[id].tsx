@@ -26,7 +26,6 @@ import prismaClient from '../../lib/prisma'
 import { JSONContent } from '@tiptap/core'
 import { deleteLesson, getLesson, updateLesson } from '../../lib/apiHelpers'
 import { LessonWithProfile } from '../../interfaces/lesson_with_profile'
-import NotesEditor from '../../components/NotesEditor'
 import NotesList from '../../components/NotesList'
 import NotebookDrawerButton from '../../components/NotebookDrawerButton'
 import { useUser } from '../../contexts/user'
@@ -110,16 +109,7 @@ const PublishedLessonView = (props: Props) => {
       {!loading && (
         <Layout
           title={lesson.title || ''}
-          rightContent={
-            <>
-              <LessonOutline editor={editor} />
-              {user && (
-                <div className="hidden md:flex">
-                  <NotesEditor lessonId={lesson.uid} />
-                </div>
-              )}
-            </>
-          }
+          rightContent={<LessonOutline editor={editor} />}
           breadcrumbs={[
             {
               label: author.displayName || '(no name)',
@@ -177,7 +167,7 @@ const PublishedLessonView = (props: Props) => {
               <NotesList lessonId={lesson.uid} />
             )}
             {user && (
-              <div className="fixed shadow-xl md:hidden bottom-4 right-4">
+              <div className="fixed shadow-xl bottom-4 right-4">
                 <NotebookDrawerButton lessonId={lesson.uid} />
               </div>
             )}
