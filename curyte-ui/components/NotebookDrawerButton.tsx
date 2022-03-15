@@ -39,7 +39,7 @@ const NotebookDrawerButton = ({ lessonId, style = 'large' }: Props) => {
         autoFocus
       >
         <DrawerOverlay />
-        <DrawerContent className="h-[80vh] px-4 py-2 overflow-auto">
+        <DrawerContent className="h-[80vh] max-h-[80vh] px-4 pb-4 pt-12">
           <DrawerCloseButton />
           <NotesEditor lessonId={lessonId} />
         </DrawerContent>

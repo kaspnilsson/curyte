@@ -45,6 +45,13 @@ const StyleMenuItems = ({ editor }: Props) => (
       isActive={editor.isActive('subscript')}
       description="Small subscripted text."
     />
+    <MenuItem
+      onClick={() => editor.chain().focus().toggleHighlight().run()}
+      icon={<i className="ri-2x ri-mark-pen-line" />}
+      label="Highlight"
+      isActive={editor.isActive('highlight')}
+      description="Highlighted text."
+    />
     {/* <MenuItem
       onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
       icon={<i className="ri-2x ri-h-4" />}
