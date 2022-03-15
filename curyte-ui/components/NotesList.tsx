@@ -1,7 +1,7 @@
 import { Spinner } from '@chakra-ui/react'
 import { JSONContent } from '@tiptap/core'
 import { useState, useEffect } from 'react'
-import { useUser } from '../contexts/user'
+import { useUserAndProfile } from '../contexts/user'
 import { NotesWithProfile } from '../interfaces/notes_with_profile'
 import { queryNotesForLesson } from '../lib/apiHelpers'
 import AuthorLink from './AuthorLink'
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const NotesList = ({ lessonId }: Props) => {
-  const { userAndProfile } = useUser()
+  const { userAndProfile } = useUserAndProfile()
   const [notes, setNotes] = useState<NotesWithProfile[]>([])
   const [loading, setLoading] = useState(false)
 

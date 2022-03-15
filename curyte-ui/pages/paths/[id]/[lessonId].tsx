@@ -36,7 +36,7 @@ import { Unit } from '../../../interfaces/unit'
 import { LessonWithProfile } from '../../../interfaces/lesson_with_profile'
 import NotesList from '../../../components/NotesList'
 import NotesEditor from '../../../components/NotesEditor'
-import { useUser } from '../../../contexts/user'
+import { useUserAndProfile } from '../../../contexts/user'
 
 interface Props {
   lesson: LessonWithProfile
@@ -53,7 +53,7 @@ const LessonInPathView = ({
 }: Props) => {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const { userAndProfile } = useUser()
+  const { userAndProfile } = useUserAndProfile()
   const user = userAndProfile?.user
   const toast = useToast()
 

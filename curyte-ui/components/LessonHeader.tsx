@@ -32,7 +32,7 @@ import Present from './icons/Present'
 import { Lesson } from '@prisma/client'
 import { getLesson } from '../lib/apiHelpers'
 import { LessonWithProfile } from '../interfaces/lesson_with_profile'
-import { useUser } from '../contexts/user'
+import { useUserAndProfile } from '../contexts/user'
 import ShareLessonButton from './ShareLessonButton'
 
 type Props = {
@@ -54,7 +54,7 @@ const LessonHeader = ({
   handlePresent,
 }: Props) => {
   const router = useRouter()
-  const { userAndProfile, loading } = useUser()
+  const { userAndProfile, loading } = useUserAndProfile()
   const [, setFetching] = useState(false)
   const [parentLesson, setParentLesson] = useState<Lesson | null>(null)
   const [isSaved, setIsSaved] = useState(false)

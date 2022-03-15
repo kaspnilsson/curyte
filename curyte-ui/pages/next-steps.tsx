@@ -18,7 +18,7 @@ import TextareaAutosize from 'react-textarea-autosize'
 import AuthorLink from '../components/AuthorLink'
 import CuryteAvatar from '../components/Avatar'
 import useImageUploadDialog from '../hooks/useImageUploadDialog'
-import { useUser } from '../contexts/user'
+import { useUserAndProfile } from '../contexts/user'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { useRouter } from 'next/router'
 import { updateProfile } from '../lib/apiHelpers'
@@ -26,7 +26,7 @@ import Container from '../components/Container'
 
 const NextStepsView = () => {
   const router = useRouter()
-  const { userAndProfile, loading } = useUser()
+  const { userAndProfile, loading } = useUserAndProfile()
   const [localProfile, setLocalProfile] = useState<Profile | null>(null)
 
   useEffect(() => {

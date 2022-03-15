@@ -20,7 +20,7 @@ import classNames from 'classnames'
 
 import { LessonWithProfile } from '../interfaces/lesson_with_profile'
 import NotebookDrawerButton from './NotebookDrawerButton'
-import { useUser } from '../contexts/user'
+import { useUserAndProfile } from '../contexts/user'
 import ShareLessonButton from './ShareLessonButton'
 
 // If we're this close to the beginning or the end of the slide, skip.
@@ -85,7 +85,7 @@ interface Props {
 }
 
 const PresentLessonView = ({ lesson, backUrl, backUrlHref }: Props) => {
-  const { userAndProfile } = useUser()
+  const { userAndProfile } = useUserAndProfile()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [progress, setProgress] = useState(0)
   const [swiper, setSwiper] = useState<SwiperClass | null>(null)

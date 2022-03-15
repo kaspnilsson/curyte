@@ -8,7 +8,7 @@ import {
   useToast,
   Spinner,
 } from '@chakra-ui/react'
-import supabase from '../supabase/client'
+import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs'
 import Link from 'next/link'
 import { exploreRoute } from '../utils/routes'
 import GoogleLogo from '../components/icons/GoogleLogo'
@@ -32,7 +32,7 @@ const Login = () => {
     setIsLoading(true)
     setError('')
 
-    const res = await supabase.auth.signIn(
+    const res = await supabaseClient.auth.signIn(
       {
         email,
       },
@@ -51,7 +51,7 @@ const Login = () => {
   const signInWithGoogle = async () => {
     setIsLoading(true)
     setError('')
-    const { error } = await supabase.auth.signIn(
+    const { error } = await supabaseClient.auth.signIn(
       {
         provider: 'google',
       },
@@ -69,7 +69,7 @@ const Login = () => {
   const signInWithFacebook = async () => {
     setIsLoading(true)
     setError('')
-    const { error } = await supabase.auth.signIn(
+    const { error } = await supabaseClient.auth.signIn(
       {
         provider: 'facebook',
       },

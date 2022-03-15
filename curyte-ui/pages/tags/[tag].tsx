@@ -6,7 +6,7 @@ import TagList from '../../components/TagList'
 import { exploreRoute, tagRoute, tagRouteHrefPath } from '../../utils/routes'
 import { Tag, Lesson } from '@prisma/client'
 import prismaClient from '../../lib/prisma'
-import { useUser } from '../../contexts/user'
+import { useUserAndProfile } from '../../contexts/user'
 import { updateTag } from '../../lib/apiHelpers'
 import { LessonWithProfile } from '../../interfaces/lesson_with_profile'
 
@@ -18,7 +18,7 @@ type Props = {
 }
 
 const TagView = ({ lessons, tag, tagText, relatedTags }: Props) => {
-  const { userAndProfile } = useUser()
+  const { userAndProfile } = useUserAndProfile()
 
   useEffect(() => {
     if (!userAndProfile?.user || !tag) return

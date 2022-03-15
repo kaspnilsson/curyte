@@ -29,7 +29,7 @@ import { LessonWithProfile } from '../../interfaces/lesson_with_profile'
 import NotesEditor from '../../components/NotesEditor'
 import NotesList from '../../components/NotesList'
 import NotebookDrawerButton from '../../components/NotebookDrawerButton'
-import { useUser } from '../../contexts/user'
+import { useUserAndProfile } from '../../contexts/user'
 import ShareLessonButton from '../../components/ShareLessonButton'
 import ClipYContainer from '../../components/ClipYContainer'
 
@@ -43,7 +43,7 @@ const PublishedLessonView = (props: Props) => {
   const [lesson, setLesson] = useState(props.lesson)
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const { userAndProfile } = useUser()
+  const { userAndProfile } = useUserAndProfile()
   const user = userAndProfile?.user
   const toast = useToast()
   // Log views only on render of a published lesson

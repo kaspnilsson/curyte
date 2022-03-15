@@ -10,14 +10,16 @@ import {
   indexRoute,
   loginRoute,
 } from '../../utils/routes'
-import supabase from '../../supabase/client'
 import { Profile } from '@prisma/client'
 import prismaClient from '../../lib/prisma'
-import { GetServerSideProps } from 'next'
 import { User } from '@supabase/supabase-js'
 import useConfirmDialog from '../../hooks/useConfirmDialog'
-import { useUser } from '../../contexts/user'
+import { useUserAndProfile } from '../../contexts/user'
 import { updateProfile } from '../../lib/apiHelpers'
+import {
+  withAuthRequired,
+  getUser,
+} from '@supabase/supabase-auth-helpers/nextjs'
 
 interface Props {
   user: User | null
@@ -28,7 +30,7 @@ const SettingsView = ({ user, profile }: Props) => {
   const router = useRouter()
   const toast = useToast()
 
-  const { logout } = useUser()
+  const { logout } = useUserAndProfile()
 
   const handleDelete = async () => {
     if (!user) return
@@ -258,20 +260,20 @@ const SettingsView = ({ user, profile }: Props) => {
     </Layout>
   )
 }
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const { user } = await supabase.auth.api.getUserByCookie(req)
-  if (!user) {
-    return { props: {}, redirect: { destination: loginRoute() } }
-  }
 
-  return {
-    props: {
-      user,
-      profile: await prismaClient.profile.findFirst({
-        where: { uid: user.id },
-      }),
-    },
-  }
-}
+export const getServerSideProps = withAuthRequired({
+  redirectTo: loginRoute(),
+  getServerSideProps: async (ctx) => {
+    const { user } = await getUser(ctx)
+    return {
+      props: {
+        user,
+        profile: await prismaClient.profile.findFirst({
+          where: { uid: user?.id || 'no_name' },
+        }),
+      },
+    }
+  },
+})
 
 export default SettingsView

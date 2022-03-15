@@ -12,12 +12,12 @@ import selfGuidedSvg from '../public/self_guided.svg'
 import Image from 'next/image'
 import Container from '../components/Container'
 import AuthorLink from '../components/AuthorLink'
-import { useUser } from '../contexts/user'
+import { useUserAndProfile } from '../contexts/user'
 
 const NextStepsView = () => {
   const [isFiringConfetti, setIsFiringConfetti] = useState(false)
 
-  const { userAndProfile } = useUser()
+  const { userAndProfile } = useUserAndProfile()
 
   useEffect(() => {
     setTimeout(() => {

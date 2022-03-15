@@ -5,11 +5,14 @@ import {
   useContext,
   ReactNode,
 } from 'react'
+import { useUser } from '@supabase/supabase-auth-helpers/react'
+
 import { useRouter } from 'next/router'
-import supabase from '../supabase/client'
-import { User, AuthChangeEvent, Session } from '@supabase/supabase-js'
+import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs'
+import { User } from '@supabase/supabase-js'
 import { Profile } from '@prisma/client'
 import { exploreRoute } from '../utils/routes'
+import { useToast } from '@chakra-ui/react'
 
 export const UserAuthContext = createContext<ContextProps>({
   userAndProfile: null,
@@ -32,73 +35,65 @@ export interface UserAndProfile {
 
 export const UserAuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter()
-  const [user, setUser] = useState<UserAndProfile | null>(null)
-  const [, setSession] = useState<Session | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [userAndProfile, setUserAndProfile] = useState<UserAndProfile | null>(
+    null
+  )
+  const { user, isLoading, error } = useUser()
+  const [loading, setLoading] = useState(isLoading)
+  const toast = useToast()
 
   useEffect(() => {
-    setLoading(true)
-    const getUserProfile = async () => {
-      const sessionUser = supabase.auth.user()
+    if (isLoading) {
+      setLoading(true)
+      return
+    }
+    if (!user) {
+      setUserAndProfile(null)
+      setLoading(false)
+      return
+    }
 
-      if (sessionUser) {
-        setLoading(true)
-        const res = await fetch(`/api/profiles/${sessionUser.id}`, {
+    if (error) {
+      toast({
+        status: 'error',
+        title: error.name,
+        description: error.message,
+      })
+    }
+
+    const getUserProfile = async () => {
+      setLoading(true)
+      if (user) {
+        const res = await fetch(`/api/profiles/${user.id}`, {
           method: 'GET',
         })
 
         if (res.ok) {
           const profile = await res.json()
-          setUser({
-            user: sessionUser,
+          setUserAndProfile({
+            user,
             profile,
           })
-          setLoading(false)
         }
       } else {
-        setUser(null)
-        setLoading(false)
+        setUserAndProfile(null)
       }
+      setLoading(false)
     }
 
     getUserProfile()
-
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setLoading(true)
-        setSession(session)
-        await updateSupabaseCookie(event, session)
-        await getUserProfile()
-        setLoading(false)
-      }
-    )
-
-    return () => {
-      authListener?.unsubscribe()
-    }
-  }, [])
-
-  const updateSupabaseCookie = async (
-    event: AuthChangeEvent,
-    session: Session | null
-  ) =>
-    await fetch('/api/auth', {
-      method: 'POST',
-      headers: new Headers({ 'Content-Type': 'application/json' }),
-      credentials: 'same-origin',
-      body: JSON.stringify({ event, session }),
-    })
+  }, [error, isLoading, toast, user])
 
   const logout = async () => {
-    await supabase.auth.signOut()
-    setUser(null)
+    await supabaseClient.auth.signOut()
+    setUserAndProfile(null)
     router.push(exploreRoute)
   }
 
   return (
     <UserAuthContext.Provider
       value={{
-        userAndProfile: user,
+        userAndProfile,
         logout,
         loading,
       }}
@@ -108,4 +103,4 @@ export const UserAuthProvider = ({ children }: { children: ReactNode }) => {
   )
 }
 
-export const useUser = () => useContext(UserAuthContext)
+export const useUserAndProfile = () => useContext(UserAuthContext)
