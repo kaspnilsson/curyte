@@ -7,6 +7,7 @@ import {
   MenuOptionGroup,
   MenuDivider,
   IconButton,
+  Tooltip,
 } from '@chakra-ui/react'
 import { SupportIcon, QuestionMarkCircleIcon } from '@heroicons/react/outline'
 import { discordInviteHref } from '../utils/routes'
@@ -18,15 +19,17 @@ interface Props {
 const EditorHelpMenu = ({ showHints }: Props) => {
   return (
     <Menu placement="top" isLazy>
-      <MenuButton
-        as={IconButton}
-        variant="ghost"
-        icon={<QuestionMarkCircleIcon className="w-6 h-6" />}
-      ></MenuButton>
+      <Tooltip label="Help">
+        <MenuButton
+          as={IconButton}
+          variant="ghost"
+          icon={<QuestionMarkCircleIcon className="w-6 h-6" />}
+        ></MenuButton>
+      </Tooltip>
       <MenuList>
         <MenuOptionGroup
           title="Resources"
-          className="uppercase text-zinc-700 !mb-0"
+          className="uppercase text-zinc-500 !mb-0"
         >
           <MenuItem className="hover:underline">
             <a
@@ -75,7 +78,7 @@ const EditorHelpMenu = ({ showHints }: Props) => {
           </MenuItem>
         </MenuOptionGroup>
         <MenuDivider />
-        <MenuOptionGroup title="Help" className="uppercase text-zinc-700 !mb-0">
+        <MenuOptionGroup title="Help" className="uppercase text-zinc-500 !mb-0">
           {showHints && (
             <MenuItem className="hover:underline" onClick={showHints}>
               Show editor hints

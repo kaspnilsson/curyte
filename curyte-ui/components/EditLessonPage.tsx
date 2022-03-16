@@ -1,6 +1,6 @@
 import React, { SyntheticEvent, useEffect, useState } from 'react'
 import { UploadIcon, LockClosedIcon } from '@heroicons/react/solid'
-import { Button, IconButton, Spinner, Text } from '@chakra-ui/react'
+import { Button, IconButton, Spinner, Text, Tooltip } from '@chakra-ui/react'
 
 import Container from './Container'
 import LessonEditor, { initialLessonContent } from './LessonEditor'
@@ -117,47 +117,55 @@ const EditLessonPage = ({
               )}
             </div>
             {handlePreview && (
-              <IconButton
-                variant="ghost"
-                icon={<EyeIcon className="w-6 h-6 text-zinc-900" />}
-                onClick={() => handlePreview()}
-                disabled={saving}
-                label="Preview"
-                aria-label="Preview"
-              ></IconButton>
+              <Tooltip label="Preview lesson">
+                <IconButton
+                  variant="ghost"
+                  icon={<EyeIcon className="w-6 h-6 text-zinc-900" />}
+                  onClick={() => handlePreview()}
+                  disabled={saving}
+                  label="Preview"
+                  aria-label="Preview"
+                ></IconButton>
+              </Tooltip>
             )}
             {handleDelete && (
-              <IconButton
-                variant="ghost"
-                icon={<TrashIcon className="w-6 h-6 text-zinc-900" />}
-                onClick={onOpen}
-                disabled={saving}
-                label="Delete lesson"
-                aria-label="Delete lesson"
-              ></IconButton>
+              <Tooltip label="Delete lesson">
+                <IconButton
+                  variant="ghost"
+                  icon={<TrashIcon className="w-6 h-6 text-zinc-900" />}
+                  onClick={onOpen}
+                  disabled={saving}
+                  label="Delete lesson"
+                  aria-label="Delete lesson"
+                ></IconButton>
+              </Tooltip>
             )}
             <EditorHelpMenu showHints={showHints} />
             {lesson?.private && (
-              <Button
-                colorScheme="black"
-                disabled={saving || !canPublish}
-                className="flex items-center justify-between gap-2 font-semibold disabled:opacity-60"
-                onClick={localHandleSubmit}
-              >
-                <UploadIcon className="w-5 h-5" />
-                <div className="hidden md:flex">Publish</div>
-              </Button>
+              <Tooltip label="Publish">
+                <Button
+                  colorScheme="black"
+                  disabled={saving || !canPublish}
+                  className="flex items-center justify-between gap-2 font-semibold disabled:opacity-60"
+                  onClick={localHandleSubmit}
+                >
+                  <UploadIcon className="w-5 h-5" />
+                  <div className="hidden md:flex">Publish</div>
+                </Button>
+              </Tooltip>
             )}
             {!lesson?.private && (
-              <Button
-                colorScheme="black"
-                disabled={saving}
-                className="flex items-center justify-between gap-2 font-semibold disabled:opacity-60"
-                onClick={localHandleSubmit}
-              >
-                <LockClosedIcon className="w-5 h-5" />
-                <div className="hidden md:flex">Make private</div>
-              </Button>
+              <Tooltip label="Make private">
+                <Button
+                  colorScheme="black"
+                  disabled={saving}
+                  className="flex items-center justify-between gap-2 font-semibold disabled:opacity-60"
+                  onClick={localHandleSubmit}
+                >
+                  <LockClosedIcon className="w-5 h-5" />
+                  <div className="hidden md:flex">Make private</div>
+                </Button>
+              </Tooltip>
             )}
           </Container>
         </footer>
