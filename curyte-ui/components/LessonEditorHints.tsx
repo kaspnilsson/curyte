@@ -37,7 +37,7 @@ const hints: Hint[] = [
     title: (
       <span className="inline-flex flex-wrap items-center justify-center gap-1">
         Insert rich content by starting a new line and using{' '}
-        <i className="ri-md ri-add-circle-line text-zinc-900"></i>
+        <i className="font-thin ri-md ri-add-circle-line text-zinc-900"></i>
       </span>
     ),
     content: (

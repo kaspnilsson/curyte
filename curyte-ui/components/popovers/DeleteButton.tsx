@@ -17,7 +17,7 @@ const DeleteButton = ({ onClick, disabled }: Props) => {
         variant="ghost"
         disabled={disabled}
       >
-        <i className="text-lg ri-delete-bin-7-line text-zinc-900"></i>
+        <i className="text-lg font-thin ri-delete-bin-7-line text-zinc-900"></i>
       </IconButton>
     </Tooltip>
   )

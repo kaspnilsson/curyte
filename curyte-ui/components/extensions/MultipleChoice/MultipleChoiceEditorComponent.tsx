@@ -96,7 +96,7 @@ const MultipleChoiceEditorComponent = ({
                 disabled={index === 0}
                 onClick={() => onDeleteOption(index)}
               >
-                <i className="text-lg ri-delete-bin-7-line text-zinc-700"></i>
+                <i className="text-lg font-thin ri-delete-bin-7-line text-zinc-700"></i>
               </IconButton>
             </div>
           ))}
@@ -107,7 +107,7 @@ const MultipleChoiceEditorComponent = ({
             onClick={() => onAddOption()}
           >
             <div className="flex items-center gap-1 px-20">
-              <i className="text-lg ri-add-line"></i>
+              <i className="text-lg font-thin ri-add-line"></i>
               Add another option
             </div>
           </Button>

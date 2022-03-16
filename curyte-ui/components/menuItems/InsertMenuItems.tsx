@@ -43,7 +43,7 @@ const InsertMenuItems = ({
           maybeFocusAndAppendToEnd()
           editor.chain().insertContent(initialLessonContent).run()
         }}
-        icon={<i className="ri-2x ri-input-method-line" />}
+        icon={<i className="font-thin ri-2x ri-input-method-line" />}
         label="Section"
         description="Add a new section."
       />
@@ -73,7 +73,7 @@ const InsertMenuItems = ({
               googleDrawingsUrlMatchRegex.test(input),
           })
         }}
-        icon={<i className="ri-2x ri-movie-line" />}
+        icon={<i className="font-thin ri-2x ri-movie-line" />}
         label="Video (Youtube or Vimeo)"
         description="Embed any video from Youtube or Vimeo."
       />
@@ -117,7 +117,7 @@ const InsertMenuItems = ({
               googleDrawingsUrlMatchRegex.test(input),
           })
         }}
-        icon={<i className="ri-2x ri-drive-line" />}
+        icon={<i className="font-thin ri-2x ri-drive-line" />}
         label="Google Doc"
         description="Embed a Google Doc."
       />
@@ -131,7 +131,7 @@ const InsertMenuItems = ({
             editor.chain().focus().setImage({ src }).run()
           }
         }}
-        icon={<i className="ri-2x ri-image-line" />}
+        icon={<i className="font-thin ri-2x ri-image-line" />}
         label="Image"
         description="Embed an image, either uploaded or from another site."
       />
@@ -145,7 +145,7 @@ const InsertMenuItems = ({
             editor.chain().focus().setIFrame({ src }).run()
           }
         }}
-        icon={<i className="ri-2x ri-file-pdf-line" />}
+        icon={<i className="font-thin ri-2x ri-file-pdf-line" />}
         label="PDF"
         description="Embed a PDF, either uploaded or from another site."
       />
@@ -161,7 +161,7 @@ const InsertMenuItems = ({
             },
           })
         }}
-        icon={<i className="ri-2x ri-window-line" />}
+        icon={<i className="font-thin ri-2x ri-window-line" />}
         label="Webpage"
         description="Embed any webpage on the internet."
       />
@@ -170,7 +170,7 @@ const InsertMenuItems = ({
           maybeFocusAndAppendToEnd()
           editor.chain().focus().toggleCodeBlock().run()
         }}
-        icon={<i className="ri-2x ri-code-box-line" />}
+        icon={<i className="font-thin ri-2x ri-code-box-line" />}
         label="Code block"
         description="Insert a code block."
       />
@@ -179,7 +179,7 @@ const InsertMenuItems = ({
           maybeFocusAndAppendToEnd()
           editor.commands.addMultipleChoice()
         }}
-        icon={<i className="ri-2x ri-survey-line" />}
+        icon={<i className="font-thin ri-2x ri-survey-line" />}
         label="Quiz question"
         description="Insert a multiple choice question."
       />
@@ -188,7 +188,7 @@ const InsertMenuItems = ({
           maybeFocusAndAppendToEnd()
           editor.commands.toggleDetails()
         }}
-        icon={<i className="ri-2x ri-split-cells-vertical" />}
+        icon={<i className="font-thin ri-2x ri-split-cells-vertical" />}
         label="Collapsible section"
         description="Insert a collapsible section."
       />
@@ -197,7 +197,7 @@ const InsertMenuItems = ({
           maybeFocusAndAppendToEnd()
           editor.commands.toggleNotice()
         }}
-        icon={<i className="ri-2x ri-lightbulb-line" />}
+        icon={<i className="font-thin ri-2x ri-lightbulb-line" />}
         label="Notice"
         description="Insert a separate block for emphasis."
       />
@@ -209,7 +209,7 @@ const InsertMenuItems = ({
             .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
             .run()
         }}
-        icon={<i className="ri-2x ri-grid-line" />}
+        icon={<i className="font-thin ri-2x ri-grid-line" />}
         label="Table"
         description="Insert a table."
       />
@@ -218,27 +218,27 @@ const InsertMenuItems = ({
         label="Bulleted list"
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         isActive={editor.isActive('bulletList')}
-        icon={<i className="ri-2x ri-list-unordered" />}
+        icon={<i className="font-thin ri-2x ri-list-unordered" />}
       />
       <MenuItem
         description="Create a list with sequential numbering."
         label="Numbered list"
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         isActive={editor.isActive('orderedList')}
-        icon={<i className="ri-2x ri-list-ordered" />}
+        icon={<i className="font-thin ri-2x ri-list-ordered" />}
       />
       <MenuItem
         description="Capture a quote."
         label="Quote"
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
         isActive={editor.isActive('blockquote')}
-        icon={<i className="ri-2x ri-double-quotes-l" />}
+        icon={<i className="font-thin ri-2x ri-double-quotes-l" />}
       />
       <MenuItem
         description="Visually divide sections."
         label="Divider"
         onClick={() => editor.chain().focus().setHorizontalRule().run()}
-        icon={<i className="ri-2x ri-separator" />}
+        icon={<i className="font-thin ri-2x ri-separator" />}
       />
       {/* <MenuItem
         onClick={() => {

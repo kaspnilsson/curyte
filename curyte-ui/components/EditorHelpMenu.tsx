@@ -85,6 +85,13 @@ const EditorHelpMenu = ({ showHints }: Props) => {
             </MenuItem>
           )}
           <a
+            href="https://www.youtube.com/watch?v=B2-It3GwZq4"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <MenuItem>Watch a video tutorial (5min)</MenuItem>
+          </a>
+          <a
             target="_blank"
             href={discordInviteHref}
             rel="noreferrer"

@@ -6,14 +6,17 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   Button,
+  AlertDialogProps,
 } from '@chakra-ui/react'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { ReactNode, useCallback, useRef, useState } from 'react'
 
 interface Props {
-  title: string
-  body: string
-  confirmText: string
-  onConfirmClick: () => void
+  title: string | ReactNode
+  body: string | ReactNode
+  closeText?: string
+  confirmText?: string
+  onConfirmClick?: () => void
+  size?: AlertDialogProps['size']
 }
 
 export default function useConfirmDialog({
@@ -21,6 +24,8 @@ export default function useConfirmDialog({
   body,
   confirmText,
   onConfirmClick,
+  closeText = 'Cancel',
+  size = 'md',
 }: Props) {
   const [isOpen, setIsOpen] = useState(false)
   const onClose = () => setIsOpen(false)
@@ -37,33 +42,40 @@ export default function useConfirmDialog({
         isOpen={isOpen}
         isCentered
         onClose={onClose}
+        size={size}
       >
         <AlertDialogOverlay>
-          <AlertDialogContent>
+          <AlertDialogContent className="flex">
             <AlertDialogHeader className="text-lg font-bold leading-tight tracking-tighter">
               {title}
             </AlertDialogHeader>
             <AlertDialogBody>{body}</AlertDialogBody>
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
-                Cancel
-              </Button>
               <Button
-                colorScheme="black"
-                onClick={() => {
-                  onConfirmClick()
-                  onClose()
-                }}
-                ml={3}
+                ref={cancelRef}
+                onClick={onClose}
+                colorScheme={confirmText && confirmText ? undefined : 'black'}
               >
-                {confirmText}
+                {closeText}
               </Button>
+              {confirmText && onConfirmClick && (
+                <Button
+                  colorScheme="black"
+                  onClick={() => {
+                    onConfirmClick()
+                    onClose()
+                  }}
+                  ml={3}
+                >
+                  {confirmText}
+                </Button>
+              )}
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
     ),
-    [body, confirmText, isOpen, onConfirmClick, title]
+    [body, closeText, confirmText, isOpen, onConfirmClick, size, title]
   )
 
   return {

@@ -59,36 +59,34 @@ const TemplatesMenu = ({ editor }: Props) => {
 
   return (
     <>
-      {templates.length ? (
-        <Menu id="templates-menu" isLazy boundary="scrollParent">
-          <MenuButton
-            size="sm"
-            as={Button}
-            disabled={loading || !templates.length}
-            colorScheme="black"
-          >
-            <div className="flex items-center gap-1 text-sm">
-              Templates
-              {!loading && (
-                <i className="w-2 text-lg ri-arrow-drop-down-line"></i>
-              )}
-              {loading && <Spinner size="xs" />}
-            </div>
-          </MenuButton>
-          <Portal>
-            <MenuList className="z-20 overflow-auto max-h-96">
-              {templates.map((t, index) => (
-                <MenuItem
-                  key={index}
-                  onClick={() => onSelectTemplate(t)}
-                  label={t.title || '(no title)'}
-                  description={t.description || ''}
-                />
-              ))}
-            </MenuList>
-          </Portal>
-        </Menu>
-      ) : null}
+      <Menu id="templates-menu" isLazy boundary="scrollParent">
+        <MenuButton
+          size="sm"
+          as={Button}
+          disabled={loading || !templates.length}
+          colorScheme="black"
+        >
+          <div className="flex items-center gap-1 text-sm">
+            Templates
+            {!loading && (
+              <i className="w-2 text-lg font-thin ri-arrow-drop-down-line"></i>
+            )}
+            {loading && <Spinner size="xs" />}
+          </div>
+        </MenuButton>
+        <Portal>
+          <MenuList className="z-20 overflow-auto max-h-96">
+            {templates.map((t, index) => (
+              <MenuItem
+                key={index}
+                onClick={() => onSelectTemplate(t)}
+                label={t.title || '(no title)'}
+                description={t.description || ''}
+              />
+            ))}
+          </MenuList>
+        </Portal>
+      </Menu>
       <ConfirmDialog />
     </>
   )

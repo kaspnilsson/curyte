@@ -235,9 +235,9 @@ const LessonHeader = ({
                         }}
                       >
                         {featured ? (
-                          <i className="mr-4 text-lg ri-lightbulb-flash-line text-inherit" />
+                          <i className="mr-4 text-lg font-thin ri-lightbulb-flash-line text-inherit" />
                         ) : (
-                          <i className="mr-4 text-lg ri-lightbulb-flash-fill text-inherit" />
+                          <i className="mr-4 text-lg font-thin ri-lightbulb-flash-fill text-inherit" />
                         )}
                         {featured ? 'Unfeature' : 'Feature'} lesson
                       </MenuItem>
@@ -250,9 +250,9 @@ const LessonHeader = ({
                         }}
                       >
                         {isTemplate ? (
-                          <i className="mr-4 text-lg ri-t-box-line text-inherit" />
+                          <i className="mr-4 text-lg font-thin ri-t-box-line text-inherit" />
                         ) : (
-                          <i className="mr-4 text-lg ri-t-box-fill text-inherit" />
+                          <i className="mr-4 text-lg font-thin ri-t-box-fill text-inherit" />
                         )}
                         {isTemplate ? 'Unmark' : 'Mark'} lesson as template
                       </MenuItem>

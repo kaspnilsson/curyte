@@ -38,13 +38,13 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
       <MenuIconButton
         label="Undo"
         onClick={() => editor.chain().focus().undo().run()}
-        icon={<i className="text-lg ri-arrow-go-back-line" />}
+        icon={<i className="text-lg font-thin ri-arrow-go-back-line" />}
       />
       <MenuIconButton
         label="Redo"
         disabled={!editor.can().redo()}
         onClick={() => editor.chain().focus().redo().run()}
-        icon={<i className="text-lg ri-arrow-go-forward-line" />}
+        icon={<i className="text-lg font-thin ri-arrow-go-forward-line" />}
       />
       <Center className="w-2 h-6">
         <Divider
@@ -56,19 +56,19 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         label="Bold"
         onClick={() => editor.chain().focus().toggleBold().run()}
         isActive={editor.isActive('bold')}
-        icon={<i className="text-lg ri-bold" />}
+        icon={<i className="text-lg font-thin ri-bold" />}
       />
       <MenuIconButton
         label="Italicize"
         onClick={() => editor.chain().focus().toggleItalic().run()}
         isActive={editor.isActive('italic')}
-        icon={<i className="text-lg ri-italic" />}
+        icon={<i className="text-lg font-thin ri-italic" />}
       />
       <MenuIconButton
         label="Underline"
         onClick={() => editor.chain().focus().toggleUnderline().run()}
         isActive={editor.isActive('underline')}
-        icon={<i className="text-lg ri-underline" />}
+        icon={<i className="text-lg font-thin ri-underline" />}
       />
       <Center className="w-2 h-6">
         <Divider
@@ -87,19 +87,19 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
         label="Bulleted list"
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         isActive={editor.isActive('bulletList')}
-        icon={<i className="text-lg ri-list-unordered" />}
+        icon={<i className="text-lg font-thin ri-list-unordered" />}
       />
       <MenuIconButton
         label="Ordered list"
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         isActive={editor.isActive('orderedList')}
-        icon={<i className="text-lg ri-list-ordered" />}
+        icon={<i className="text-lg font-thin ri-list-ordered" />}
       />
       <MenuIconButton
         label="Block quote"
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
         isActive={editor.isActive('blockquote')}
-        icon={<i className="text-lg ri-double-quotes-l" />}
+        icon={<i className="text-lg font-thin ri-double-quotes-l" />}
       />
       <Center className="w-4 h-6">
         <Divider
@@ -110,13 +110,13 @@ const FancyEditorMenuBar = ({ editor }: Props) => {
       {/* <MenuIconButton
         label="Add a line"
         onClick={() => editor.chain().focus().setHorizontalRule().run()}
-        icon={<i className="text-lg ri-separator" />}
+        icon={<i className="text-lg font-thin ri-separator" />}
       /> */}
       <Menu id="insert-menu" isLazy boundary="scrollParent" colorScheme="zinc">
         <MenuButton size="sm" variant="ghost" colorScheme="zinc" as={Button}>
           <div className="flex items-center gap-1 text-sm text-zinc-900">
             Insert
-            <i className="w-2 text-lg ri-arrow-drop-down-line"></i>
+            <i className="w-2 text-lg font-thin ri-arrow-drop-down-line"></i>
           </div>
         </MenuButton>
         <Portal>

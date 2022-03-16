@@ -29,13 +29,13 @@ const SimpleEditorMenuBar = ({ editor }: Props) => {
         label="Bold"
         onClick={() => editor.chain().focus().toggleBold().run()}
         isActive={editor.isActive('bold')}
-        icon={<i className="text-lg ri-bold" />}
+        icon={<i className="text-lg font-thin ri-bold" />}
       />
       <MenuIconButton
         label="Italicize"
         onClick={() => editor.chain().focus().toggleItalic().run()}
         isActive={editor.isActive('italic')}
-        icon={<i className="text-lg ri-italic" />}
+        icon={<i className="text-lg font-thin ri-italic" />}
       />
       <Center className="w-4 h-6">
         <Divider
@@ -48,7 +48,7 @@ const SimpleEditorMenuBar = ({ editor }: Props) => {
         <MenuButton size="sm" variant="ghost" colorScheme="zinc" as={Button}>
           <div className="flex items-center gap-1 text-sm text-zinc-900">
             Insert
-            <i className="w-2 text-lg ri-arrow-drop-down-line"></i>
+            <i className="w-2 text-lg font-thin ri-arrow-drop-down-line"></i>
           </div>
         </MenuButton>
         <Portal>
