@@ -81,6 +81,7 @@ const useCuryteEditor = (
     CuryteImage(
       (image: File) =>
         new Promise((resolve, reject) => {
+          toast({ title: 'Uploading...' })
           uploadFile(
             image,
             (progress: number) => {
