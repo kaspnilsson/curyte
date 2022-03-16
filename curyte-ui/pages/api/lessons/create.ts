@@ -1,13 +1,14 @@
 import { Prisma } from '@prisma/client'
 import { NextApiRequest, NextApiResponse } from 'next'
 import prismaClient from '../../../lib/prisma'
-import supabaseAdmin from '../../../supabase/admin'
+import { getUser } from '@supabase/supabase-auth-helpers/nextjs'
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { user } = await supabaseAdmin.auth.api.getUserByCookie(req)
+  const { user } = await getUser({ req, res })
+
   if (!user) {
     res.status(403).end('Forbidden')
     return
