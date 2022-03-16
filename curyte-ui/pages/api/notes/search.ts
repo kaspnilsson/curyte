@@ -19,7 +19,7 @@ export default async function handler(
       where: { lessonId: lessonId as string },
       include: { profiles: true },
     })
-    console.log(notes)
+
     res.status(200).json(notes.filter((n) => !!n.content))
     return
   } else {

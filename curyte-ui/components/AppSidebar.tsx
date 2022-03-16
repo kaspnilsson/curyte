@@ -30,7 +30,7 @@ import classNames from 'classnames'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { SyntheticEvent, useEffect, useRef, useState } from 'react'
-import { useUser } from '../contexts/user'
+import { useUserAndProfile } from '../contexts/user'
 import {
   accountRoute,
   accountRouteHrefPath,
@@ -61,7 +61,7 @@ const ListItem = ({
 }: ListItemProps) => {
   const router = useRouter()
   const isActive = router.pathname === href
-  const { userAndProfile } = useUser()
+  const { userAndProfile } = useUserAndProfile()
 
   return (
     <Tooltip label={label} hasArrow placement="right">
@@ -103,7 +103,7 @@ interface AppMenuProps {
 }
 
 const AppMenu = ({ withLabel = true }: AppMenuProps) => {
-  const { userAndProfile: user } = useUser()
+  const { userAndProfile: user } = useUserAndProfile()
   const router = useRouter()
   const [query, setQuery] = useState('')
   const { isOpen, onOpen, onClose } = useDisclosure()

@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react'
-import { GetServerSideProps } from 'next'
 import LoadingSpinner from '../../../components/LoadingSpinner'
 import { debounce } from 'ts-debounce'
 import ErrorPage from 'next/error'
@@ -7,10 +6,10 @@ import ErrorPage from 'next/error'
 import { loginRoute } from '../../../utils/routes'
 import EditPathPage from '../../../components/EditPathPage'
 
-import supabase from '../../../supabase/client'
+import { withAuthRequired } from '@supabase/supabase-auth-helpers/nextjs'
 import { Path } from '@prisma/client'
 import prismaClient from '../../../lib/prisma'
-import { useUser } from '../../../contexts/user'
+import { useUserAndProfile } from '../../../contexts/user'
 
 type Props = {
   id: string
@@ -18,7 +17,7 @@ type Props = {
 }
 
 const EditPathView = (props: Props) => {
-  const { userAndProfile, loading } = useUser()
+  const { userAndProfile, loading } = useUserAndProfile()
   const [path, setPath] = useState<Path | undefined>(props.path)
   const [savingPromise, setSavingPromise] = useState<Promise<unknown> | null>(
     null
@@ -73,23 +72,19 @@ const EditPathView = (props: Props) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({
-  query,
-  req,
-}) => {
-  const { user } = await supabase.auth.api.getUserByCookie(req)
-  if (!user) {
-    return { props: {}, redirect: { destination: loginRoute() } }
-  }
-  const id = query.id as string
+export const getServerSideProps = withAuthRequired({
+  redirectTo: loginRoute(),
+  getServerSideProps: async ({ query }) => {
+    const id = query.id as string
 
-  const path = await prismaClient.path.findFirst({
-    where: { uid: id },
-  })
+    const path = await prismaClient.path.findFirst({
+      where: { uid: id },
+    })
 
-  return {
-    props: { id, path },
-  }
-}
+    return {
+      props: { id, path },
+    }
+  },
+})
 
 export default EditPathView

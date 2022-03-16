@@ -5,11 +5,11 @@ import { loginRoute, editPathRoute } from '../../utils/routes'
 
 import { Path } from '@prisma/client'
 import { createPath } from '../../lib/apiHelpers'
-import { useUser } from '../../contexts/user'
+import { useUserAndProfile } from '../../contexts/user'
 
 const NewPathView = () => {
   const router = useRouter()
-  const { userAndProfile } = useUser()
+  const { userAndProfile } = useUserAndProfile()
   const user = userAndProfile?.user
 
   useEffect(() => {

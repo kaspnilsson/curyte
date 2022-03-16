@@ -1,9 +1,9 @@
 import LoadingSpinner from '../components/LoadingSpinner'
 import { useEffect } from 'react'
-import { useUser } from '../contexts/user'
+import { useUserAndProfile } from '../contexts/user'
 
 const Logout = () => {
-  const { logout } = useUser()
+  const { logout } = useUserAndProfile()
   useEffect(() => {
     logout()
     // eslint-disable-next-line react-hooks/exhaustive-deps

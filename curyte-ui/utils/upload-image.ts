@@ -1,4 +1,4 @@
-import supabase from '../supabase/client'
+import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs'
 import { uuid } from './uuid'
 
 const compressOptions = {
@@ -18,7 +18,7 @@ export const uploadFile = async (
   onSuccess: (url: string) => void,
   onError: (e: unknown) => void
 ) => {
-  const { data, error } = await supabase.storage
+  const { data, error } = await supabaseClient.storage
     .from('public-bucket')
     .upload(uuid(), file, { cacheControl: '31536000' })
   if (error) {

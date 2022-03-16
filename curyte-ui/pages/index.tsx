@@ -16,7 +16,7 @@ import Link from 'next/link'
 import { XIcon } from '@heroicons/react/outline'
 import { Tag } from '@prisma/client'
 import prismaClient from '../lib/prisma'
-import { useUser } from '../contexts/user'
+import { useUserAndProfile } from '../contexts/user'
 import { LessonWithProfile } from '../interfaces/lesson_with_profile'
 import LoadingSpinner from '../components/LoadingSpinner'
 
@@ -35,7 +35,7 @@ const ExplorePage = ({
 }: Props) => {
   const [showHero, setShowHero] = useState(false)
 
-  const { userAndProfile, loading } = useUser()
+  const { userAndProfile, loading } = useUserAndProfile()
 
   useEffect(() => {
     const hideShowHero = localStorage.getItem('hideStartWritingHero')

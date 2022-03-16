@@ -39,31 +39,31 @@ const TextBubbleMenu = ({ editor }: Props) => {
         label="Bold"
         onClick={() => editor.chain().focus().toggleBold().run()}
         isActive={editor.isActive('bold')}
-        icon={<i className="text-lg ri-bold" />}
+        icon={<i className="text-lg font-thin ri-bold" />}
       />
       <MenuIconButton
         label="Italicize"
         onClick={() => editor.chain().focus().toggleItalic().run()}
         isActive={editor.isActive('italic')}
-        icon={<i className="text-lg ri-italic" />}
+        icon={<i className="text-lg font-thin ri-italic" />}
       />
       <MenuIconButton
         label="Underline"
         onClick={() => editor.chain().focus().toggleUnderline().run()}
         isActive={editor.isActive('underline')}
-        icon={<i className="text-lg ri-underline" />}
+        icon={<i className="text-lg font-thin ri-underline" />}
       />
       <MenuIconButton
         label="Highlight"
         onClick={() => editor.chain().focus().toggleHighlight().run()}
         isActive={editor.isActive('highlight')}
-        icon={<i className="text-lg ri-mark-pen-line" />}
+        icon={<i className="text-lg font-thin ri-mark-pen-line" />}
       />
       <MenuIconButton
         label="Code (inline)"
         onClick={() => editor.chain().focus().toggleCode().run()}
         isActive={editor.isActive('code')}
-        icon={<i className="text-lg ri-code-line" />}
+        icon={<i className="text-lg font-thin ri-code-line" />}
       />
       <MenuIconButton
         label="Clear formatting"
@@ -71,7 +71,7 @@ const TextBubbleMenu = ({ editor }: Props) => {
           editor.chain().focus().unsetAllMarks().run()
           editor.chain().focus().clearNodes().run()
         }}
-        icon={<i className="text-lg ri-format-clear" />}
+        icon={<i className="text-lg font-thin ri-format-clear" />}
       />
       <Center className="w-2 h-6">
         <Divider

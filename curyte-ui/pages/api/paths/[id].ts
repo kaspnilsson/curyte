@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import prismaClient from '../../../lib/prisma'
-import supabase from '../../../supabase/client'
+import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs'
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,7 +11,7 @@ export default async function handler(
     method,
     query: { id },
   } = req
-  const { user } = await supabase.auth.api.getUserByCookie(req)
+  const { user } = await supabaseClient.auth.api.getUserByCookie(req)
 
   if (!id) {
     res.status(400).end('No path UID!')

@@ -8,7 +8,11 @@ import LessonHeader from '../../../components/LessonHeader'
 import FancyEditor from '../../../components/FancyEditor'
 import LoadingSpinner from '../../../components/LoadingSpinner'
 import { useRouter } from 'next/router'
-import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/outline'
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  PencilIcon,
+} from '@heroicons/react/outline'
 import {
   accountRoute,
   accountRouteHrefPath,
@@ -17,6 +21,7 @@ import {
   lessonInPathRouteHrefPath,
   lessonRoute,
   lessonRouteHrefPath,
+  loginRoute,
   pathRoute,
   pathRouteHrefPath,
   presentLessonInPathRoute,
@@ -36,7 +41,7 @@ import { Unit } from '../../../interfaces/unit'
 import { LessonWithProfile } from '../../../interfaces/lesson_with_profile'
 import NotesList from '../../../components/NotesList'
 import NotesEditor from '../../../components/NotesEditor'
-import { useUser } from '../../../contexts/user'
+import { useUserAndProfile } from '../../../contexts/user'
 
 interface Props {
   lesson: LessonWithProfile
@@ -53,7 +58,7 @@ const LessonInPathView = ({
 }: Props) => {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const { userAndProfile } = useUser()
+  const { userAndProfile } = useUserAndProfile()
   const user = userAndProfile?.user
   const toast = useToast()
 
@@ -110,9 +115,20 @@ const LessonInPathView = ({
             <>
               <LessonOutline editor={editor} />
               {user && (
-                <div className="hidden md:mt-2 md:flex">
+                <div className="hidden md:mt-4 md:flex">
                   <NotesEditor lessonId={lesson.uid} />
                 </div>
+              )}
+              {!user && (
+                <Link passHref href={loginRoute()}>
+                  <Button
+                    colorScheme="black"
+                    className="flex items-center gap-2 mt-4"
+                  >
+                    <PencilIcon className="w-5 h-5" />
+                    Notebook
+                  </Button>
+                </Link>
               )}
             </>
           }

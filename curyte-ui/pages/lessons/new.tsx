@@ -5,11 +5,11 @@ import { editLessonRoute, loginRoute } from '../../utils/routes'
 
 import { Lesson } from '@prisma/client'
 import { createLesson, copyLesson } from '../../lib/apiHelpers'
-import { useUser } from '../../contexts/user'
+import { useUserAndProfile } from '../../contexts/user'
 
 const NewLessonView = () => {
   const router = useRouter()
-  const { userAndProfile, loading } = useUser()
+  const { userAndProfile, loading } = useUserAndProfile()
   const user = userAndProfile?.user
 
   useEffect(() => {

@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import prismaClient from '../../../lib/prisma'
 import supabaseAdmin from '../../../supabase/admin'
+import { getUser } from '@supabase/supabase-auth-helpers/nextjs'
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,7 +17,8 @@ export default async function handler(
     return
   }
 
-  const { user } = await supabaseAdmin.auth.api.getUserByCookie(req)
+  const { user } = await getUser({ req, res })
+
   const uid = id as string
 
   if (method === 'DELETE') {

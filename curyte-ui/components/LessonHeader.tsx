@@ -32,7 +32,7 @@ import Present from './icons/Present'
 import { Lesson } from '@prisma/client'
 import { getLesson } from '../lib/apiHelpers'
 import { LessonWithProfile } from '../interfaces/lesson_with_profile'
-import { useUser } from '../contexts/user'
+import { useUserAndProfile } from '../contexts/user'
 import ShareLessonButton from './ShareLessonButton'
 
 type Props = {
@@ -54,7 +54,7 @@ const LessonHeader = ({
   handlePresent,
 }: Props) => {
   const router = useRouter()
-  const { userAndProfile, loading } = useUser()
+  const { userAndProfile, loading } = useUserAndProfile()
   const [, setFetching] = useState(false)
   const [parentLesson, setParentLesson] = useState<Lesson | null>(null)
   const [isSaved, setIsSaved] = useState(false)
@@ -235,9 +235,9 @@ const LessonHeader = ({
                         }}
                       >
                         {featured ? (
-                          <i className="mr-4 text-lg ri-lightbulb-flash-line text-inherit" />
+                          <i className="mr-4 text-lg font-thin ri-lightbulb-flash-line text-inherit" />
                         ) : (
-                          <i className="mr-4 text-lg ri-lightbulb-flash-fill text-inherit" />
+                          <i className="mr-4 text-lg font-thin ri-lightbulb-flash-fill text-inherit" />
                         )}
                         {featured ? 'Unfeature' : 'Feature'} lesson
                       </MenuItem>
@@ -250,9 +250,9 @@ const LessonHeader = ({
                         }}
                       >
                         {isTemplate ? (
-                          <i className="mr-4 text-lg ri-t-box-line text-inherit" />
+                          <i className="mr-4 text-lg font-thin ri-t-box-line text-inherit" />
                         ) : (
-                          <i className="mr-4 text-lg ri-t-box-fill text-inherit" />
+                          <i className="mr-4 text-lg font-thin ri-t-box-fill text-inherit" />
                         )}
                         {isTemplate ? 'Unmark' : 'Mark'} lesson as template
                       </MenuItem>

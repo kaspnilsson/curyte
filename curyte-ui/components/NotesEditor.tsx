@@ -7,7 +7,7 @@ import SimpleEditor from './SimpleEditor'
 import { Spinner, Tooltip } from '@chakra-ui/react'
 import { getNotes, updateNotes } from '../lib/apiHelpers'
 import { InformationCircleIcon } from '@heroicons/react/outline'
-import { useUser } from '../contexts/user'
+import { useUserAndProfile } from '../contexts/user'
 import { debounce } from 'ts-debounce'
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const NotesEditor = ({ lessonId }: Props) => {
-  const { userAndProfile } = useUser()
+  const { userAndProfile } = useUserAndProfile()
   const user = userAndProfile?.user
   const [notes, setNotes] = useState<Notes | null>(null)
   const [loading, setLoading] = useState(false)

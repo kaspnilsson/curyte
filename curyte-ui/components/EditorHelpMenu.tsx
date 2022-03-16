@@ -6,6 +6,8 @@ import {
   MenuItem,
   MenuOptionGroup,
   MenuDivider,
+  IconButton,
+  Tooltip,
 } from '@chakra-ui/react'
 import { SupportIcon, QuestionMarkCircleIcon } from '@heroicons/react/outline'
 import { discordInviteHref } from '../utils/routes'
@@ -17,15 +19,17 @@ interface Props {
 const EditorHelpMenu = ({ showHints }: Props) => {
   return (
     <Menu placement="top" isLazy>
-      <MenuButton className="p-2 text-zinc-900">
-        <div className="flex items-center gap-1 font-bold leading-tight tracking-tighter">
-          <QuestionMarkCircleIcon className="w-6 h-6" />
-        </div>
-      </MenuButton>
+      <Tooltip label="Help">
+        <MenuButton
+          as={IconButton}
+          variant="ghost"
+          icon={<QuestionMarkCircleIcon className="w-6 h-6" />}
+        ></MenuButton>
+      </Tooltip>
       <MenuList>
         <MenuOptionGroup
           title="Resources"
-          className="uppercase text-zinc-700 !mb-0"
+          className="uppercase text-zinc-500 !mb-0"
         >
           <MenuItem className="hover:underline">
             <a
@@ -74,12 +78,19 @@ const EditorHelpMenu = ({ showHints }: Props) => {
           </MenuItem>
         </MenuOptionGroup>
         <MenuDivider />
-        <MenuOptionGroup title="Help" className="uppercase text-zinc-700 !mb-0">
+        <MenuOptionGroup title="Help" className="uppercase text-zinc-500 !mb-0">
           {showHints && (
             <MenuItem className="hover:underline" onClick={showHints}>
               Show editor hints
             </MenuItem>
           )}
+          <a
+            href="https://www.youtube.com/watch?v=B2-It3GwZq4"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <MenuItem>Watch a video tutorial (5min)</MenuItem>
+          </a>
           <a
             target="_blank"
             href={discordInviteHref}

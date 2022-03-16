@@ -1,4 +1,8 @@
 /* eslint-disable react/jsx-filename-extension */
+import {
+  withAuthRequired,
+  getUser,
+} from '@supabase/supabase-auth-helpers/nextjs'
 import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
 import React, { useEffect } from 'react'
@@ -27,10 +31,8 @@ import {
   DocumentTextIcon,
   SupportIcon,
 } from '@heroicons/react/outline'
-import supabase from '../../supabase/client'
-import { GetServerSideProps } from 'next'
 import prismaClient from '../../lib/prisma'
-import { useUser } from '../../contexts/user'
+import { useUserAndProfile } from '../../contexts/user'
 import { PathWithProfile } from '../../interfaces/path_with_profile'
 import { LessonWithProfile } from '../../interfaces/lesson_with_profile'
 import LoadingSpinner from '../../components/LoadingSpinner'
@@ -42,7 +44,7 @@ interface Props {
 
 const WorkspaceView = ({ paths, lessons }: Props) => {
   const router = useRouter()
-  const { userAndProfile, loading } = useUser()
+  const { userAndProfile, loading } = useUserAndProfile()
 
   useEffect(() => {
     if (loading) return
@@ -218,26 +220,27 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const { user } = await supabase.auth.api.getUserByCookie(req)
-  if (!user) {
-    return { props: {}, redirect: { destination: loginRoute() } }
-  }
-  // TODO(kasper): rework saved lessons
-  const [lessons, paths] = await Promise.all([
-    prismaClient.lesson.findMany({
-      where: { authorId: user.id },
-      orderBy: { updated: 'desc' },
-      include: { profiles: true },
-    }),
-    prismaClient.path.findMany({
-      where: { authorId: user.id },
-      orderBy: { updated: 'desc' },
-      include: { profiles: true },
-    }),
-  ])
+export const getServerSideProps = withAuthRequired({
+  redirectTo: loginRoute(),
+  getServerSideProps: async (ctx) => {
+    const { user } = await getUser(ctx)
 
-  return { props: { lessons, paths } }
-}
+    // TODO(kasper): rework saved lessons
+    const [lessons, paths] = await Promise.all([
+      prismaClient.lesson.findMany({
+        where: { authorId: user?.id || 'no_user' },
+        orderBy: { updated: 'desc' },
+        include: { profiles: true },
+      }),
+      prismaClient.path.findMany({
+        where: { authorId: user?.id || 'no_user' },
+        orderBy: { updated: 'desc' },
+        include: { profiles: true },
+      }),
+    ])
+
+    return { props: { lessons, paths } }
+  },
+})
 
 export default WorkspaceView

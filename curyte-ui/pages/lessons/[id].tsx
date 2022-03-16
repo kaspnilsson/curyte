@@ -13,6 +13,7 @@ import {
   editLessonRoute,
   lessonRoute,
   lessonRouteHrefPath,
+  loginRoute,
   presentLessonRoute,
   workspaceRoute,
 } from '../../utils/routes'
@@ -20,7 +21,7 @@ import { ParsedUrlQuery } from 'querystring'
 import useCuryteEditor from '../../hooks/useCuryteEditor'
 import LessonOutline from '../../components/LessonOutline'
 import { userIsAdmin } from '../../utils/hacks'
-import { useToast } from '@chakra-ui/react'
+import { Button, useToast } from '@chakra-ui/react'
 import { Profile } from '@prisma/client'
 import prismaClient from '../../lib/prisma'
 import { JSONContent } from '@tiptap/core'
@@ -29,9 +30,11 @@ import { LessonWithProfile } from '../../interfaces/lesson_with_profile'
 import NotesEditor from '../../components/NotesEditor'
 import NotesList from '../../components/NotesList'
 import NotebookDrawerButton from '../../components/NotebookDrawerButton'
-import { useUser } from '../../contexts/user'
+import { useUserAndProfile } from '../../contexts/user'
 import ShareLessonButton from '../../components/ShareLessonButton'
 import ClipYContainer from '../../components/ClipYContainer'
+import { PencilIcon } from '@heroicons/react/outline'
+import Link from 'next/link'
 
 interface Props {
   lesson: LessonWithProfile | null
@@ -43,7 +46,7 @@ const PublishedLessonView = (props: Props) => {
   const [lesson, setLesson] = useState(props.lesson)
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const { userAndProfile } = useUser()
+  const { userAndProfile } = useUserAndProfile()
   const user = userAndProfile?.user
   const toast = useToast()
   // Log views only on render of a published lesson
@@ -115,11 +118,22 @@ const PublishedLessonView = (props: Props) => {
             <>
               <LessonOutline editor={editor} />
               {user && (
-                <div className="hidden md:mt-2 md:flex">
+                <div className="hidden md:mt-4 md:flex">
                   <ClipYContainer>
                     <NotesEditor lessonId={lesson.uid} />
                   </ClipYContainer>
                 </div>
+              )}
+              {!user && (
+                <Link passHref href={loginRoute()}>
+                  <Button
+                    colorScheme="black"
+                    className="flex items-center gap-2 mt-4"
+                  >
+                    <PencilIcon className="w-5 h-5" />
+                    Notebook
+                  </Button>
+                </Link>
               )}
             </>
           }

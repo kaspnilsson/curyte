@@ -3,7 +3,7 @@ import { TrashIcon, PencilAltIcon, EyeIcon } from '@heroicons/react/outline'
 import { Path } from '@prisma/client'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { useUser } from '../contexts/user'
+import { useUserAndProfile } from '../contexts/user'
 import useConfirmDialog from '../hooks/useConfirmDialog'
 import { userIsAdmin } from '../utils/hacks'
 import { editPathRoute, workspaceRoute, pathRoute } from '../utils/routes'
@@ -15,7 +15,7 @@ interface Props {
 
 const PathActions = ({ path, isReadOnlyView }: Props) => {
   const [loading, setLoading] = useState(false)
-  const { userAndProfile } = useUser()
+  const { userAndProfile } = useUserAndProfile()
   const user = userAndProfile?.user
   const router = useRouter()
 

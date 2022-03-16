@@ -96,7 +96,7 @@ const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
                   colorScheme="black"
                   className="flex !w-full items-center gap-2 shadow-2xl shadow-violet-500/50"
                 >
-                  <i className="text-xl ri-twitter-line" />
+                  <i className="text-xl font-thin ri-twitter-line" />
                   Twitter
                 </Button>
               </a>
@@ -109,7 +109,7 @@ const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
                   colorScheme="black"
                   className="flex !w-full items-center gap-2 shadow-2xl shadow-violet-500/50"
                 >
-                  <i className="text-xl ri-facebook-circle-line" />
+                  <i className="text-xl font-thin ri-facebook-circle-line" />
                   Facebook
                 </Button>
               </a>

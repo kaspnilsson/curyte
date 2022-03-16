@@ -29,7 +29,7 @@ import {
 import { MobileSidebar } from './AppSidebar'
 import Container from './Container'
 import classNames from 'classnames'
-import { useUser } from '../contexts/user'
+import { useUserAndProfile } from '../contexts/user'
 import { UrlObject } from 'url'
 
 export interface BreadcrumbProps {
@@ -44,7 +44,7 @@ type Props = {
 }
 
 const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
-  const { userAndProfile } = useUser()
+  const { userAndProfile } = useUserAndProfile()
 
   return (
     <>
