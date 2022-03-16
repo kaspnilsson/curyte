@@ -6,6 +6,7 @@ import {
   MenuItem,
   MenuOptionGroup,
   MenuDivider,
+  IconButton,
 } from '@chakra-ui/react'
 import { SupportIcon, QuestionMarkCircleIcon } from '@heroicons/react/outline'
 import { discordInviteHref } from '../utils/routes'
@@ -17,11 +18,11 @@ interface Props {
 const EditorHelpMenu = ({ showHints }: Props) => {
   return (
     <Menu placement="top" isLazy>
-      <MenuButton className="p-2 text-zinc-900">
-        <div className="flex items-center gap-1 font-bold leading-tight tracking-tighter">
-          <QuestionMarkCircleIcon className="w-6 h-6" />
-        </div>
-      </MenuButton>
+      <MenuButton
+        as={IconButton}
+        variant="ghost"
+        icon={<QuestionMarkCircleIcon className="w-6 h-6" />}
+      ></MenuButton>
       <MenuList>
         <MenuOptionGroup
           title="Resources"

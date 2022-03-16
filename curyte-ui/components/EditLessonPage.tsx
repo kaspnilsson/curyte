@@ -1,24 +1,10 @@
 import React, { SyntheticEvent, useEffect, useState } from 'react'
 import { UploadIcon, LockClosedIcon } from '@heroicons/react/solid'
-import {
-  Button,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Spinner,
-  Text,
-} from '@chakra-ui/react'
+import { Button, IconButton, Spinner, Text } from '@chakra-ui/react'
 
 import Container from './Container'
 import LessonEditor, { initialLessonContent } from './LessonEditor'
-import {
-  CheckIcon,
-  CogIcon,
-  DocumentRemoveIcon,
-  ExternalLinkIcon,
-} from '@heroicons/react/outline'
+import { CheckIcon, TrashIcon, EyeIcon } from '@heroicons/react/outline'
 import useConfirmDialog from '../hooks/useConfirmDialog'
 import { Lesson, Profile } from '@prisma/client'
 import LessonEditorHints from './LessonEditorHints'
@@ -110,12 +96,12 @@ const EditLessonPage = ({
               <LessonEditorHints onHide={hideHints} />
             </div>
           )}
-          <Container className="flex items-center justify-end h-16">
-            <div className="flex items-center gap-2 mr-auto italic text-zinc-500">
+          <Container className="flex items-center justify-end h-16 gap-1">
+            <div className="flex flex-wrap items-center gap-2 mr-auto italic text-zinc-600">
               {saving && (
                 <>
-                  <Text className="flex items-center gap-2">Saving...</Text>
                   <Spinner />
+                  <Text>Saving...</Text>
                 </>
               )}
               {dirty && !saving && (
@@ -125,74 +111,52 @@ const EditLessonPage = ({
               )}
               {!dirty && !saving && (
                 <>
-                  <CheckIcon className="w-5 h-5" />
+                  <CheckIcon className="w-6 h-6" />
                   <Text>Autosaved!</Text>
                 </>
               )}
             </div>
-            <EditorHelpMenu showHints={showHints} />
-            <Menu placement="top" isLazy>
-              <MenuButton
-                as={IconButton}
-                className="mr-4"
-                aria-label="Settings"
-                icon={<CogIcon className="w-6 h-6" />}
+            {handlePreview && (
+              <IconButton
                 variant="ghost"
-              />
-              <MenuList>
-                {handlePreview && (
-                  <MenuItem
-                    icon={
-                      <ExternalLinkIcon className="w-5 h-5 text-zinc-700" />
-                    }
-                    onClick={() => handlePreview()}
-                    disabled={saving}
-                  >
-                    Preview
-                  </MenuItem>
-                )}
-                {handleDelete && (
-                  <MenuItem
-                    icon={
-                      <DocumentRemoveIcon className="w-5 h-5 text-zinc-700" />
-                    }
-                    onClick={onOpen}
-                    disabled={saving}
-                  >
-                    Delete lesson
-                  </MenuItem>
-                )}
-                {/* <MenuItem icon={<ExternalLinkIcon />} command="⌘N">
-                  New Window
-                </MenuItem>
-                <MenuItem icon={<RepeatIcon />} command="⌘⇧N">
-                  Open Closed Tab
-                </MenuItem>
-                <MenuItem icon={<EditIcon />} command="⌘O">
-                  Open File...
-                </MenuItem> */}
-              </MenuList>
-            </Menu>
+                icon={<EyeIcon className="w-6 h-6 text-zinc-900" />}
+                onClick={() => handlePreview()}
+                disabled={saving}
+                label="Preview"
+                aria-label="Preview"
+              ></IconButton>
+            )}
+            {handleDelete && (
+              <IconButton
+                variant="ghost"
+                icon={<TrashIcon className="w-6 h-6 text-zinc-900" />}
+                onClick={onOpen}
+                disabled={saving}
+                label="Delete lesson"
+                aria-label="Delete lesson"
+              ></IconButton>
+            )}
+            <EditorHelpMenu showHints={showHints} />
             {lesson?.private && (
               <Button
                 colorScheme="black"
                 disabled={saving || !canPublish}
-                className="flex items-center justify-between font-semibold disabled:opacity-50"
+                className="flex items-center justify-between gap-2 font-semibold disabled:opacity-60"
                 onClick={localHandleSubmit}
               >
-                <UploadIcon className="w-5 h-5 mr-2" />
-                Publish
+                <UploadIcon className="w-5 h-5" />
+                <div className="hidden md:flex">Publish</div>
               </Button>
             )}
             {!lesson?.private && (
               <Button
                 colorScheme="black"
                 disabled={saving}
-                className="flex items-center justify-between font-semibold disabled:opacity-50"
+                className="flex items-center justify-between gap-2 font-semibold disabled:opacity-60"
                 onClick={localHandleSubmit}
               >
-                <LockClosedIcon className="w-5 h-5 mr-2" />
-                Make private
+                <LockClosedIcon className="w-5 h-5" />
+                <div className="hidden md:flex">Make private</div>
               </Button>
             )}
           </Container>
