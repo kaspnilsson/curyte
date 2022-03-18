@@ -60,7 +60,7 @@ const LessonOutline = ({ editor }: Props) => {
       {!items.length && null}
       {!!items.length && (
         <div className="flex-col w-full truncate lex toc">
-          <span className="mb-2 text-sm font-bold uppercase text-zinc-700">
+          <span className="mb-2 text-xs font-bold uppercase text-zinc-500">
             Outline
           </span>
           <List listStyleType="none">
@@ -77,14 +77,14 @@ const LessonOutline = ({ editor }: Props) => {
                 >
                   <ListItem
                     className={classNames(
-                      'truncate w-full text-base',
+                      'truncate w-full text-sm',
                       // Cannot use string concatenation to compute: https://v2.tailwindcss.com/docs/just-in-time-mode
                       {
-                        'pl-0 font-semibold 2xl:text-lg leading-tight tracking-tighter':
+                        'pl-0 font-semibold text-sm 2xl:text-base leading-tight tracking-tighter':
                           item.level === minHeadingLevel,
-                        'pl-3 text-sm 2xl:text-base':
+                        'pl-3 text-xs 2xl:text-sm':
                           item.level === minHeadingLevel + 1,
-                        'pl-6 text-sm 2xl:text-base':
+                        'pl-6 text-xs 2xl:text-sm':
                           item.level === minHeadingLevel + 2,
                       }
                     )}

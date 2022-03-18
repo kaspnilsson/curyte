@@ -32,7 +32,6 @@ import NotesList from '../../components/NotesList'
 import NotebookDrawerButton from '../../components/NotebookDrawerButton'
 import { useUserAndProfile } from '../../contexts/user'
 import ShareLessonButton from '../../components/ShareLessonButton'
-import ClipYContainer from '../../components/ClipYContainer'
 import { PencilIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
 
@@ -119,9 +118,7 @@ const PublishedLessonView = (props: Props) => {
               <LessonOutline editor={editor} />
               {user && (
                 <div className="hidden md:mt-4 md:flex">
-                  <ClipYContainer>
-                    <NotesEditor lessonId={lesson.uid} />
-                  </ClipYContainer>
+                  <NotesEditor lessonId={lesson.uid} />
                 </div>
               )}
               {!user && (

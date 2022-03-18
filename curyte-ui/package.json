@@ -101,6 +101,7 @@
     "react-instantsearch-dom": "^6.18.0",
     "react-is": "^17.0.2",
     "react-markdown": "^7.1.0",
+    "react-sticky-box": "0.9.3",
     "react-textarea-autosize": "^8.3.3",
     "react-time-ago": "^7.1.7",
     "react-use": "^17.3.1",
