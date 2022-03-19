@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { NodeSelection, Plugin, PluginKey } from 'prosemirror-state'
 import { EditorView } from 'prosemirror-view'
 
@@ -19,11 +20,7 @@ export const DragHandle = Extension.create({
     const HANDLER_GAP = 48
     const dragHandler = document.createElement('div')
     dragHandler.textContent = '⠿'
-    dragHandler.className = 'sm:text-sm lg:text-md xl:text-lg'
-    dragHandler.style.position = 'absolute'
-    dragHandler.style.cursor = 'grab'
-    dragHandler.style.zIndex = '10'
-    dragHandler.style.margin = '0 auto'
+    dragHandler.className = 'sm:text-sm lg:text-md xl:text-lg drag-handler'
 
     function createRect(rect: DOMRect) {
       if (rect == null) {
@@ -57,7 +54,9 @@ export const DragHandle = Extension.create({
         const temp = view.nodeDOM(pos.inside)
         const node = getDirectChild(temp ? (temp as HTMLElement) : null)
         if (node && node.nodeType === 1) {
+          // @ts-ignore
           const desc = view.docView.nearestDesc(node, true)
+          // @ts-ignore
           if (!(!desc || desc === view.docView)) {
             return desc.posBefore
           }
@@ -99,8 +98,13 @@ export const DragHandle = Extension.create({
 
     // Check if node has content. If not, the handler don't need to be shown.
     function nodeHasContent(view: EditorView, inside: number): boolean {
-      // return !!view.nodeDOM(inside)?.textContent
-      return true
+      const n = view.nodeDOM(inside) as HTMLElement
+      if (!n) return false
+      return !!(
+        n.textContent ||
+        n.getAttribute('draggable') === 'true' ||
+        n.classList.contains('react-renderer')
+      )
     }
 
     function bindEventsToDragHandler(editorView: EditorView) {
@@ -161,7 +165,7 @@ export const DragHandle = Extension.create({
                   rect.left += win.pageXOffset
                   dragHandler.style.left = rect.left - WIDTH + 'px'
                   dragHandler.style.top = rect.top + 'px'
-                  // dragHandler.style.bottom = rect.bottom + 4 + 'px'
+                  dragHandler.style.height = rect.height + 'px'
                   dragHandler.style.visibility = 'visible'
                 } else {
                   dragHandler.style.visibility = 'hidden'
