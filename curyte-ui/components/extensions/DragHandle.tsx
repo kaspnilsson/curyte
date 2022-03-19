@@ -3,11 +3,18 @@ import { EditorView } from 'prosemirror-view'
 
 import { Extension } from '@tiptap/core'
 
+// Disallow dragging on some nodes.
+// See https://github.com/ueberdosis/tiptap/issues/2250
+const nodeIsDraggable = (node: Node) => {
+  if (node.nodeName === 'TABLE') return false
+  return true
+}
+
 export const DragHandle = Extension.create({
   name: 'dragHandler',
 
   addProseMirrorPlugins() {
-    let nodeToBeDragged = null
+    let nodeToBeDragged: HTMLElement | null = null
     const WIDTH = 24
     const HANDLER_GAP = 48
     const dragHandler = document.createElement('div')
@@ -15,10 +22,10 @@ export const DragHandle = Extension.create({
     dragHandler.className = 'sm:text-sm lg:text-md xl:text-lg'
     dragHandler.style.position = 'absolute'
     dragHandler.style.cursor = 'grab'
-    dragHandler.style.zIndex = '9999'
+    dragHandler.style.zIndex = '10'
     dragHandler.style.margin = '0 auto'
 
-    function createRect(rect) {
+    function createRect(rect: DOMRect) {
       if (rect == null) {
         return null
       }
@@ -35,16 +42,20 @@ export const DragHandle = Extension.create({
       return newRect
     }
 
-    function removeNode(node) {
+    function removeNode(node: Node) {
       if (node && node.parentNode) {
         node.parentNode.removeChild(node)
       }
     }
 
-    function blockPosAtCoords(coords, view) {
+    function blockPosAtCoords(
+      coords: { left: number; top: number },
+      view: EditorView
+    ) {
       const pos = view.posAtCoords(coords)
       if (pos) {
-        const node = getDirectChild(view.nodeDOM(pos.inside))
+        const temp = view.nodeDOM(pos.inside)
+        const node = getDirectChild(temp ? (temp as HTMLElement) : null)
         if (node && node.nodeType === 1) {
           const desc = view.docView.nearestDesc(node, true)
           if (!(!desc || desc === view.docView)) {
@@ -55,11 +66,11 @@ export const DragHandle = Extension.create({
       return null
     }
 
-    function dragStart(e, view: EditorView) {
+    function dragStart(e: DragEvent, view: EditorView) {
       if (!e.dataTransfer) return
       const coords = { left: e.clientX + HANDLER_GAP, top: e.clientY }
       const pos = blockPosAtCoords(coords, view)
-      if (pos != null) {
+      if (pos != null && nodeToBeDragged) {
         view.dispatch(
           view.state.tr.setSelection(NodeSelection.create(view.state.doc, pos))
         )
@@ -71,17 +82,19 @@ export const DragHandle = Extension.create({
     }
 
     // Get the direct child of the Editor. To cover cases when the user is hovering nested nodes.
-    function getDirectChild(node) {
+    function getDirectChild(
+      node: HTMLElement | null | undefined
+    ): HTMLElement | null {
       while (node && node.parentNode) {
         if (
           node.classList?.contains('ProseMirror') ||
-          node.parentNode.classList?.contains('ProseMirror')
+          (node.parentNode as HTMLElement).classList?.contains('ProseMirror')
         ) {
           break
         }
-        node = node.parentNode
+        node = node.parentNode as HTMLElement
       }
-      return node
+      return node || null
     }
 
     // Check if node has content. If not, the handler don't need to be shown.
@@ -122,21 +135,28 @@ export const DragHandle = Extension.create({
               return false
             },
             mousemove(view, event) {
+              if (!view.editable) return false
               const coords = {
                 left: event.clientX + HANDLER_GAP,
                 top: event.clientY,
               }
               const position = view.posAtCoords(coords)
               if (position && nodeHasContent(view, position.inside)) {
-                nodeToBeDragged = getDirectChild(view.nodeDOM(position.inside))
+                const temp = view.nodeDOM(position.inside)
+                nodeToBeDragged = getDirectChild(
+                  temp ? (temp as HTMLElement) : undefined
+                )
                 if (
                   nodeToBeDragged &&
+                  nodeIsDraggable(nodeToBeDragged) &&
                   !nodeToBeDragged.classList?.contains('ProseMirror')
                 ) {
                   const rect = createRect(
                     nodeToBeDragged.getBoundingClientRect()
                   )
+                  if (!rect) return false
                   const win = nodeToBeDragged.ownerDocument.defaultView
+                  if (!win) return false
                   rect.top += win.pageYOffset
                   rect.left += win.pageXOffset
                   dragHandler.style.left = rect.left - WIDTH + 'px'
