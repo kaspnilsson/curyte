@@ -4,6 +4,7 @@ import Header, { BreadcrumbProps } from './Header'
 import Container from './Container'
 import { FullSidebar } from './AppSidebar'
 import classNames from 'classnames'
+import StickyBox from 'react-sticky-box'
 
 type Props = {
   children: React.ReactNode
@@ -48,9 +49,15 @@ const Layout = ({
                 <div className="flex-1 w-full max-w-full min-w-0">
                   {children}
                 </div>
-                <div className="md:sticky md:top-20 md:w-56 lg:w-64 xl:w-72 2xl:w-80">
+                <StickyBox
+                  className="hidden md:block md:w-56 lg:w-64 xl:w-72 2xl:w-80"
+                  // 20px + 64px for header size
+                  offsetTop={84}
+                  offsetBottom={20}
+                >
                   {rightContent}
-                </div>
+                </StickyBox>
+                <div className="block md:hidden">{rightContent}</div>
               </div>
             )}
           </Container>
