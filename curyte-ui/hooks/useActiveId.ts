@@ -6,13 +6,15 @@ function useActiveId(itemIds: string[], deps: DependencyList = []) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
+        let found = false
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (!found && entry.isIntersecting) {
+            found = true
             setActiveId(entry.target.id)
           }
         })
       },
-      { rootMargin: `0% 0% -80% 0%` }
+      { rootMargin: `10% 0% -80% 0%` }
     )
 
     itemIds.forEach((id) => {

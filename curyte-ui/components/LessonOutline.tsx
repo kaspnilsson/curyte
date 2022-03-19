@@ -76,7 +76,7 @@ const LessonOutline = ({ editor }: Props) => {
                   href={`#${item.id}`}
                   key={index}
                   className={classNames(
-                    'py-2 md:py-1 flex hover:text-zinc-900 rounded px-1',
+                    'py-2 md:py-1 flex hover:text-zinc-900 rounded px-1 transition-colors',
                     {
                       'text-violet-700': activeId === item.id,
                       'text-zinc-500': activeId !== item.id,
@@ -88,9 +88,9 @@ const LessonOutline = ({ editor }: Props) => {
                       'truncate w-full text-sm text-inherit',
                       // Cannot use string concatenation to compute: https://v2.tailwindcss.com/docs/just-in-time-mode
                       {
-                        'pl-0 font-semibold text-sm 2xl:text-base leading-tight tracking-tighter':
+                        'pl-0 font-bold text-sm 2xl:text-base leading-tight tracking-tighter':
                           item.level === minHeadingLevel,
-                        'pl-3 text-xs 2xl:text-sm leading-tight tracking-tighter':
+                        'pl-3 font-semibold text-xs 2xl:text-sm leading-tight tracking-tighter':
                           item.level === minHeadingLevel + 1,
                         'pl-6 text-xs 2xl:text-sm leading-tight tracking-tighter':
                           item.level === minHeadingLevel + 2,
