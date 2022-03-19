@@ -214,3 +214,19 @@ textarea::placeholder {
   --swiper-navigation-color: var(--chakra-colors-zinc-700) !important;
   --swiper-theme-color: var(--chakra-colors-zinc-700) !important;
 }
+
+.drag-handler {
+  position: absolute;
+  cursor: grab;
+  z-index: 9;
+  margin: 0 auto;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  font-size: larger !important;
+
+  &:hover {
+    background-color: rgba(24, 24, 27, 0.04);
+  }
+}
