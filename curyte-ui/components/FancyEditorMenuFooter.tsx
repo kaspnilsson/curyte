@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import InsertMenuItems from './menuItems/InsertMenuItems'
-import { InputDialogProps } from './InputDialog'
+import InputDialog, { InputDialogProps } from './InputDialog'
 
 interface Props {
   editor: Editor | null
@@ -31,6 +31,7 @@ const FancyEditorMenuFooter = ({ editor }: Props) => {
   }
   return (
     <div className="flex flex-wrap items-center justify-center w-full gap-1 py-1 mb-4 ">
+      <InputDialog {...dialogProps} />
       <Menu id="insert-menu" isLazy boundary="scrollParent" colorScheme="zinc">
         <Tooltip label="Insert rich content like videos and docs at the end of the lesson">
           <MenuButton size="lg" as={Button}>
