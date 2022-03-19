@@ -3,11 +3,10 @@ import { GetServerSideProps } from 'next'
 import Layout from '../../components/Layout'
 import LessonList from '../../components/LessonList'
 import TagList from '../../components/TagList'
-import { Heading } from '@chakra-ui/react'
 import { exploreRoute, tagRoute, tagRouteHrefPath } from '../../utils/routes'
 import { Tag, Lesson } from '@prisma/client'
 import prismaClient from '../../lib/prisma'
-import { useUser } from '../../contexts/user'
+import { useUserAndProfile } from '../../contexts/user'
 import { updateTag } from '../../lib/apiHelpers'
 import { LessonWithProfile } from '../../interfaces/lesson_with_profile'
 
@@ -19,7 +18,7 @@ type Props = {
 }
 
 const TagView = ({ lessons, tag, tagText, relatedTags }: Props) => {
-  const { userAndProfile } = useUser()
+  const { userAndProfile } = useUserAndProfile()
 
   useEffect(() => {
     if (!userAndProfile?.user || !tag) return
@@ -46,12 +45,9 @@ const TagView = ({ lessons, tag, tagText, relatedTags }: Props) => {
         ]}
         rightContent={
           <div className="w-full">
-            <Heading
-              className="mb-2 font-bold leading-tight tracking-tighter"
-              size="md"
-            >
+            <div className="mb-2 text-xl font-bold leading-tight tracking-tighter md:text-2xl">
               Related topics
-            </Heading>
+            </div>
             {!!relatedTags?.length && <TagList tags={relatedTags} />}
             {!relatedTags?.length && (
               <div className="text-sm text-zinc-500">Nothing here yet!</div>

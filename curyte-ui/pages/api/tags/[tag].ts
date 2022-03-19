@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import prismaClient from '../../../lib/prisma'
-import supabase from '../../../supabase/client'
+import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs'
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,7 +13,7 @@ export default async function handler(
   } = req
 
   if (!tag) {
-    res.status(400).json({ error: 'No tag specified!' })
+    res.status(400).end('No tag specified!')
     return
   }
 
@@ -27,9 +27,9 @@ export default async function handler(
     found ? res.status(200).json(tag) : res.status(404)
     return
   } else if (method === 'POST') {
-    const { user } = await supabase.auth.api.getUserByCookie(req)
+    const { user } = await supabaseClient.auth.api.getUserByCookie(req)
     if (!user) {
-      res.status(403).json({ error: 'Not logged in!' })
+      res.status(403).end('Not logged in!')
       return
     }
 
@@ -40,15 +40,15 @@ export default async function handler(
     })
 
     if (!found) {
-      res.status(401).json({ error: 'Update failed!' })
+      res.status(401).end('Update failed!')
       return
     }
 
     res.status(200).json(found)
   } else if (method === 'PUT') {
-    const { user } = await supabase.auth.api.getUserByCookie(req)
+    const { user } = await supabaseClient.auth.api.getUserByCookie(req)
     if (!user) {
-      res.status(403).json({ error: 'Not logged in!' })
+      res.status(403).end('Not logged in!')
       return
     }
 
@@ -58,15 +58,15 @@ export default async function handler(
     })
 
     if (!found) {
-      res.status(401).json({ error: 'Update failed!' })
+      res.status(401).end('Update failed!')
       return
     }
 
     res.status(200).json(found)
   } else if (method === 'DELETE') {
-    const { user } = await supabase.auth.api.getUserByCookie(req)
+    const { user } = await supabaseClient.auth.api.getUserByCookie(req)
     if (!user) {
-      res.status(403).json({ error: 'Not logged in!' })
+      res.status(403).end('Not logged in!')
       return
     }
     await prismaClient.tag.delete({ where: { tagText } })

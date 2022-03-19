@@ -29,7 +29,7 @@ import {
 import { MobileSidebar } from './AppSidebar'
 import Container from './Container'
 import classNames from 'classnames'
-import { useUser } from '../contexts/user'
+import { useUserAndProfile } from '../contexts/user'
 import { UrlObject } from 'url'
 
 export interface BreadcrumbProps {
@@ -44,16 +44,11 @@ type Props = {
 }
 
 const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
-  const { userAndProfile } = useUser()
+  const { userAndProfile } = useUserAndProfile()
 
   return (
     <>
       <Head>
-        {/* Material Icons Link */}
-        <link
-          href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          rel="stylesheet"
-        />
         <link
           rel="icon"
           href="/static/curyte_logo_black.svg"
@@ -75,7 +70,7 @@ const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
         <Container>
           <div className="flex items-center justify-between h-16 py-4">
             <div className="flex items-center gap-2 md:gap-4">
-              <div className="lg:hidden">
+              <div className="md:hidden">
                 <MobileSidebar />
               </div>
               {breadcrumbs.length ? (

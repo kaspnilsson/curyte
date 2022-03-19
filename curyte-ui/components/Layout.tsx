@@ -4,6 +4,7 @@ import Header, { BreadcrumbProps } from './Header'
 import Container from './Container'
 import { FullSidebar } from './AppSidebar'
 import classNames from 'classnames'
+import StickyBox from 'react-sticky-box'
 
 type Props = {
   children: React.ReactNode
@@ -27,28 +28,36 @@ const Layout = ({
 }: Props) => {
   return (
     <div className={'relative min-h-screen max-w-[100vw] flex ' + className}>
-      <nav className="relative z-[11] hidden w-48 bg-white border-r xl:w-64 lg:flex flex-0">
+      <nav className="relative z-[11] hidden w-16 bg-white border-r md:flex flex-0">
         <FullSidebar />
       </nav>
       <main className="relative flex flex-col flex-1 max-w-full min-w-0">
         <Header title={title} breadcrumbs={breadcrumbs}></Header>
         <div className="flex flex-col justify-between flex-1 pt-12">
-          <Container className="mb-24">
+          <Container className="mb-24 z-[1]">
             {!rightContent && children}
             {rightContent && (
               <div
                 className={classNames(
-                  'flex items-start gap-8 xl:gap-12 2xl:gap-16 md:flex-row',
+                  'flex items-start gap-4 lg:gap-8 xl:gap-12 2xl:gap-16 md:flex-row',
                   {
                     'flex-col': rightContentWrapBehavior === 'normal',
                     'flex-col-reverse': rightContentWrapBehavior === 'reverse',
                   }
                 )}
               >
-                <div className="flex-1 max-w-full min-w-0">{children}</div>
-                <div className="md:sticky md:top-20 md:w-40 xl:w-64">
-                  {rightContent}
+                <div className="flex-1 w-full max-w-full min-w-0">
+                  {children}
                 </div>
+                <StickyBox
+                  className="hidden md:block md:w-56 lg:w-64 xl:w-72 2xl:w-80"
+                  // 20px + 64px for header size
+                  offsetTop={84}
+                  offsetBottom={20}
+                >
+                  {rightContent}
+                </StickyBox>
+                <div className="block md:hidden">{rightContent}</div>
               </div>
             )}
           </Container>

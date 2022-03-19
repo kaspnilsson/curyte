@@ -33,6 +33,8 @@ import Heading from '@tiptap/extension-heading'
 import { useToast } from '@chakra-ui/react'
 import { TrailingNode } from '../components/extensions/TrailingNode'
 import { DragHandle } from '../components/extensions/DragHandle'
+import Notice from '../components/extensions/Notice/Notice'
+import NoticeContent from '../components/extensions/Notice/NoticeContent'
 
 interface EditorProps {
   content: JSONContent | null
@@ -80,6 +82,7 @@ const useCuryteEditor = (
     CuryteImage(
       (image: File) =>
         new Promise((resolve, reject) => {
+          toast({ title: 'Uploading...' })
           uploadFile(
             image,
             (progress: number) => {
@@ -89,8 +92,7 @@ const useCuryteEditor = (
               toast({ title: 'Image uploaded!', status: 'success' })
               resolve(url)
             },
-            reject,
-            true
+            reject
           )
         })
     ),
@@ -107,13 +109,15 @@ const useCuryteEditor = (
       ...[
         DragHandle,
         Details,
+        DetailsContent,
         Focus.configure({
           mode: 'deepest',
         }),
-        DetailsContent,
         IFrameEmbed,
         YoutubeEmbed,
         CuryteLink,
+        Notice,
+        NoticeContent,
         VimeoEmbed,
         Placeholder.configure({
           showOnlyWhenEditable: true,

@@ -3,32 +3,25 @@ import { useRouter } from 'next/router'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { editLessonRoute, loginRoute } from '../../utils/routes'
 
-import supabase from '../../supabase/client'
 import { Lesson } from '@prisma/client'
-import { getLesson, createLesson } from '../../lib/apiHelpers'
+import { createLesson, copyLesson } from '../../lib/apiHelpers'
+import { useUserAndProfile } from '../../contexts/user'
 
 const NewLessonView = () => {
   const router = useRouter()
-  const user = supabase.auth.user()
+  const { userAndProfile, loading } = useUserAndProfile()
+  const user = userAndProfile?.user
 
   useEffect(() => {
+    if (loading) return
     if (!user) {
       router.push(loginRoute(router.asPath))
       return
     }
     const createNewDraft = async () => {
       if (router.query.copyFrom) {
-        const l = await getLesson(router.query.copyFrom as string)
-        const newLesson = await createLesson({
-          ...l,
-          parentLessonId: l.uid,
-          private: true,
-          authorId: user.id,
-          uid: '',
-          created: new Date(),
-          updated: new Date(),
-        })
-        router.replace(editLessonRoute(newLesson.uid))
+        const l = await copyLesson(router.query.copyFrom as string)
+        router.replace(editLessonRoute(l.uid))
       } else {
         const newLesson = await createLesson({
           private: true,
@@ -40,7 +33,7 @@ const NewLessonView = () => {
       }
     }
     createNewDraft()
-  }, [router, router.query.copyFrom, user])
+  }, [loading, router, router.query.copyFrom, user])
 
   return <LoadingSpinner message="Building lesson..." />
 }

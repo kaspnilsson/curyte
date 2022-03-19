@@ -11,6 +11,8 @@ import ErrorBoundary from '../components/ErrorBoundary'
 import theme from '../styles/theme'
 import { UserAuthProvider } from '../contexts/user'
 import { FileUploadDialogProvider } from '../components/dialogs/FileUploadDialog/FileUploadDialogContext'
+import { UserProvider } from '@supabase/supabase-auth-helpers/react'
+import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs'
 
 export default function CuryteApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -45,15 +47,18 @@ export default function CuryteApp({ Component, pageProps }: AppProps) {
 
   return (
     <ChakraProvider portalZIndex={20} theme={theme}>
-      <UserAuthProvider>
-        <ImageUploadDialogProvider>
-          <FileUploadDialogProvider>
-            <ErrorBoundary>
-              <Component {...pageProps} />
-            </ErrorBoundary>
-          </FileUploadDialogProvider>
-        </ImageUploadDialogProvider>
-      </UserAuthProvider>
+      <UserProvider supabaseClient={supabaseClient}>
+        {/* UserProvider used within UserAuthProvider */}
+        <UserAuthProvider>
+          <ImageUploadDialogProvider>
+            <FileUploadDialogProvider>
+              <ErrorBoundary>
+                <Component {...pageProps} />
+              </ErrorBoundary>
+            </FileUploadDialogProvider>
+          </ImageUploadDialogProvider>
+        </UserAuthProvider>
+      </UserProvider>
     </ChakraProvider>
   )
 }

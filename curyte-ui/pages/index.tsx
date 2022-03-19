@@ -4,7 +4,6 @@ import { GetServerSideProps } from 'next'
 import LessonList from '../components/LessonList'
 import {
   Button,
-  Heading,
   Tab,
   TabList,
   TabPanel,
@@ -17,7 +16,7 @@ import Link from 'next/link'
 import { XIcon } from '@heroicons/react/outline'
 import { Tag } from '@prisma/client'
 import prismaClient from '../lib/prisma'
-import { useUser } from '../contexts/user'
+import { useUserAndProfile } from '../contexts/user'
 import { LessonWithProfile } from '../interfaces/lesson_with_profile'
 import LoadingSpinner from '../components/LoadingSpinner'
 
@@ -36,7 +35,7 @@ const ExplorePage = ({
 }: Props) => {
   const [showHero, setShowHero] = useState(false)
 
-  const { userAndProfile, loading } = useUser()
+  const { userAndProfile, loading } = useUserAndProfile()
 
   useEffect(() => {
     const hideShowHero = localStorage.getItem('hideStartWritingHero')
@@ -61,12 +60,9 @@ const ExplorePage = ({
       ]}
       rightContent={
         <div className="w-full">
-          <Heading
-            className="mb-2 font-bold leading-tight tracking-tighter"
-            size="md"
-          >
+          <span className="mb-2 text-2xl font-bold leading-tight tracking-tighter">
             Trending topics
-          </Heading>
+          </span>
           {!!tags?.length && <TagList tags={tags} />}
         </div>
       }
@@ -82,12 +78,9 @@ const ExplorePage = ({
               <XIcon className="w-5 h-5 text-zinc-500" />
             </Button>
           )}
-          <Heading
-            className="mb-8 font-bold leading-tight tracking-tighter text-center"
-            size="lg"
-          >
+          <span className="mb-8 text-4xl font-bold leading-tight tracking-tighter text-center">
             A better lesson builder -- for teachers, by teachers.
-          </Heading>
+          </span>
           <Link href={newLessonRoute()} passHref>
             <Button colorScheme="black" onClick={hideHero}>
               Start writing

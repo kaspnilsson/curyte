@@ -13,6 +13,7 @@ import {
   editLessonRoute,
   lessonRoute,
   lessonRouteHrefPath,
+  loginRoute,
   presentLessonRoute,
   workspaceRoute,
 } from '../../utils/routes'
@@ -20,8 +21,7 @@ import { ParsedUrlQuery } from 'querystring'
 import useCuryteEditor from '../../hooks/useCuryteEditor'
 import LessonOutline from '../../components/LessonOutline'
 import { userIsAdmin } from '../../utils/hacks'
-import { useToast } from '@chakra-ui/react'
-import supabase from '../../supabase/client'
+import { Button, useToast } from '@chakra-ui/react'
 import { Profile } from '@prisma/client'
 import prismaClient from '../../lib/prisma'
 import { JSONContent } from '@tiptap/core'
@@ -29,6 +29,11 @@ import { deleteLesson, getLesson, updateLesson } from '../../lib/apiHelpers'
 import { LessonWithProfile } from '../../interfaces/lesson_with_profile'
 import NotesEditor from '../../components/NotesEditor'
 import NotesList from '../../components/NotesList'
+import NotebookDrawerButton from '../../components/NotebookDrawerButton'
+import { useUserAndProfile } from '../../contexts/user'
+import ShareLessonButton from '../../components/ShareLessonButton'
+import { PencilIcon } from '@heroicons/react/outline'
+import Link from 'next/link'
 
 interface Props {
   lesson: LessonWithProfile | null
@@ -40,7 +45,8 @@ const PublishedLessonView = (props: Props) => {
   const [lesson, setLesson] = useState(props.lesson)
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const user = supabase.auth.user()
+  const { userAndProfile } = useUserAndProfile()
+  const user = userAndProfile?.user
   const toast = useToast()
   // Log views only on render of a published lesson
   useEffect(() => {
@@ -110,7 +116,22 @@ const PublishedLessonView = (props: Props) => {
           rightContent={
             <>
               <LessonOutline editor={editor} />
-              {user && <NotesEditor lessonId={lesson.uid} />}
+              {user && (
+                <div className="hidden md:mt-4 md:flex">
+                  <NotesEditor lessonId={lesson.uid} />
+                </div>
+              )}
+              {!user && (
+                <Link passHref href={loginRoute()}>
+                  <Button
+                    colorScheme="black"
+                    className="flex items-center gap-2 mt-4"
+                  >
+                    <PencilIcon className="w-5 h-5" />
+                    Notebook
+                  </Button>
+                </Link>
+              )}
             </>
           }
           breadcrumbs={[
@@ -125,6 +146,7 @@ const PublishedLessonView = (props: Props) => {
               as: lessonRoute(lesson.uid),
             },
           ]}
+          rightContentWrapBehavior="reverse"
         >
           <NextSeo
             title={lesson.title || ''}
@@ -135,6 +157,11 @@ const PublishedLessonView = (props: Props) => {
               description: openGraphDescription,
               images: openGraphImages,
               site_name: 'Curyte',
+            }}
+            twitter={{
+              cardType: 'summary_large_image',
+              site: 'http://curyte.com',
+              handle: '@curyte',
             }}
           ></NextSeo>
           <article>
@@ -157,7 +184,17 @@ const PublishedLessonView = (props: Props) => {
               handlePresent={() => router.push(presentLessonRoute(lesson.uid))}
             />
             <FancyEditor readOnly editor={editor} />
-            {user && <NotesList lessonId={lesson.uid} />}
+            <div className="flex items-center justify-center w-full h-32 gap-8">
+              <ShareLessonButton lesson={lesson} />
+            </div>
+            {user && (user.id === lesson.authorId || userIsAdmin(user.id)) && (
+              <NotesList lessonId={lesson.uid} />
+            )}
+            {user && (
+              <div className="fixed shadow-xl md:hidden bottom-4 right-4">
+                <NotebookDrawerButton lessonId={lesson.uid} />
+              </div>
+            )}
           </article>
         </Layout>
       )}

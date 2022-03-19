@@ -3,8 +3,8 @@ import { TrashIcon, PencilAltIcon, EyeIcon } from '@heroicons/react/outline'
 import { Path } from '@prisma/client'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { useUserAndProfile } from '../contexts/user'
 import useConfirmDialog from '../hooks/useConfirmDialog'
-import supabase from '../supabase/client'
 import { userIsAdmin } from '../utils/hacks'
 import { editPathRoute, workspaceRoute, pathRoute } from '../utils/routes'
 
@@ -15,11 +15,12 @@ interface Props {
 
 const PathActions = ({ path, isReadOnlyView }: Props) => {
   const [loading, setLoading] = useState(false)
-  const user = supabase.auth.user()
+  const { userAndProfile } = useUserAndProfile()
+  const user = userAndProfile?.user
   const router = useRouter()
 
   const handleDelete = async () => {
-    if (!user || !user.id) return
+    if (!userAndProfile || !userAndProfile?.user) return
     try {
       setLoading(true)
       await fetch(`/api/paths/${path.uid}`, { method: 'DELETE' })

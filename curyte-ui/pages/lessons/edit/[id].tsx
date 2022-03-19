@@ -1,6 +1,5 @@
 import ErrorPage from 'next/error'
 import React, { useMemo, useState } from 'react'
-import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import EditLessonPage from '../../../components/EditLessonPage'
 import LoadingSpinner from '../../../components/LoadingSpinner'
@@ -9,10 +8,10 @@ import { debounce } from 'ts-debounce'
 import { lessonRoute, loginRoute, workspaceRoute } from '../../../utils/routes'
 import { Portal, useToast } from '@chakra-ui/react'
 import { Confetti } from '../../../components/Confetti'
-import supabase from '../../../supabase/client'
+import { withAuthRequired } from '@supabase/supabase-auth-helpers/nextjs'
 import { Lesson } from '@prisma/client'
 import prismaClient from '../../../lib/prisma'
-import { useUser } from '../../../contexts/user'
+import { useUserAndProfile } from '../../../contexts/user'
 
 interface Props {
   lesson?: Lesson
@@ -28,7 +27,7 @@ const LessonView = (props: Props) => {
   const [savingPromise, setSavingPromise] = useState<Promise<unknown> | null>(
     null
   )
-  const { userAndProfile, loading } = useUser()
+  const { userAndProfile, loading } = useUserAndProfile()
 
   const handleTogglePrivate = async () => {
     if (!lesson) return
@@ -107,22 +106,17 @@ const LessonView = (props: Props) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({
-  req,
-  query,
-}) => {
-  const { user } = await supabase.auth.api.getUserByCookie(req)
-  if (!user) {
-    return { props: {}, redirect: { destination: loginRoute() } }
-  }
+export const getServerSideProps = withAuthRequired({
+  redirectTo: loginRoute(),
+  getServerSideProps: async ({ query }) => {
+    const lesson = await prismaClient.lesson.findFirst({
+      where: { uid: query.id as string },
+    })
 
-  const lesson = await prismaClient.lesson.findFirst({
-    where: { uid: query.id as string },
-  })
-
-  return {
-    props: { lesson },
-  }
-}
+    return {
+      props: { lesson },
+    }
+  },
+})
 
 export default LessonView

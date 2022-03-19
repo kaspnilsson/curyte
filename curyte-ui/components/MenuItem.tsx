@@ -1,4 +1,4 @@
-import { Heading, Text, MenuItem as ChakraMenuItem } from '@chakra-ui/react'
+import { Text, MenuItem as ChakraMenuItem } from '@chakra-ui/react'
 import classNames from 'classnames'
 interface Props {
   onClick: () => void
@@ -32,7 +32,9 @@ const MenuItem = ({
     {icon || null}
     <div className="flex flex-col justify-center gap-1 my-1">
       <div className="flex space-between">
-        <Heading fontSize="sm">{label}</Heading>
+        <span className="font-bold leading-tight tracking-tighter">
+          {label}
+        </span>
         <div className="flex-end">{shortcut || null}</div>
       </div>
       <Text fontSize="xs" className="text-zinc-500">

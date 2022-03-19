@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import prismaClient from '../../../lib/prisma'
-import supabase from '../../../supabase/client'
+import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs'
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,11 +13,11 @@ export default async function handler(
   } = req
 
   if (!id) {
-    res.status(400).json({ error: 'No profile UID!' })
+    res.status(400).end('No profile UID!')
     return
   }
 
-  const { user } = await supabase.auth.api.getUserByCookie(req)
+  const { user } = await supabaseClient.auth.api.getUserByCookie(req)
   const uid = id as string
 
   if (method === 'GET') {
@@ -26,13 +26,13 @@ export default async function handler(
     })
 
     if (!profile) {
-      res.status(401).json({ error: 'Not found!' })
+      res.status(401).end('Not found!')
       return
     }
     res.status(200).json(profile)
   } else if (method === 'POST') {
     if (!user) {
-      res.status(403).json({ error: 'Not logged in!' })
+      res.status(403).end('Not logged in!')
       return
     }
     const profile = await prismaClient.profile.upsert({
@@ -42,13 +42,13 @@ export default async function handler(
     })
 
     if (!profile) {
-      res.status(401).json({ error: 'Update failed!' })
+      res.status(401).end('Update failed!')
       return
     }
     res.status(200).json(profile)
   } else if (method === 'PUT') {
     if (!user) {
-      res.status(403).json({ error: 'Not logged in!' })
+      res.status(403).end('Not logged in!')
       return
     }
     const profile = await prismaClient.profile.update({
@@ -57,17 +57,17 @@ export default async function handler(
     })
 
     if (!profile) {
-      res.status(401).json({ error: 'Update failed!' })
+      res.status(401).end('Update failed!')
       return
     }
     res.status(200).json(profile)
   } else if (method === 'DELETE') {
     if (!user) {
-      res.status(403).json({ error: 'Not logged in!' })
+      res.status(403).end('Not logged in!')
       return
     }
     if (uid !== user.id) {
-      res.status(403).json({ error: 'Forbiddden!' })
+      res.status(403).end('Forbiddden!')
       return
     }
     await prismaClient.lesson.delete({ where: { uid } })

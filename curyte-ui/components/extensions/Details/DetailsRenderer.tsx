@@ -36,7 +36,7 @@ const DetailsWrapper = ({
   }
   return (
     <NodeViewWrapper>
-      <div className="grid grid-cols-[min-content_1fr] items-center gap-2 p-4 my-4 border rounded-xl border-zinc-200">
+      <div className="grid grid-cols-[min-content_1fr] items-center gap-2 p-4 lg:p-8 my-4 border rounded-xl border-zinc-200 text-inherit">
         <IconButton
           contentEditable={false}
           aria-label="Expand toggle"
@@ -49,7 +49,7 @@ const DetailsWrapper = ({
         {editor.isEditable && (
           <TextareaAutosize
             autoFocus
-            className="w-full text-lg font-bold leading-tight tracking-tighter border-0 resize-none"
+            className="w-full overflow-hidden text-lg font-bold leading-tight tracking-tighter border-0 resize-none bg-inherit"
             value={summary}
             placeholder="Ask a question..."
             onChange={({ currentTarget }) =>
@@ -60,7 +60,7 @@ const DetailsWrapper = ({
         )}
         {!editor.isEditable && (
           <summary
-            className="w-full text-lg font-bold leading-tight tracking-tighter list-none cursor-pointer"
+            className="w-full text-lg font-bold leading-tight tracking-tighter list-none select-all"
             onClick={() => handleSetOpen(!open)}
           >
             {summary}

@@ -12,7 +12,7 @@ const StyleMenuButton = ({ editor }: Props) => {
       <MenuButton size="sm" variant="ghost" colorScheme="zinc" as={Button}>
         <div className="flex items-center gap-1 text-sm text-zinc-900">
           Style
-          <i className="w-2 text-lg ri-arrow-drop-down-line"></i>
+          <i className="w-2 text-lg font-thin ri-arrow-drop-down-line"></i>
         </div>
       </MenuButton>
       <Portal>

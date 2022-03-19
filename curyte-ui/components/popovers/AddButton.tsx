@@ -24,7 +24,7 @@ const AddButton = ({ disabled, items }: Props) => {
           variant="ghost"
           disabled={disabled}
         >
-          <i className="text-lg ri-add-circle-line text-zinc-900"></i>
+          <i className="text-lg font-thin ri-add-circle-line text-zinc-900"></i>
         </MenuButton>
       </Tooltip>
       <Portal>

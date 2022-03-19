@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import prismaClient from '../../../lib/prisma'
-import supabaseAdmin from '../../../supabase/admin'
+import { getUser } from '@supabase/supabase-auth-helpers/nextjs'
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,10 +11,10 @@ export default async function handler(
     body,
     query: { lessonId },
   } = req
-  const { user } = await supabaseAdmin.auth.api.getUserByCookie(req)
+  const { user } = await getUser({ req, res })
 
   if (!user) {
-    res.status(403).json({ error: 'Not logged in!' })
+    res.status(403).end('Not logged in!')
     return
   }
 
@@ -43,7 +43,7 @@ export default async function handler(
   }
   if (method === 'GET') {
     if (!lessonId) {
-      res.status(400).json({ error: 'No lesson UID!' })
+      res.status(400).end('No lesson UID!')
       return
     }
     const notes = await prismaClient.notes.upsert({

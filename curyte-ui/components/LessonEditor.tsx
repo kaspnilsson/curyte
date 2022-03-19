@@ -17,6 +17,8 @@ import {
 } from '../utils/routes'
 import { Lesson } from '@prisma/client'
 import TemplatesMenu from './TemplatesMenu'
+import { Button, ButtonGroup } from '@chakra-ui/react'
+import useConfirmDialog from '../hooks/useConfirmDialog'
 
 export const initialLessonContent = {
   type: 'doc',
@@ -75,6 +77,32 @@ const LessonEditor = ({
     [lesson?.uid, handleContentUpdate]
   )
 
+  const { ConfirmDialog, onOpen } = useConfirmDialog({
+    size: '4xl',
+    title: 'Import from Google Drive',
+    body: (
+      <div className="grid grid-cols-1 gap-4">
+        <p>
+          Import from Google Drive coming soon! For now, Curyte supports copying
+          and pasting from all of your favorite Google tools.
+        </p>
+        <p>Check this video out for a quick tutorial 👇</p>
+        <div className="relative h-auto aspect-w-16 aspect-h-9">
+          <iframe
+            src="https://www.youtube.com/embed/B2-It3GwZq4"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full border shadow-lg min-h-96 rounded-xl"
+          ></iframe>
+        </div>
+      </div>
+    ),
+    closeText: 'Ok',
+    onConfirmClick: () => null,
+  })
+
   return (
     <Layout
       footer={stickyFooter}
@@ -97,6 +125,7 @@ const LessonEditor = ({
         },
       ]}
     >
+      <ConfirmDialog />
       <div className="flex">
         <div className="flex flex-col flex-grow min-w-0 md:ml-10 lg:ml-0">
           <div className="flex items-center justify-between w-full ">
@@ -134,8 +163,18 @@ const LessonEditor = ({
               })
             }}
           />
-          <div className="mt-2">
-            <TemplatesMenu editor={editor}></TemplatesMenu>
+          <div className="flex items-center mt-2">
+            <ButtonGroup isAttached>
+              <TemplatesMenu editor={editor}></TemplatesMenu>
+              <Button
+                size="sm"
+                className="flex items-center gap-1"
+                onClick={onOpen}
+              >
+                <i className="text-lg font-thin ri-drive-line"></i>
+                Google Drive
+              </Button>
+            </ButtonGroup>
           </div>
           <EditableCoverImage
             title={lesson?.title || ''}

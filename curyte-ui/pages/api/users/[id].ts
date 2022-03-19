@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import prismaClient from '../../../lib/prisma'
 import supabaseAdmin from '../../../supabase/admin'
+import { getUser } from '@supabase/supabase-auth-helpers/nextjs'
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,18 +13,17 @@ export default async function handler(
   } = req
 
   if (!id) {
-    res.status(400).json({ error: 'No profile UID!' })
+    res.status(400).end('No profile UID!')
     return
   }
 
-  const { user } = await supabaseAdmin.auth.api.getUserByCookie(req)
+  const { user } = await getUser({ req, res })
+
   const uid = id as string
 
   if (method === 'DELETE') {
     if (!user || user.id !== uid) {
-      res
-        .status(403)
-        .json({ error: "Not allowed to delete other peoples' content!" })
+      res.status(403).end("Not allowed to delete other peoples' content!")
     }
     await prismaClient.profile.delete({
       where: { uid },

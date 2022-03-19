@@ -11,7 +11,7 @@ export default async function handler(
   } = req
   if (method === 'GET') {
     if (!lessonId) {
-      res.status(400).json({ error: 'No lesson UID!' })
+      res.status(400).end('No lesson UID!')
       return
     }
     // TODO: restrict this to the lesson owner
@@ -19,6 +19,7 @@ export default async function handler(
       where: { lessonId: lessonId as string },
       include: { profiles: true },
     })
+
     res.status(200).json(notes.filter((n) => !!n.content))
     return
   } else {

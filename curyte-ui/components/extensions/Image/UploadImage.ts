@@ -1,4 +1,5 @@
-import { Plugin } from 'prosemirror-state'
+import { Plugin, PluginKey } from 'prosemirror-state'
+import { DecorationSet } from 'prosemirror-view'
 
 /**
  * function for image drag n drop(for tiptap)
@@ -6,8 +7,17 @@ import { Plugin } from 'prosemirror-state'
  */
 export type UploadFn = (image: File) => Promise<string>
 
+export const imagePluginKey = new PluginKey<DecorationSet>('imageUploadPlugin')
+
+// const findPlaceholder = (state: EditorState, id: object) => {
+//   const decos = imagePluginKey.getState(state)
+//   const found = decos?.find(undefined, undefined, (spec) => spec.id === id)
+//   return found?.length ? found[0].from : undefined
+// }
+
 export const uploadImagePlugin = (upload: UploadFn) => {
   return new Plugin({
+    key: imagePluginKey,
     props: {
       handlePaste(view, event, slice) {
         const items = Array.from(event.clipboardData?.items || [])
@@ -21,13 +31,46 @@ export const uploadImagePlugin = (upload: UploadFn) => {
             event.stopPropagation()
 
             if (upload && image) {
-              upload(image).then((src) => {
-                const node = schema.nodes.image.create({
-                  src,
-                })
-                slice.content.replaceChild(0, node)
-                return true
-              })
+              // A fresh object to act as the ID for this upload
+              const id = {}
+
+              // Replace the selection with a placeholder
+              const { tr } = view.state
+              if (!tr.selection.empty) tr.deleteSelection()
+              const imageMeta = {
+                type: 'add',
+                pos: tr.selection.from,
+                id,
+              }
+              tr.setMeta(imagePluginKey, imageMeta)
+              view.dispatch(tr)
+
+              upload(image).then(
+                (src) => {
+                  // const placholderPos = findPlaceholder(view.state, id)
+                  // // If the content around the placeholder has been deleted, drop
+                  // // the image
+                  // if (placholderPos == null) return
+                  // // Otherwise, insert it at the placeholder's position, and remove
+                  // // the placeholder
+                  // const removeMeta = {
+                  //   type: 'remove',
+                  //   id,
+                  // }
+                  view.dispatch(
+                    view.state.tr.insert(
+                      tr.selection.from,
+                      schema.nodes.image.create({ src })
+                    )
+                  )
+                  event.preventDefault()
+                  return true
+                },
+                () => {
+                  // On failure, just clean up the placeholder
+                  view.dispatch(tr.setMeta(imagePluginKey, { remove: { id } }))
+                }
+              )
             }
           } else {
             const reader = new FileReader()
@@ -35,7 +78,11 @@ export const uploadImagePlugin = (upload: UploadFn) => {
               const node = schema.nodes.image.create({
                 src: readerEvent.target?.result,
               })
-              slice.content.replaceChild(0, node)
+              if (slice.content.firstChild) {
+                slice.content.replaceChild(0, node)
+              } else {
+                slice.content.append(node)
+              }
               return true
             }
             if (!image) return false
