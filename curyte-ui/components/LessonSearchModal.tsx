@@ -6,6 +6,7 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Spinner,
 } from '@chakra-ui/react'
 import { SearchIcon } from '@heroicons/react/outline'
 import { Lesson } from '@prisma/client'
@@ -14,7 +15,6 @@ import { debounce } from 'ts-debounce'
 import { LessonWithProfile } from '../interfaces/lesson_with_profile'
 import { queryLessons } from '../lib/apiHelpers'
 import LessonList from './LessonList'
-import LoadingSpinner from './LoadingSpinner'
 
 interface Props {
   onClose: () => void
@@ -33,13 +33,14 @@ const LessonSearchModal = ({ onClose, isOpen, onSelectLesson }: Props) => {
         setLoading(true)
         setLessons(await queryLessons(q))
         setLoading(false)
-      }, 100),
+      }, 250),
     []
   )
 
   const handleQueryChange = (q: string) => {
     setQuery(q)
     if (!q) return
+    setLoading(true)
     debouncedDoSearch(q)
   }
 
@@ -68,12 +69,12 @@ const LessonSearchModal = ({ onClose, isOpen, onSelectLesson }: Props) => {
             ></Input>
           </InputGroup>
           {query && (
-            <div className="relative flex flex-wrap items-center justify-center w-full min-h-full gap-4 pt-4 mt-6 border-t-2 border-zinc-200">
-              {loading && <LoadingSpinner />}
-              {!!lessons && (
+            <div className="flex flex-wrap items-center justify-center w-full min-h-full gap-4 pt-4 mt-6 border-t-2 border-zinc-200">
+              {loading && <Spinner size="xl" className="m-16" />}
+              {!loading && !!lessons && (
                 <LessonList lessons={lessons} onSelectLesson={onSelectLesson} />
               )}
-              {!lessons?.length && 'None found!'}
+              {!loading && !lessons?.length && 'None found!'}
             </div>
           )}
         </ModalBody>
