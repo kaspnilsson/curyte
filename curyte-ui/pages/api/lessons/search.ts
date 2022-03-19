@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client'
 import { User } from '@supabase/supabase-js'
 import { NextApiRequest, NextApiResponse } from 'next'
 import prismaClient from '../../../lib/prisma'
-import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs'
+import { getUser } from '@supabase/supabase-auth-helpers/nextjs'
 
 const MAX_RESULTS = 20
 
@@ -46,7 +46,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { user } = await supabaseClient.auth.api.getUserByCookie(req)
+  const { user } = await getUser({ req, res })
   const {
     method,
     query: { q },
