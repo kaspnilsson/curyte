@@ -20,7 +20,8 @@ export const DragHandle = Extension.create({
     const HANDLER_GAP = 48
     const dragHandler = document.createElement('div')
     dragHandler.textContent = '⠿'
-    dragHandler.className = 'sm:text-sm lg:text-md xl:text-lg drag-handler'
+    dragHandler.className =
+      'transition sm:text-sm lg:text-md xl:text-lg drag-handler'
 
     function createRect(rect: DOMRect) {
       if (rect == null) {

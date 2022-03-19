@@ -216,6 +216,7 @@ textarea::placeholder {
 }
 
 .drag-handler {
+  color: var(--chakra-colors-zinc-500);
   position: absolute;
   cursor: grab;
   z-index: 9;
@@ -228,5 +229,6 @@ textarea::placeholder {
 
   &:hover {
     background-color: rgba(24, 24, 27, 0.04);
+    color: var(--chakra-colors-zinc-700);
   }
 }
