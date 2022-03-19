@@ -9,19 +9,13 @@ const StyleMenuItems = ({ editor }: Props) => (
     <MenuItem
       onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
       icon={<i className="font-thin ri-2x ri-h-1" />}
-      label="Heading 1"
+      label="Heading"
       description="Large section heading."
     />
     <MenuItem
       onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
       icon={<i className="font-thin ri-2x ri-h-2" />}
-      label="Heading 2"
-      description="Medium section heading."
-    />
-    <MenuItem
-      onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-      icon={<i className="font-thin ri-2x ri-h-3" />}
-      label="Heading 3"
+      label="Subheading"
       description="Small section heading."
     />
     <MenuItem

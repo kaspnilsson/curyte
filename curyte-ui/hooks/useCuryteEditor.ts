@@ -77,7 +77,7 @@ const useCuryteEditor = (
           0,
         ]
       },
-    }).configure({ levels: [1, 2, 3] }),
+    }).configure({ levels: [1, 2] }),
     CuryteImage(
       (image: File) =>
         new Promise((resolve, reject) => {
