@@ -12,8 +12,10 @@ export const DragHandle = Extension.create({
     const HANDLER_GAP = 48
     const dragHandler = document.createElement('div')
     dragHandler.textContent = '⠿'
+    dragHandler.className = 'sm:text-sm lg:text-md xl:text-lg'
     dragHandler.style.position = 'absolute'
     dragHandler.style.cursor = 'grab'
+    dragHandler.style.zIndex = '9999'
     dragHandler.style.margin = '0 auto'
 
     function createRect(rect) {
