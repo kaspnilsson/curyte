@@ -26,6 +26,11 @@ export const updateTag = async (
     body: JSON.stringify(args),
   }).then(parseTagJson)
 
+export const logTagView = async (tagText: string) =>
+  fetch(`/api/logView?tagText=${tagText}`, {
+    method: 'PUT',
+  })
+
 export const parsePathJson = async (res: Response) =>
   res.json().then((p) => p as PathWithProfile)
 
@@ -51,6 +56,11 @@ export const updatePath = async (
     method: 'PUT',
     body: JSON.stringify(args),
   }).then(parsePathJson)
+
+export const logPathView = async (uid: string) =>
+  fetch(`/api/logView?pathId=${uid}`, {
+    method: 'PUT',
+  })
 
 export const parseLessonJson = async (res: Response) =>
   res.json().then((l) => l as LessonWithProfile)
@@ -92,6 +102,11 @@ export const updateLesson = async (
     method: 'PUT',
     body: JSON.stringify(args),
   }).then(parseLessonJson)
+
+export const logLessonView = async (uid: string) =>
+  fetch(`/api/logView?lessonId=${uid}`, {
+    method: 'PUT',
+  })
 
 export const getLessons = async (args: Prisma.LessonFindManyArgs) =>
   fetch(`/api/lessons`, {

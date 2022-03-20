@@ -20,7 +20,7 @@ import DateFormatter from '../../../components/DateFormatter'
 import CoverImage from '../../../components/CoverImage'
 import { Lesson } from '@prisma/client'
 import { Unit } from '../../../interfaces/unit'
-import { updatePath } from '../../../lib/apiHelpers'
+import { logPathView } from '../../../lib/apiHelpers'
 import prismaClient from '../../../lib/prisma'
 import { PathWithProfile } from '../../../interfaces/path_with_profile'
 import { LessonWithProfile } from '../../../interfaces/lesson_with_profile'
@@ -34,9 +34,7 @@ const PublishedPathView = ({ lessonsMap, path }: Props) => {
   // Log views only on render of a published path
   useEffect(() => {
     if (path.private) return
-    updatePath(path.uid, {
-      viewCount: { increment: 1 },
-    })
+    logPathView(path.uid)
   }, [path])
 
   if (!path) return <ErrorPage statusCode={404} />

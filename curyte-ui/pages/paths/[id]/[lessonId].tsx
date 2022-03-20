@@ -35,7 +35,12 @@ import { Button, useToast, Text } from '@chakra-ui/react'
 import Link from 'next/link'
 import { Lesson, Path } from '@prisma/client'
 import { JSONContent } from '@tiptap/core'
-import { deleteLesson, updateLesson, updatePath } from '../../../lib/apiHelpers'
+import {
+  deleteLesson,
+  logLessonView,
+  logPathView,
+  updateLesson,
+} from '../../../lib/apiHelpers'
 import prismaClient from '../../../lib/prisma'
 import { Unit } from '../../../interfaces/unit'
 import { LessonWithProfile } from '../../../interfaces/lesson_with_profile'
@@ -65,12 +70,8 @@ const LessonInPathView = ({
   // Log views only on render of a published lesson in published path
   useEffect(() => {
     if (lesson.private || path.private) return
-    updateLesson(lesson.uid, {
-      viewCount: { increment: 1 },
-    })
-    updatePath(path.uid, {
-      viewCount: { increment: 1 },
-    })
+    logLessonView(lesson.uid)
+    logPathView(path.uid)
   }, [lesson.private, lesson.uid, path.private, path.uid])
 
   const handleDelete = async () => {
