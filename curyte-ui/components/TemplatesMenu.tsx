@@ -11,6 +11,7 @@ import { Lesson } from '@prisma/client'
 import { Editor, JSONContent } from '@tiptap/react'
 import { useEffect, useState } from 'react'
 import useConfirmDialog from '../hooks/useConfirmDialog'
+import { getLessons } from '../lib/apiHelpers'
 import MenuItem from './MenuItem'
 
 interface Props {
@@ -26,10 +27,7 @@ const TemplatesMenu = ({ editor }: Props) => {
   useEffect(() => {
     const getTemplates = async () => {
       setLoading(true)
-      const fetched = await fetch('/api/lessons', {
-        method: 'POST',
-        body: JSON.stringify({ where: { template: true } }),
-      })
+      const fetched = await getLessons({ where: { template: true } })
       if (!fetched.ok) return
 
       setTemplates(await fetched.json())

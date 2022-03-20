@@ -12,6 +12,7 @@ import { withAuthRequired } from '@supabase/supabase-auth-helpers/nextjs'
 import { Lesson } from '@prisma/client'
 import prismaClient from '../../../lib/prisma'
 import { useUserAndProfile } from '../../../contexts/user'
+import { updateLesson } from '../../../lib/apiHelpers'
 
 interface Props {
   lesson?: Lesson
@@ -49,16 +50,22 @@ const LessonView = (props: Props) => {
   const debouncedUpdateLesson = useMemo(
     () =>
       debounce(async (l: Lesson) => {
-        const lessonPromise = fetch(`/api/lessons/${l.uid}`, {
-          method: 'POST',
-          body: JSON.stringify(l),
-        })
-        setSavingPromise(lessonPromise)
-        await lessonPromise
-        setLesson(l)
-        setSavingPromise(null)
+        try {
+          const lessonPromise = updateLesson(l.uid, l)
+          setSavingPromise(lessonPromise)
+          await lessonPromise
+          setLesson(l)
+        } catch (e: unknown) {
+          toast({
+            status: 'error',
+            title: 'Update failed',
+            description: (e as Error).message,
+          })
+        } finally {
+          setSavingPromise(null)
+        }
       }, 500),
-    []
+    [toast]
   )
 
   const handleUpdate = async (l: Lesson) => {

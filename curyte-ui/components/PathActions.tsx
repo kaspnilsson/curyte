@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useUserAndProfile } from '../contexts/user'
 import useConfirmDialog from '../hooks/useConfirmDialog'
+import { deletePath } from '../lib/apiHelpers'
 import { userIsAdmin } from '../utils/hacks'
 import { editPathRoute, workspaceRoute, pathRoute } from '../utils/routes'
 
@@ -23,7 +24,7 @@ const PathActions = ({ path, isReadOnlyView }: Props) => {
     if (!userAndProfile || !userAndProfile?.user) return
     try {
       setLoading(true)
-      await fetch(`/api/paths/${path.uid}`, { method: 'DELETE' })
+      await deletePath(path.uid)
 
       router.push(workspaceRoute)
     } finally {

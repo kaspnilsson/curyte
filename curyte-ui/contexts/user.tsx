@@ -13,6 +13,7 @@ import { User } from '@supabase/supabase-js'
 import { Profile } from '@prisma/client'
 import { exploreRoute } from '../utils/routes'
 import { useToast } from '@chakra-ui/react'
+import { getProfile } from '../lib/apiHelpers'
 
 export const UserAuthContext = createContext<ContextProps>({
   userAndProfile: null,
@@ -64,17 +65,12 @@ export const UserAuthProvider = ({ children }: { children: ReactNode }) => {
     const getUserProfile = async () => {
       setLoading(true)
       if (user) {
-        const res = await fetch(`/api/profiles/${user.id}`, {
-          method: 'GET',
-        })
+        const profile = await getProfile(user.id)
 
-        if (res.ok) {
-          const profile = await res.json()
-          setUserAndProfile({
-            user,
-            profile,
-          })
-        }
+        setUserAndProfile({
+          user,
+          profile,
+        })
       } else {
         setUserAndProfile(null)
       }

@@ -15,7 +15,7 @@ import prismaClient from '../../lib/prisma'
 import { User } from '@supabase/supabase-js'
 import useConfirmDialog from '../../hooks/useConfirmDialog'
 import { useUserAndProfile } from '../../contexts/user'
-import { updateProfile } from '../../lib/apiHelpers'
+import { deleteUser, updateProfile } from '../../lib/apiHelpers'
 import {
   withAuthRequired,
   getUser,
@@ -35,7 +35,7 @@ const SettingsView = ({ user, profile }: Props) => {
   const handleDelete = async () => {
     if (!user) return
     setSaving(true)
-    await fetch(`/api/users/${user.id}`, { method: 'DELETE' })
+    await deleteUser(user.id)
     logout()
     setSaving(false)
     router.push(indexRoute)

@@ -70,7 +70,7 @@ export default async function handler(
       res.status(403).end('Forbiddden!')
       return
     }
-    await prismaClient.lesson.delete({ where: { uid } })
+    await prismaClient.profile.delete({ where: { uid } })
     res.status(200)
   } else {
     res.status(405).end(`Method ${method} Not Allowed`)
