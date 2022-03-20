@@ -14,7 +14,7 @@ function useActiveId(itemIds: string[], deps: DependencyList = []) {
           }
         })
       },
-      { rootMargin: '-111px 0% -80% 0%' }
+      { rootMargin: '-113px 0% -80% 0%' }
     )
 
     itemIds.forEach((id) => {
