@@ -21,7 +21,7 @@ export const DragHandle = Extension.create({
     const dragHandler = document.createElement('div')
     dragHandler.textContent = '⠿'
     dragHandler.className =
-      'transition sm:text-sm lg:text-md xl:text-lg drag-handler'
+      'hidden transition sm:text-sm lg:text-md xl:text-lg drag-handler md:flex'
 
     function createRect(rect: DOMRect) {
       if (rect == null) {

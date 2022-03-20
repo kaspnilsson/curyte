@@ -78,7 +78,7 @@ const LessonOutline = ({ editor }: Props) => {
                   className={classNames(
                     'py-2 md:py-1 flex hover:text-zinc-900 rounded px-1 transition-colors',
                     {
-                      'text-violet-700': activeId === item.id,
+                      'text-zinc-900': activeId === item.id,
                       'text-zinc-500': activeId !== item.id,
                     }
                   )}

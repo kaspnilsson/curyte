@@ -1,7 +1,7 @@
 import { DependencyList, useState, useEffect } from 'react'
 
 function useActiveId(itemIds: string[], deps: DependencyList = []) {
-  const [activeId, setActiveId] = useState(``)
+  const [activeId, setActiveId] = useState('')
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -14,7 +14,7 @@ function useActiveId(itemIds: string[], deps: DependencyList = []) {
           }
         })
       },
-      { rootMargin: `10% 0% -80% 0%` }
+      { rootMargin: '-111px 0% -80% 0%' }
     )
 
     itemIds.forEach((id) => {
