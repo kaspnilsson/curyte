@@ -27,10 +27,7 @@ const TemplatesMenu = ({ editor }: Props) => {
   useEffect(() => {
     const getTemplates = async () => {
       setLoading(true)
-      const fetched = await getLessons({ where: { template: true } })
-      if (!fetched.ok) return
-
-      setTemplates(await fetched.json())
+      setTemplates(await getLessons({ where: { template: true } }))
       setLoading(false)
     }
     getTemplates()
