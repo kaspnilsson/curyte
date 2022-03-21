@@ -4,7 +4,8 @@ import { LessonWithProfile } from '../interfaces/lesson_with_profile'
 import { PathWithProfile } from '../interfaces/path_with_profile'
 
 export const handleFetchErrors = async (res: Response) => {
-  if (!res.ok) throw Error(`${res.statusText}: ${await res.text()}`)
+  if (!res.ok)
+    throw Error(`${res.statusText || res.status}: ${await res.text()}`)
   return res
 }
 
