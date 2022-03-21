@@ -25,7 +25,12 @@ import { Button, useToast } from '@chakra-ui/react'
 import { Profile } from '@prisma/client'
 import prismaClient from '../../lib/prisma'
 import { JSONContent } from '@tiptap/core'
-import { deleteLesson, getLesson, updateLesson } from '../../lib/apiHelpers'
+import {
+  deleteLesson,
+  getLesson,
+  logLessonView,
+  updateLesson,
+} from '../../lib/apiHelpers'
 import { LessonWithProfile } from '../../interfaces/lesson_with_profile'
 import NotesEditor from '../../components/NotesEditor'
 import NotesList from '../../components/NotesList'
@@ -51,9 +56,7 @@ const PublishedLessonView = (props: Props) => {
   // Log views only on render of a published lesson
   useEffect(() => {
     if (!lesson || lesson.private) return
-    updateLesson(lesson.uid, {
-      viewCount: { increment: 1 },
-    })
+    logLessonView(lesson.uid)
   }, [lesson])
 
   useEffect(() => {

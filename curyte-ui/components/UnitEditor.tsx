@@ -205,6 +205,10 @@ const UnitEditor = ({
                             aria-label="Edit lesson"
                             icon={<PencilAltIcon className="w-5 h-5" />}
                             onClick={() => onEditLesson(id)}
+                            disabled={
+                              !lessonsByUid[id] ||
+                              lessonsByUid[id].authorId !== user.uid
+                            }
                           />
                         </Tooltip>
                         <Tooltip label="Remove lesson">

@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import prismaClient from '../../../lib/prisma'
 import { getUser } from '@supabase/supabase-auth-helpers/nextjs'
+import { userCanEditLesson } from '../../../server-utils/lesson-ownership'
 
 export default async function handler(
   req: NextApiRequest,
@@ -41,10 +42,14 @@ export default async function handler(
       return
     }
 
-    const lesson = await prismaClient.lesson.upsert({
+    if (!(await userCanEditLesson(uid, user.id))) {
+      res.status(403).end('You do not own this lesson!')
+      return
+    }
+
+    const lesson = await prismaClient.lesson.update({
       where: { uid },
-      create: { ...JSON.parse(body) },
-      update: { ...JSON.parse(body) },
+      data: JSON.parse(body),
       include: { profiles: true },
     })
 
@@ -61,9 +66,16 @@ export default async function handler(
       return
     }
 
+    const data = JSON.parse(body)
+
+    if (!(await userCanEditLesson(uid, user.id))) {
+      res.status(403).end('You do not own this lesson!')
+      return
+    }
+
     const lesson = await prismaClient.lesson.update({
       where: { uid },
-      data: { ...JSON.parse(body) },
+      data,
       include: { profiles: true },
     })
 
@@ -79,11 +91,12 @@ export default async function handler(
       res.status(403).end('Not logged in!')
       return
     }
-    const lesson = await prismaClient.lesson.findFirst({ where: { uid } })
-    if (user.id !== lesson?.authorId) {
-      res.status(403).end('Forbiddden!')
+
+    if (!(await userCanEditLesson(uid, user.id))) {
+      res.status(403).end('You do not own this lesson!')
       return
     }
+
     // Delete things referencing this lesson first to not violate foriegn key constraints
     await prismaClient.notes.deleteMany({ where: { lessonId: uid } })
     await prismaClient.lesson.delete({ where: { uid } })

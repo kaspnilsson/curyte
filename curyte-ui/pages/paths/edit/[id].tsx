@@ -10,6 +10,8 @@ import { withAuthRequired } from '@supabase/supabase-auth-helpers/nextjs'
 import { Path } from '@prisma/client'
 import prismaClient from '../../../lib/prisma'
 import { useUserAndProfile } from '../../../contexts/user'
+import { useToast } from '@chakra-ui/react'
+import { updatePath } from '../../../lib/apiHelpers'
 
 type Props = {
   id: string
@@ -23,26 +25,33 @@ const EditPathView = (props: Props) => {
     null
   )
   const [dirty, setDirty] = useState(false)
+  const toast = useToast()
 
   const debouncedUpdatePath = useMemo(
     () =>
       debounce(async (p: Path) => {
         if (!path?.uid) return
-        p = {
-          ...p,
-          created: p?.created || new Date(),
-          updated: new Date(),
+        try {
+          p = {
+            ...p,
+            created: p?.created || new Date(),
+            updated: new Date(),
+          }
+          const pathPromise = updatePath(path.uid, p)
+          setSavingPromise(pathPromise)
+          await pathPromise
+          setPath(p)
+        } catch (e: unknown) {
+          toast({
+            status: 'error',
+            title: 'Update failed',
+            description: (e as Error).message,
+          })
+        } finally {
+          setSavingPromise(null)
         }
-        const pathPromise = fetch(`/api/paths/${path.uid}`, {
-          method: 'POST',
-          body: JSON.stringify(p),
-        })
-        setSavingPromise(pathPromise)
-        await pathPromise
-        setPath(p)
-        setSavingPromise(null)
       }, 500),
-    [path]
+    [path?.uid, toast]
   )
 
   const handleUpdate = async (l: Path) => {

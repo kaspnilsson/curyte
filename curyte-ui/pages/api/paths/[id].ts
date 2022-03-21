@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import prismaClient from '../../../lib/prisma'
 import { getUser } from '@supabase/supabase-auth-helpers/nextjs'
+import { userCanEditPath } from '../../../server-utils/lesson-ownership'
 
 export default async function handler(
   req: NextApiRequest,
@@ -35,10 +36,14 @@ export default async function handler(
       return
     }
 
-    const path = await prismaClient.path.upsert({
+    if (!(await userCanEditPath(uid, user.id))) {
+      res.status(403).end('You do not own this path!')
+      return
+    }
+
+    const path = await prismaClient.path.update({
       where: { uid },
-      create: { ...JSON.parse(body) },
-      update: { ...JSON.parse(body) },
+      data: { ...JSON.parse(body) },
     })
 
     if (!path) {
@@ -49,6 +54,11 @@ export default async function handler(
   } else if (method === 'PUT') {
     if (!user) {
       res.status(403).end('Not logged in!')
+      return
+    }
+
+    if (!(await userCanEditPath(uid, user.id))) {
+      res.status(403).end('You do not own this path!')
       return
     }
 
@@ -67,6 +77,12 @@ export default async function handler(
       res.status(403).end('Not logged in!')
       return
     }
+
+    if (!(await userCanEditPath(uid, user.id))) {
+      res.status(403).end('You do not own this path!')
+      return
+    }
+
     const path = await prismaClient.path.findFirst({ where: { uid } })
     if (user.id !== path?.authorId) {
       res.status(403).end('Forbiddden!')

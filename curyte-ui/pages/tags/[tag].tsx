@@ -7,7 +7,7 @@ import { exploreRoute, tagRoute, tagRouteHrefPath } from '../../utils/routes'
 import { Tag, Lesson } from '@prisma/client'
 import prismaClient from '../../lib/prisma'
 import { useUserAndProfile } from '../../contexts/user'
-import { updateTag } from '../../lib/apiHelpers'
+import { logTagView } from '../../lib/apiHelpers'
 import { LessonWithProfile } from '../../interfaces/lesson_with_profile'
 
 type Props = {
@@ -22,9 +22,7 @@ const TagView = ({ lessons, tag, tagText, relatedTags }: Props) => {
 
   useEffect(() => {
     if (!userAndProfile?.user || !tag) return
-    updateTag(tagText, {
-      viewCount: { increment: 1 },
-    })
+    logTagView(tagText)
   }, [tag, tagText, userAndProfile])
 
   return (

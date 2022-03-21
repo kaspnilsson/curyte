@@ -22,6 +22,7 @@ import { Confetti } from './Confetti'
 import EditableCoverImage from './EditableCoverImage'
 import { Path, Profile, Lesson } from '@prisma/client'
 import { Unit } from '../interfaces/unit'
+import { getLesson } from '../lib/apiHelpers'
 
 interface Props {
   path: Path
@@ -94,9 +95,7 @@ const EditPathPage = ({ path, user, handleUpdate, saving, dirty }: Props) => {
       const fetchLessons = async () => {
         const promises = []
         for (const lessonUid of toFetch) {
-          const p = fetch(`/api/lessons/${lessonUid}`, { method: 'GET' }).then(
-            (res) => res.json()
-          )
+          const p = getLesson(lessonUid)
           promises.push(p)
         }
         const clone = { ...lessonsByUid }
