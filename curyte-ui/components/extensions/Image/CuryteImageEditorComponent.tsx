@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Input } from '@chakra-ui/react'
+import { Textarea } from '@chakra-ui/react'
 import classNames from 'classnames'
 import ImageFullWidth from '../../icons/ImageFullWidth'
 import ImageHalfWidth from '../../icons/ImageHalfWidth'
@@ -55,14 +55,15 @@ const CuryteImageEditorComponent = (props: EditorProps) => {
           'ring-4': selected,
         })}
       ></img>
-      <Input
+      <Textarea
         placeholder="Add a caption..."
         variant="ghost"
         colorScheme="black"
-        className="max-w-full mx-auto italic text-center bg-transparent text-zinc-700"
+        resize="none"
+        className="max-w-full mx-auto italic text-center bg-transparent border-0 text-zinc-700 max-h-fit"
         value={caption}
         onChange={(e) => onUpdate({ ...props, caption: e.target.value })}
-      ></Input>
+      ></Textarea>
     </div>
   )
 }
