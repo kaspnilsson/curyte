@@ -32,6 +32,7 @@ import CuryteImage from '../components/extensions/Image/CuryteImage'
 import Heading from '@tiptap/extension-heading'
 import { useToast } from '@chakra-ui/react'
 import { TrailingNode } from '../components/extensions/TrailingNode'
+import { DragHandle } from '../components/extensions/DragHandle'
 import Notice from '../components/extensions/Notice/Notice'
 import NoticeContent from '../components/extensions/Notice/NoticeContent'
 
@@ -77,7 +78,7 @@ const useCuryteEditor = (
           0,
         ]
       },
-    }).configure({ levels: [1, 2, 3] }),
+    }).configure({ levels: [1, 2] }),
     CuryteImage(
       (image: File) =>
         new Promise((resolve, reject) => {
@@ -106,6 +107,7 @@ const useCuryteEditor = (
   if (fancy) {
     extensions.push(
       ...[
+        DragHandle,
         Details,
         DetailsContent,
         Focus.configure({

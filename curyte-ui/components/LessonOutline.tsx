@@ -3,6 +3,7 @@ import { List, ListItem } from '@chakra-ui/react'
 import { Editor } from '@tiptap/react'
 import { useCallback, useEffect, useState } from 'react'
 import { types } from './extensions/AutoId'
+import useActiveId from '../hooks/useActiveId'
 
 interface Props {
   editor: Editor | null
@@ -17,6 +18,10 @@ interface Heading {
 
 const LessonOutline = ({ editor }: Props) => {
   const [items, setItems] = useState<Heading[]>([])
+  const activeId = useActiveId(
+    items.map((i) => i.id),
+    [items]
+  )
 
   const handleUpdate = useCallback(() => {
     if (!editor) return
@@ -60,7 +65,7 @@ const LessonOutline = ({ editor }: Props) => {
       {!items.length && null}
       {!!items.length && (
         <div className="flex-col w-full truncate lex toc">
-          <span className="mb-2 text-xs font-bold uppercase text-zinc-500">
+          <span className="px-1 mb-2 text-xs font-bold uppercase text-zinc-500">
             Outline
           </span>
           <List listStyleType="none">
@@ -71,20 +76,23 @@ const LessonOutline = ({ editor }: Props) => {
                   href={`#${item.id}`}
                   key={index}
                   className={classNames(
-                    'py-2 md:py-1 flex text-zinc-500 hover:text-zinc-900 rounded',
-                    { 'bg-zinc-500 text-white': item.isActive }
+                    'py-2 md:py-1 flex hover:text-zinc-900 rounded px-1 transition-colors',
+                    {
+                      'text-zinc-900': activeId === item.id,
+                      'text-zinc-500': activeId !== item.id,
+                    }
                   )}
                 >
                   <ListItem
                     className={classNames(
-                      'truncate w-full text-sm',
+                      'truncate w-full text-sm text-inherit',
                       // Cannot use string concatenation to compute: https://v2.tailwindcss.com/docs/just-in-time-mode
                       {
-                        'pl-0 font-semibold text-sm 2xl:text-base leading-tight tracking-tighter':
+                        'pl-0 font-bold text-sm 2xl:text-base leading-tight tracking-tighter':
                           item.level === minHeadingLevel,
-                        'pl-3 text-xs 2xl:text-sm':
+                        'pl-3 font-semibold text-xs 2xl:text-sm leading-tight tracking-tighter':
                           item.level === minHeadingLevel + 1,
-                        'pl-6 text-xs 2xl:text-sm':
+                        'pl-6 text-xs 2xl:text-sm leading-tight tracking-tighter':
                           item.level === minHeadingLevel + 2,
                       }
                     )}

@@ -12,7 +12,7 @@ const CuryteImageEditorComponent = ({
   return (
     <div
       className={classNames(
-        'h-min-content flex flex-col items-center gap-1 relative p-2 mx-auto',
+        'h-min-content flex flex-col items-center gap-1 relative p-4 mx-auto',
         {
           'w-full': displayMode === 'full',
           'w-full md:max-w-[50%]': displayMode === 'half',
@@ -23,7 +23,7 @@ const CuryteImageEditorComponent = ({
         src={src}
         alt={alt}
         title={title}
-        className="m-0 border shadow-xl rounded-xl"
+        className="m-0 shadow-xl rounded-xl"
       ></img>
       {caption && (
         <span className="max-w-full mx-auto italic text-center bg-transparent text-zinc-700">

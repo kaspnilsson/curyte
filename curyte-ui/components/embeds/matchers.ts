@@ -9,7 +9,7 @@ export const urlMatchRegex = new RegExp(
 )
 
 export const youtubeUrlMatchRegex = new RegExp(
-  /(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([a-zA-Z0-9_-]{11})$/i
+  /(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i
 )
 
 export const googleDocsUrlMatchRegex = new RegExp(

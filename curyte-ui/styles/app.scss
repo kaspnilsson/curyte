@@ -1,8 +1,4 @@
 .ProseMirror {
-  > :first-child {
-    margin-top: 0.5em;
-  }
-
   br + br.ProseMirror-trailingBreak,
   &[contenteditable='false'] br.ProseMirror-trailingBreak {
     display: none;
@@ -213,4 +209,22 @@ textarea::placeholder {
 :root {
   --swiper-navigation-color: var(--chakra-colors-zinc-700) !important;
   --swiper-theme-color: var(--chakra-colors-zinc-700) !important;
+}
+
+.drag-handler {
+  color: var(--chakra-colors-zinc-500);
+  position: absolute;
+  cursor: grab;
+  z-index: 9;
+  margin: 0 auto;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  font-size: larger !important;
+
+  &:hover {
+    background-color: rgba(24, 24, 27, 0.04);
+    color: var(--chakra-colors-zinc-700);
+  }
 }

@@ -67,7 +67,7 @@ const FancyEditor = ({
                 >
                   <div
                     style={{ position: 'absolute', top: -16, left: -82 }}
-                    className="flex items-center bg-white border !rounded-lg shadow-xl"
+                    className="hidden md:flex items-center bg-white border !rounded-lg shadow-xl"
                   >
                     <DeleteButton
                       disabled={editor.isEmpty}
