@@ -51,6 +51,9 @@ module.exports = {
         },
       },
     },
+    letterSpacing: {
+      tighter: '-0.04em',
+    },
   },
   plugins: [
     require('@tailwindcss/typography'),

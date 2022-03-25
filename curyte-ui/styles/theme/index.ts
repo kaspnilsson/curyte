@@ -29,11 +29,6 @@ const theme = extendTheme({
     // 'focus-ring-color': 'rgba(255, 0, 125, 0.6)',
     outline: '0 0 0 3px var(--chakra-ui-focus-ring-color)',
   },
-  extend: {
-    letterSpacing: {
-      tigher: '-0.04em',
-    },
-  },
 } as ThemeConfig)
 
 export default theme
