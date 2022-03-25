@@ -186,6 +186,12 @@ export const queryProfiles = async (q: string) =>
     .then(handleFetchErrors)
     .then(parseProfilesJson)
 
+export const createProfile = async (data: Partial<Profile>) =>
+  await fetch('/api/profiles/create', {
+    body: JSON.stringify({ ...data }),
+    method: 'POST',
+  }).then(parseProfileJson)
+
 export const searchImages = async (
   q: string
 ): Promise<AttributedPhoto[] | undefined> =>
@@ -230,3 +236,6 @@ export const updateNotes = async (
   })
     .then(handleFetchErrors)
     .then(parseNotesJson)
+
+export const logoutServerside = async () =>
+  fetch('/api/auth/logout').then(handleFetchErrors)

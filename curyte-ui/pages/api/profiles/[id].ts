@@ -16,8 +16,6 @@ export default async function handler(
     res.status(400).end('No profile UID!')
     return
   }
-
-  const { user } = await getUser({ req, res })
   const uid = id as string
 
   if (method === 'GET') {
@@ -26,11 +24,12 @@ export default async function handler(
     })
 
     if (!profile) {
-      res.status(401).end('Not found!')
+      res.status(404).end('Not found!')
       return
     }
     res.status(200).json(profile)
   } else if (method === 'POST') {
+    const { user } = await getUser({ req, res })
     if (!user) {
       res.status(403).end('Not logged in!')
       return
@@ -47,6 +46,7 @@ export default async function handler(
     }
     res.status(200).json(profile)
   } else if (method === 'PUT') {
+    const { user } = await getUser({ req, res })
     if (!user) {
       res.status(403).end('Not logged in!')
       return
@@ -62,6 +62,7 @@ export default async function handler(
     }
     res.status(200).json(profile)
   } else if (method === 'DELETE') {
+    const { user } = await getUser({ req, res })
     if (!user) {
       res.status(403).end('Not logged in!')
       return

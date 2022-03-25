@@ -8,12 +8,11 @@ import {
 import { useUser } from '@supabase/supabase-auth-helpers/react'
 
 import { useRouter } from 'next/router'
-import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs'
 import { User } from '@supabase/supabase-js'
 import { Profile } from '@prisma/client'
 import { exploreRoute } from '../utils/routes'
 import { useToast } from '@chakra-ui/react'
-import { getProfile } from '../lib/apiHelpers'
+import { createProfile, logoutServerside, getProfile } from '../lib/apiHelpers'
 
 export const UserAuthContext = createContext<ContextProps>({
   userAndProfile: null,
@@ -65,12 +64,25 @@ export const UserAuthProvider = ({ children }: { children: ReactNode }) => {
     const getUserProfile = async () => {
       setLoading(true)
       if (user) {
-        const profile = await getProfile(user.id)
-
-        setUserAndProfile({
-          user,
-          profile,
-        })
+        let profile = null
+        try {
+          profile = await getProfile(user.id)
+        } catch (e: unknown) {
+          // uhh just create the profile i guess
+          profile = await createProfile({
+            uid: user.id,
+            displayName:
+              user.user_metadata.full_name ||
+              user.user_metadata.name ||
+              undefined,
+            photoUrl: user.user_metadata.avatar_url || undefined,
+          })
+        } finally {
+          setUserAndProfile({
+            user,
+            profile,
+          })
+        }
       } else {
         setUserAndProfile(null)
       }
@@ -81,7 +93,7 @@ export const UserAuthProvider = ({ children }: { children: ReactNode }) => {
   }, [error, isLoading, toast, user])
 
   const logout = async () => {
-    await supabaseClient.auth.signOut()
+    await logoutServerside()
     setUserAndProfile(null)
     router.push(exploreRoute)
   }

@@ -142,6 +142,7 @@ const NextStepsView = () => {
                 colorScheme="black"
                 size="lg"
                 className="justify-center w-full"
+                disabled={!(localProfile?.bio && localProfile?.displayName)}
               >
                 Continue
               </Button>
