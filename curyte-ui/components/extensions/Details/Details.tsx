@@ -51,7 +51,7 @@ const Details = Node.create({
       toggleDetails:
         () =>
         ({ commands }) =>
-          commands.toggleList('details', 'detailsContent'),
+          commands.wrapInList('details'),
     }
   },
 })
