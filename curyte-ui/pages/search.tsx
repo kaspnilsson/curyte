@@ -49,6 +49,27 @@ const SearchView = ({ q }: Props) => {
     fetch()
   }, [q])
 
+  useEffect(() => {
+    // select the first tab w results
+    if (loading) return
+    if (lessons.length) {
+      setActiveTab(0)
+      return
+    }
+    if (profiles.length) {
+      setActiveTab(1)
+      return
+    }
+    if (paths.length) {
+      setActiveTab(2)
+      return
+    }
+    if (tags.length) {
+      setActiveTab(3)
+      return
+    }
+  }, [lessons.length, loading, paths.length, profiles.length, tags.length])
+
   if (loading) return <LoadingSpinner />
   return (
     <>
@@ -71,7 +92,7 @@ const SearchView = ({ q }: Props) => {
                   Lessons matching {q}
                 </span>
                 {!lessons.length && (
-                  <div className="flex flex-col items-start gap-2 text-zinc-500">
+                  <div className="flex flex-col items-start gap-2 text-sm text-zinc-500">
                     Nothing here yet!
                   </div>
                 )}
@@ -80,18 +101,19 @@ const SearchView = ({ q }: Props) => {
             )}
             {activeTab !== 1 && (
               <div className="pt-8">
-                <span className="mb-6 text-lg font-bold leading-tight tracking-tighter break-all line-clamp-1">
+                <span className="mb-2 text-lg font-bold leading-tight tracking-tighter break-all line-clamp-1">
                   People matching {q}
                 </span>
-                <div className="flex flex-col gap-4">
-                  {!profiles.length && (
-                    <div className="text-sm text-zinc-500">
-                      Nothing here yet!
-                    </div>
-                  )}
-                  {!!profiles.length &&
-                    profiles.map((p) => <AuthorLink author={p} key={p.uid} />)}
-                </div>
+                {!profiles.length && (
+                  <div className="text-sm text-zinc-500">Nothing here yet!</div>
+                )}
+                {!!profiles.length && (
+                  <div className="flex flex-col gap-4 mt-4">
+                    {profiles.map((p) => (
+                      <AuthorLink author={p} key={p.uid} />
+                    ))}
+                  </div>
+                )}
               </div>
             )}
             {activeTab !== 2 && (
