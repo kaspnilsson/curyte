@@ -178,15 +178,16 @@ const SearchView = ({ q }: Props) => {
                 {!!lessons.length && <LessonList lessons={lessons} />}
               </TabPanel>
               <TabPanel className="!px-0">
-                <div className="flex flex-col gap-8 mt-4">
-                  {!profiles.length && (
-                    <div className="text-sm text-zinc-500">
-                      Nothing here yet!
-                    </div>
-                  )}
-                  {!!profiles.length &&
-                    profiles.map((p) => <AuthorLink author={p} key={p.uid} />)}
-                </div>
+                {!profiles.length && (
+                  <div className="text-sm text-zinc-500">Nothing here yet!</div>
+                )}
+                {!!profiles.length && (
+                  <div className="flex flex-col gap-8 mt-4">
+                    {profiles.map((p) => (
+                      <AuthorLink author={p} key={p.uid} />
+                    ))}
+                  </div>
+                )}
               </TabPanel>
               <TabPanel className="!px-0">
                 {!paths.length && (
