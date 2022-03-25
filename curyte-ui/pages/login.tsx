@@ -164,7 +164,7 @@ const Login = () => {
               disabled={isLoading}
             >
               <FormControl id="email">
-                <FormLabel className="font-semibold leading-tight tracking-tighter">
+                <FormLabel className="font-semibold leading-tight tracking-tighter text-zinc-500">
                   Or, log in with email
                 </FormLabel>
                 <Input

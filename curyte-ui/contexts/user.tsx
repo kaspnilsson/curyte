@@ -10,7 +10,7 @@ import { useUser } from '@supabase/supabase-auth-helpers/react'
 import { useRouter } from 'next/router'
 import { User } from '@supabase/supabase-js'
 import { Profile } from '@prisma/client'
-import { exploreRoute } from '../utils/routes'
+import { exploreRoute, loginRoute } from '../utils/routes'
 import { useToast } from '@chakra-ui/react'
 import { createProfile, logoutServerside, getProfile } from '../lib/apiHelpers'
 
@@ -68,15 +68,20 @@ export const UserAuthProvider = ({ children }: { children: ReactNode }) => {
         try {
           profile = await getProfile(user.id)
         } catch (e: unknown) {
-          // uhh just create the profile i guess
-          profile = await createProfile({
-            uid: user.id,
-            displayName:
-              user.user_metadata.full_name ||
-              user.user_metadata.name ||
-              undefined,
-            photoUrl: user.user_metadata.avatar_url || undefined,
-          })
+          // Just create the profile i guess
+          try {
+            profile = await createProfile({
+              uid: user.id,
+              displayName:
+                user.user_metadata.full_name ||
+                user.user_metadata.name ||
+                undefined,
+              photoUrl: user.user_metadata.avatar_url || undefined,
+            })
+          } catch (e: unknown) {
+            // User is logged out serverside but not clientside
+            router.push(loginRoute())
+          }
         } finally {
           setUserAndProfile({
             user,
@@ -90,7 +95,7 @@ export const UserAuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     getUserProfile()
-  }, [error, isLoading, toast, user])
+  }, [error, isLoading, router, toast, user])
 
   const logout = async () => {
     await logoutServerside()
