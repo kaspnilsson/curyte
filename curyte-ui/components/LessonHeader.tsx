@@ -16,7 +16,7 @@ import {
   ButtonGroup,
 } from '@chakra-ui/react'
 import {
-  BookmarkIcon,
+  // BookmarkIcon,
   DocumentRemoveIcon,
   PencilAltIcon,
   DuplicateIcon,
@@ -26,7 +26,7 @@ import { useRouter } from 'next/router'
 import { loginRoute, newLessonRoute } from '../utils/routes'
 import TagChip from './TagChip'
 import CoverImage from './CoverImage'
-import { black } from '../styles/theme/colors'
+// import { black } from '../styles/theme/colors'
 import useConfirmDialog from '../hooks/useConfirmDialog'
 import Present from './icons/Present'
 import { Lesson } from '@prisma/client'
@@ -57,7 +57,7 @@ const LessonHeader = ({
   const { userAndProfile, loading } = useUserAndProfile()
   const [, setFetching] = useState(false)
   const [parentLesson, setParentLesson] = useState<Lesson | null>(null)
-  const [isSaved, setIsSaved] = useState(false)
+  // const [isSaved, setIsSaved] = useState(false)
   const [featured, setFeatured] = useState(lesson.featured || false)
   const [isTemplate, setIsTemplate] = useState(lesson.template || false)
   // const toast = useToast()
@@ -75,35 +75,34 @@ const LessonHeader = ({
     const fetchIsSaved = async () => {
       // setIsSaved(await getCurrentUserHasSavedLesson(lesson.uid))
       // TODO(kaspnilsson)
-
-      setIsSaved(false)
+      // setIsSaved(false)
     }
     Promise.all([fetchParent(), fetchIsSaved()]).then(() => {
       setFetching(false)
     })
   }, [lesson, userAndProfile, lesson.parentLessonId, loading])
 
-  const toggleSaveLesson = async () => {
-    if (!userAndProfile) {
-      // logged out!
-      router.push(loginRoute(router.asPath))
-      return
-    }
-    setFetching(true)
-    setIsSaved(!isSaved)
-    // TODO(kaspnilsson)
-    // if (isSaved) {
-    //   await removeSavedLessonForCurrentUser(lesson.uid)
-    //   toast({ title: 'Lesson removed from bookmarks.' })
-    // } else {
-    //   await saveLessonForCurrentUser(lesson.uid)
-    //   toast({
-    //     title: 'Lesson bookmarked! View bookmarked lessons in your workspace.',
-    //     status: 'success',
-    //   })
-    // }
-    setFetching(false)
-  }
+  // const toggleSaveLesson = async () => {
+  //   if (!userAndProfile) {
+  //     // logged out!
+  //     router.push(loginRoute(router.asPath))
+  //     return
+  //   }
+  //   setFetching(true)
+  //   setIsSaved(!isSaved)
+  //   // TODO(kaspnilsson)
+  //   // if (isSaved) {
+  //   //   await removeSavedLessonForCurrentUser(lesson.uid)
+  //   //   toast({ title: 'Lesson removed from bookmarks.' })
+  //   // } else {
+  //   //   await saveLessonForCurrentUser(lesson.uid)
+  //   //   toast({
+  //   //     title: 'Lesson bookmarked! View bookmarked lessons in your workspace.',
+  //   //     status: 'success',
+  //   //   })
+  //   // }
+  //   setFetching(false)
+  // }
 
   const handleMakeCopy = async () => {
     if (!userAndProfile) {
@@ -189,7 +188,7 @@ const LessonHeader = ({
                   <Present />
                 </Button>
               )}
-              {!lesson.private && (
+              {/* {!lesson.private && (
                 <Button
                   size="xs"
                   variant="ghost"
@@ -202,7 +201,7 @@ const LessonHeader = ({
                     style={{ fill: isSaved ? black[900] : 'transparent' }}
                   />
                 </Button>
-              )}
+              )} */}
               <Menu id="more-menu" isLazy>
                 <MenuButton
                   as={Button}
