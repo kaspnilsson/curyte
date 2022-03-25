@@ -72,7 +72,7 @@ const ExplorePage = ({
           {userAndProfile && (
             <Button
               onClick={hideHero}
-              className="!absolute top-2 right-2 opacity-0 group-hover:opacity-100 ease-in-out transition-all duration-150"
+              className="!absolute top-2 right-2"
               size="xs"
             >
               <XIcon className="w-5 h-5 text-zinc-500" />
@@ -82,7 +82,7 @@ const ExplorePage = ({
             A better lesson builder -- for teachers, by teachers.
           </span>
           <Link href={newLessonRoute()} passHref>
-            <Button colorScheme="black" onClick={hideHero}>
+            <Button colorScheme="black" onClick={hideHero} size="lg">
               Start writing
             </Button>
           </Link>

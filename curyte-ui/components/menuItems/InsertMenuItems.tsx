@@ -49,6 +49,15 @@ const InsertMenuItems = ({
       />
       <MenuItem
         onClick={() => {
+          maybeFocusAndAppendToEnd()
+          editor.commands.toggleNotice()
+        }}
+        icon={<i className="font-thin ri-2x ri-lightbulb-line" />}
+        label="Prompt"
+        description="Insert a separate block for emphasis."
+      />
+      <MenuItem
+        onClick={() => {
           openDialog({
             isOpen: true,
             title: 'Enter a video URL',
@@ -191,15 +200,6 @@ const InsertMenuItems = ({
         icon={<i className="font-thin ri-2x ri-split-cells-vertical" />}
         label="Collapsible section"
         description="Insert a collapsible section."
-      />
-      <MenuItem
-        onClick={() => {
-          maybeFocusAndAppendToEnd()
-          editor.commands.toggleNotice()
-        }}
-        icon={<i className="font-thin ri-2x ri-lightbulb-line" />}
-        label="Prompt"
-        description="Insert a separate block for emphasis."
       />
       <MenuItem
         onClick={() => {
