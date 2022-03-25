@@ -94,18 +94,22 @@ const PublishedLessonView = (props: Props) => {
   }
 
   const handleToggleFeatured = async () => {
-    await updateLesson(lesson.uid, {
-      featured: !lesson.featured,
-    })
+    setLesson(
+      await updateLesson(lesson.uid, {
+        featured: !lesson.featured,
+      })
+    )
     toast({
       title: `Lesson featured state set to ${!lesson.featured}`,
     })
   }
 
   const handleToggleTemplate = async () => {
-    await updateLesson(lesson.uid, {
-      template: !lesson.template,
-    })
+    setLesson(
+      await updateLesson(lesson.uid, {
+        template: !lesson.template,
+      })
+    )
     toast({
       title: `Lesson template state set to ${!lesson.template}`,
     })
