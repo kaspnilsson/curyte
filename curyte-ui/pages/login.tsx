@@ -39,6 +39,10 @@ const Login = () => {
       })
     } else if (window && window.location) {
       const redirectHost = new URL(REDIRECT_URL_BASE).host
+      console.log(window.location)
+      console.log(REDIRECT_URL_BASE)
+      console.log(window.location.host)
+      console.log(redirectHost)
       if (window.location.host !== redirectHost) {
         toast({
           // infinite duration
