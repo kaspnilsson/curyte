@@ -36,6 +36,7 @@ const EditPathView = (props: Props) => {
             ...p,
             created: p?.created || new Date(),
             updated: new Date(),
+            units: p.units || [],
           }
           const pathPromise = updatePath(path.uid, p)
           setSavingPromise(pathPromise)
