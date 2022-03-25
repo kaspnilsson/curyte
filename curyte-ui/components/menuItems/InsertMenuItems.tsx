@@ -198,7 +198,7 @@ const InsertMenuItems = ({
           editor.commands.toggleNotice()
         }}
         icon={<i className="font-thin ri-2x ri-lightbulb-line" />}
-        label="Notice"
+        label="Prompt"
         description="Insert a separate block for emphasis."
       />
       <MenuItem
