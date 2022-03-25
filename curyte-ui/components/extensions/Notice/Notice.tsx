@@ -19,6 +19,7 @@ const Notice = Node.create({
   content: 'block+',
   group: 'block',
   defining: true,
+  atom: true,
 
   addAttributes() {
     return {
@@ -50,7 +51,7 @@ const Notice = Node.create({
       toggleNotice:
         () =>
         ({ commands }) =>
-          commands.toggleList('notice', 'noticeContent'),
+          commands.wrapInList('notice'),
     }
   },
 })
