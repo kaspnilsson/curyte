@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useState } from 'react'
+import React, { SyntheticEvent, useEffect, useState } from 'react'
 import {
   Button,
   FormControl,
@@ -18,14 +18,40 @@ import CuryteLogo from '../components/CuryteLogo'
 import Head from 'next/head'
 import Container from '../components/Container'
 
-const REDIRECT_URL_BASE =
-  process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 'curyte.com/redirect'
+const REDIRECT_URL_BASE = process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL
 
 const Login = () => {
   const toast = useToast()
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    if (!REDIRECT_URL_BASE) {
+      toast({
+        // infinite duration
+        duration: null,
+        id: 'wrong-host',
+        isClosable: true,
+        status: 'error',
+        title: 'Invalid server configuration',
+        description: 'Missing REDIRECT_URL_BASE',
+      })
+    } else if (window && window.location) {
+      const redirectHost = new URL(REDIRECT_URL_BASE).host
+      if (window.location.host !== redirectHost) {
+        toast({
+          // infinite duration
+          duration: null,
+          id: 'wrong-host',
+          isClosable: true,
+          status: 'error',
+          title: 'Invalid server configuration',
+          description: `Incorrect REDIRECT_URL_BASE: set to ${REDIRECT_URL_BASE}, which is a different host`,
+        })
+      }
+    }
+  }, [toast])
 
   const submitHandler = async (event: SyntheticEvent) => {
     event.preventDefault()
