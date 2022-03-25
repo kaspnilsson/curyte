@@ -132,6 +132,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       take: 10,
       include: { profiles: true },
       where: { featured: true, private: { not: true } },
+      orderBy: { updated: 'desc' },
     }),
     prismaClient.lesson.findMany({
       take: 10,
