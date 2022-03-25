@@ -10,7 +10,7 @@ import {
 import Link from 'next/link'
 import CuryteLogo from '../components/CuryteLogo'
 import Footer from '../components/Footer'
-import { exploreRoute, successRoute } from '../utils/routes'
+import { exploreRoute, loginRoute, successRoute } from '../utils/routes'
 import Head from 'next/head'
 import { SyntheticEvent, useEffect, useState } from 'react'
 import { Profile } from '@prisma/client'
@@ -30,7 +30,12 @@ const NextStepsView = () => {
   const [localProfile, setLocalProfile] = useState<Profile | null>(null)
 
   useEffect(() => {
-    if (loading || !userAndProfile) return
+    if (loading) return
+    if (!userAndProfile) {
+      // logged out!
+      router.push(loginRoute())
+      return
+    }
     setLocalProfile(userAndProfile.profile)
   }, [loading, router, userAndProfile])
 
