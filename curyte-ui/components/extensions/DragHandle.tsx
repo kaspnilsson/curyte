@@ -6,6 +6,10 @@ import { findDomRefAtPos, findParentNodeClosestToPos } from 'prosemirror-utils'
 
 import { Extension } from '@tiptap/core'
 import DragHandleButton from '../DragHandleButton'
+import InsertHandleButton from '../InsertHandleButton'
+import { PlusIcon } from '@heroicons/react/outline'
+import { Divider } from '@chakra-ui/react'
+import CuryteUIProviders from '../../contexts/CuryteUIProviders'
 
 // Disallow dragging on some nodes.
 // See https://github.com/ueberdosis/tiptap/issues/2250
@@ -28,14 +32,38 @@ export const DragHandle = Extension.create({
       'hidden transition sm:text-sm lg:text-md xl:text-lg drag-handler md:flex'
     let menuOpen = false
 
-    const renderReactComponent = () => {
+    const insertHandler = document.createElement('div')
+    insertHandler.setAttribute('id', 'insert-handler')
+    insertHandler.className =
+      'hidden transition sm:text-sm lg:text-md xl:text-lg insert-handler md:flex'
+
+    const renderReactComponents = () => {
       ReactDOM.render(
-        <DragHandleButton
-          editor={this.editor}
-          draggable={!!(activeNode && nodeIsDraggable(activeNode))}
-          onOpenStateChange={(isOpen) => (menuOpen = isOpen)}
-        />,
+        <CuryteUIProviders>
+          <DragHandleButton
+            editor={this.editor}
+            draggable={!!(activeNode && nodeIsDraggable(activeNode))}
+            onOpenStateChange={(isOpen) => (menuOpen = isOpen)}
+          />
+        </CuryteUIProviders>,
         dragHandler
+      )
+      ReactDOM.render(
+        <CuryteUIProviders>
+          <InsertHandleButton
+            editor={this.editor}
+            className="!w-full hover:bg-zinc-100 rounded"
+            onOpenStateChange={(isOpen) => (menuOpen = isOpen)}
+            buttonContent={
+              <div className="flex items-center justify-center w-full gap-2 px-2">
+                <Divider className="flex-1" />
+                <PlusIcon className="w-5 h-5" />
+                <Divider className="flex-1" />
+              </div>
+            }
+          />
+        </CuryteUIProviders>,
+        insertHandler
       )
     }
 
@@ -137,12 +165,20 @@ export const DragHandle = Extension.create({
         const win = activeNode.ownerDocument.defaultView
         if (!win) return false
         rect.top += win.pageYOffset
+        rect.bottom += win.pageYOffset
         rect.left += win.pageXOffset
+        rect.right += win.pageXOffset
         dragHandler.style.left = rect.left - WIDTH - PADDING + 'px'
         dragHandler.style.top = rect.top + 'px'
         dragHandler.style.height = rect.height + 'px'
         dragHandler.style.visibility = 'visible'
-        renderReactComponent()
+        insertHandler.style.left = rect.left + 'px'
+        insertHandler.style.width = activeNode.clientWidth + 'px'
+        insertHandler.style.bottom = rect.bottom + 16 + 'px'
+        insertHandler.style.top = rect.bottom + PADDING + 'px'
+        insertHandler.style.height = '16px'
+        insertHandler.style.visibility = 'visible'
+        renderReactComponents()
       } else {
         dragHandler.style.visibility = 'hidden'
       }
@@ -153,9 +189,12 @@ export const DragHandle = Extension.create({
         key: new PluginKey('dragHandler'),
         view: (editorView) => {
           bindEventsToDragHandler(editorView)
+          document.body.appendChild(insertHandler)
+
           return {
             destroy() {
               removeNode(dragHandler)
+              removeNode(insertHandler)
             },
             update(view) {
               const node = findParentNodeClosestToPos(
@@ -204,6 +243,7 @@ export const DragHandle = Extension.create({
               } else {
                 activeNode = null
                 dragHandler.style.visibility = 'hidden'
+                insertHandler.style.visibility = 'hidden'
               }
               return true
             },

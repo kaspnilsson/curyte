@@ -140,6 +140,7 @@ const useCuryteEditor = (
             }
             return ''
           },
+          showOnlyCurrent: false,
           includeChildren: true,
         }),
         MultipleChoice,

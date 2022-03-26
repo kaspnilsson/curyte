@@ -1,4 +1,4 @@
-import { Editor } from '@tiptap/react'
+import { Editor } from '@tiptap/core'
 import { InputDialogProps } from '../InputDialog'
 import MenuItem from '../MenuItem'
 import {

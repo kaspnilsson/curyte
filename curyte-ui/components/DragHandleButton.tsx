@@ -1,12 +1,5 @@
 import { TrashIcon, DotsVerticalIcon } from '@heroicons/react/outline'
-import {
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  Portal,
-  Tooltip,
-} from '@chakra-ui/react'
+import { Menu, MenuButton, MenuList, Portal, Tooltip } from '@chakra-ui/react'
 import { Editor } from '@tiptap/core'
 import MenuItem from './MenuItem'
 import classNames from 'classnames'
@@ -27,33 +20,34 @@ const DragHandleButton = ({ editor, draggable, onOpenStateChange }: Props) => {
       <Tooltip
         placement="bottom-start"
         label={
-          <div className="z-20 block grid-rows-2 p-4 text-sm text-center bg-white rounded shadow text-zinc-500">
+          <div className="text-center text-zinc-400">
             {draggable && (
               <div>
-                <span className="text-zinc-900">Drag</span> to move
+                <span className="text-zinc-50">Drag</span> to move
               </div>
             )}
             <div>
-              <span className="text-zinc-900">Click</span> to open menu
+              <span className="text-zinc-50">Click</span> to open menu
             </div>
           </div>
         }
       >
         <MenuButton
-          as={IconButton}
           aria-label="add"
           colorScheme="zinc"
           variant="ghost"
-          //   disabled={disabled}
-          className={classNames('rounded hover:bg-zinc-100 !p-1', {
-            'cursor-grab': draggable,
-          })}
+          className={classNames(
+            'rounded p-1 hover:bg-zinc-100 flex items-center justify-center',
+            {
+              'cursor-grab': draggable,
+            }
+          )}
         >
-          <DotsVerticalIcon className="w-5 h-5 text-zinc-500"></DotsVerticalIcon>
+          <DotsVerticalIcon className="w-5 h-5 text-zinc-500" />
         </MenuButton>
       </Tooltip>
       <Portal>
-        <MenuList className="z-20 p-4 overflow-auto bg-white rounded shadow max-h-96">
+        <MenuList className="z-20 max-h-96">
           <MenuItem
             disabled={editor.isEmpty}
             onClick={() => {
