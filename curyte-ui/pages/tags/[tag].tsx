@@ -9,6 +9,7 @@ import prismaClient from '../../lib/prisma'
 import { useUserAndProfile } from '../../contexts/user'
 import { logTagView } from '../../lib/apiHelpers'
 import { LessonWithProfile } from '../../interfaces/lesson_with_profile'
+import { deleteLessonContentServerside } from '../../utils/hacks'
 
 type Props = {
   tagText: string
@@ -82,10 +83,12 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const [tag = null, lessons = null] = await Promise.all([
     prismaClient.tag.findFirst({ where: { tagText } }),
     // Could also use the lesson IDs from the tag directly
-    prismaClient.lesson.findMany({
-      where: { tags: { has: tagText }, private: false },
-      include: { profiles: true },
-    }),
+    prismaClient.lesson
+      .findMany({
+        where: { tags: { has: tagText }, private: false },
+        include: { profiles: true },
+      })
+      .then(deleteLessonContentServerside),
   ])
 
   const tagNames = (lessons || []).reduce((acc: Set<string>, curr: Lesson) => {

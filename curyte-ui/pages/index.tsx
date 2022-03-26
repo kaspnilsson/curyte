@@ -19,6 +19,7 @@ import prismaClient from '../lib/prisma'
 import { useUserAndProfile } from '../contexts/user'
 import { LessonWithProfile } from '../interfaces/lesson_with_profile'
 import LoadingSpinner from '../components/LoadingSpinner'
+import { deleteLessonContentServerside } from '../utils/hacks'
 
 interface Props {
   featuredLessons: LessonWithProfile[]
@@ -128,24 +129,30 @@ const ExplorePage = ({
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const [featuredLessons, popularLessons, recentLessons] = await Promise.all([
-    prismaClient.lesson.findMany({
-      take: 10,
-      include: { profiles: true },
-      where: { featured: true, private: { not: true } },
-      orderBy: { updated: 'desc' },
-    }),
-    prismaClient.lesson.findMany({
-      take: 10,
-      include: { profiles: true },
-      where: { private: { not: true } },
-      orderBy: { viewCount: 'desc' },
-    }),
-    prismaClient.lesson.findMany({
-      take: 10,
-      include: { profiles: true },
-      where: { private: { not: true } },
-      orderBy: { created: 'desc' },
-    }),
+    prismaClient.lesson
+      .findMany({
+        take: 10,
+        include: { profiles: true },
+        where: { featured: true, private: { not: true } },
+        orderBy: { updated: 'desc' },
+      })
+      .then(deleteLessonContentServerside),
+    prismaClient.lesson
+      .findMany({
+        take: 10,
+        include: { profiles: true },
+        where: { private: { not: true } },
+        orderBy: { viewCount: 'desc' },
+      })
+      .then(deleteLessonContentServerside),
+    prismaClient.lesson
+      .findMany({
+        take: 10,
+        include: { profiles: true },
+        where: { private: { not: true } },
+        orderBy: { created: 'desc' },
+      })
+      .then(deleteLessonContentServerside),
   ])
 
   const tags = await prismaClient.tag.findMany({

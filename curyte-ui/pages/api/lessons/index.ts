@@ -1,23 +1,37 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+import { LessonWithProfile } from '../../../interfaces/lesson_with_profile'
 import prismaClient from '../../../lib/prisma'
+import { deleteLessonContentServerside } from '../../../utils/hacks'
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { method, body } = req
+  const {
+    method,
+    body,
+    query: { withContent },
+  } = req
+
   if (method === 'POST') {
-    const lessons = await prismaClient.lesson.findMany({
+    let lessons = await prismaClient.lesson.findMany({
       ...JSON.parse(body),
       include: { profiles: true },
     })
+    if (!withContent) {
+      lessons = deleteLessonContentServerside(lessons as LessonWithProfile[])
+    }
     res.status(200).json(lessons)
     return
   }
   if (method === 'GET') {
-    const lessons = await prismaClient.lesson.findMany({
+    let lessons = await prismaClient.lesson.findMany({
+      ...JSON.parse(body),
       include: { profiles: true },
     })
+    if (!withContent) {
+      lessons = deleteLessonContentServerside(lessons as LessonWithProfile[])
+    }
     res.status(200).json(lessons)
     return
   } else {

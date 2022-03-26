@@ -24,6 +24,7 @@ import { logPathView } from '../../../lib/apiHelpers'
 import prismaClient from '../../../lib/prisma'
 import { PathWithProfile } from '../../../interfaces/path_with_profile'
 import { LessonWithProfile } from '../../../interfaces/lesson_with_profile'
+import { deleteLessonContentServerside } from '../../../utils/hacks'
 
 interface Props {
   lessonsMap: { [uid: string]: LessonWithProfile }
@@ -194,10 +195,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   for (const u of (path?.units || []) as unknown as Unit[]) {
     lessonIds.push(...(u?.lessonIds || []))
   }
-  const lessons = await prismaClient.lesson.findMany({
-    where: { uid: { in: lessonIds } },
-    include: { profiles: true },
-  })
+  const lessons = await prismaClient.lesson
+    .findMany({
+      where: { uid: { in: lessonIds } },
+      include: { profiles: true },
+    })
+    .then(deleteLessonContentServerside)
   const lessonsMap: { [uid: string]: Lesson } = {}
   for (const l of lessons) {
     if (l) {

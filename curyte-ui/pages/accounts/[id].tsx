@@ -10,6 +10,7 @@ import { Lesson, Profile, Tag } from '@prisma/client'
 import ErrorPage from 'next/error'
 import prismaClient from '../../lib/prisma'
 import { LessonWithProfile } from '../../interfaces/lesson_with_profile'
+import { deleteLessonContentServerside } from '../../utils/hacks'
 
 type Props = {
   lessons: LessonWithProfile[]
@@ -72,10 +73,12 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   })
 
   const lessons = profile?.uid
-    ? await prismaClient.lesson.findMany({
-        where: { authorId: profile.uid, private: { not: true } },
-        include: { profiles: true },
-      })
+    ? await prismaClient.lesson
+        .findMany({
+          where: { authorId: profile.uid, private: { not: true } },
+          include: { profiles: true },
+        })
+        .then(deleteLessonContentServerside)
     : []
 
   const tagCounts = (lessons || []).reduce(

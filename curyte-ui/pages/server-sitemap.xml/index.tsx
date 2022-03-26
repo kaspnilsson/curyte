@@ -17,7 +17,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       changefreq: 'weekly',
     },
   ]
-  const lessons = await getLessons({ where: { private: { not: true } } })
+  const lessons = await getLessons({ where: { private: { not: true } } }, false)
   for (const lesson of lessons) {
     const loc = makeAbsoluteUrl(lessonRoute(lesson.uid))
     fields.push({

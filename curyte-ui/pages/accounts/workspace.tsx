@@ -36,6 +36,7 @@ import { useUserAndProfile } from '../../contexts/user'
 import { PathWithProfile } from '../../interfaces/path_with_profile'
 import { LessonWithProfile } from '../../interfaces/lesson_with_profile'
 import LoadingSpinner from '../../components/LoadingSpinner'
+import { deleteLessonContentServerside } from '../../utils/hacks'
 
 interface Props {
   paths: PathWithProfile[]
@@ -227,11 +228,13 @@ export const getServerSideProps = withAuthRequired({
 
     // TODO(kasper): rework saved lessons
     const [lessons, paths] = await Promise.all([
-      prismaClient.lesson.findMany({
-        where: { authorId: user?.id || 'no_user' },
-        orderBy: { updated: 'desc' },
-        include: { profiles: true },
-      }),
+      prismaClient.lesson
+        .findMany({
+          where: { authorId: user?.id || 'no_user' },
+          orderBy: { updated: 'desc' },
+          include: { profiles: true },
+        })
+        .then(deleteLessonContentServerside),
       prismaClient.path.findMany({
         where: { authorId: user?.id || 'no_user' },
         orderBy: { updated: 'desc' },
