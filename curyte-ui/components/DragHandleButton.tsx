@@ -1,4 +1,4 @@
-import { TrashIcon } from '@heroicons/react/outline'
+import { TrashIcon, DotsVerticalIcon } from '@heroicons/react/outline'
 import {
   IconButton,
   Menu,
@@ -8,23 +8,31 @@ import {
   Tooltip,
 } from '@chakra-ui/react'
 import { Editor } from '@tiptap/core'
-import GripIcon from './GripIcon'
 import MenuItem from './MenuItem'
+import classNames from 'classnames'
 
 interface Props {
   editor: Editor
+  draggable: boolean
+  onOpenStateChange?: (isOpen: boolean) => void
 }
 
-const DragHandleButton = ({ editor }: Props) => {
+const DragHandleButton = ({ editor, draggable, onOpenStateChange }: Props) => {
   return (
-    <Menu isLazy>
+    <Menu
+      isLazy
+      onOpen={onOpenStateChange ? () => onOpenStateChange(true) : () => null}
+      onClose={onOpenStateChange ? () => onOpenStateChange(false) : () => null}
+    >
       <Tooltip
         placement="bottom-start"
         label={
           <div className="z-20 block grid-rows-2 p-4 text-sm text-center bg-white rounded shadow text-zinc-500">
-            <div>
-              <span className="text-zinc-900">Drag</span> to move
-            </div>
+            {draggable && (
+              <div>
+                <span className="text-zinc-900">Drag</span> to move
+              </div>
+            )}
             <div>
               <span className="text-zinc-900">Click</span> to open menu
             </div>
@@ -37,9 +45,11 @@ const DragHandleButton = ({ editor }: Props) => {
           colorScheme="zinc"
           variant="ghost"
           //   disabled={disabled}
-          className="rounded hover:bg-zinc-100 cursor-grab !p-2"
+          className={classNames('rounded hover:bg-zinc-100 !p-1', {
+            'cursor-grab': draggable,
+          })}
         >
-          <GripIcon className="w-3 h-4 text-zinc-500"></GripIcon>
+          <DotsVerticalIcon className="w-5 h-5 text-zinc-500"></DotsVerticalIcon>
         </MenuButton>
       </Tooltip>
       <Portal>

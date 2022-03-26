@@ -25,7 +25,18 @@ export const DragHandle = Extension.create({
     dragHandler.setAttribute('id', 'drag-handler')
     dragHandler.className =
       'hidden transition sm:text-sm lg:text-md xl:text-lg drag-handler md:flex'
-    ReactDOM.render(<DragHandleButton editor={this.editor} />, dragHandler)
+    let menuOpen = false
+
+    const renderReactComponent = () => {
+      ReactDOM.render(
+        <DragHandleButton
+          editor={this.editor}
+          draggable={!!(nodeToBeDragged && nodeIsDraggable(nodeToBeDragged))}
+          onOpenStateChange={(isOpen) => (menuOpen = isOpen)}
+        />,
+        dragHandler
+      )
+    }
 
     function createRect(rect: DOMRect) {
       if (rect == null) {
@@ -74,7 +85,7 @@ export const DragHandle = Extension.create({
       if (!e.dataTransfer) return
       const coords = { left: e.clientX + HANDLER_GAP, top: e.clientY }
       const pos = blockPosAtCoords(coords, view)
-      if (pos != null && nodeToBeDragged) {
+      if (pos != null && nodeToBeDragged && nodeIsDraggable(nodeToBeDragged)) {
         view.dispatch(
           view.state.tr.setSelection(NodeSelection.create(view.state.doc, pos))
         )
@@ -144,7 +155,7 @@ export const DragHandle = Extension.create({
               return false
             },
             mousemove(view, event) {
-              if (!view.editable) return false
+              if (!view.editable || menuOpen) return false
               const coords = {
                 left: event.clientX + HANDLER_GAP,
                 top: event.clientY,
@@ -160,7 +171,6 @@ export const DragHandle = Extension.create({
                 )
                 if (
                   nodeToBeDragged &&
-                  nodeIsDraggable(nodeToBeDragged) &&
                   !nodeToBeDragged.classList?.contains('ProseMirror')
                 ) {
                   const rect = createRect(
@@ -175,6 +185,7 @@ export const DragHandle = Extension.create({
                   dragHandler.style.top = rect.top + 'px'
                   dragHandler.style.height = rect.height + 'px'
                   dragHandler.style.visibility = 'visible'
+                  renderReactComponent()
                 } else {
                   dragHandler.style.visibility = 'hidden'
                 }
