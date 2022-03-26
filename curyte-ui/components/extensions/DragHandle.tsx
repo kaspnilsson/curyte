@@ -2,6 +2,7 @@
 import { NodeSelection, Plugin, PluginKey } from 'prosemirror-state'
 import { EditorView } from 'prosemirror-view'
 import ReactDOM from 'react-dom'
+import { findDomRefAtPos, findParentNodeClosestToPos } from 'prosemirror-utils'
 
 import { Extension } from '@tiptap/core'
 import DragHandleButton from '../DragHandleButton'
@@ -17,7 +18,7 @@ export const DragHandle = Extension.create({
   name: 'dragHandler',
 
   addProseMirrorPlugins() {
-    let nodeToBeDragged: HTMLElement | null = null
+    let activeNode: HTMLElement | null = null
     const WIDTH = 32
     const PADDING = 8
     const HANDLER_GAP = 48
@@ -31,7 +32,7 @@ export const DragHandle = Extension.create({
       ReactDOM.render(
         <DragHandleButton
           editor={this.editor}
-          draggable={!!(nodeToBeDragged && nodeIsDraggable(nodeToBeDragged))}
+          draggable={!!(activeNode && nodeIsDraggable(activeNode))}
           onOpenStateChange={(isOpen) => (menuOpen = isOpen)}
         />,
         dragHandler
@@ -85,13 +86,13 @@ export const DragHandle = Extension.create({
       if (!e.dataTransfer) return
       const coords = { left: e.clientX + HANDLER_GAP, top: e.clientY }
       const pos = blockPosAtCoords(coords, view)
-      if (pos != null && nodeToBeDragged && nodeIsDraggable(nodeToBeDragged)) {
+      if (pos != null && activeNode && nodeIsDraggable(activeNode)) {
         view.dispatch(
           view.state.tr.setSelection(NodeSelection.create(view.state.doc, pos))
         )
         const slice = view.state.selection.content()
         e.dataTransfer.clearData()
-        e.dataTransfer.setDragImage(nodeToBeDragged, 10, 10)
+        e.dataTransfer.setDragImage(activeNode, 10, 10)
         view.dragging = { slice, move: true }
       }
     }
@@ -129,6 +130,24 @@ export const DragHandle = Extension.create({
       document.body.appendChild(dragHandler)
     }
 
+    const updateHandler = () => {
+      if (activeNode && !activeNode.classList?.contains('ProseMirror')) {
+        const rect = createRect(activeNode.getBoundingClientRect())
+        if (!rect) return false
+        const win = activeNode.ownerDocument.defaultView
+        if (!win) return false
+        rect.top += win.pageYOffset
+        rect.left += win.pageXOffset
+        dragHandler.style.left = rect.left - WIDTH - PADDING + 'px'
+        dragHandler.style.top = rect.top + 'px'
+        dragHandler.style.height = rect.height + 'px'
+        dragHandler.style.visibility = 'visible'
+        renderReactComponent()
+      } else {
+        dragHandler.style.visibility = 'hidden'
+      }
+    }
+
     return [
       new Plugin({
         key: new PluginKey('dragHandler'),
@@ -137,6 +156,18 @@ export const DragHandle = Extension.create({
           return {
             destroy() {
               removeNode(dragHandler)
+            },
+            update(view) {
+              const node = findParentNodeClosestToPos(
+                view.state.selection.$anchor,
+                () => true
+              )
+              if (!node) return
+              const el = findDomRefAtPos(node.pos, view.domAtPos.bind(view))
+
+              activeNode = getDirectChild(el ? (el as HTMLElement) : undefined)
+              updateHandler()
+              return
             },
           }
         },
@@ -166,31 +197,12 @@ export const DragHandle = Extension.create({
                 // && nodeHasContent(view, position.inside)
               ) {
                 const temp = view.nodeDOM(position.inside)
-                nodeToBeDragged = getDirectChild(
+                activeNode = getDirectChild(
                   temp ? (temp as HTMLElement) : undefined
                 )
-                if (
-                  nodeToBeDragged &&
-                  !nodeToBeDragged.classList?.contains('ProseMirror')
-                ) {
-                  const rect = createRect(
-                    nodeToBeDragged.getBoundingClientRect()
-                  )
-                  if (!rect) return false
-                  const win = nodeToBeDragged.ownerDocument.defaultView
-                  if (!win) return false
-                  rect.top += win.pageYOffset
-                  rect.left += win.pageXOffset
-                  dragHandler.style.left = rect.left - WIDTH - PADDING + 'px'
-                  dragHandler.style.top = rect.top + 'px'
-                  dragHandler.style.height = rect.height + 'px'
-                  dragHandler.style.visibility = 'visible'
-                  renderReactComponent()
-                } else {
-                  dragHandler.style.visibility = 'hidden'
-                }
+                updateHandler()
               } else {
-                nodeToBeDragged = null
+                activeNode = null
                 dragHandler.style.visibility = 'hidden'
               }
               return true

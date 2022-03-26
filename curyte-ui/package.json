@@ -88,6 +88,7 @@
     "next-seo": "^4.28.1",
     "next-use-posthog": "^1.16.0",
     "prop-types": "^15.7.2",
+    "prosemirror-utils": "^0.9.6",
     "re-resizable": "^6.9.1",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.0",
