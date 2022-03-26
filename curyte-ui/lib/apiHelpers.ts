@@ -143,8 +143,11 @@ export const logLessonView = async (uid: string) =>
     method: 'PUT',
   })
 
-export const getLessons = async (args: Prisma.LessonFindManyArgs) =>
-  fetch(`/api/lessons`, {
+export const getLessons = async (
+  args: Prisma.LessonFindManyArgs,
+  withContent = true
+) =>
+  fetch(`/api/lessons${withContent ? '?withContent=true' : ''}`, {
     method: 'POST',
     body: JSON.stringify(args),
   })
