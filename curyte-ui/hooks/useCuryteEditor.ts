@@ -136,11 +136,10 @@ const useCuryteEditor = (
                   return ''
                 }
               }
-              return 'Type anywhere or use [ insert ] to add new elements.'
+              return 'Type anywhere or use [ insert ].'
             }
             return ''
           },
-          showOnlyCurrent: false,
           includeChildren: true,
         }),
         MultipleChoice,
