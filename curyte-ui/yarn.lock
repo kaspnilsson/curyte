@@ -1872,6 +1872,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-dom@^17.0.14":
+  version "17.0.14"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.14.tgz#c8f917156b652ddf807711f5becbd2ab018dea9f"
+  integrity sha512-H03xwEP1oXmSfl3iobtmQ/2dHF5aBHr8aUMwyGZya6OW45G+xtdzmq6HkncefiBt5JU8DVyaWl/nWZbjZCnzAQ==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-instantsearch-core@*":
   version "6.10.6"
   resolved "https://registry.yarnpkg.com/@types/react-instantsearch-core/-/react-instantsearch-core-6.10.6.tgz#fce555ffd76e072752ec980e9e56a54d6a23a3e6"

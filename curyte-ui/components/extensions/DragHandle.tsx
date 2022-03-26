@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { NodeSelection, Plugin, PluginKey } from 'prosemirror-state'
 import { EditorView } from 'prosemirror-view'
+import ReactDOM from 'react-dom'
 
 import { Extension } from '@tiptap/core'
+import GripIcon from '../GripIcon'
 
 // Disallow dragging on some nodes.
 // See https://github.com/ueberdosis/tiptap/issues/2250
@@ -19,9 +21,13 @@ export const DragHandle = Extension.create({
     const WIDTH = 24
     const HANDLER_GAP = 48
     const dragHandler = document.createElement('div')
-    dragHandler.textContent = '⠿'
+    dragHandler.setAttribute('id', 'drag-handler')
     dragHandler.className =
       'hidden transition sm:text-sm lg:text-md xl:text-lg drag-handler md:flex'
+    ReactDOM.render(
+      <GripIcon className="w-2 h-5 text-zinc-500"></GripIcon>,
+      dragHandler
+    )
 
     function createRect(rect: DOMRect) {
       if (rect == null) {
