@@ -4,7 +4,7 @@ import { EditorView } from 'prosemirror-view'
 import ReactDOM from 'react-dom'
 
 import { Extension } from '@tiptap/core'
-import GripIcon from '../GripIcon'
+import DragHandleButton from '../DragHandleButton'
 
 // Disallow dragging on some nodes.
 // See https://github.com/ueberdosis/tiptap/issues/2250
@@ -18,16 +18,14 @@ export const DragHandle = Extension.create({
 
   addProseMirrorPlugins() {
     let nodeToBeDragged: HTMLElement | null = null
-    const WIDTH = 24
+    const WIDTH = 32
+    const PADDING = 8
     const HANDLER_GAP = 48
     const dragHandler = document.createElement('div')
     dragHandler.setAttribute('id', 'drag-handler')
     dragHandler.className =
       'hidden transition sm:text-sm lg:text-md xl:text-lg drag-handler md:flex'
-    ReactDOM.render(
-      <GripIcon className="w-2 h-5 text-zinc-500"></GripIcon>,
-      dragHandler
-    )
+    ReactDOM.render(<DragHandleButton editor={this.editor} />, dragHandler)
 
     function createRect(rect: DOMRect) {
       if (rect == null) {
@@ -104,15 +102,15 @@ export const DragHandle = Extension.create({
     }
 
     // Check if node has content. If not, the handler don't need to be shown.
-    function nodeHasContent(view: EditorView, inside: number): boolean {
-      const n = view.nodeDOM(inside) as HTMLElement
-      if (!n) return false
-      return !!(
-        n.textContent ||
-        n.getAttribute('draggable') === 'true' ||
-        n.classList.contains('react-renderer')
-      )
-    }
+    // function nodeHasContent(view: EditorView, inside: number): boolean {
+    //   const n = view.nodeDOM(inside) as HTMLElement
+    //   if (!n) return false
+    //   return !!(
+    //     n.textContent ||
+    //     n.getAttribute('draggable') === 'true' ||
+    //     n.classList.contains('react-renderer')
+    //   )
+    // }
 
     function bindEventsToDragHandler(editorView: EditorView) {
       dragHandler.setAttribute('draggable', 'true')
@@ -152,7 +150,10 @@ export const DragHandle = Extension.create({
                 top: event.clientY,
               }
               const position = view.posAtCoords(coords)
-              if (position && nodeHasContent(view, position.inside)) {
+              if (
+                position
+                // && nodeHasContent(view, position.inside)
+              ) {
                 const temp = view.nodeDOM(position.inside)
                 nodeToBeDragged = getDirectChild(
                   temp ? (temp as HTMLElement) : undefined
@@ -170,7 +171,7 @@ export const DragHandle = Extension.create({
                   if (!win) return false
                   rect.top += win.pageYOffset
                   rect.left += win.pageXOffset
-                  dragHandler.style.left = rect.left - WIDTH + 'px'
+                  dragHandler.style.left = rect.left - WIDTH - PADDING + 'px'
                   dragHandler.style.top = rect.top + 'px'
                   dragHandler.style.height = rect.height + 'px'
                   dragHandler.style.visibility = 'visible'
