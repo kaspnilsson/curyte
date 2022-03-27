@@ -51,6 +51,7 @@ export const DragHandle = Extension.create({
       ReactDOM.render(
         <CuryteUIProviders>
           <InsertHandleButton
+            forceNewBlock
             editor={this.editor}
             className="!w-full hover:bg-zinc-100 rounded"
             onOpenStateChange={(isOpen) => (menuOpen = isOpen)}

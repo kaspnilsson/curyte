@@ -10,6 +10,7 @@ interface Props {
   className?: string
   forceInsertAtEnd?: boolean
   onOpenStateChange?: (isOpen: boolean) => void
+  forceNewBlock?: boolean
 }
 
 const InsertHandleButton = ({
@@ -17,6 +18,7 @@ const InsertHandleButton = ({
   buttonContent,
   className = '',
   forceInsertAtEnd = false,
+  forceNewBlock = false,
   onOpenStateChange,
 }: Props) => {
   const [dialogProps, setDialogProps] = useState({} as InputDialogProps)
@@ -33,7 +35,7 @@ const InsertHandleButton = ({
     return null
   }
   return (
-    <div className="flex flex-wrap items-center justify-center w-full gap-1 py-1 mb-4 ">
+    <div className="flex flex-wrap items-center justify-center w-full gap-1">
       <InputDialog {...dialogProps} />
       <Menu
         id="insert-menu"
@@ -45,7 +47,10 @@ const InsertHandleButton = ({
           onOpenStateChange ? () => onOpenStateChange(false) : () => null
         }
       >
-        <Tooltip label="Insert rich content like videos and docs at the end of the lesson">
+        <Tooltip
+          label="Insert rich content like videos and docs at the end of the lesson"
+          closeDelay={10}
+        >
           <MenuButton className={className}>{buttonContent}</MenuButton>
         </Tooltip>
         <Portal>
@@ -54,6 +59,7 @@ const InsertHandleButton = ({
               editor={editor}
               openDialog={openDialog}
               forceInsertAtEnd={forceInsertAtEnd}
+              forceNewBlock={forceNewBlock}
             />
           </MenuList>
         </Portal>

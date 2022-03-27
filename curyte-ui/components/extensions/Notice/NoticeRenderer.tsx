@@ -48,7 +48,7 @@ const NoticeWrapper = ({
     <NodeViewWrapper>
       <div
         className={classNames(
-          'border rounded-xl p-4 lg:p-8 my-4 items-center justify-center flex relative group',
+          'border rounded-xl p-4 lg:p-8 my-8 items-center justify-center flex relative group',
           {
             'bg-red-50': backgroundColor === 'red',
             'bg-yellow-50': backgroundColor === 'yellow',
@@ -61,7 +61,7 @@ const NoticeWrapper = ({
         )}
       >
         {editor.isEditable && (
-          <div className="absolute flex items-center invisible gap-1 mx-auto transition-all ease-in-out bg-white border rounded-lg shadow-lg opacity-0 -bottom-4 group-hover:visible group-hover:opacity-100">
+          <div className="absolute flex items-center invisible gap-1 mx-auto transition-all ease-in-out bg-white border rounded-lg shadow-lg opacity-0 -top-4 group-hover:visible group-hover:opacity-100">
             <ColorOptions
               onChange={handleSetColor}
               currentColor={backgroundColor}
