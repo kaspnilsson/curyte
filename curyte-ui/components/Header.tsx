@@ -79,19 +79,19 @@ const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
                   separator={
                     <ChevronRightIcon className="w-3 h-3 md:w-5 md:h-5 text-zinc-500" />
                   }
-                  className="flex flex-wrap -mx-2"
+                  className="flex-wrap hidden -ml-2 md:flex"
                 >
                   {breadcrumbs.map((b, index) => (
                     <BreadcrumbItem key={index}>
                       <Link as={b.as} href={b.href} passHref>
                         <Button
                           size="xs"
-                          className={classNames('truncate min-w-0 !py-4', {
+                          className={classNames('truncate min-w-0 !py-1', {
                             'max-w-[15vw] !text-sm md:!text-base lg:!text-xl':
                               breadcrumbs.length > 2,
                             'max-w-[25vw] !text-xs md:!text-base lg:!text-xl':
                               breadcrumbs.length == 2,
-                            'max-w-[50vw] !text-base lg:!text-xl':
+                            'max-w-[40vw] !text-base lg:!text-xl':
                               breadcrumbs.length < 2,
                           })}
                           variant="ghost"
