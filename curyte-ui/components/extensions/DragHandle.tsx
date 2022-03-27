@@ -58,7 +58,7 @@ export const DragHandle = Extension.create({
             buttonContent={
               <div className="flex items-center justify-center w-full gap-2 px-2">
                 <Divider className="flex-1" />
-                <PlusIcon className="w-5 h-5" />
+                <PlusIcon className="w-4 h-4" />
                 <Divider className="flex-1" />
               </div>
             }
