@@ -51,8 +51,8 @@ const CuryteImageEditorComponent = (props: EditorProps) => {
         src={src}
         alt={alt}
         title={title}
-        className={classNames('!m-0 border not-prose rounded-xl', {
-          'ring-4': selected,
+        className={classNames('!m-0 border not-prose shadow-xl rounded-xl', {
+          'ring-4 ring-violet-500': selected,
         })}
       ></img>
       <Textarea

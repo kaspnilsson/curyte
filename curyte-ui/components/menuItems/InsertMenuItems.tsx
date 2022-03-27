@@ -1,4 +1,4 @@
-import { Editor } from '@tiptap/react'
+import { Editor } from '@tiptap/core'
 import { InputDialogProps } from '../InputDialog'
 import MenuItem from '../MenuItem'
 import {
@@ -17,11 +17,14 @@ interface Props {
   editor: Editor
   openDialog: (input: Partial<InputDialogProps>) => void
   forceInsertAtEnd?: boolean
+  forceNewBlock?: boolean
 }
+
 const InsertMenuItems = ({
   editor,
   openDialog,
   forceInsertAtEnd = false,
+  forceNewBlock = false,
 }: Props) => {
   const { getImageSrc } = useImageUploadDialog()
   const { getFileSrc } = useFileUploadDialog()
@@ -36,11 +39,21 @@ const InsertMenuItems = ({
     }
   }
 
+  // https://stackoverflow.com/questions/68146588/tiptap-insert-node-below-at-the-end-of-the-current-one
+  const maybeForceNewBlock = () => {
+    if (forceNewBlock) {
+      const pos = editor.state.selection.$from.after(1)
+      editor.commands.focus('start')
+      editor.chain().insertContentAt(pos, { type: 'paragraph' }).run()
+    }
+  }
+
   return (
     <>
       <MenuItem
         onClick={() => {
           maybeFocusAndAppendToEnd()
+          maybeForceNewBlock()
           editor.chain().insertContent(initialLessonContent).run()
         }}
         icon={<i className="font-thin ri-2x ri-input-method-line" />}
@@ -50,6 +63,7 @@ const InsertMenuItems = ({
       <MenuItem
         onClick={() => {
           maybeFocusAndAppendToEnd()
+          maybeForceNewBlock()
           editor.commands.toggleNotice()
         }}
         icon={<i className="font-thin ri-2x ri-lightbulb-line" />}
@@ -65,11 +79,13 @@ const InsertMenuItems = ({
             onConfirm: (src: string) => {
               if (youtubeUrlMatchRegex.test(src)) {
                 maybeFocusAndAppendToEnd()
+                maybeForceNewBlock()
                 editor.commands.setYoutubeVideo({
                   src,
                 })
               } else {
                 maybeFocusAndAppendToEnd()
+                maybeForceNewBlock()
                 // It's vimeo
                 editor.commands.setVimeoVideo({
                   src,
@@ -107,6 +123,7 @@ const InsertMenuItems = ({
             ),
             onConfirm: (src: string) => {
               maybeFocusAndAppendToEnd()
+              maybeForceNewBlock()
               editor
                 .chain()
                 .focus()
@@ -137,6 +154,7 @@ const InsertMenuItems = ({
           })
           if (src) {
             maybeFocusAndAppendToEnd()
+            maybeForceNewBlock()
             editor.chain().focus().setImage({ src }).run()
           }
         }}
@@ -151,6 +169,7 @@ const InsertMenuItems = ({
           })
           if (src) {
             maybeFocusAndAppendToEnd()
+            maybeForceNewBlock()
             editor.chain().focus().setIFrame({ src }).run()
           }
         }}
@@ -166,6 +185,7 @@ const InsertMenuItems = ({
             description: 'Enter the URL for another website.',
             onConfirm: (src: string) => {
               maybeFocusAndAppendToEnd()
+              maybeForceNewBlock()
               editor.chain().focus().setIFrame({ src }).run()
             },
           })
@@ -177,6 +197,7 @@ const InsertMenuItems = ({
       <MenuItem
         onClick={() => {
           maybeFocusAndAppendToEnd()
+          maybeForceNewBlock()
           editor.chain().focus().toggleCodeBlock().run()
         }}
         icon={<i className="font-thin ri-2x ri-code-box-line" />}
@@ -186,6 +207,7 @@ const InsertMenuItems = ({
       <MenuItem
         onClick={() => {
           maybeFocusAndAppendToEnd()
+          maybeForceNewBlock()
           editor.commands.addMultipleChoice()
         }}
         icon={<i className="font-thin ri-2x ri-survey-line" />}
@@ -195,6 +217,7 @@ const InsertMenuItems = ({
       <MenuItem
         onClick={() => {
           maybeFocusAndAppendToEnd()
+          maybeForceNewBlock()
           editor.commands.toggleDetails()
         }}
         icon={<i className="font-thin ri-2x ri-split-cells-vertical" />}
@@ -204,6 +227,7 @@ const InsertMenuItems = ({
       <MenuItem
         onClick={() => {
           maybeFocusAndAppendToEnd()
+          maybeForceNewBlock()
           editor
             .chain()
             .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
@@ -248,6 +272,7 @@ const InsertMenuItems = ({
             description: 'Enter the URL for a Curyte lesson.',
             onConfirm: (src: string) => {
               maybeFocusAndAppendToEnd()
+              maybeForceNewBlock()
               editor.commands.setCuryteLink({ src })
             },
             initialValue: '',

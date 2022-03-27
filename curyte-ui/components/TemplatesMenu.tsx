@@ -25,12 +25,19 @@ const TemplatesMenu = ({ editor }: Props) => {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    let subscribed = true
+
     const getTemplates = async () => {
       setLoading(true)
-      setTemplates(await getLessons({ where: { template: true } }))
+      const got = await getLessons({ where: { template: true } })
+      if (!subscribed) return
+      setTemplates(got)
       setLoading(false)
     }
     getTemplates()
+    return () => {
+      subscribed = false
+    }
   }, [])
 
   const applyTemplate = () => {

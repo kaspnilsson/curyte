@@ -1,18 +1,14 @@
 import { AppProps } from 'next/app'
-import { ChakraProvider } from '@chakra-ui/react'
 import 'remixicon/fonts/remixicon.css'
 import '../styles/index.css'
 import '../styles/app.scss'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import { ImageUploadDialogProvider } from '../components/dialogs/ImageUploadDialog/ImageUploadDialogContext'
 import { exception, pageview } from '../utils/gtag'
-import ErrorBoundary from '../components/ErrorBoundary'
-import theme from '../styles/theme'
-import { UserAuthProvider } from '../contexts/user'
-import { FileUploadDialogProvider } from '../components/dialogs/FileUploadDialog/FileUploadDialogContext'
-import { UserProvider } from '@supabase/supabase-auth-helpers/react'
+import CuryteUIProviders from '../contexts/CuryteUIProviders'
 import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs'
+import { UserProvider } from '@supabase/supabase-auth-helpers/react'
+import { UserAuthProvider } from '../contexts/user'
 
 export default function CuryteApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -46,19 +42,13 @@ export default function CuryteApp({ Component, pageProps }: AppProps) {
   })
 
   return (
-    <ChakraProvider portalZIndex={20} theme={theme}>
-      <UserProvider supabaseClient={supabaseClient}>
-        {/* UserProvider used within UserAuthProvider */}
-        <UserAuthProvider>
-          <ImageUploadDialogProvider>
-            <FileUploadDialogProvider>
-              <ErrorBoundary>
-                <Component {...pageProps} />
-              </ErrorBoundary>
-            </FileUploadDialogProvider>
-          </ImageUploadDialogProvider>
-        </UserAuthProvider>
-      </UserProvider>
-    </ChakraProvider>
+    <UserProvider supabaseClient={supabaseClient}>
+      {/* UserProvider used within UserAuthProvider */}
+      <UserAuthProvider>
+        <CuryteUIProviders>
+          <Component {...pageProps} />
+        </CuryteUIProviders>
+      </UserAuthProvider>
+    </UserProvider>
   )
 }
