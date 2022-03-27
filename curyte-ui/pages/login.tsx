@@ -17,6 +17,7 @@ import Footer from '../components/Footer'
 import CuryteLogo from '../components/CuryteLogo'
 import Head from 'next/head'
 import Container from '../components/Container'
+import { useRouter } from 'next/router'
 
 const REDIRECT_URL_BASE = process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL
 
@@ -25,6 +26,11 @@ const Login = () => {
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const router = useRouter()
+  const { referrer } = router.query
+  const redirectTo = referrer
+    ? `${REDIRECT_URL_BASE}${referrer}`
+    : REDIRECT_URL_BASE
 
   useEffect(() => {
     if (!REDIRECT_URL_BASE) {
@@ -63,7 +69,7 @@ const Login = () => {
         email,
       },
       {
-        redirectTo: REDIRECT_URL_BASE,
+        redirectTo,
       }
     )
     toast({ title: 'Check your email for a sign in link!' })
@@ -82,7 +88,7 @@ const Login = () => {
         provider: 'google',
       },
       {
-        redirectTo: REDIRECT_URL_BASE,
+        redirectTo,
       }
     )
     if (error) {
@@ -100,7 +106,7 @@ const Login = () => {
         provider: 'facebook',
       },
       {
-        redirectTo: REDIRECT_URL_BASE,
+        redirectTo,
       }
     )
     if (error) {
