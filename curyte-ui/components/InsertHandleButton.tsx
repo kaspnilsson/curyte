@@ -48,7 +48,14 @@ const InsertHandleButton = ({
         }
       >
         <Tooltip
-          label="Insert rich content like videos and docs at the end of the lesson"
+          label={
+            <div className="text-center text-zinc-400">
+              <div>
+                <span className="text-zinc-50">Click</span> to insert content
+                below
+              </div>
+            </div>
+          }
           closeDelay={10}
         >
           <MenuButton className={className}>{buttonContent}</MenuButton>
