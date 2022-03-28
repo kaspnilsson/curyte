@@ -211,20 +211,29 @@ textarea::placeholder {
   --swiper-theme-color: var(--chakra-colors-zinc-700) !important;
 }
 
-.drag-handler {
+.drag-handler,
+.insert-handler {
   color: var(--chakra-colors-zinc-500);
   position: absolute;
-  cursor: grab;
+  // cursor: grab;
   z-index: 9;
   margin: 0 auto;
   padding: 0 4px;
   display: flex;
   align-items: center;
-  border-radius: 8px;
-  font-size: larger !important;
+  justify-content: center;
 
-  &:hover {
-    background-color: rgba(24, 24, 27, 0.04);
-    color: var(--chakra-colors-zinc-700);
-  }
+  // &:hover {
+  //   background-color: rgba(24, 24, 27, 0.04);
+  //   color: var(--chakra-colors-zinc-700);
+  // }
+}
+
+.chakra-portal :first-child {
+  z-index: 1;
+}
+
+.chakra-menu__menu-list {
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important;
 }

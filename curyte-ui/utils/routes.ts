@@ -12,6 +12,14 @@ export const accountRouteHrefPath = '/accounts/[id]'
 
 export const loginRoute = (referrer = '') => {
   let out = '/login'
+  // Always refer in prod, but referring is broken in dev due to
+  // https://github.com/supabase/auth-elements/issues/12#issuecomment-864768979
+  if (
+    typeof window !== 'undefined' &&
+    window.location.hostname === PROD_HOST_NAME
+  ) {
+    referrer = window.location.pathname
+  }
   if (referrer) {
     out = `${out}?referrer=${referrer}`
   }
@@ -72,4 +80,6 @@ export const successRoute = '/success'
 // -------------
 
 export const getLessonLinkExternal = (uid: string) =>
-  `http://curyte.com${lessonRoute(uid)}`
+  `http://${PROD_HOST_NAME}${lessonRoute(uid)}`
+
+export const PROD_HOST_NAME = 'www.curyte.com'

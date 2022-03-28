@@ -1,8 +1,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { NodeSelection, Plugin, PluginKey } from 'prosemirror-state'
 import { EditorView } from 'prosemirror-view'
+import ReactDOM from 'react-dom'
+import { findDomRefAtPos, findParentNodeClosestToPos } from 'prosemirror-utils'
 
 import { Extension } from '@tiptap/core'
+import DragHandleButton from '../DragHandleButton'
+import InsertHandleButton from '../InsertHandleButton'
+import { PlusIcon } from '@heroicons/react/outline'
+import { Divider } from '@chakra-ui/react'
+import CuryteUIProviders from '../../contexts/CuryteUIProviders'
 
 // Disallow dragging on some nodes.
 // See https://github.com/ueberdosis/tiptap/issues/2250
@@ -15,13 +22,51 @@ export const DragHandle = Extension.create({
   name: 'dragHandler',
 
   addProseMirrorPlugins() {
-    let nodeToBeDragged: HTMLElement | null = null
-    const WIDTH = 24
+    let activeNode: HTMLElement | null = null
+    const WIDTH = 32
+    const PADDING = 8
     const HANDLER_GAP = 48
     const dragHandler = document.createElement('div')
-    dragHandler.textContent = '⠿'
+    dragHandler.setAttribute('id', 'drag-handler')
     dragHandler.className =
       'hidden transition sm:text-sm lg:text-md xl:text-lg drag-handler md:flex'
+    let menuOpen = false
+
+    const insertHandler = document.createElement('div')
+    insertHandler.setAttribute('id', 'insert-handler')
+    insertHandler.className =
+      'hidden transition sm:text-sm lg:text-md xl:text-lg insert-handler md:flex'
+
+    const renderReactComponents = () => {
+      ReactDOM.render(
+        <CuryteUIProviders>
+          <DragHandleButton
+            editor={this.editor}
+            draggable={!!(activeNode && nodeIsDraggable(activeNode))}
+            onOpenStateChange={(isOpen) => (menuOpen = isOpen)}
+          />
+        </CuryteUIProviders>,
+        dragHandler
+      )
+      ReactDOM.render(
+        <CuryteUIProviders>
+          <InsertHandleButton
+            forceNewBlock
+            editor={this.editor}
+            className="!w-full hover:bg-zinc-100 rounded"
+            onOpenStateChange={(isOpen) => (menuOpen = isOpen)}
+            buttonContent={
+              <div className="flex items-center justify-center w-full gap-2 px-2">
+                <Divider className="flex-1" />
+                <PlusIcon className="w-4 h-4" />
+                <Divider className="flex-1" />
+              </div>
+            }
+          />
+        </CuryteUIProviders>,
+        insertHandler
+      )
+    }
 
     function createRect(rect: DOMRect) {
       if (rect == null) {
@@ -70,13 +115,13 @@ export const DragHandle = Extension.create({
       if (!e.dataTransfer) return
       const coords = { left: e.clientX + HANDLER_GAP, top: e.clientY }
       const pos = blockPosAtCoords(coords, view)
-      if (pos != null && nodeToBeDragged) {
+      if (pos != null && activeNode && nodeIsDraggable(activeNode)) {
         view.dispatch(
           view.state.tr.setSelection(NodeSelection.create(view.state.doc, pos))
         )
         const slice = view.state.selection.content()
         e.dataTransfer.clearData()
-        e.dataTransfer.setDragImage(nodeToBeDragged, 10, 10)
+        e.dataTransfer.setDragImage(activeNode, 10, 10)
         view.dragging = { slice, move: true }
       }
     }
@@ -98,15 +143,15 @@ export const DragHandle = Extension.create({
     }
 
     // Check if node has content. If not, the handler don't need to be shown.
-    function nodeHasContent(view: EditorView, inside: number): boolean {
-      const n = view.nodeDOM(inside) as HTMLElement
-      if (!n) return false
-      return !!(
-        n.textContent ||
-        n.getAttribute('draggable') === 'true' ||
-        n.classList.contains('react-renderer')
-      )
-    }
+    // function nodeHasContent(view: EditorView, inside: number): boolean {
+    //   const n = view.nodeDOM(inside) as HTMLElement
+    //   if (!n) return false
+    //   return !!(
+    //     n.textContent ||
+    //     n.getAttribute('draggable') === 'true' ||
+    //     n.classList.contains('react-renderer')
+    //   )
+    // }
 
     function bindEventsToDragHandler(editorView: EditorView) {
       dragHandler.setAttribute('draggable', 'true')
@@ -114,14 +159,55 @@ export const DragHandle = Extension.create({
       document.body.appendChild(dragHandler)
     }
 
+    const updateHandler = () => {
+      if (activeNode && !activeNode.classList?.contains('ProseMirror')) {
+        const rect = createRect(activeNode.getBoundingClientRect())
+        if (!rect) return false
+        const win = activeNode.ownerDocument.defaultView
+        if (!win) return false
+        rect.top += win.pageYOffset
+        rect.bottom += win.pageYOffset
+        rect.left += win.pageXOffset
+        rect.right += win.pageXOffset
+        dragHandler.style.left = rect.left - WIDTH - PADDING + 'px'
+        dragHandler.style.top = rect.top + 'px'
+        dragHandler.style.height = rect.height + 'px'
+        dragHandler.style.visibility = 'visible'
+        insertHandler.style.left = rect.left + 'px'
+        insertHandler.style.width = activeNode.clientWidth + 'px'
+        insertHandler.style.bottom = rect.bottom + 16 + 'px'
+        insertHandler.style.top = rect.bottom + PADDING + 'px'
+        insertHandler.style.height = '16px'
+        insertHandler.style.visibility = 'visible'
+        renderReactComponents()
+      } else {
+        dragHandler.style.visibility = 'hidden'
+      }
+    }
+
     return [
       new Plugin({
         key: new PluginKey('dragHandler'),
         view: (editorView) => {
           bindEventsToDragHandler(editorView)
+          document.body.appendChild(insertHandler)
+
           return {
             destroy() {
               removeNode(dragHandler)
+              removeNode(insertHandler)
+            },
+            update(view) {
+              const node = findParentNodeClosestToPos(
+                view.state.selection.$anchor,
+                () => true
+              )
+              if (!node) return
+              const el = findDomRefAtPos(node.pos, view.domAtPos.bind(view))
+
+              activeNode = getDirectChild(el ? (el as HTMLElement) : undefined)
+              updateHandler()
+              return
             },
           }
         },
@@ -140,40 +226,25 @@ export const DragHandle = Extension.create({
               return false
             },
             mousemove(view, event) {
-              if (!view.editable) return false
+              if (!view.editable || menuOpen) return false
               const coords = {
                 left: event.clientX + HANDLER_GAP,
                 top: event.clientY,
               }
               const position = view.posAtCoords(coords)
-              if (position && nodeHasContent(view, position.inside)) {
+              if (
+                position
+                // && nodeHasContent(view, position.inside)
+              ) {
                 const temp = view.nodeDOM(position.inside)
-                nodeToBeDragged = getDirectChild(
+                activeNode = getDirectChild(
                   temp ? (temp as HTMLElement) : undefined
                 )
-                if (
-                  nodeToBeDragged &&
-                  nodeIsDraggable(nodeToBeDragged) &&
-                  !nodeToBeDragged.classList?.contains('ProseMirror')
-                ) {
-                  const rect = createRect(
-                    nodeToBeDragged.getBoundingClientRect()
-                  )
-                  if (!rect) return false
-                  const win = nodeToBeDragged.ownerDocument.defaultView
-                  if (!win) return false
-                  rect.top += win.pageYOffset
-                  rect.left += win.pageXOffset
-                  dragHandler.style.left = rect.left - WIDTH + 'px'
-                  dragHandler.style.top = rect.top + 'px'
-                  dragHandler.style.height = rect.height + 'px'
-                  dragHandler.style.visibility = 'visible'
-                } else {
-                  dragHandler.style.visibility = 'hidden'
-                }
+                updateHandler()
               } else {
-                nodeToBeDragged = null
+                activeNode = null
                 dragHandler.style.visibility = 'hidden'
+                insertHandler.style.visibility = 'hidden'
               }
               return true
             },

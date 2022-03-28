@@ -1,14 +1,8 @@
-import { EditorContent, FloatingMenu, Editor } from '@tiptap/react'
-import React, { useState } from 'react'
+import { EditorContent, Editor } from '@tiptap/react'
+import React from 'react'
 import FancyEditorMenuBar from './FancyEditorMenuBar'
 import TextBubbleMenu from './extensions/BubbleMenu/TextBubbleMenu'
 import TableBubbleMenu from './extensions/BubbleMenu/TableBubbleMenu'
-import DeleteButton from './popovers/DeleteButton'
-import AddButton from './popovers/AddButton'
-import StyleMenuItems from './menuItems/StyleMenuItems'
-import InsertMenuItems from './menuItems/InsertMenuItems'
-import InputDialog, { InputDialogProps } from './InputDialog'
-import { MenuDivider } from '@chakra-ui/react'
 import classNames from 'classnames'
 import FancyEditorMenuFooter from './FancyEditorMenuFooter'
 
@@ -23,18 +17,18 @@ const FancyEditor = ({
   readOnly = false,
   presentMode = false,
 }: Props) => {
-  const [dialogProps, setDialogProps] = useState({} as InputDialogProps)
+  // const [dialogProps, setDialogProps] = useState({} as InputDialogProps)
 
-  const onClose = () => {
-    setDialogProps({ ...dialogProps, isOpen: false })
-  }
+  // const onClose = () => {
+  //   setDialogProps({ ...dialogProps, isOpen: false })
+  // }
 
-  const openDialog = (input: Partial<InputDialogProps>) => {
-    setDialogProps({ ...dialogProps, ...input, onClose })
-  }
+  // const openDialog = (input: Partial<InputDialogProps>) => {
+  //   setDialogProps({ ...dialogProps, ...input, onClose })
+  // }
   return (
     <>
-      <InputDialog {...dialogProps} />
+      {/* <InputDialog {...dialogProps} /> */}
       <div className="relative flex flex-col items-start w-full">
         {!readOnly && <FancyEditorMenuBar editor={editor} />}
         <EditorContent
@@ -43,6 +37,7 @@ const FancyEditor = ({
             {
               'sm:prose-sm lg:prose-md xl:prose-lg': !presentMode,
               'sm:prose-sm md:prose-md lg:prose-lg xl:prose-xl': presentMode,
+              'px-6 md:px-8': !readOnly,
             }
           )}
           spellCheck
@@ -55,7 +50,7 @@ const FancyEditor = ({
               <>
                 <TableBubbleMenu editor={editor} />
                 <TextBubbleMenu editor={editor} />
-                <FloatingMenu
+                {/* <FloatingMenu
                   editor={editor}
                   tippyOptions={{ zIndex: 11, animation: true }}
                   shouldShow={({ view }) => {
@@ -95,7 +90,7 @@ const FancyEditor = ({
                       }
                     />
                   </div>
-                </FloatingMenu>
+                </FloatingMenu> */}
               </>
             )}
           </>

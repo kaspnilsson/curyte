@@ -39,7 +39,7 @@ const UserView = ({ lessons, profile, favoriteTags }: Props) => {
           <div className="my-4">{profile.bio}</div>
           <SocialLinks profile={profile} />
         </div>
-        <div className="flex-none ml-12">
+        <div className="flex-none ml-4 md:ml-12">
           <Avatar profile={profile} size="2xl" />
         </div>
       </section>
