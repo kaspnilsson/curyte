@@ -21,14 +21,15 @@ const DragHandleButton = ({ editor, draggable, onOpenStateChange }: Props) => {
         placement="bottom-start"
         label={
           <div className="text-center text-zinc-400">
+            <div>
+              <span className="text-zinc-50">Click</span> to open menu
+            </div>
             {draggable && (
               <div>
                 <span className="text-zinc-50">Drag</span> to move
               </div>
             )}
-            <div>
-              <span className="text-zinc-50">Click</span> to open menu
-            </div>
+            {!draggable && <div>Dragging disabled for this block type</div>}
           </div>
         }
       >
