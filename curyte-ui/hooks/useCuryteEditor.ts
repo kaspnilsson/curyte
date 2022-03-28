@@ -26,7 +26,7 @@ import { MultipleChoice } from '../components/extensions/MultipleChoice/Multiple
 import { zinc } from '../styles/theme/colors'
 import Details from '../components/extensions/Details/Details'
 import DetailsContent from '../components/extensions/Details/DetailsContent'
-import { getCurrentlySelectedNodes } from '../utils/prosemirror'
+// import { getCurrentlySelectedNodes } from '../utils/prosemirror'
 import { uploadFile } from '../utils/upload-image'
 import CuryteImage from '../components/extensions/Image/CuryteImage'
 import Heading from '@tiptap/extension-heading'
@@ -121,26 +121,26 @@ const useCuryteEditor = (
         VimeoEmbed,
         Placeholder.configure({
           showOnlyWhenEditable: true,
-          placeholder: ({ editor, node, pos }) => {
+          placeholder: ({ node, pos }) => {
             if (node.type.name === 'heading') {
               if (pos === 0) return 'Add your first section header...'
               if (node.attrs.level === 1) return 'Add section header...'
               return 'Add section subheader...'
             }
-            if (node.type.name === 'paragraph') {
-              const nodes = getCurrentlySelectedNodes(
-                editor.state.doc.resolve(pos)
-              )
-              for (const n of nodes) {
-                if (n.type.name === 'table') {
-                  return ''
-                }
-              }
-              return 'Type anywhere or use [ insert ].'
-            }
+            // if (node.type.name === 'paragraph') {
+            //   const nodes = getCurrentlySelectedNodes(
+            //     editor.state.doc.resolve(pos)
+            //   )
+            //   for (const n of nodes) {
+            //     if (n.type.name === 'table') {
+            //       return ''
+            //     }
+            //   }
+            //   return 'Type anywhere or use [ insert ].'
+            // }
             return ''
           },
-          // showOnlyCurrent: false,
+          showOnlyCurrent: false,
           includeChildren: true,
         }),
         MultipleChoice,
