@@ -26,7 +26,7 @@ import { MultipleChoice } from '../components/extensions/MultipleChoice/Multiple
 import { zinc } from '../styles/theme/colors'
 import Details from '../components/extensions/Details/Details'
 import DetailsContent from '../components/extensions/Details/DetailsContent'
-// import { getCurrentlySelectedNodes } from '../utils/prosemirror'
+import { getCurrentlySelectedNodes as getHierarchyFromPos } from '../utils/prosemirror'
 import { uploadFile } from '../utils/upload-image'
 import CuryteImage from '../components/extensions/Image/CuryteImage'
 import Heading from '@tiptap/extension-heading'
@@ -120,26 +120,29 @@ const useCuryteEditor = (
         NoticeContent,
         VimeoEmbed,
         Placeholder.configure({
-          showOnlyWhenEditable: true,
-          placeholder: ({ node, pos }) => {
+          placeholder: ({ editor, node, pos }) => {
             if (node.type.name === 'heading') {
               if (pos === 0) return 'Add your first section header...'
               if (node.attrs.level === 1) return 'Add section header...'
               return 'Add section subheader...'
             }
-            // if (node.type.name === 'paragraph') {
-            //   const nodes = getCurrentlySelectedNodes(
-            //     editor.state.doc.resolve(pos)
-            //   )
-            //   for (const n of nodes) {
-            //     if (n.type.name === 'table') {
-            //       return ''
-            //     }
-            //   }
-            //   return 'Type anywhere or use [ insert ].'
-            // }
+            if (node.type.name === 'paragraph') {
+              // const nodes = getHierarchyFromPos(editor.state.selection.$anchor)
+              const nodes = getHierarchyFromPos(editor.state.doc.resolve(pos))
+              for (const n of nodes) {
+                if (n.type.name === 'table') {
+                  return ''
+                }
+                // if (n === node) {
+                //   return 'Type anywhere or use [ insert ].'
+                // }
+              }
+              // return ''
+              return 'Type anywhere or use [ insert ].'
+            }
             return ''
           },
+          showOnlyWhenEditable: true,
           showOnlyCurrent: false,
           includeChildren: true,
         }),

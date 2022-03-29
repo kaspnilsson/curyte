@@ -10,6 +10,8 @@ import InsertHandleButton from '../InsertHandleButton'
 import { PlusIcon } from '@heroicons/react/outline'
 import { Divider } from '@chakra-ui/react'
 import CuryteUIProviders from '../../contexts/CuryteUIProviders'
+import { getDirectChild } from '../../utils/prosemirror'
+import { isServerSideRendering } from '../../hooks/useWindowSize'
 
 // Disallow dragging on some nodes.
 // See https://github.com/ueberdosis/tiptap/issues/2250
@@ -126,22 +128,6 @@ export const DragHandle = Extension.create({
       }
     }
 
-    // Get the direct child of the Editor. To cover cases when the user is hovering nested nodes.
-    function getDirectChild(
-      node: HTMLElement | null | undefined
-    ): HTMLElement | null {
-      while (node && node.parentNode) {
-        if (
-          node.classList?.contains('ProseMirror') ||
-          (node.parentNode as HTMLElement).classList?.contains('ProseMirror')
-        ) {
-          break
-        }
-        node = node.parentNode as HTMLElement
-      }
-      return node || null
-    }
-
     // Check if node has content. If not, the handler don't need to be shown.
     // function nodeHasContent(view: EditorView, inside: number): boolean {
     //   const n = view.nodeDOM(inside) as HTMLElement
@@ -192,10 +178,23 @@ export const DragHandle = Extension.create({
           bindEventsToDragHandler(editorView)
           document.body.appendChild(insertHandler)
 
+          let rerender: NodeJS.Timeout
+          const resizeListener = () => {
+            if (rerender) clearTimeout(rerender)
+            rerender = setTimeout(updateHandler, 10)
+          }
+
+          if (!isServerSideRendering) {
+            window.addEventListener('resize', resizeListener)
+          }
+
           return {
             destroy() {
               removeNode(dragHandler)
               removeNode(insertHandler)
+              if (!isServerSideRendering) {
+                window.removeEventListener('resize', resizeListener)
+              }
             },
             update(view) {
               const node = findParentNodeClosestToPos(
