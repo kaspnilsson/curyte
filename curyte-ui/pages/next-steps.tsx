@@ -28,7 +28,6 @@ const NextStepsView = () => {
   const router = useRouter()
   const { userAndProfile, loading } = useUserAndProfile()
   const [localProfile, setLocalProfile] = useState<Profile | null>(null)
-  const { referrer } = router.query
 
   useEffect(() => {
     if (loading) return
@@ -58,7 +57,7 @@ const NextStepsView = () => {
     if (!userAndProfile?.user?.id || !localProfile) return
     event.preventDefault()
     await updateProfile(userAndProfile.user.id, localProfile)
-    router.push(referrer ? (referrer as string) : successRoute)
+    router.push(successRoute)
   }
 
   if (!userAndProfile || !localProfile) return null

@@ -29,7 +29,7 @@ const Login = () => {
   const router = useRouter()
   const { referrer } = router.query
   const redirectTo = referrer
-    ? `${REDIRECT_URL_BASE}?referrer=${referrer}`
+    ? `${REDIRECT_URL_BASE}${referrer}`
     : REDIRECT_URL_BASE
 
   useEffect(() => {
