@@ -146,6 +146,7 @@ export const DragHandle = Extension.create({
     }
 
     const updateHandler = () => {
+      if (!this.editor.isEditable) return
       if (activeNode && !activeNode.classList?.contains('ProseMirror')) {
         const rect = createRect(activeNode.getBoundingClientRect())
         if (!rect) return false
