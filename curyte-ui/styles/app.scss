@@ -10,6 +10,15 @@
     float: left;
     pointer-events: none;
     height: 0;
+    opacity: 0;
+    -webkit-transition: opacity 0.05s ease-in-out;
+    -moz-transition: opacity 0.05s ease-in-out;
+    transition: opacity 0.05s ease-in-out;
+  }
+
+  .is-empty:hover::before,
+  .is-empty.has-focus::before {
+    opacity: 1;
   }
 
   &.ProseMirror-focused {
@@ -44,6 +53,13 @@
     a {
       color: initial;
     }
+  }
+
+  p,
+  h2,
+  h3,
+  h4 {
+    padding: 0.25em 0;
   }
 
   ul[data-type='taskList'] {

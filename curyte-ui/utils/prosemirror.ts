@@ -11,3 +11,19 @@ export const getCurrentlySelectedNodes = (
 
   return output
 }
+
+// Get the direct child of the Editor. To cover cases when the user is hovering nested nodes.
+export const getDirectChild = (
+  node: HTMLElement | null | undefined
+): HTMLElement | null => {
+  while (node && node.parentNode) {
+    if (
+      node.classList?.contains('ProseMirror') ||
+      (node.parentNode as HTMLElement).classList?.contains('ProseMirror')
+    ) {
+      break
+    }
+    node = node.parentNode as HTMLElement
+  }
+  return node || null
+}
