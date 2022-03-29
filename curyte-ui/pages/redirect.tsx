@@ -6,17 +6,18 @@ import { nextStepsRoute, workspaceRoute } from '../utils/routes'
 
 const NewPathView = () => {
   const router = useRouter()
+  const { referrer } = router.query
   const { userAndProfile, loading } = useUserAndProfile()
 
   useEffect(() => {
     if (loading || !userAndProfile) return
     if (userAndProfile?.profile?.displayName) {
       // If user has name, they probably went thru the walkthrough
-      router.push(workspaceRoute)
+      router.push(referrer ? (referrer as string) : workspaceRoute)
     } else {
-      router.push(nextStepsRoute)
+      router.push(nextStepsRoute(referrer ? (referrer as string) : ''))
     }
-  }, [loading, router, userAndProfile])
+  }, [loading, referrer, router, userAndProfile])
 
   return <LoadingSpinner />
 }
