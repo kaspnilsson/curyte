@@ -107,7 +107,7 @@ const LessonHeader = ({
   const handleMakeCopy = async () => {
     if (!userAndProfile) {
       // logged out!
-      router.push(loginRoute(router.asPath))
+      router.push(loginRoute(newLessonRoute(lesson.uid)))
       return
     }
     router.push(newLessonRoute(lesson.uid))

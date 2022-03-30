@@ -121,7 +121,7 @@ const LessonInPathView = ({
                 </div>
               )}
               {!user && (
-                <Link passHref href={loginRoute()}>
+                <Link passHref href={loginRoute(router.asPath)}>
                   <Button
                     colorScheme="black"
                     className="flex items-center gap-2 mt-4"
