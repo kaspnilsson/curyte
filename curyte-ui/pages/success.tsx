@@ -65,7 +65,7 @@ const NextStepsView = () => {
                   src={guideMeSvg}
                   alt="Show me how to use Curyte"
                 />
-                <h3 className="flex items-center gap-2 text-xl font-bold leading-tight tracking-tighter">
+                <h3 className="flex items-center justify-center gap-2 text-xl font-bold leading-tight tracking-tighter">
                   Teach me how to Curyte
                 </h3>
                 <Text className="text-sm text-zinc-500">
@@ -85,8 +85,8 @@ const NextStepsView = () => {
                 {/* <Button size="lg" className="justify-center w-full">
                   Explore lessons from others
                 </Button> */}
-                <h3 className="flex items-center gap-2 text-xl font-bold leading-tight tracking-tighter">
-                  Take me to the homepage
+                <h3 className="flex items-center justify-center gap-2 text-xl font-bold leading-tight tracking-tighter">
+                  Let me explore!
                 </h3>
                 <Text className="text-sm text-zinc-500">
                   Browse and copy hundreds of high quality lessons from teachers
