@@ -39,6 +39,7 @@ import { useUserAndProfile } from '../../contexts/user'
 import ShareLessonButton from '../../components/ShareLessonButton'
 import { PencilIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
+import { isServerSideRendering } from '../../hooks/useWindowSize'
 
 interface Props {
   lesson: LessonWithProfile | null
@@ -129,7 +130,10 @@ const PublishedLessonView = (props: Props) => {
                 </div>
               )}
               {!user && (
-                <Link passHref href={loginRoute()}>
+                <Link
+                  passHref
+                  href={loginRoute(isServerSideRendering ? '' : router.asPath)}
+                >
                   <Button
                     colorScheme="black"
                     className="flex items-center gap-2 mt-4"
