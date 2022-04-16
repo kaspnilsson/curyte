@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Textarea } from '@chakra-ui/react'
+import TextareaAutosize from 'react-textarea-autosize'
 import classNames from 'classnames'
 import ImageFullWidth from '../../icons/ImageFullWidth'
 import ImageHalfWidth from '../../icons/ImageHalfWidth'
@@ -24,7 +24,7 @@ const CuryteImageEditorComponent = (props: EditorProps) => {
   return (
     <div
       className={classNames(
-        'h-min-content flex flex-col items-center gap-1 relative p-2 mx-auto',
+        'h-min-content flex flex-col items-center gap-1 relative p-2',
         {
           'w-full': displayMode === 'full',
           'max-w-[50%]': displayMode === 'half',
@@ -55,15 +55,12 @@ const CuryteImageEditorComponent = (props: EditorProps) => {
           'ring-4 ring-violet-500': selected,
         })}
       ></img>
-      <Textarea
+      <TextareaAutosize
         placeholder="Add a caption..."
-        variant="ghost"
-        colorScheme="black"
-        resize="none"
-        className="max-w-full mx-auto italic text-center bg-transparent border-0 text-zinc-700 max-h-fit"
+        className="w-full max-w-full p-4 mx-auto overflow-hidden text-base italic text-center bg-transparent border-0 rounded resize-none text-zinc-700 focus-within:bg-violet-50"
         value={caption}
         onChange={(e) => onUpdate({ ...props, caption: e.target.value })}
-      ></Textarea>
+      />
     </div>
   )
 }

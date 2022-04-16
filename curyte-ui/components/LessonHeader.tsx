@@ -123,9 +123,17 @@ const LessonHeader = ({
   return (
     <>
       <ConfirmDialog />
+      {lesson.coverImageUrl && (
+        <div className="mb-8 sm:mx-0">
+          <CoverImage
+            title={lesson?.title || '(no title)'}
+            src={lesson.coverImageUrl}
+          />
+        </div>
+      )}
       <LessonTitle title={lesson?.title || '(no title)'} />
-      <div className="flex items-center mb-4 h-min">
-        {parentLesson && parentLesson.uid && (
+      {parentLesson && parentLesson.uid && (
+        <div className="flex items-center mb-4 h-min">
           <div className="flex items-center h-min">
             <span className="mr-2">➜</span>
             <h1 className="mr-2 font-bold leading-tight tracking-tighter text-center md:leading-none md:text-left">
@@ -133,8 +141,8 @@ const LessonHeader = ({
             </h1>
             <LessonLink lesson={parentLesson} />
           </div>
-        )}
-      </div>
+        </div>
+      )}
       <div className="mt-1 mb-8">
         <div className="mb-6 text-xl xl:text-2xl focus:outline-none text-zinc-500">
           {lesson.description}
@@ -147,7 +155,7 @@ const LessonHeader = ({
           </div>
         )}
       </div>
-      <div className="flex flex-wrap items-center justify-between mb-6 gap-x-1 gap-y-2">
+      <div className="flex flex-wrap items-center justify-between py-3 mb-6 gap-x-1 gap-y-2 border-y">
         <AuthorLink author={lesson.profiles} />
         <div className="flex items-center gap-1">
           {lesson.private && (
@@ -188,6 +196,16 @@ const LessonHeader = ({
                   <Present />
                 </Button>
               )}
+              {handleEdit && (
+                <Button
+                  onClick={handleEdit}
+                  size="xs"
+                  variant="ghost"
+                  colorScheme="black"
+                >
+                  <PencilAltIcon className="w-5 h-5 text-inherit" />
+                </Button>
+              )}
               {/* {!lesson.private && (
                 <Button
                   size="xs"
@@ -218,12 +236,6 @@ const LessonHeader = ({
                       <MenuItem onClick={handleMakeCopy}>
                         <DuplicateIcon className="w-5 h-5 mr-4 text-inherit" />
                         Make a copy
-                      </MenuItem>
-                    )}
-                    {handleEdit && (
-                      <MenuItem onClick={handleEdit}>
-                        <PencilAltIcon className="w-5 h-5 mr-4 text-inherit" />
-                        Edit lesson
                       </MenuItem>
                     )}
                     {handleToggleFeatured && (
@@ -269,14 +281,6 @@ const LessonHeader = ({
           </div>
         </div>
       </div>
-      {lesson.coverImageUrl && (
-        <div className="mb-8 sm:mx-0">
-          <CoverImage
-            title={lesson?.title || '(no title)'}
-            src={lesson.coverImageUrl}
-          />
-        </div>
-      )}
     </>
   )
 }
