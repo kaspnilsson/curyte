@@ -10,7 +10,7 @@ export default async function handler(
   } = req
 
   if (lessonId) {
-    const lesson = prismaClient.lesson.update({
+    const lesson = await prismaClient.lesson.update({
       where: { uid: lessonId as string },
       data: { viewCount: { increment: 1 } },
     })
@@ -21,7 +21,7 @@ export default async function handler(
     res.status(200).end()
     return
   } else if (pathId) {
-    const path = prismaClient.path.update({
+    const path = await prismaClient.path.update({
       where: { uid: pathId as string },
       data: { viewCount: { increment: 1 } },
     })
@@ -32,7 +32,7 @@ export default async function handler(
     res.status(200).end()
     return
   } else if (tagText) {
-    const tag = prismaClient.tag.update({
+    const tag = await prismaClient.tag.update({
       where: { tagText: tagText as string },
       data: { viewCount: { increment: 1 } },
     })
