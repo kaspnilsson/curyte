@@ -24,9 +24,11 @@ import { getLessonLinkExternal } from '../utils/routes'
 import LessonPreview from './LessonPreview'
 
 import copyToCliboard from '../utils/copy-to-clipboard'
-import classNames from 'classnames'
 import GoogleClassroomLogo from './icons/GoogleClassroomLogo'
 import { useState } from 'react'
+import classNames from 'classnames'
+import { useUserAndProfile } from '../contexts/user'
+import { copyLesson } from '../lib/apiHelpers'
 
 interface Props {
   lesson?: LessonWithProfile
@@ -64,16 +66,57 @@ const makeMailtoUrl = (lesson: LessonWithProfile): string => {
   return `mailto:?subject=${quote}&body=${getLessonLinkExternal(lesson.uid)}`
 }
 
+const makeGoogleClassroomUrl = (lesson: LessonWithProfile): string =>
+  `https://classroom.google.com/share?itemtype=assignment&url=${getLessonLinkExternal(
+    lesson.uid
+  )}&title=${lesson.title}&body=${lesson.description || lesson.title}`
+
 const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
   const [makeCopy, setMakeCopy] = useState(true)
+  const [copyName, setCopyName] = useState('Copy of ' + lesson?.title || '')
+  const [tabIndex, setTabIndex] = useState(0)
+  const [copying, setCopying] = useState(false)
+
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
+  const { userAndProfile } = useUserAndProfile()
 
-  const onCopy = () => {
-    if (!lesson) return
-    copyToCliboard(getLessonLinkExternal(lesson.uid))
+  // Send RPC to create a copy if and only if the first tab is selected and the
+  // user has checked "make a copy"
+  const maybeCreateCopy = async () => {
+    if (tabIndex !== 0 || !makeCopy || !lesson) return null
+    if (!userAndProfile) {
+      toast({
+        title: 'Must be logged in to create a copy!',
+        status: 'error',
+        duration: null,
+        id: 'not-logged-in',
+        isClosable: true,
+      })
+      return null
+    }
+    setCopying(true)
+    toast({
+      title: 'Making a copy...',
+    })
+    const retVal = await copyLesson(lesson.uid, copyName)
+    setCopying(false)
+    return retVal
+  }
+
+  const onSendToClassroom = async () => {
+    const exportedLesson = (await maybeCreateCopy()) || lesson
+    if (!exportedLesson) return
+    window.open(makeGoogleClassroomUrl(exportedLesson), '_blank')
+  }
+
+  const onCopy = async () => {
+    const exportedLesson = (await maybeCreateCopy()) || lesson
+    if (!exportedLesson) return
+    copyToCliboard(getLessonLinkExternal(exportedLesson.uid))
     toast({ title: 'Copied URL to clipboard.' })
   }
+
   const isLarge = style === 'large'
   if (!lesson) return null
   return (
@@ -94,47 +137,65 @@ const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
       <Modal isOpen={isOpen} onClose={onClose} size="2xl">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader className="!pb-0">
+          <ModalHeader>
             <div className="text-2xl font-bold leading-tight tracking-tighter">
               Share this lesson
             </div>
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody className="!pt-0">
-            <Tabs colorScheme="black" isLazy>
+          <ModalBody className="relative">
+            <Tabs
+              colorScheme="black"
+              isLazy
+              onChange={(index) => setTabIndex(index)}
+              isDisabled={copying}
+            >
               <TabList>
                 <Tab>To classroom</Tab>
                 <Tab>On social media</Tab>
-                {/* <Tab>Bookmarks</Tab> */}
               </TabList>
               <TabPanels>
                 <TabPanel className="!px-0">
-                  <div className="flex flex-col gap-3 p-4 my-4 text-yellow-900 border rounded-xl bg-yellow-50">
-                    <h3 className="text-lg font-bold leading-tight tracking-tighter">
-                      💡 Tip
-                    </h3>
-                    Make a copy of this lesson for each of your classrooms to
-                    use the student notebook feature. Changing the name for each
-                    class will help you stay organized!
+                  <div>
+                    Make a copy of this lesson for each of your classes to see
+                    student notebooks from just that class.{' '}
                   </div>
-                  <Switch
-                    colorScheme="violet"
-                    isChecked={makeCopy}
-                    onChange={() => setMakeCopy(!makeCopy)}
+                  <FormControl
+                    id="copy-name"
+                    className="flex items-center gap-2 my-4"
                   >
-                    Make a copy
-                  </Switch>
+                    <Switch
+                      id="copy-switch"
+                      colorScheme="violet"
+                      isChecked={makeCopy}
+                      onChange={() => setMakeCopy(!makeCopy)}
+                      isDisabled={copying}
+                    ></Switch>
+                    <FormLabel
+                      htmlFor="copy-switch"
+                      className="!m-0 !font-normal !text-black"
+                    >
+                      Make a copy
+                    </FormLabel>
+                  </FormControl>
                   {makeCopy && (
-                    <FormControl id="copy-name" className="my-4">
-                      <FormLabel className="font-semibold leading-tight tracking-tighter">
-                        Copy title
-                      </FormLabel>
-                      <Input
-                        name="Lesson copy name"
-                        value={copyName}
-                        onChange={(e) => setCopyName(e.currentTarget.value)}
-                      />
-                    </FormControl>
+                    <>
+                      <div className="flex flex-col gap-3 p-4 my-4 text-yellow-900 border rounded-xl bg-yellow-50">
+                        💡 Tip: Changing the name for each class will help you
+                        stay organized!
+                      </div>
+                      <FormControl id="copy-name" className="my-4">
+                        <FormLabel className="font-semibold leading-tight tracking-tighter">
+                          Copy title
+                        </FormLabel>
+                        <Input
+                          isDisabled={copying}
+                          name="Lesson copy name"
+                          value={copyName}
+                          onChange={(e) => setCopyName(e.currentTarget.value)}
+                        />
+                      </FormControl>
+                    </>
                   )}
                   <LessonPreview
                     onClick={() => null}
@@ -150,15 +211,25 @@ const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
                         : lesson
                     }
                   />
-                  <div className="flex justify-end gap-4 my-4">
+                  <div className="grid items-center justify-end grid-cols-1 gap-4 my-4 lg:grid-cols-2">
                     <Button
                       colorScheme="black"
-                      // disabled={!scriptLoaded}
-                      className="flex items-center gap-2"
+                      className="flex items-center gap-2 shadow-2xl shadow-violet-500/50"
+                      onClick={onCopy}
+                      isDisabled={copying}
+                    >
+                      <LinkIcon className="w-5 h-5" />
+                      Copy link
+                    </Button>
+                    <Button
+                      colorScheme="black"
+                      // isDisabled={!scriptLoaded}
+                      className="flex items-center gap-2 shadow-2xl shadow-violet-500/50"
                       onClick={onSendToClassroom}
+                      isDisabled={copying}
                     >
                       <GoogleClassroomLogo />
-                      Share to Google Classroom
+                      Send to Google Classroom
                     </Button>
                   </div>
                 </TabPanel>
