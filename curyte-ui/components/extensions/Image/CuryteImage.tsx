@@ -6,6 +6,7 @@ import { uploadImagePlugin, UploadFn } from './UploadImage'
 import { CuryteImageAttrs } from './CuryteImageAttrs'
 import CuryteImageRenderer from './CuryteImageRenderer'
 import classNames from 'classnames'
+import { NodeSelection } from 'prosemirror-state'
 
 type ExtensionAttrs = { [key in keyof CuryteImageAttrs]: Partial<Attribute> }
 
@@ -124,6 +125,27 @@ const CuryteImage = (uploadFn: UploadFn) => {
       }
     },
 
+    addKeyboardShortcuts() {
+      return {
+        Backspace: () => {
+          const { $anchor, from, to } = this.editor.state.selection
+          // If it is a large selection, don't handle the event.
+          if (from !== to) return false
+          if ($anchor.nodeBefore && $anchor.nodeBefore.type === this.type) {
+            // select it.
+            this.editor.view.dispatch(
+              this.editor.state.tr.setSelection(
+                NodeSelection.create(this.editor.state.doc, from - 1)
+              )
+            )
+
+            return true
+          }
+          return false
+        },
+      }
+    },
+
     addInputRules() {
       return [
         nodeInputRule({
@@ -140,6 +162,7 @@ const CuryteImage = (uploadFn: UploadFn) => {
         }),
       ]
     },
+
     addProseMirrorPlugins() {
       return [uploadImagePlugin(uploadFn)]
     },
