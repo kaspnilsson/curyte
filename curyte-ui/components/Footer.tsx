@@ -27,17 +27,17 @@ const Footer = () => {
             Resources
           </span>
           <Link href={privacyPolicyRoute} passHref>
-            <Button variant="link" colorScheme="violet">
+            <Button variant="link" colorScheme="blue">
               Privacy Policy
             </Button>
           </Link>
           <Link href={dataDeletionInstructionsRoute} passHref>
-            <Button variant="link" colorScheme="violet">
+            <Button variant="link" colorScheme="blue">
               Removing your data
             </Button>
           </Link>
           <Link href="http://curyte.com/lessons/WxzMiQtgkuigQeM7" passHref>
-            <Button variant="link" colorScheme="violet">
+            <Button variant="link" colorScheme="blue">
               Curriculum and copyright
             </Button>
           </Link>
@@ -47,12 +47,12 @@ const Footer = () => {
             About
           </span>
           <Link href={whatIsCuryteRoute} passHref>
-            <Button variant="link" colorScheme="violet">
+            <Button variant="link" colorScheme="blue">
               What is Curyte?
             </Button>
           </Link>
           <Link href={discordInviteHref} passHref>
-            <Button variant="link" colorScheme="violet">
+            <Button variant="link" colorScheme="blue">
               Join the community!
             </Button>
           </Link>

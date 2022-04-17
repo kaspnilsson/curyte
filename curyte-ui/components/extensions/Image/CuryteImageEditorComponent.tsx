@@ -52,12 +52,12 @@ const CuryteImageEditorComponent = (props: EditorProps) => {
         alt={alt}
         title={title}
         className={classNames('!m-0 border not-prose shadow-xl rounded-xl', {
-          'ring-4 ring-violet-500': selected,
+          'ring-4 ring-blue-500': selected,
         })}
       ></img>
       <TextareaAutosize
         placeholder="Add a caption..."
-        className="w-full max-w-full p-4 mx-auto overflow-hidden text-base italic text-center bg-transparent border-0 rounded resize-none text-zinc-700 focus-within:bg-violet-50"
+        className="w-full max-w-full p-4 mx-auto overflow-hidden text-base italic text-center bg-transparent border-0 rounded resize-none text-zinc-700 focus-within:bg-blue-50"
         value={caption}
         onChange={(e) => onUpdate({ ...props, caption: e.target.value })}
       />

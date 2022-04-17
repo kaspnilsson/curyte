@@ -225,7 +225,7 @@ const ImageUploadDialog = ({
                           href={res.unsplashUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="underline text-violet-500"
+                          className="underline text-blue-500"
                         >
                           {res.owner}
                         </a>

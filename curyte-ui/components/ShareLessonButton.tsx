@@ -126,7 +126,7 @@ const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
         variant={isLarge ? 'solid' : 'ghost'}
         onClick={onOpen}
         className={classNames('flex items-center gap-2', {
-          'shadow-2xl shadow-violet-500/50': isLarge,
+          'shadow-2xl shadow-blue-500/50': isLarge,
         })}
         size={isLarge ? 'lg' : 'xs'}
       >
@@ -165,7 +165,7 @@ const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
                   >
                     <Switch
                       id="copy-switch"
-                      colorScheme="violet"
+                      colorScheme="blue"
                       isChecked={makeCopy}
                       onChange={() => setMakeCopy(!makeCopy)}
                       isDisabled={copying}
@@ -213,7 +213,7 @@ const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
                   <div className="grid items-center justify-end grid-cols-1 gap-4 my-4 lg:grid-cols-2">
                     <Button
                       colorScheme="black"
-                      className="flex items-center gap-2 shadow-2xl shadow-violet-500/50"
+                      className="flex items-center gap-2 shadow-2xl shadow-blue-500/50"
                       onClick={onCopy}
                       isDisabled={copying}
                     >
@@ -223,7 +223,7 @@ const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
                     <Button
                       colorScheme="black"
                       // isDisabled={!scriptLoaded}
-                      className="flex items-center gap-2 shadow-2xl shadow-violet-500/50"
+                      className="flex items-center gap-2 shadow-2xl shadow-blue-500/50"
                       onClick={onSendToClassroom}
                       isDisabled={copying}
                     >
@@ -242,7 +242,7 @@ const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
                     >
                       <Button
                         colorScheme="black"
-                        className="flex !w-full items-center gap-2 shadow-2xl shadow-violet-500/50"
+                        className="flex !w-full items-center gap-2 shadow-2xl shadow-blue-500/50"
                       >
                         <i className="text-xl font-thin ri-twitter-line" />
                         Twitter
@@ -255,7 +255,7 @@ const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
                     >
                       <Button
                         colorScheme="black"
-                        className="flex !w-full items-center gap-2 shadow-2xl shadow-violet-500/50"
+                        className="flex !w-full items-center gap-2 shadow-2xl shadow-blue-500/50"
                       >
                         <i className="text-xl font-thin ri-facebook-circle-line" />
                         Facebook
@@ -268,7 +268,7 @@ const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
                     >
                       <Button
                         colorScheme="black"
-                        className="flex !w-full items-center gap-2 shadow-2xl shadow-violet-500/50"
+                        className="flex !w-full items-center gap-2 shadow-2xl shadow-blue-500/50"
                       >
                         <MailIcon className="w-5 h-5" />
                         Email
@@ -276,7 +276,7 @@ const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
                     </a>
                     <Button
                       colorScheme="black"
-                      className="flex !w-full items-center gap-2 shadow-2xl shadow-violet-500/50"
+                      className="flex !w-full items-center gap-2 shadow-2xl shadow-blue-500/50"
                       onClick={onCopy}
                     >
                       <LinkIcon className="w-5 h-5" />

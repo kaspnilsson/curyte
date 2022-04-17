@@ -23,21 +23,18 @@ const WhatIsCuryteView = () => {
           </h1>
           <div className="flex flex-wrap items-center justify-center gap-1 mb-8 text-4xl font-bold leading-tight tracking-tighter text-center">
             Engaging lessons,
-            <div className="text-violet-500">digitally native.</div>
+            <div className="text-blue-500">digitally native.</div>
           </div>
           <div className="relative flex flex-col items-center gap-4 mb-16 md:flex-row align-center">
             <Link passHref href={exploreRoute}>
-              <Button
-                className="flex-1 shadow-xl shadow-violet-500/20"
-                size="lg"
-              >
+              <Button className="flex-1 shadow-xl shadow-blue-500/20" size="lg">
                 <div className="p-4">Explore</div>
               </Button>
             </Link>
             <Link passHref href={newLessonRoute()}>
               <Button
                 size="lg"
-                className="flex-1 shadow-xl shadow-violet-500/20"
+                className="flex-1 shadow-xl shadow-blue-500/20"
                 colorScheme="black"
               >
                 <div className="p-4">Start writing</div>
@@ -46,7 +43,7 @@ const WhatIsCuryteView = () => {
           </div>
         </section>
         <section className="relative flex flex-col items-center justify-around mb-16">
-          <div className="shadow-xl shadow-violet-500/20 rounded-xl overflow-hidden mb-40 border border-violet-200 lg:max-w-[60vw] hidden md:inline relative">
+          <div className="shadow-xl shadow-blue-500/20 rounded-xl overflow-hidden mb-40 border border-blue-200 lg:max-w-[60vw] hidden md:inline relative">
             <AutoPlaySilentVideo
               src="/static/promo.mp4"
               type="video/mp4"
@@ -171,7 +168,7 @@ const WhatIsCuryteView = () => {
             <Link passHref href={newLessonRoute()}>
               <Button
                 size="lg"
-                className="flex-1 shadow-xl shadow-violet-500/20"
+                className="flex-1 shadow-xl shadow-blue-500/20"
                 colorScheme="black"
               >
                 <div className="p-4">Start writing</div>

@@ -25,7 +25,7 @@ const colorToEmoji = (color: Color) => {
   if (color === 'blue') {
     return 'ℹ️'
   }
-  if (color === 'violet') {
+  if (color === 'blue') {
     return 'ℹ️'
   }
   if (color === 'gray') {
@@ -54,7 +54,7 @@ const NoticeWrapper = ({
             'bg-yellow-50': backgroundColor === 'yellow',
             'bg-green-50': backgroundColor === 'green',
             'bg-blue-50': backgroundColor === 'blue',
-            'bg-violet-50': backgroundColor === 'violet',
+            'bg-blue-50': backgroundColor === 'blue',
             'bg-zinc-50': backgroundColor === 'gray',
             'bg-transparent': backgroundColor === 'transparent',
           }
@@ -76,7 +76,7 @@ const NoticeWrapper = ({
               '!text-yellow-900': backgroundColor === 'yellow',
               '!text-green-900': backgroundColor === 'green',
               '!text-blue-900': backgroundColor === 'blue',
-              '!text-violet-900': backgroundColor === 'violet',
+              '!text-blue-900': backgroundColor === 'blue',
               '!text-zinc-900':
                 backgroundColor === 'gray' || backgroundColor === 'transparent',
             })

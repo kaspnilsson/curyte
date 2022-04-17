@@ -69,7 +69,7 @@ const ExplorePage = ({
       }
     >
       {(!userAndProfile || showHero) && (
-        <section className="relative flex flex-col items-center p-12 mb-12 shadow-xl rounded-xl bg-zinc-100 group shadow-violet-500/20">
+        <section className="relative flex flex-col items-center p-12 mb-12 shadow-xl rounded-xl bg-zinc-100 group shadow-blue-500/20">
           {userAndProfile && (
             <Button
               onClick={hideHero}

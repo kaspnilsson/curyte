@@ -33,7 +33,7 @@ const FancyEditor = ({
         {!readOnly && <FancyEditorMenuBar editor={editor} />}
         <EditorContent
           className={classNames(
-            'prose prose-zinc prose-violet prose-headings:!font-semibold prose-headings:!tracking-tighter prose-headings:!leading-tight prose-headings:!scroll-m-28 prose-th:!px-2 prose-th:!py-4 prose-td:!px-2 prose-td:!py-4 prose-th:border prose-td:border prose-th:font-semibold prose-th:bg-zinc-100 md:overflow-hidden w-full max-w-full prose-strong:!text-inherit prose-headings:!text-inherit prose-a:!text-inherit prose-table:!text-inherit prose-blockquote:!text-inherit ',
+            'prose prose-zinc prose-blue prose-headings:!font-semibold prose-headings:!tracking-tighter prose-headings:!leading-tight prose-headings:!scroll-m-28 prose-th:!px-2 prose-th:!py-4 prose-td:!px-2 prose-td:!py-4 prose-th:border prose-td:border prose-th:font-semibold prose-th:bg-zinc-100 md:overflow-hidden w-full max-w-full prose-strong:!text-inherit prose-headings:!text-inherit prose-a:!text-inherit prose-table:!text-inherit prose-blockquote:!text-inherit ',
             {
               'sm:prose-sm lg:prose-md xl:prose-lg': !presentMode,
               'sm:prose-sm md:prose-md lg:prose-lg xl:prose-xl': presentMode,

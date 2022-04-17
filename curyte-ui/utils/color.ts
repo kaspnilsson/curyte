@@ -3,7 +3,7 @@ export const COLORS = [
   'yellow',
   'green',
   'blue',
-  'violet',
+  'blue',
   'gray',
   'transparent',
 ] as const
@@ -16,7 +16,7 @@ export const colorToBackgroundClassNames = (c: Color) => ({
   'bg-yellow-50': c === 'yellow',
   'bg-green-50': c === 'green',
   'bg-blue-50': c === 'blue',
-  'bg-violet-50': c === 'violet',
+  'bg-blue-50': c === 'blue',
   'bg-zinc-50': c === 'gray',
   'bg-transparent': c === 'transparent',
 })

@@ -1,10 +1,10 @@
 import { extendTheme, ThemeConfig } from '@chakra-ui/react'
-import { black, violet, zinc } from './colors'
+import { black, blue, zinc } from './colors'
 import components from './components'
 
 const theme = extendTheme({
   colors: {
-    violet,
+    blue,
     zinc,
     black,
     gray: { ...zinc },
@@ -18,7 +18,7 @@ const theme = extendTheme({
       // button, checkbox, radio, switch.
       // html: {
       ':host,:root': {
-        '--chakra-ui-focus-ring-color': 'var(--chakra-colors-violet-500)',
+        '--chakra-ui-focus-ring-color': 'var(--chakra-colors-blue-500)',
       },
     },
   },

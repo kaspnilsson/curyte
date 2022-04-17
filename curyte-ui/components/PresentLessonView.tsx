@@ -146,7 +146,7 @@ const PresentLessonView = ({ lesson, backUrl, backUrlHref }: Props) => {
       <Link passHref href={backUrlHref} as={backUrl}>
         <Button
           colorScheme="black"
-          className="flex items-center gap-2 shadow-2xl shadow-violet-500/50"
+          className="flex items-center gap-2 shadow-2xl shadow-blue-500/50"
           size="lg"
         >
           <ArrowLeftIcon className="w-5 h-5" />

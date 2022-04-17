@@ -108,7 +108,7 @@
       position: relative;
 
       &:after {
-        background-color: var(--chakra-colors-violet-500);
+        background-color: var(--chakra-colors-blue-500);
         opacity: 0.1;
         content: '';
         left: 0;
@@ -129,7 +129,7 @@
 
   .has-focus {
     &:not(.react-renderer):not(pre) {
-      background-color: var(--chakra-colors-violet-50);
+      background-color: var(--chakra-colors-blue-50);
     }
   }
 
@@ -164,7 +164,7 @@ textarea:focus {
 }
 
 .animated-border {
-  // Tailwind: orange 400, yellow 400, sky 400, violet 700
+  // Tailwind: orange 400, yellow 400, sky 400, blue 700
   background: conic-gradient(#fb923c, #facc15, #38bdf8, #6d28d9, #fb923c);
   position: absolute;
   top: 0;
