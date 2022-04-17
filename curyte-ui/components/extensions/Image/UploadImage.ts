@@ -47,8 +47,6 @@ export const uploadImagePlugin = (upload: UploadFn) => {
               tr.setMeta(imagePluginKey, imageMeta)
               view.dispatch(tr)
 
-              debugger
-
               upload(image).then(
                 (src) => {
                   // const placholderPos = findPlaceholder(view.state, id)

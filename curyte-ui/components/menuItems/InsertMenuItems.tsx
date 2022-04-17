@@ -7,6 +7,7 @@ import {
   googleDriveUrlMatchRegex,
   googleSheetsUrlMatchRegex,
   googleSlidesUrlMatchRegex,
+  vimeoUrlMatchRegex,
   youtubeUrlMatchRegex,
 } from '../embeds/matchers'
 import useImageUploadDialog from '../../hooks/useImageUploadDialog'
@@ -43,7 +44,6 @@ const InsertMenuItems = ({
   const maybeForceNewBlock = () => {
     if (forceNewBlock) {
       const pos = editor.state.selection.$from.after(1)
-      editor.commands.focus('start')
       editor.chain().insertContentAt(pos, { type: 'paragraph' }).run()
     }
   }
@@ -95,7 +95,7 @@ const InsertMenuItems = ({
             initialValue: '',
             validator: (input: string) =>
               youtubeUrlMatchRegex.test(input) ||
-              googleDrawingsUrlMatchRegex.test(input),
+              vimeoUrlMatchRegex.test(input),
           })
         }}
         icon={<i className="font-thin ri-2x ri-movie-line" />}
