@@ -157,6 +157,14 @@ export const getLessons = async (
     .then(handleFetchErrors)
     .then(parseLessonsJson)
 
+export const getLessonsForSitemap = async (args: Prisma.LessonFindManyArgs) =>
+  fetch('https://curyte.com/api/lessons', {
+    method: 'POST',
+    body: JSON.stringify(args),
+  })
+    .then(handleFetchErrors)
+    .then(parseLessonsJson)
+
 export const parseProfileJson = async (res: Response) =>
   res.json().then((p) => p as Profile)
 

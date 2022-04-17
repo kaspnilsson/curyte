@@ -1,4 +1,10 @@
+# *
 User-agent: *
 Allow: /
 
-Sitemap: http://www.curyte.com/server-sitemap.xml
+# Host
+Host: https://www.curyte.com
+
+# Sitemaps
+Sitemap: https://www.curyte.com/sitemap.xml
+Sitemap: https://www.curyte.com/server-sitemap.xml

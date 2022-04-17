@@ -4,7 +4,7 @@
 import { getServerSideSitemap, ISitemapField } from 'next-sitemap'
 import { GetServerSideProps } from 'next'
 import { lessonRoute } from '../../utils/routes'
-import { getLessons } from '../../lib/apiHelpers'
+import { getLessonsForSitemap } from '../../lib/apiHelpers'
 
 const makeAbsoluteUrl = (url: string) => `https://www.curyte.com${url}`
 
@@ -17,7 +17,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       changefreq: 'weekly',
     },
   ]
-  const lessons = await getLessons({ where: { private: { not: true } } }, false)
+  const lessons = await getLessonsForSitemap({
+    where: { private: { not: true } },
+  })
   for (const lesson of lessons) {
     const loc = makeAbsoluteUrl(lessonRoute(lesson.uid))
     fields.push({

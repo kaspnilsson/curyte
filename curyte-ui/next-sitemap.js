@@ -1,3 +1,5 @@
+/** @type {import('next-sitemap').IConfig} */
+
 module.exports = {
   siteUrl: 'https://www.curyte.com',
   generateRobotsTxt: true,

@@ -94,6 +94,9 @@ const ExplorePage = ({
           Explore
         </h1>
       </section>
+      <div className="mt-2 italic text-zinc-500">
+        self-paced, student-led lessons from teachers around the world
+      </div>
       <div className="w-full pt-2 mt-4">
         <Tabs colorScheme="black" isLazy>
           <TabList>
