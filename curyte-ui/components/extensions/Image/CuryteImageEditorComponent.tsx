@@ -5,10 +5,12 @@ import ImageFullWidth from '../../icons/ImageFullWidth'
 import ImageHalfWidth from '../../icons/ImageHalfWidth'
 import MenuIconButton from '../../MenuIconButton'
 import { CuryteImageAttrs } from './CuryteImageAttrs'
+import { Editor } from '@tiptap/react'
 
 interface EditorProps extends CuryteImageAttrs {
   onUpdate: (attrs: CuryteImageAttrs) => void
   selected: boolean
+  editor: Editor
 }
 
 const CuryteImageEditorComponent = (props: EditorProps) => {
@@ -20,11 +22,22 @@ const CuryteImageEditorComponent = (props: EditorProps) => {
     alt = '',
     caption = '',
     selected,
+    editor,
   } = props
+
+  const handleKeydown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      // Advance the selection
+      console.log(editor)
+      // debugger
+      editor.commands.focus(editor.state.selection.$anchor.pos + 1)
+    }
+  }
+
   return (
     <div
       className={classNames(
-        'h-min-content flex flex-col items-center gap-1 relative p-2',
+        'h-min-content flex flex-col items-center gap-1 relative p-2 mx-auto',
         {
           'w-full': displayMode === 'full',
           'max-w-[50%]': displayMode === 'half',
@@ -60,6 +73,8 @@ const CuryteImageEditorComponent = (props: EditorProps) => {
         className="w-full max-w-full p-4 mx-auto overflow-hidden text-base italic text-center bg-transparent border-0 rounded resize-none text-zinc-700 focus-within:bg-violet-50"
         value={caption}
         onChange={(e) => onUpdate({ ...props, caption: e.target.value })}
+        onBlur={(e) => onUpdate({ ...props, caption: e.target.value.trim() })}
+        onKeyDown={handleKeydown}
       />
     </div>
   )

@@ -28,6 +28,7 @@ const CuryteImageRenderer = ({
               updateAttributes(attrs)
             }}
             selected={selected}
+            editor={editor}
           />
         )}
         {!editor.isEditable && <CuryteImageComponent {...node.attrs} />}
