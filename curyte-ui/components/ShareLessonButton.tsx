@@ -148,7 +148,6 @@ const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
               colorScheme="black"
               isLazy
               onChange={(index) => setTabIndex(index)}
-              isDisabled={copying}
             >
               <TabList>
                 <Tab>To classroom</Tab>
