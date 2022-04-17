@@ -8,6 +8,15 @@ import {
   ModalHeader,
   ModalOverlay,
   useToast,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  FormControl,
+  FormLabel,
+  Input,
+  Switch,
 } from '@chakra-ui/react'
 import { ShareIcon, LinkIcon, MailIcon } from '@heroicons/react/outline'
 import { LessonWithProfile } from '../interfaces/lesson_with_profile'
@@ -16,6 +25,8 @@ import LessonPreview from './LessonPreview'
 
 import copyToCliboard from '../utils/copy-to-clipboard'
 import classNames from 'classnames'
+import GoogleClassroomLogo from './icons/GoogleClassroomLogo'
+import { useState } from 'react'
 
 interface Props {
   lesson?: LessonWithProfile
@@ -54,6 +65,7 @@ const makeMailtoUrl = (lesson: LessonWithProfile): string => {
 }
 
 const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
+  const [makeCopy, setMakeCopy] = useState(true)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
 
@@ -89,48 +101,121 @@ const ShareLessonButton = ({ lesson, style = 'large' }: Props) => {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody className="!pt-0">
-            <LessonPreview lesson={lesson} />
-            <div className="grid items-center grid-cols-2 gap-4 my-4 lg:grid-cols-4 justify-evenly">
-              <a href={makeTwitterUrl(lesson)} target="_blank" rel="noreferrer">
-                <Button
-                  colorScheme="black"
-                  className="flex !w-full items-center gap-2 shadow-2xl shadow-violet-500/50"
-                >
-                  <i className="text-xl font-thin ri-twitter-line" />
-                  Twitter
-                </Button>
-              </a>
-              <a
-                href={makeFacebookUrl(lesson)}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Button
-                  colorScheme="black"
-                  className="flex !w-full items-center gap-2 shadow-2xl shadow-violet-500/50"
-                >
-                  <i className="text-xl font-thin ri-facebook-circle-line" />
-                  Facebook
-                </Button>
-              </a>
-              <a href={makeMailtoUrl(lesson)} target="_blank" rel="noreferrer">
-                <Button
-                  colorScheme="black"
-                  className="flex !w-full items-center gap-2 shadow-2xl shadow-violet-500/50"
-                >
-                  <MailIcon className="w-5 h-5" />
-                  Email
-                </Button>
-              </a>
-              <Button
-                colorScheme="black"
-                className="flex !w-full items-center gap-2 shadow-2xl shadow-violet-500/50"
-                onClick={onCopy}
-              >
-                <LinkIcon className="w-5 h-5" />
-                Copy link
-              </Button>
-            </div>
+            <Tabs colorScheme="black" isLazy>
+              <TabList>
+                <Tab>To classroom</Tab>
+                <Tab>On social media</Tab>
+                {/* <Tab>Bookmarks</Tab> */}
+              </TabList>
+              <TabPanels>
+                <TabPanel className="!px-0">
+                  <div className="flex flex-col gap-3 p-4 my-4 text-yellow-900 border rounded-xl bg-yellow-50">
+                    <h3 className="text-lg font-bold leading-tight tracking-tighter">
+                      💡 Tip
+                    </h3>
+                    Make a copy of this lesson for each of your classrooms to
+                    use the student notebook feature. Changing the name for each
+                    class will help you stay organized!
+                  </div>
+                  <Switch
+                    colorScheme="violet"
+                    isChecked={makeCopy}
+                    onChange={() => setMakeCopy(!makeCopy)}
+                  >
+                    Make a copy
+                  </Switch>
+                  {makeCopy && (
+                    <FormControl id="copy-name" className="my-4">
+                      <FormLabel className="font-semibold leading-tight tracking-tighter">
+                        Copy title
+                      </FormLabel>
+                      <Input
+                        name="Lesson copy name"
+                        value={copyName}
+                        onChange={(e) => setCopyName(e.currentTarget.value)}
+                      />
+                    </FormControl>
+                  )}
+                  <LessonPreview
+                    onClick={() => null}
+                    lesson={
+                      makeCopy
+                        ? {
+                            ...lesson,
+                            title: copyName,
+                            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                            profiles:
+                              userAndProfile?.profile || lesson.profiles,
+                          }
+                        : lesson
+                    }
+                  />
+                  <div className="flex justify-end gap-4 my-4">
+                    <Button
+                      colorScheme="black"
+                      // disabled={!scriptLoaded}
+                      className="flex items-center gap-2"
+                      onClick={onSendToClassroom}
+                    >
+                      <GoogleClassroomLogo />
+                      Share to Google Classroom
+                    </Button>
+                  </div>
+                </TabPanel>
+                <TabPanel className="!px-0">
+                  <LessonPreview lesson={lesson} />
+                  <div className="grid items-center grid-cols-2 gap-4 my-4 lg:grid-cols-4 justify-evenly">
+                    <a
+                      href={makeTwitterUrl(lesson)}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <Button
+                        colorScheme="black"
+                        className="flex !w-full items-center gap-2 shadow-2xl shadow-violet-500/50"
+                      >
+                        <i className="text-xl font-thin ri-twitter-line" />
+                        Twitter
+                      </Button>
+                    </a>
+                    <a
+                      href={makeFacebookUrl(lesson)}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <Button
+                        colorScheme="black"
+                        className="flex !w-full items-center gap-2 shadow-2xl shadow-violet-500/50"
+                      >
+                        <i className="text-xl font-thin ri-facebook-circle-line" />
+                        Facebook
+                      </Button>
+                    </a>
+                    <a
+                      href={makeMailtoUrl(lesson)}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <Button
+                        colorScheme="black"
+                        className="flex !w-full items-center gap-2 shadow-2xl shadow-violet-500/50"
+                      >
+                        <MailIcon className="w-5 h-5" />
+                        Email
+                      </Button>
+                    </a>
+                    <Button
+                      colorScheme="black"
+                      className="flex !w-full items-center gap-2 shadow-2xl shadow-violet-500/50"
+                      onClick={onCopy}
+                    >
+                      <LinkIcon className="w-5 h-5" />
+                      Copy link
+                    </Button>
+                  </div>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
           </ModalBody>
         </ModalContent>
       </Modal>
