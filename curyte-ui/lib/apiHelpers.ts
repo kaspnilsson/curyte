@@ -101,12 +101,15 @@ export const createLesson = async (data: Lesson) =>
     .then(handleFetchErrors)
     .then(parseLessonJson)
 
-export const copyLesson = async (uid: string) =>
-  await fetch(`/api/lessons/create?copyFrom=${uid}`, {
+export const copyLesson = async (uid: string, newTitle = '') => {
+  let url = `/api/lessons/create?copyFrom=${uid}`
+  if (newTitle) url = `${url}&newTitle=${newTitle}`
+  return fetch(url, {
     method: 'POST',
   })
     .then(handleFetchErrors)
     .then(parseLessonJson)
+}
 
 export const getLesson = async (uid: string) =>
   fetch(`/api/lessons/${uid}`, {

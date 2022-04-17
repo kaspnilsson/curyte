@@ -123,7 +123,6 @@ const EditLessonPage = ({
                   icon={<EyeIcon className="w-6 h-6 text-zinc-900" />}
                   onClick={() => handlePreview()}
                   disabled={saving}
-                  label="Preview"
                   aria-label="Preview"
                 ></IconButton>
               </Tooltip>
@@ -135,7 +134,6 @@ const EditLessonPage = ({
                   icon={<TrashIcon className="w-6 h-6 text-zinc-900" />}
                   onClick={onOpen}
                   disabled={saving}
-                  label="Delete lesson"
                   aria-label="Delete lesson"
                 ></IconButton>
               </Tooltip>

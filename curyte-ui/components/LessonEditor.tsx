@@ -128,6 +128,11 @@ const LessonEditor = ({
       <ConfirmDialog />
       <div className="flex">
         <div className="flex flex-col flex-grow min-w-0 md:ml-10 lg:ml-0">
+          <EditableCoverImage
+            title={lesson?.title || ''}
+            src={coverImageUrl}
+            onEditUrl={onCoverImageUpload}
+          />
           <div className="flex items-center justify-between w-full ">
             <TextareaAutosize
               autoFocus
@@ -176,11 +181,6 @@ const LessonEditor = ({
               </Button>
             </ButtonGroup>
           </div>
-          <EditableCoverImage
-            title={lesson?.title || ''}
-            src={coverImageUrl}
-            onEditUrl={onCoverImageUpload}
-          />
           <div className="py-8">
             <FancyEditor editor={editor} />
           </div>

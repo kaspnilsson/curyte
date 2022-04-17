@@ -17,7 +17,6 @@ const CuryteAvatar = ({ profile, className, size = 'md' }: Props) => {
       src={profile.photoUrl || undefined}
       name={profile.displayName || '?'}
       className={'shadow-xl shadow-zinc-900/10 ' + className}
-      alt={profile.displayName}
       size={size}
     />
   )

@@ -12,7 +12,7 @@ export const computeClassesForTitle = (title?: string): string => {
 
 const LessonTitle = ({ title }: Props) => {
   return (
-    <div className="mb-4">
+    <div className="flex items-center justify-between w-full mb-2">
       <h1
         className={`${computeClassesForTitle(
           title

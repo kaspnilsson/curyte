@@ -16,7 +16,7 @@ export default async function handler(
   const {
     body,
     method,
-    query: { copyFrom },
+    query: { copyFrom, newTitle },
   } = req
   if (method === 'POST') {
     if (copyFrom) {
@@ -28,11 +28,13 @@ export default async function handler(
         res.status(404).end('Lesson to be copied from not found!')
         return
       }
+
+      const title = newTitle ? (newTitle as string) : original.title
       const data: Prisma.LessonUncheckedCreateInput = {
         coverImageUrl: original.coverImageUrl,
         parentLessonId: original.uid,
         authorId: user.id,
-        title: original.title,
+        title,
         tags: original.tags,
         description: original.description,
       }

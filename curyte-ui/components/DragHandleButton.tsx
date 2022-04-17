@@ -35,7 +35,6 @@ const DragHandleButton = ({ editor, draggable, onOpenStateChange }: Props) => {
       >
         <MenuButton
           aria-label="add"
-          variant="ghost"
           className={classNames(
             'rounded p-1 hover:bg-zinc-100 flex items-center justify-center',
             {
