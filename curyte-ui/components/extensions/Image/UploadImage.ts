@@ -22,6 +22,7 @@ export const uploadImagePlugin = (upload: UploadFn) => {
       handlePaste(view, event, slice) {
         const items = Array.from(event.clipboardData?.items || [])
         const { schema } = view.state
+        let handled = false
 
         items.forEach((item) => {
           const image = item.getAsFile()
@@ -29,6 +30,7 @@ export const uploadImagePlugin = (upload: UploadFn) => {
           if (item.type.indexOf('image') === 0) {
             event.preventDefault()
             event.stopPropagation()
+            handled = true
 
             if (upload && image) {
               // A fresh object to act as the ID for this upload
@@ -45,6 +47,8 @@ export const uploadImagePlugin = (upload: UploadFn) => {
               tr.setMeta(imagePluginKey, imageMeta)
               view.dispatch(tr)
 
+              debugger
+
               upload(image).then(
                 (src) => {
                   // const placholderPos = findPlaceholder(view.state, id)
@@ -57,6 +61,7 @@ export const uploadImagePlugin = (upload: UploadFn) => {
                   //   type: 'remove',
                   //   id,
                   // }
+
                   view.dispatch(
                     view.state.tr.insert(
                       tr.selection.from,
@@ -64,7 +69,6 @@ export const uploadImagePlugin = (upload: UploadFn) => {
                     )
                   )
                   event.preventDefault()
-                  return true
                 },
                 () => {
                   // On failure, just clean up the placeholder
@@ -90,7 +94,7 @@ export const uploadImagePlugin = (upload: UploadFn) => {
           }
         })
 
-        return false
+        return handled
       },
 
       handleDOMEvents: {
