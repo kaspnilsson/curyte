@@ -1,11 +1,8 @@
 import { Spinner } from '@chakra-ui/react'
-import { JSONContent } from '@tiptap/core'
 import { useState, useEffect } from 'react'
 import { useUserAndProfile } from '../contexts/user'
-import { NotesWithProfile } from '../interfaces/notes_with_profile'
+import { Notes } from '../interfaces/notes_with_profile'
 import { queryNotesForLesson } from '../lib/apiHelpers'
-import AuthorLink from './AuthorLink'
-import DateFormatter from './DateFormatter'
 import NotesRenderer from './NotesRenderer'
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 
@@ -15,7 +12,7 @@ interface Props {
 
 const NotesList = ({ lessonId }: Props) => {
   const { userAndProfile } = useUserAndProfile()
-  const [notes, setNotes] = useState<NotesWithProfile[]>([])
+  const [notes, setNotes] = useState<Notes[]>([])
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -47,19 +44,7 @@ const NotesList = ({ lessonId }: Props) => {
           {notes
             .filter((n) => !!n.content)
             .map((n, index) => (
-              <div key={index} className="w-full">
-                <div className="flex items-center justify-between p-4 shadow-lg rounded-t-xl bg-zinc-100">
-                  <AuthorLink author={n.profiles} smallerPic />
-                  <div className="pl-2 text-sm text-right text-zinc-700">
-                    <DateFormatter date={n.updated} />
-                  </div>
-                </div>
-                <div className="p-4 shadow-lg rounded-b-xl bg-zinc-50">
-                  <NotesRenderer
-                    content={n.content ? (n.content as JSONContent) : null}
-                  />
-                </div>
-              </div>
+              <NotesRenderer key={index} notes={n} />
             ))}
         </Masonry>
       </ResponsiveMasonry>

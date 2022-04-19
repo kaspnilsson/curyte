@@ -40,10 +40,11 @@ interface EditorProps {
   content: JSONContent | null
   onUpdate?: (json: JSONContent) => void
   fancy?: boolean
+  placeholder?: string
 }
 
 const useCuryteEditor = (
-  { content, onUpdate, fancy = true }: EditorProps,
+  { content, onUpdate, fancy = true, placeholder }: EditorProps,
   deps: DependencyList = []
 ) => {
   const toast = useToast()
@@ -120,28 +121,32 @@ const useCuryteEditor = (
         NoticeContent,
         VimeoEmbed,
         Placeholder.configure({
-          placeholder: ({ editor, node, pos }) => {
-            if (node.type.name === 'heading') {
-              if (pos === 0) return 'Add your first section header...'
-              if (node.attrs.level === 1) return 'Add section header...'
-              return 'Add section subheader...'
-            }
-            if (node.type.name === 'paragraph') {
-              // const nodes = getHierarchyFromPos(editor.state.selection.$anchor)
-              const nodes = getHierarchyFromPos(editor.state.doc.resolve(pos))
-              for (const n of nodes) {
-                if (n.type.name === 'table') {
-                  return ''
+          placeholder: placeholder
+            ? placeholder
+            : ({ editor, node, pos }) => {
+                if (node.type.name === 'heading') {
+                  if (pos === 0) return 'Add your first section header...'
+                  if (node.attrs.level === 1) return 'Add section header...'
+                  return 'Add section subheader...'
                 }
-                // if (n === node) {
-                //   return 'Type anywhere or use [ insert ].'
-                // }
-              }
-              // return ''
-              return 'Type anywhere or use [ insert ].'
-            }
-            return ''
-          },
+                if (node.type.name === 'paragraph') {
+                  // const nodes = getHierarchyFromPos(editor.state.selection.$anchor)
+                  const nodes = getHierarchyFromPos(
+                    editor.state.doc.resolve(pos)
+                  )
+                  for (const n of nodes) {
+                    if (n.type.name === 'table') {
+                      return ''
+                    }
+                    // if (n === node) {
+                    //   return 'Type anywhere or use [ insert ].'
+                    // }
+                  }
+                  // return ''
+                  return 'Type anywhere or use [ insert ].'
+                }
+                return ''
+              },
           showOnlyWhenEditable: true,
           showOnlyCurrent: false,
           includeChildren: true,
@@ -155,7 +160,7 @@ const useCuryteEditor = (
       ...[
         Placeholder.configure({
           showOnlyWhenEditable: true,
-          placeholder: 'Add notes',
+          placeholder: placeholder || 'Add notes',
         }),
       ]
     )

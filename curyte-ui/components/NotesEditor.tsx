@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { JSONContent } from '@tiptap/react'
 
 import useCuryteEditor from '../hooks/useCuryteEditor'
@@ -8,7 +8,7 @@ import { Spinner, Tooltip } from '@chakra-ui/react'
 import { getNotes, updateNotes } from '../lib/apiHelpers'
 import { InformationCircleIcon } from '@heroicons/react/outline'
 import { useUserAndProfile } from '../contexts/user'
-import { debounce } from 'ts-debounce'
+import { useDebounceCallback } from '@react-hook/debounce'
 
 interface Props {
   lessonId: string
@@ -33,16 +33,14 @@ const NotesEditor = ({ lessonId }: Props) => {
     fetchNotes()
   }, [lessonId])
 
-  const handleContentUpdate = useMemo(() => {
-    const handleUpdate = async (content: JSONContent) => {
+  const handleContentUpdate = useDebounceCallback(
+    async (content: JSONContent) => {
       setLoading(true)
       await updateNotes(lessonId, content)
       setLoading(false)
-    }
-    return debounce((json: JSONContent) => {
-      handleUpdate(json)
-    }, 100)
-  }, [lessonId])
+    },
+    200
+  )
 
   const editor = useCuryteEditor(
     {

@@ -17,7 +17,7 @@ export default async function handler(
     // TODO: restrict this to the lesson owner
     const notes = await prismaClient.notes.findMany({
       where: { lessonId: lessonId as string },
-      include: { profiles: true },
+      include: { profiles: true, lessons: { include: { profiles: true } } },
     })
 
     res.status(200).json(notes.filter((n) => !!n.content))
