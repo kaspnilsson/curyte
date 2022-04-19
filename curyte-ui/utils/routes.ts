@@ -1,4 +1,4 @@
-// import { isServerSideRendering } from '../hooks/useWindowSize'
+import { isServerSideRendering } from '../hooks/useWindowSize'
 
 export const lessonRoute = (uid: string) => `/lessons/${uid}`
 export const lessonRouteHrefPath = '/lessons/[id]'
@@ -16,9 +16,10 @@ export const loginRoute = (referrer = '') => {
   let out = '/login'
   // Always refer in prod, but referring is broken in dev due to
   // https://github.com/supabase/auth-elements/issues/12#issuecomment-864768979
-  // if (!isServerSideRendering && window.location.hostname === PROD_HOST_NAME) {
-  //   referrer = window.location.pathname
-  // }
+
+  if (!isServerSideRendering && window.location.hostname === PROD_HOST_NAME) {
+    referrer = window.location.pathname
+  }
   if (referrer) {
     out = `${out}?referrer=${referrer}`
   }
@@ -40,6 +41,8 @@ export const tagRoute = (tag: string) => `/tags/${tag}`
 export const tagRouteHrefPath = '/tags/[tag]'
 
 export const exploreRoute = '/'
+
+export const notebooksRoute = '/accounts/notebooks'
 
 export const newPathRoute = '/paths/new'
 

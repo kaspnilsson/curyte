@@ -15,7 +15,8 @@ const NewPathView = () => {
       // If user has name, they probably went thru the walkthrough
       router.push(referrer ? (referrer as string) : workspaceRoute)
     } else {
-      router.push(nextStepsRoute(referrer ? (referrer as string) : ''))
+      // Drop referrer if user is new.
+      router.push(nextStepsRoute())
     }
   }, [loading, referrer, router, userAndProfile])
 
