@@ -39,7 +39,7 @@ const AuthorLink = ({ author, small = false, smallerPic = false }: Props) => {
               >
                 {author.displayName || '(no name)'}
               </a>
-              {author.bio && !small && (
+              {author.bio && !small && !smallerPic && (
                 <span className="text-xs break-all line-clamp-1 text-zinc-500 text-ellipsis">
                   {author.bio}
                 </span>
