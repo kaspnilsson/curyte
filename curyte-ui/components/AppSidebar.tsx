@@ -25,6 +25,7 @@ import {
   LogoutIcon,
   MenuIcon,
   SearchIcon,
+  BookOpenIcon,
 } from '@heroicons/react/outline'
 import classNames from 'classnames'
 import Link from 'next/link'
@@ -38,6 +39,7 @@ import {
   exploreRoute,
   loginRoute,
   logOutRoute,
+  notebooksRoute,
   searchRoute,
   workspaceRoute,
 } from '../utils/routes'
@@ -184,6 +186,14 @@ const AppMenu = ({ withLabel = true }: AppMenuProps) => {
         withLabel={withLabel}
         as={workspaceRoute}
         href={workspaceRoute}
+        requiresLogin
+      />
+      <ListItem
+        icon={<BookOpenIcon className="h-6 w-6 !text-inherit" />}
+        label="Notebooks"
+        withLabel={withLabel}
+        as={notebooksRoute}
+        href={notebooksRoute}
         requiresLogin
       />
       <ListItem

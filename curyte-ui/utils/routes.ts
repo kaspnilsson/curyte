@@ -42,6 +42,8 @@ export const tagRouteHrefPath = '/tags/[tag]'
 
 export const exploreRoute = '/'
 
+export const notebooksRoute = '/accounts/notebooks'
+
 export const newPathRoute = '/paths/new'
 
 export const editPathRoute = (uid: string) => `/paths/edit/${uid}`
