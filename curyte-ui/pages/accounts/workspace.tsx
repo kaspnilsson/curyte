@@ -38,6 +38,11 @@ import { LessonWithProfile } from '../../interfaces/lesson_with_profile'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { deleteLessonContentServerside } from '../../utils/hacks'
 import { NotesWithProfile } from '../../interfaces/notes_with_profile'
+import { JSONContent } from '@tiptap/core'
+import DateFormatter from '../../components/DateFormatter'
+import NotesRenderer from '../../components/NotesRenderer'
+import LessonLink from '../../components/LessonLink'
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 
 interface Props {
   paths: PathWithProfile[]
@@ -216,13 +221,33 @@ const WorkspaceView = ({ paths, lessons, notes }: Props) => {
                     </div>
                   )}
                   {!!notes.length && (
-                    <LessonList
-                      lessons={
-                        notes
-                          .filter((n) => !!n.lessons)
-                          .map((n) => n.lessons as LessonWithProfile) || []
-                      }
-                    />
+                    <ResponsiveMasonry
+                      columnsCountBreakPoints={{ 350: 1, 1280: 2 }}
+                    >
+                      <Masonry gutter="1rem">
+                        {notes
+                          .filter((n) => !!n.lessons && !!n.content)
+                          .map((n, index) => (
+                            <div key={index} className="w-full">
+                              <div className="flex items-center justify-between p-4 shadow-lg rounded-t-xl bg-zinc-100">
+                                {n.lessons && <LessonLink lesson={n.lessons} />}
+                                <div className="text-sm text-zinc-700">
+                                  <DateFormatter date={n.updated} />
+                                </div>
+                              </div>
+                              <div className="p-4 shadow-lg rounded-b-xl bg-zinc-50">
+                                <NotesRenderer
+                                  content={
+                                    n.content
+                                      ? (n.content as JSONContent)
+                                      : null
+                                  }
+                                />
+                              </div>
+                            </div>
+                          ))}
+                      </Masonry>
+                    </ResponsiveMasonry>
                   )}
                 </TabPanel>
                 {/* <TabPanel className="!px-0">
@@ -262,6 +287,7 @@ export const getServerSideProps = withAuthRequired({
       prismaClient.notes.findMany({
         where: { userId: user?.id || 'no_user' },
         include: { profiles: true, lessons: { include: { profiles: true } } },
+        orderBy: { updated: 'desc' },
       }),
     ])
 
