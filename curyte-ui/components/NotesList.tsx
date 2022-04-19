@@ -44,21 +44,23 @@ const NotesList = ({ lessonId }: Props) => {
       {!notes?.length && <div className="text-zinc-500">Nothing here yet!</div>}
       <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 900: 2, 1300: 3 }}>
         <Masonry gutter="1rem">
-          {notes.map((n, index) => (
-            <div key={index} className="w-full">
-              <div className="flex items-center justify-between p-4 shadow-lg rounded-t-xl bg-zinc-100">
-                <AuthorLink author={n.profiles} smallerPic />
-                <div className="pl-2 text-sm text-right text-zinc-700">
-                  <DateFormatter date={n.updated} />
+          {notes
+            .filter((n) => !!n.content)
+            .map((n, index) => (
+              <div key={index} className="w-full">
+                <div className="flex items-center justify-between p-4 shadow-lg rounded-t-xl bg-zinc-100">
+                  <AuthorLink author={n.profiles} smallerPic />
+                  <div className="pl-2 text-sm text-right text-zinc-700">
+                    <DateFormatter date={n.updated} />
+                  </div>
+                </div>
+                <div className="p-4 shadow-lg rounded-b-xl bg-zinc-50">
+                  <NotesRenderer
+                    content={n.content ? (n.content as JSONContent) : null}
+                  />
                 </div>
               </div>
-              <div className="p-4 shadow-lg rounded-b-xl bg-zinc-50">
-                <NotesRenderer
-                  content={n.content ? (n.content as JSONContent) : null}
-                />
-              </div>
-            </div>
-          ))}
+            ))}
         </Masonry>
       </ResponsiveMasonry>
     </div>
