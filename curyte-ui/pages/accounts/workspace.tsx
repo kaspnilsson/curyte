@@ -37,13 +37,15 @@ import { PathWithProfile } from '../../interfaces/path_with_profile'
 import { LessonWithProfile } from '../../interfaces/lesson_with_profile'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { deleteLessonContentServerside } from '../../utils/hacks'
+import { NotesWithProfile } from '../../interfaces/notes_with_profile'
 
 interface Props {
   paths: PathWithProfile[]
   lessons: LessonWithProfile[]
+  notes: NotesWithProfile[]
 }
 
-const WorkspaceView = ({ paths, lessons }: Props) => {
+const WorkspaceView = ({ paths, lessons, notes }: Props) => {
   const router = useRouter()
   const { userAndProfile, loading } = useUserAndProfile()
 
@@ -157,6 +159,7 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
               <TabList>
                 <Tab>Lessons</Tab>
                 <Tab>Paths</Tab>
+                <Tab>Notebooks</Tab>
                 {/* <Tab>Bookmarks</Tab> */}
               </TabList>
               <TabPanels>
@@ -206,6 +209,22 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
                     </div>
                   )}
                 </TabPanel>
+                <TabPanel className="!px-0">
+                  {!notes.length && (
+                    <div className="text-sm text-zinc-500">
+                      Nothing here yet!
+                    </div>
+                  )}
+                  {!!notes.length && (
+                    <LessonList
+                      lessons={
+                        notes
+                          .filter((n) => !!n.lessons)
+                          .map((n) => n.lessons as LessonWithProfile) || []
+                      }
+                    />
+                  )}
+                </TabPanel>
                 {/* <TabPanel className="!px-0">
                   {!savedLessons.length && <div className="text-sm text-zinc-500">Nothing here yet!</div>}
                   {!!savedLessons.length && (
@@ -227,7 +246,7 @@ export const getServerSideProps = withAuthRequired({
     const { user } = await getUser(ctx)
 
     // TODO(kasper): rework saved lessons
-    const [lessons, paths] = await Promise.all([
+    const [lessons, paths, notes] = await Promise.all([
       prismaClient.lesson
         .findMany({
           where: { authorId: user?.id || 'no_user' },
@@ -240,9 +259,13 @@ export const getServerSideProps = withAuthRequired({
         orderBy: { updated: 'desc' },
         include: { profiles: true },
       }),
+      prismaClient.notes.findMany({
+        where: { userId: user?.id || 'no_user' },
+        include: { profiles: true, lessons: { include: { profiles: true } } },
+      }),
     ])
 
-    return { props: { lessons, paths } }
+    return { props: { lessons, paths, notes } }
   },
 })
 
