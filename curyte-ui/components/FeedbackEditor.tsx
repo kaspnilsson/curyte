@@ -14,14 +14,14 @@ interface Props {
 const FeedbackEditor = ({ inResponseTo }: Props) => {
   const { userAndProfile } = useUserAndProfile()
   const user = userAndProfile?.user
-  const [notes, setFeedback] = useState<Feedback | null>(null)
+  const [feedback, setFeedback] = useState<Feedback | null>(null)
 
   useEffect(() => {
     const fetchFeedback = async () => {
       if (!inResponseTo) return
-      const n = await getFeedback(inResponseTo)
-      if (n) {
-        setFeedback(n)
+      const f = await getFeedback(inResponseTo)
+      if (f) {
+        setFeedback(f)
       }
     }
     fetchFeedback()
@@ -36,12 +36,12 @@ const FeedbackEditor = ({ inResponseTo }: Props) => {
 
   const editor = useCuryteEditor(
     {
-      content: notes?.content ? (notes.content as JSONContent) : null,
+      content: feedback?.content ? (feedback.content as JSONContent) : null,
       onUpdate: handleContentUpdate,
       fancy: false,
       placeholder: 'Add feedback',
     },
-    [notes, handleContentUpdate]
+    [feedback, handleContentUpdate]
   )
 
   if (!user) return null
