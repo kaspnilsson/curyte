@@ -222,7 +222,7 @@ const WorkspaceView = ({ paths, lessons, notes }: Props) => {
                   )}
                   {!!notes.length && (
                     <ResponsiveMasonry
-                      columnsCountBreakPoints={{ 350: 1, 900: 2 }}
+                      columnsCountBreakPoints={{ 350: 1, 900: 2, 1300: 3 }}
                     >
                       <Masonry gutter="1rem">
                         {notes

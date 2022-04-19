@@ -9,9 +9,10 @@ import { Profile } from '@prisma/client'
 type Props = {
   author: Profile | null
   small?: boolean
+  smallerPic?: boolean
 }
 
-const AuthorLink = ({ author, small = false }: Props) => {
+const AuthorLink = ({ author, small = false, smallerPic = false }: Props) => {
   if (!author) return null
 
   return (
@@ -27,7 +28,7 @@ const AuthorLink = ({ author, small = false }: Props) => {
             <Avatar
               profile={author}
               className="shadow-xl shadow-zinc-900/10"
-              size={small ? '2xs' : 'md'}
+              size={small ? '2xs' : smallerPic ? 'sm' : 'md'}
             />
             <div className="flex flex-col max-w-xs min-w-0 gap-1 ml-2">
               <a
