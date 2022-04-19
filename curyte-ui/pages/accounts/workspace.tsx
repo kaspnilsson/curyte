@@ -222,7 +222,7 @@ const WorkspaceView = ({ paths, lessons, notes }: Props) => {
                   )}
                   {!!notes.length && (
                     <ResponsiveMasonry
-                      columnsCountBreakPoints={{ 350: 1, 1280: 2 }}
+                      columnsCountBreakPoints={{ 350: 1, 900: 2 }}
                     >
                       <Masonry gutter="1rem">
                         {notes
@@ -231,7 +231,7 @@ const WorkspaceView = ({ paths, lessons, notes }: Props) => {
                             <div key={index} className="w-full">
                               <div className="flex items-center justify-between p-4 shadow-lg rounded-t-xl bg-zinc-100">
                                 {n.lessons && <LessonLink lesson={n.lessons} />}
-                                <div className="text-sm text-zinc-700">
+                                <div className="pl-2 text-sm text-right text-zinc-700">
                                   <DateFormatter date={n.updated} />
                                 </div>
                               </div>
