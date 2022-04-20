@@ -1,5 +1,6 @@
 import { Lesson, Notes, Path, Prisma, Profile, Tag } from '@prisma/client'
 import { AttributedPhoto } from '../interfaces/attributed_photo'
+import { Feedback } from '../interfaces/feedback_with_profile'
 import { LessonWithProfile } from '../interfaces/lesson_with_profile'
 import { PathWithProfile } from '../interfaces/path_with_profile'
 
@@ -242,14 +243,48 @@ export const getNotes = async (lessonId: string) =>
 
 export const updateNotes = async (
   lessonId: string,
-  args: Prisma.XOR<Prisma.NotesUpdateInput, Prisma.NotesUncheckedUpdateInput>
-) =>
-  fetch(`/api/notes?lessonId=${lessonId}`, {
+  args: Prisma.XOR<Prisma.NotesUpdateInput, Prisma.NotesUncheckedUpdateInput>,
+  inResponseTo?: string
+) => {
+  let url = `/api/notes?lessonId=${lessonId}`
+  if (inResponseTo) {
+    url = `${url}&inResponseTo=${inResponseTo}`
+  }
+  return fetch(url, {
     method: 'PUT',
     body: JSON.stringify(args),
   })
     .then(handleFetchErrors)
     .then(parseNotesJson)
+}
+
+export const parseFeedbackJson = async (res: Response) =>
+  res.json().then((f) => f as Feedback)
+
+export const parseFeedbackArrJson = async (res: Response) =>
+  res.json().then((feedback) => feedback.map((n: unknown) => n as Feedback))
+
+export const getFeedback = async (inResponseTo: string) =>
+  fetch(`/api/feedback?inResponseTo=${inResponseTo}`, { method: 'GET' })
+    .then(handleFetchErrors)
+    .then(parseFeedbackJson)
+
+export const updateFeedback = async (
+  inResponseTo: string,
+  args: Prisma.XOR<
+    Prisma.FeedbackUpdateInput,
+    Prisma.FeedbackUncheckedUpdateInput
+  >
+) => {
+  const url = `/api/feedback?inResponseTo=${inResponseTo}`
+
+  return fetch(url, {
+    method: 'PUT',
+    body: JSON.stringify(args),
+  })
+    .then(handleFetchErrors)
+    .then(parseFeedbackJson)
+}
 
 export const logoutServerside = async () =>
   fetch('/api/auth/logout').then(handleFetchErrors)

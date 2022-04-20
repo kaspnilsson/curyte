@@ -11,15 +11,12 @@ import { loginRoute, workspaceRoute } from '../../utils/routes'
 import prismaClient from '../../lib/prisma'
 import { useUserAndProfile } from '../../contexts/user'
 import LoadingSpinner from '../../components/LoadingSpinner'
-import { NotesWithProfile } from '../../interfaces/notes_with_profile'
-import { JSONContent } from '@tiptap/core'
-import DateFormatter from '../../components/DateFormatter'
+import { Notes } from '../../interfaces/notes_with_profile'
 import NotesRenderer from '../../components/NotesRenderer'
-import LessonLink from '../../components/LessonLink'
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 
 interface Props {
-  notes: NotesWithProfile[]
+  notes: Notes[]
 }
 
 const NotebooksView = ({ notes }: Props) => {
@@ -63,21 +60,7 @@ const NotebooksView = ({ notes }: Props) => {
                   {notes
                     .filter((n) => !!n.lessons && !!n.content)
                     .map((n, index) => (
-                      <div key={index} className="w-full">
-                        <div className="flex items-center justify-between p-4 shadow-lg rounded-t-xl bg-zinc-100">
-                          {n.lessons && <LessonLink lesson={n.lessons} />}
-                          <div className="pl-2 text-sm text-right text-zinc-700">
-                            <DateFormatter date={n.updated} />
-                          </div>
-                        </div>
-                        <div className="p-4 shadow-lg rounded-b-xl bg-zinc-50">
-                          <NotesRenderer
-                            content={
-                              n.content ? (n.content as JSONContent) : null
-                            }
-                          />
-                        </div>
-                      </div>
+                      <NotesRenderer key={index} notes={n} titleMode="lesson" />
                     ))}
                 </Masonry>
               </ResponsiveMasonry>
@@ -96,7 +79,11 @@ export const getServerSideProps = withAuthRequired({
 
     const notes = await prismaClient.notes.findMany({
       where: { userId: user?.id || 'no_user' },
-      include: { profiles: true, lessons: { include: { profiles: true } } },
+      include: {
+        profiles: true,
+        lessons: { include: { profiles: true } },
+        feedback: { include: { profiles: true } },
+      },
       orderBy: { updated: 'desc' },
     })
 

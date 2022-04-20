@@ -62,6 +62,7 @@ model Profile {
   savedLessons String[]
   savedPaths   String[]
   fts          Unsupported("tsvector")?
+  feedback     Feedback[]               @relation("feedbackToprofiles")
   lessons      Lesson[]
   notes        Notes[]                  @relation("notesToprofiles")
   paths        Path[]
@@ -82,12 +83,26 @@ model Tag {
 
 model Notes {
   lessonId String
-  userId   String   @db.Uuid
+  userId   String     @db.Uuid
   content  Json?
-  updated  DateTime @default(now()) @db.Timestamp(6)
-  lessons  Lesson   @relation("lessonsTonotes", fields: [lessonId], references: [uid], onDelete: NoAction, onUpdate: NoAction)
-  profiles Profile  @relation("notesToprofiles", fields: [userId], references: [uid], onDelete: NoAction, onUpdate: NoAction)
+  updated  DateTime   @default(now()) @db.Timestamp(6)
+  uid      String     @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  lessons  Lesson     @relation("lessonsTonotes", fields: [lessonId], references: [uid], onDelete: NoAction, onUpdate: NoAction)
+  profiles Profile    @relation("notesToprofiles", fields: [userId], references: [uid], onDelete: NoAction, onUpdate: NoAction)
+  feedback Feedback[] @relation("feedbackTonotes")
 
   @@id([userId, lessonId])
   @@map("notes")
+}
+
+model Feedback {
+  updated      DateTime @default(now()) @db.Timestamp(6)
+  inResponseTo String   @db.Uuid
+  userId       String   @db.Uuid
+  content      Json?
+  notes        Notes    @relation("feedbackTonotes", fields: [inResponseTo], references: [uid], onDelete: NoAction, onUpdate: NoAction)
+  profiles     Profile  @relation("feedbackToprofiles", fields: [userId], references: [uid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([inResponseTo, userId])
+  @@map("feedback")
 }
