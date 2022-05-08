@@ -121,7 +121,7 @@ const Login = () => {
       <Head>
         <title>Curyte: Log in</title>
       </Head>
-      <div className="flex flex-col items-center justify-center w-full min-h-screen">
+      <div className="flex flex-col items-center justify-center w-full min-h-screen-ios">
         <Container className="flex items-center w-full gap-2 my-4">
           <Link href={exploreRoute} passHref>
             <a>

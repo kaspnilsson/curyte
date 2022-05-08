@@ -4,7 +4,7 @@ import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary'
 import { exception } from '../utils/gtag'
 
 const ErrorFallback = ({ error }: { error: Error }) => (
-  <div className="flex flex-col items-center justify-center w-screen h-screen gap-8">
+  <div className="flex flex-col items-center justify-center w-screen gap-8 h-screen-ios">
     <span className="font-bold leading-tight tracking-tighter font-xl">
       Something went wrong :/
     </span>

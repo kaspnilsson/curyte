@@ -17,14 +17,18 @@ const FeedbackEditor = ({ inResponseTo }: Props) => {
   const [feedback, setFeedback] = useState<Feedback | null>(null)
 
   useEffect(() => {
+    let isCancelled = false
     const fetchFeedback = async () => {
       if (!inResponseTo) return
       const f = await getFeedback(inResponseTo)
-      if (f) {
+      if (f && !isCancelled) {
         setFeedback(f)
       }
     }
     fetchFeedback()
+    return () => {
+      isCancelled = true
+    }
   }, [inResponseTo])
 
   const handleContentUpdate = useDebounceCallback(

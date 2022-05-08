@@ -5,7 +5,7 @@ interface Props {
 }
 
 const LoadingSpinner = ({ message = 'loading...' }: Props) => (
-  <div className="absolute top-0 bottom-0 left-0 right-0 z-10 flex flex-col items-center justify-center h-screen gap-8 bg-white text-zinc-500">
+  <div className="absolute top-0 bottom-0 left-0 right-0 z-10 flex flex-col items-center justify-center h-screen-ios gap-8 bg-white text-zinc-500">
     <div className="text-xl font-bold leading-tight tracking-tighter md:text-2xl ">
       {message}
     </div>
