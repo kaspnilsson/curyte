@@ -84,24 +84,26 @@ const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
                   {breadcrumbs.map((b, index) => (
                     <BreadcrumbItem key={index}>
                       <Link as={b.as} href={b.href} passHref>
-                        <Button
-                          size="xs"
-                          className={classNames('truncate min-w-0 !py-1', {
-                            'max-w-[15vw] !text-sm md:!text-base lg:!text-xl':
-                              breadcrumbs.length > 2,
-                            'max-w-[25vw] !text-xs md:!text-base lg:!text-xl':
-                              breadcrumbs.length == 2,
-                            'max-w-[40vw] !text-base lg:!text-xl':
-                              breadcrumbs.length < 2,
-                          })}
-                          variant="ghost"
-                        >
-                          <Tooltip label={b.label}>
-                            <Text className="min-w-0 font-bold leading-tight tracking-tighter truncate">
-                              {b.label}
-                            </Text>
-                          </Tooltip>
-                        </Button>
+                        <a>
+                          <Button
+                            size="xs"
+                            className={classNames('truncate min-w-0 !py-1', {
+                              'max-w-[15vw] !text-sm md:!text-base lg:!text-xl':
+                                breadcrumbs.length > 2,
+                              'max-w-[25vw] !text-xs md:!text-base lg:!text-xl':
+                                breadcrumbs.length == 2,
+                              'max-w-[40vw] !text-base lg:!text-xl':
+                                breadcrumbs.length < 2,
+                            })}
+                            variant="ghost"
+                          >
+                            <Tooltip label={b.label}>
+                              <Text className="min-w-0 font-bold leading-tight tracking-tighter truncate">
+                                {b.label}
+                              </Text>
+                            </Tooltip>
+                          </Button>
+                        </a>
                       </Link>
                     </BreadcrumbItem>
                   ))}
@@ -111,10 +113,14 @@ const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
             {!userAndProfile?.profile && (
               <div className="flex items-center gap-2">
                 <Link passHref href={loginRoute()}>
-                  <Button variant="outline">Log in</Button>
+                  <a>
+                    <Button variant="outline">Log in</Button>
+                  </a>
                 </Link>
                 <Link passHref href={loginRoute()}>
-                  <Button colorScheme="black">Sign up</Button>
+                  <a>
+                    <Button colorScheme="black">Sign up</Button>
+                  </a>
                 </Link>
               </div>
             )}
@@ -134,29 +140,35 @@ const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
                     <Portal>
                       <MenuList className="!shadow-md">
                         <Link passHref href={newLessonRoute()}>
-                          <MenuItem className="flex-col !items-start">
-                            <Text>New lesson</Text>
-                            <Text fontSize="xs" className="text-zinc-500">
-                              Create a new lesson from scratch.
-                            </Text>
-                          </MenuItem>
+                          <a>
+                            <MenuItem className="flex-col !items-start">
+                              <Text>New lesson</Text>
+                              <Text fontSize="xs" className="text-zinc-500">
+                                Create a new lesson from scratch.
+                              </Text>
+                            </MenuItem>
+                          </a>
                         </Link>
                         <Link passHref href={newPathRoute}>
-                          <MenuItem className="flex-col !items-start">
-                            <Text>New path</Text>
-                            <Text fontSize="xs" className="text-zinc-500">
-                              Create an outline of a course, then fill it with
-                              lessons.
-                            </Text>
-                          </MenuItem>
+                          <a>
+                            <MenuItem className="flex-col !items-start">
+                              <Text>New path</Text>
+                              <Text fontSize="xs" className="text-zinc-500">
+                                Create an outline of a course, then fill it with
+                                lessons.
+                              </Text>
+                            </MenuItem>
+                          </a>
                         </Link>
                         <Link passHref href={workspaceRoute}>
-                          <MenuItem className="flex-col !items-start">
-                            <Text>Existing path or lesson</Text>
-                            <Text fontSize="xs" className="text-zinc-500">
-                              View all your work in the workspace.
-                            </Text>
-                          </MenuItem>
+                          <a>
+                            <MenuItem className="flex-col !items-start">
+                              <Text>Existing path or lesson</Text>
+                              <Text fontSize="xs" className="text-zinc-500">
+                                View all your work in the workspace.
+                              </Text>
+                            </MenuItem>
+                          </a>
                         </Link>
                       </MenuList>
                     </Portal>
@@ -170,41 +182,49 @@ const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
                     <Portal>
                       <MenuList className="!shadow-md">
                         <Link passHref href={workspaceRoute}>
-                          <MenuItem className="flex-col !items-start">
-                            <Text>Workspace</Text>
-                            <Text fontSize="xs" className="text-zinc-500">
-                              Create, edit, and publish new content.
-                            </Text>
-                          </MenuItem>
+                          <a>
+                            <MenuItem className="flex-col !items-start">
+                              <Text>Workspace</Text>
+                              <Text fontSize="xs" className="text-zinc-500">
+                                Create, edit, and publish new content.
+                              </Text>
+                            </MenuItem>
+                          </a>
                         </Link>
                         <Link
                           passHref
                           as={accountRoute(userAndProfile?.profile.uid)}
                           href={accountRouteHrefPath}
                         >
-                          <MenuItem className="flex-col !items-start">
-                            <Text>Profile</Text>
-                            <Text fontSize="xs" className="text-zinc-500">
-                              View your public profile.
-                            </Text>
-                          </MenuItem>
+                          <a>
+                            <MenuItem className="flex-col !items-start">
+                              <Text>Profile</Text>
+                              <Text fontSize="xs" className="text-zinc-500">
+                                View your public profile.
+                              </Text>
+                            </MenuItem>
+                          </a>
                         </Link>
                         <Link passHref href={accountSettingsRoute}>
-                          <MenuItem className="flex-col !items-start">
-                            <Text>Account settings</Text>
-                            <Text fontSize="xs" className="text-zinc-500">
-                              Update username, bio, and more.
-                            </Text>
-                          </MenuItem>
+                          <a>
+                            <MenuItem className="flex-col !items-start">
+                              <Text>Account settings</Text>
+                              <Text fontSize="xs" className="text-zinc-500">
+                                Update username, bio, and more.
+                              </Text>
+                            </MenuItem>
+                          </a>
                         </Link>
 
                         <Link passHref href={logOutRoute}>
-                          <MenuItem className="flex-col !items-start">
-                            <Text>Sign out</Text>
-                            <Text fontSize="xs" className="text-zinc-500">
-                              Log out of Curyte.
-                            </Text>
-                          </MenuItem>
+                          <a>
+                            <MenuItem className="flex-col !items-start">
+                              <Text>Sign out</Text>
+                              <Text fontSize="xs" className="text-zinc-500">
+                                Log out of Curyte.
+                              </Text>
+                            </MenuItem>
+                          </a>
                         </Link>
                       </MenuList>
                     </Portal>

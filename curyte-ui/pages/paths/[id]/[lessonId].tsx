@@ -122,13 +122,15 @@ const LessonInPathView = ({
               )}
               {!user && (
                 <Link passHref href={loginRoute(router.asPath)}>
-                  <Button
-                    colorScheme="black"
-                    className="flex items-center gap-2 mt-4"
-                  >
-                    <PencilIcon className="w-5 h-5" />
-                    Notebook
-                  </Button>
+                  <a>
+                    <Button
+                      colorScheme="black"
+                      className="flex items-center gap-2 mt-4"
+                    >
+                      <PencilIcon className="w-5 h-5" />
+                      Notebook
+                    </Button>
+                  </a>
                 </Link>
               )}
             </>
@@ -198,10 +200,12 @@ const LessonInPathView = ({
                     href={lessonInPathRouteHrefPath}
                     as={lessonInPathRoute(path.uid, prevLesson.uid)}
                   >
-                    <Button className="flex items-center gap-2">
-                      <ArrowLeftIcon className="w-4 h-4" />
-                      Back
-                    </Button>
+                    <a>
+                      <Button className="flex items-center gap-2">
+                        <ArrowLeftIcon className="w-4 h-4" />
+                        Back
+                      </Button>
+                    </a>
                   </Link>
                   <Text
                     className="mr-2 break-all text-zinc-500 line-clamp-1"
@@ -218,10 +222,12 @@ const LessonInPathView = ({
                     href={pathRouteHrefPath}
                     as={pathRoute(path.uid)}
                   >
-                    <Button className="flex items-center gap-2">
-                      <ArrowLeftIcon className="w-4 h-4" />
-                      Back
-                    </Button>
+                    <a>
+                      <Button className="flex items-center gap-2">
+                        <ArrowLeftIcon className="w-4 h-4" />
+                        Back
+                      </Button>
+                    </a>
                   </Link>
                   <Text
                     className="mr-2 break-all text-zinc-500 line-clamp-1"
@@ -238,13 +244,15 @@ const LessonInPathView = ({
                     href={lessonInPathRouteHrefPath}
                     as={lessonInPathRoute(path.uid, nextLesson.uid)}
                   >
-                    <Button
-                      className="flex items-center gap-2"
-                      colorScheme="black"
-                    >
-                      Next
-                      <ArrowRightIcon className="w-4 h-4" />
-                    </Button>
+                    <a>
+                      <Button
+                        className="flex items-center gap-2"
+                        colorScheme="black"
+                      >
+                        Next
+                        <ArrowRightIcon className="w-4 h-4" />
+                      </Button>
+                    </a>
                   </Link>
                   <Text
                     className="ml-2 break-all text-zinc-500 line-clamp-1"
@@ -261,13 +269,15 @@ const LessonInPathView = ({
                     href={pathRouteHrefPath}
                     as={pathRoute(path.uid)}
                   >
-                    <Button
-                      className="flex items-center gap-2"
-                      colorScheme="black"
-                    >
-                      Next
-                      <ArrowRightIcon className="w-4 h-4" />
-                    </Button>
+                    <a>
+                      <Button
+                        className="flex items-center gap-2"
+                        colorScheme="black"
+                      >
+                        Next
+                        <ArrowRightIcon className="w-4 h-4" />
+                      </Button>
+                    </a>
                   </Link>
                   <Text
                     className="mr-2 break-all text-zinc-500 line-clamp-1"

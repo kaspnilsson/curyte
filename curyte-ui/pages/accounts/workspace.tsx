@@ -78,16 +78,20 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
                     href={newLessonRouteHref}
                     passHref
                   >
-                    <Button className="flex items-center gap-1">
-                      Create a lesson
-                      <DocumentTextIcon className="w-5 h-5" />
-                    </Button>
+                    <a>
+                      <Button className="flex items-center gap-1">
+                        Create a lesson
+                        <DocumentTextIcon className="w-5 h-5" />
+                      </Button>
+                    </a>
                   </Link>
                   <Link as={newPathRoute} href={newPathRoute} passHref>
-                    <Button className="flex items-center gap-1">
-                      Create a path
-                      <AcademicCapIcon className="w-5 h-5" />
-                    </Button>
+                    <a>
+                      <Button className="flex items-center gap-1">
+                        Create a path
+                        <AcademicCapIcon className="w-5 h-5" />
+                      </Button>
+                    </a>
                   </Link>
                 </div>
               </section>
@@ -101,7 +105,7 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
                       href="https://www.curyte.com/lessons/aa19daf3-3399-40db-bfda-be3c7f64f083"
                       passHref
                     >
-                      Getting started with Curyte
+                      <a>Getting started with Curyte</a>
                     </Link>
                   </li>
                   <li className="hover:underline">
@@ -109,7 +113,7 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
                       href="http://curyte.com/lessons/writing-a-lesson-on-curyte-1639450877617"
                       passHref
                     >
-                      Writing your first lesson
+                      <a>Writing your first lesson</a>
                     </Link>
                   </li>
                   <li className="hover:underline">
@@ -117,7 +121,7 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
                       href="http://curyte.com/lessons/4Jhyh_peR2IJyLo8"
                       passHref
                     >
-                      The 5E Method
+                      <a>The 5E Method</a>
                     </Link>
                   </li>
                   <li className="hover:underline">
@@ -125,7 +129,7 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
                       href="http://curyte.com/lessons/8e7265ed-5aba-4283-939a-cd3c20bbdf5d"
                       passHref
                     >
-                      Adding embedded content
+                      <a>Adding embedded content</a>
                     </Link>
                   </li>
                   <li className="hover:underline">
@@ -133,7 +137,7 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
                       href="http://curyte.com/lessons/WxzMiQtgkuigQeM7"
                       passHref
                     >
-                      Curriculum and copyright
+                      <a>Curriculum and copyright</a>
                     </Link>
                   </li>
                 </ul>
@@ -171,10 +175,12 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
                         href={newLessonRouteHref}
                         passHref
                       >
-                        <Button className="flex items-center w-auto gap-1">
-                          Create a lesson
-                          <DocumentTextIcon className="w-5 h-5" />
-                        </Button>
+                        <a>
+                          <Button className="flex items-center w-auto gap-1">
+                            Create a lesson
+                            <DocumentTextIcon className="w-5 h-5" />
+                          </Button>
+                        </a>
                       </Link>
                     </div>
                   )}
@@ -187,10 +193,12 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
                         Nothing here yet!
                       </div>
                       <Link as={newPathRoute} href={newPathRoute} passHref>
-                        <Button className="flex items-center gap-1">
-                          Create a path
-                          <AcademicCapIcon className="w-5 h-5" />
-                        </Button>
+                        <a>
+                          <Button className="flex items-center gap-1">
+                            Create a path
+                            <AcademicCapIcon className="w-5 h-5" />
+                          </Button>
+                        </a>
                       </Link>
                     </div>
                   )}

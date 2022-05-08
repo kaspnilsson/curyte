@@ -27,19 +27,25 @@ const Footer = () => {
             Resources
           </span>
           <Link href={privacyPolicyRoute} passHref>
-            <Button variant="link" colorScheme="violet">
-              Privacy Policy
-            </Button>
+            <a>
+              <Button variant="link" colorScheme="violet">
+                Privacy Policy
+              </Button>
+            </a>
           </Link>
           <Link href={dataDeletionInstructionsRoute} passHref>
-            <Button variant="link" colorScheme="violet">
-              Removing your data
-            </Button>
+            <a>
+              <Button variant="link" colorScheme="violet">
+                Removing your data
+              </Button>
+            </a>
           </Link>
           <Link href="http://curyte.com/lessons/WxzMiQtgkuigQeM7" passHref>
-            <Button variant="link" colorScheme="violet">
-              Curriculum and copyright
-            </Button>
+            <a>
+              <Button variant="link" colorScheme="violet">
+                Curriculum and copyright
+              </Button>
+            </a>
           </Link>
         </div>
         <div className="flex flex-col items-start gap-2">
@@ -47,14 +53,18 @@ const Footer = () => {
             About
           </span>
           <Link href={whatIsCuryteRoute} passHref>
-            <Button variant="link" colorScheme="violet">
-              What is Curyte?
-            </Button>
+            <a>
+              <Button variant="link" colorScheme="violet">
+                What is Curyte?
+              </Button>
+            </a>
           </Link>
           <Link href={discordInviteHref} passHref>
-            <Button variant="link" colorScheme="violet">
-              Join the community!
-            </Button>
+            <a>
+              <Button variant="link" colorScheme="violet">
+                Join the community!
+              </Button>
+            </a>
           </Link>
         </div>
       </Container>

@@ -138,7 +138,7 @@ const PathPreview = ({ path, author, onClick, small = false }: Props) => {
               passHref
               key={path.uid}
             >
-              {card}
+              <a>{card}</a>
             </Link>
           )}
           {path.private && (
@@ -148,7 +148,7 @@ const PathPreview = ({ path, author, onClick, small = false }: Props) => {
               passHref
               key={path.uid}
             >
-              {card}
+              <a>{card}</a>
             </Link>
           )}
         </>

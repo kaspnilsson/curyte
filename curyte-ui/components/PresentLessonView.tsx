@@ -144,14 +144,16 @@ const PresentLessonView = ({ lesson, backUrl, backUrlHref }: Props) => {
       </h1>
       <ShareLessonButton style="small" lesson={lesson} />
       <Link passHref href={backUrlHref} as={backUrl}>
-        <Button
-          colorScheme="black"
-          className="flex items-center gap-2 shadow-2xl shadow-violet-500/50"
-          size="lg"
-        >
-          <ArrowLeftIcon className="w-5 h-5" />
-          Back to lesson
-        </Button>
+        <a>
+          <Button
+            colorScheme="black"
+            className="flex items-center gap-2 shadow-2xl shadow-violet-500/50"
+            size="lg"
+          >
+            <ArrowLeftIcon className="w-5 h-5" />
+            Back to lesson
+          </Button>
+        </a>
       </Link>
     </div>,
   ]
@@ -165,14 +167,16 @@ const PresentLessonView = ({ lesson, backUrl, backUrlHref }: Props) => {
         <div className="sticky top-0 left-0 right-0 z-20 transition-all bg-white border-b">
           <Container className="flex items-center justify-between h-12 gap-4 py-2 md:py-4">
             <Link passHref href={backUrlHref} as={backUrl}>
-              <Button
-                variant="link"
-                className="flex items-center gap-2"
-                size="sm"
-              >
-                <ArrowLeftIcon className="w-4 h-4" />
-                Back to lesson
-              </Button>
+              <a>
+                <Button
+                  variant="link"
+                  className="flex items-center gap-2"
+                  size="sm"
+                >
+                  <ArrowLeftIcon className="w-4 h-4" />
+                  Back to lesson
+                </Button>
+              </a>
             </Link>
             <Button
               size="sm"

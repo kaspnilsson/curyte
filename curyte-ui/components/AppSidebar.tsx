@@ -81,19 +81,21 @@ const ListItem = ({
           passHref
           as={requiresLogin && !userAndProfile ? loginRoute() : as}
         >
-          <Button
-            variant="ghost"
-            className={classNames(
-              'flex !w-full gap-3 text-inherit font-bold leading-tight tracking-tighter',
-              {
-                '!justify-start': withLabel,
-                'justify-center': !withLabel,
-              }
-            )}
-          >
-            {icon || null}
-            {withLabel && label}
-          </Button>
+          <a className="w-full">
+            <Button
+              variant="ghost"
+              className={classNames(
+                'flex !w-full gap-3 text-inherit font-bold leading-tight tracking-tighter',
+                {
+                  '!justify-start': withLabel,
+                  'justify-center': !withLabel,
+                }
+              )}
+            >
+              {icon || null}
+              {withLabel && label}
+            </Button>
+          </a>
         </Link>
       </div>
     </Tooltip>
@@ -125,22 +127,24 @@ const AppMenu = ({ withLabel = true }: AppMenuProps) => {
   return (
     <div className="flex flex-col h-full gap-2">
       <Tooltip label="Home" hasArrow placement="right">
-        <div className="flex items-center justify-center w-full mb-4">
+        <div className="flex items-center w-full mb-4">
           <Link href={exploreRoute} passHref>
-            <Button
-              variant="ghost"
-              className={classNames('flex items-center gap-2', {
-                '!justify-start': withLabel,
-                'justify-center': !withLabel,
-              })}
-            >
-              <CuryteLogo />
-              {withLabel && (
-                <h2 className="text-2xl font-bold leading-tight tracking-tighter">
-                  Curyte
-                </h2>
-              )}
-            </Button>
+            <a className="w-full">
+              <Button
+                variant="ghost"
+                className={classNames('flex items-center gap-2', {
+                  '!justify-start': withLabel,
+                  'justify-center': !withLabel,
+                })}
+              >
+                <CuryteLogo />
+                {withLabel && (
+                  <h2 className="text-2xl font-bold leading-tight tracking-tighter">
+                    Curyte
+                  </h2>
+                )}
+              </Button>
+            </a>
           </Link>
         </div>
       </Tooltip>

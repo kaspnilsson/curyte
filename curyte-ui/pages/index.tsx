@@ -83,9 +83,11 @@ const ExplorePage = ({
             A better lesson builder -- for teachers, by teachers.
           </span>
           <Link href={newLessonRoute()} passHref>
-            <Button colorScheme="black" onClick={hideHero} size="lg">
-              Start writing
-            </Button>
+            <a>
+              <Button colorScheme="black" onClick={hideHero} size="lg">
+                Start writing
+              </Button>
+            </a>
           </Link>
         </section>
       )}

@@ -134,13 +134,15 @@ const PublishedLessonView = (props: Props) => {
                   passHref
                   href={loginRoute(isServerSideRendering ? '' : router.asPath)}
                 >
-                  <Button
-                    colorScheme="black"
-                    className="flex items-center gap-2 mt-4"
-                  >
-                    <PencilIcon className="w-5 h-5" />
-                    Notebook
-                  </Button>
+                  <a>
+                    <Button
+                      colorScheme="black"
+                      className="flex items-center gap-2 mt-4"
+                    >
+                      <PencilIcon className="w-5 h-5" />
+                      Notebook
+                    </Button>
+                  </a>
                 </Link>
               )}
             </>

@@ -124,11 +124,13 @@ const Login = () => {
       <div className="flex flex-col items-center justify-center w-full min-h-screen">
         <Container className="flex items-center w-full gap-2 my-4">
           <Link href={exploreRoute} passHref>
-            <h2 className="flex items-center gap-2 text-2xl font-bold leading-tight tracking-tighter cursor-pointer hover:underline">
-              <CuryteLogo />
-              Curyte
-              {isLoading && <Spinner />}
-            </h2>
+            <a>
+              <h2 className="flex items-center gap-2 text-2xl font-bold leading-tight tracking-tighter cursor-pointer hover:underline">
+                <CuryteLogo />
+                Curyte
+                {isLoading && <Spinner />}
+              </h2>
+            </a>
           </Link>
         </Container>
         <Container className="flex flex-col items-center justify-center flex-1 my-16">

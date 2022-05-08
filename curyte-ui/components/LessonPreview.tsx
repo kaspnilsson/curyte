@@ -23,48 +23,31 @@ type Props = {
   onClick?: (l: Lesson) => void
   pathId?: string
   small?: boolean
+  className?: string
 }
 
-const LessonPreview = ({ lesson, onClick, pathId, small = false }: Props) => {
+const LessonPreview = ({
+  lesson,
+  onClick,
+  pathId,
+  small = false,
+  className = '',
+}: Props) => {
   if (!lesson) return null
   const card = (
-    <div className="grid grid-cols-[1fr_min-content] w-full gap-3 cursor-pointer group lesson-preview py-6">
+    <div className="grid grid-cols-[1fr_min-content] w-full gap-3 cursor-pointer group lesson-preview">
       <div className="flex flex-col flex-1 gap-1">
         <div className="flex flex-col gap-2">
           <Text
             className={classNames(
-              'text-base font-bold leading-tight tracking-tighter line-clamp-2',
+              'text-base font-bold leading-tight tracking-tighter line-clamp-2 hover:underline group-hover:underline',
               { 'md:text-2xl': !small }
             )}
           >
-            <a className="hover:underline group-hover:underline">
-              {lesson.title || '(no title)'}
-            </a>
+            {lesson.title || '(no title)'}
           </Text>
         </div>
-        <div className="flex flex-wrap items-center gap-2 pt-1 text-xs divide-x sm:pt-2">
-          {lesson.profiles && <AuthorLink author={lesson.profiles} small />}
-          {lesson.created && (
-            <div className="pl-2 text-zinc-500">
-              <DateFormatter date={lesson.created} />
-            </div>
-          )}
-          <Text
-            fontSize="xs"
-            className="hidden pl-2 leading-tight tracking-tighter text-zinc-500 proportional-nums md:flex"
-          >
-            {lesson.saveCount || 0}
-            &nbsp;{lesson.saveCount === 1 ? 'save' : 'saves'}
-          </Text>
-          <Text
-            fontSize="xs"
-            className="pl-2 leading-tight tracking-tighter text-zinc-500 proportional-nums"
-          >
-            {lesson.viewCount || 0}
-            &nbsp;{lesson.viewCount === 1 ? 'view' : 'views'}
-          </Text>
-        </div>
-        <div className="hidden mt-1 sm:mt-2 xs:inline">
+        <div className="mt-1 sm:mt-2">
           <Text
             className="break-words line-clamp-1 md:line-clamp-2 text-zinc-700"
             fontSize={small ? 'xs' : 'sm'}
@@ -73,7 +56,7 @@ const LessonPreview = ({ lesson, onClick, pathId, small = false }: Props) => {
           </Text>
         </div>
         {!!lesson.tags?.length && (
-          <div className="flex flex-wrap items-center gap-2 mt-1 sm:mt-2">
+          <div className="flex flex-wrap items-center mt-1 gap-x-2 gap-y-1 sm:mt-2">
             {lesson.tags.slice(0, small ? 2 : 3).map((t, index) => (
               <TagChip tagLabel={t} key={t + index} />
             ))}
@@ -81,7 +64,7 @@ const LessonPreview = ({ lesson, onClick, pathId, small = false }: Props) => {
         )}
       </div>
       {!small && (
-        <div className="relative w-32 h-32 overflow-hidden border rounded md:w-40 md:h-40 xl:w-72">
+        <div className="relative w-24 h-24 overflow-hidden border rounded md:w-36 md:h-36 xl:w-72">
           {lesson.coverImageUrl && (
             <Image
               src={lesson.coverImageUrl}
@@ -134,7 +117,29 @@ const LessonPreview = ({ lesson, onClick, pathId, small = false }: Props) => {
     </div>
   )
   return (
-    <>
+    <div className={`w-full py-6 ${className}`}>
+      <div className="flex flex-wrap items-center gap-2 pb-1 text-xs divide-x sm:pb-2">
+        {lesson.profiles && <AuthorLink author={lesson.profiles} small />}
+        {lesson.created && (
+          <div className="pl-2 text-zinc-500">
+            <DateFormatter date={lesson.created} />
+          </div>
+        )}
+        <Text
+          fontSize="xs"
+          className="hidden pl-2 leading-tight tracking-tighter text-zinc-500 proportional-nums md:flex"
+        >
+          {lesson.saveCount || 0}
+          &nbsp;{lesson.saveCount === 1 ? 'save' : 'saves'}
+        </Text>
+        <Text
+          fontSize="xs"
+          className="hidden pl-2 leading-tight tracking-tighter text-zinc-500 proportional-nums md:flex"
+        >
+          {lesson.viewCount || 0}
+          &nbsp;{lesson.viewCount === 1 ? 'view' : 'views'}
+        </Text>
+      </div>
       {!onClick && (
         <>
           {pathId && (
@@ -175,7 +180,7 @@ const LessonPreview = ({ lesson, onClick, pathId, small = false }: Props) => {
           {card}
         </div>
       )}
-    </>
+    </div>
   )
 }
 

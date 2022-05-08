@@ -34,10 +34,12 @@ const NextStepsView = () => {
       <div className="flex flex-col items-center justify-center w-full min-h-screen">
         <Container className="flex items-center w-full gap-2 my-4">
           <Link href={exploreRoute} passHref>
-            <h2 className="flex items-center gap-2 text-2xl font-bold leading-tight tracking-tighter">
-              <CuryteLogo />
-              Curyte
-            </h2>
+            <a>
+              <h2 className="flex items-center gap-2 text-2xl font-bold leading-tight tracking-tighter">
+                <CuryteLogo />
+                Curyte
+              </h2>
+            </a>
           </Link>
         </Container>
         <Container className="flex flex-col items-center justify-center flex-1 w-full my-16">
@@ -58,7 +60,7 @@ const NextStepsView = () => {
               }}
               passHref
             >
-              <div className="flex flex-col justify-between gap-4 p-8 border shadow-xl cursor-pointer rounded-xl hover:animate-wiggle w-72">
+              <a className="flex flex-col justify-between gap-4 p-8 border shadow-xl cursor-pointer rounded-xl hover:animate-wiggle w-72">
                 <Image
                   height="256px"
                   width="256px"
@@ -72,10 +74,10 @@ const NextStepsView = () => {
                   Take a few short lessons (on Curyte!) to learn how to use the
                   editor and platform
                 </Text>
-              </div>
+              </a>
             </Link>
             <Link href={exploreRoute} passHref>
-              <div className="flex flex-col justify-between gap-4 p-8 border shadow-xl cursor-pointer rounded-xl hover:animate-wiggle w-72">
+              <a className="flex flex-col justify-between gap-4 p-8 border shadow-xl cursor-pointer rounded-xl hover:animate-wiggle w-72">
                 <Image
                   height="256px"
                   width="256px"
@@ -92,7 +94,7 @@ const NextStepsView = () => {
                   Browse and copy hundreds of high quality lessons from teachers
                   around the world
                 </Text>
-              </div>
+              </a>
             </Link>
           </section>
         </Container>

@@ -15,7 +15,7 @@ const LessonList = ({
   onSelectLesson,
   small = false,
 }: Props) => (
-  <div className="flex flex-wrap w-full">
+  <div className="flex flex-wrap w-full divide-y">
     {!!lessons.length &&
       lessons.map((l, key) => (
         <LessonPreview

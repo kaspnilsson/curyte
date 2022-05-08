@@ -27,21 +27,25 @@ const WhatIsCuryteView = () => {
           </div>
           <div className="relative flex flex-col items-center gap-4 mb-16 md:flex-row align-center">
             <Link passHref href={exploreRoute}>
-              <Button
-                className="flex-1 shadow-xl shadow-violet-500/20"
-                size="lg"
-              >
-                <div className="p-4">Explore</div>
-              </Button>
+              <a>
+                <Button
+                  className="flex-1 shadow-xl shadow-violet-500/20"
+                  size="lg"
+                >
+                  <div className="p-4">Explore</div>
+                </Button>
+              </a>
             </Link>
             <Link passHref href={newLessonRoute()}>
-              <Button
-                size="lg"
-                className="flex-1 shadow-xl shadow-violet-500/20"
-                colorScheme="black"
-              >
-                <div className="p-4">Start writing</div>
-              </Button>
+              <a>
+                <Button
+                  size="lg"
+                  className="flex-1 shadow-xl shadow-violet-500/20"
+                  colorScheme="black"
+                >
+                  <div className="p-4">Start writing</div>
+                </Button>
+              </a>
             </Link>
           </div>
         </section>
@@ -169,13 +173,15 @@ const WhatIsCuryteView = () => {
           </div>
           <div className="flex flex-col items-center gap-4 md:flex-row align-center">
             <Link passHref href={newLessonRoute()}>
-              <Button
-                size="lg"
-                className="flex-1 shadow-xl shadow-violet-500/20"
-                colorScheme="black"
-              >
-                <div className="p-4">Start writing</div>
-              </Button>
+              <a>
+                <Button
+                  size="lg"
+                  className="flex-1 shadow-xl shadow-violet-500/20"
+                  colorScheme="black"
+                >
+                  <div className="p-4">Start writing</div>
+                </Button>
+              </a>
             </Link>
           </div>
         </section>

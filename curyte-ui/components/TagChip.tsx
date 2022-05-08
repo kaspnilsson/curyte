@@ -14,13 +14,15 @@ const TagChip = ({ tagLabel, colorScheme = 'zinc', size = 'sm' }: Props) => {
     <>
       {tagLabel && (
         <Link passHref href={tagRouteHrefPath} as={tagRoute(tagLabel)}>
-          <Tag
-            size={size}
-            colorScheme={colorScheme}
-            className="cursor-pointer hover:text-black"
-          >
-            <TagLabel className="hover:underline">{tagLabel}</TagLabel>
-          </Tag>
+          <a className="flex">
+            <Tag
+              size={size}
+              colorScheme={colorScheme}
+              className="cursor-pointer hover:text-black"
+            >
+              <TagLabel className="hover:underline">{tagLabel}</TagLabel>
+            </Tag>
+          </a>
         </Link>
       )}
       {!tagLabel && null}
