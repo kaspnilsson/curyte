@@ -57,7 +57,7 @@ const Layout = ({
                 >
                   {rightContent}
                 </StickyBox>
-                <div className="block md:hidden">{rightContent}</div>
+                <div className="block max-w-full md:hidden">{rightContent}</div>
               </div>
             )}
           </Container>
