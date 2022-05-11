@@ -27,9 +27,7 @@ const Layout = ({
   rightContentWrapBehavior = 'normal',
 }: Props) => {
   return (
-    <div
-      className={'relative min-h-screen-ios max-w-[100vw] flex ' + className}
-    >
+    <div className={'relative min-h-screen max-w-[100vw] flex ' + className}>
       <nav className="relative z-0 hidden w-16 bg-white border-r md:flex flex-0">
         <FullSidebar />
       </nav>

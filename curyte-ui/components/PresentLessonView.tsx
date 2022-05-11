@@ -159,8 +159,8 @@ const PresentLessonView = ({ lesson, backUrl, backUrlHref }: Props) => {
   ]
 
   return (
-    <FullScreen handle={handle}>
-      <article className="relative flex flex-col w-screen h-screen-ios overflow-hidden bg-white scroll-auto">
+    <FullScreen handle={handle} className="absolute inset-0">
+      <article className="relative flex flex-col w-screen h-screen overflow-hidden bg-white scroll-auto">
         <Head>
           <title>{lesson.title}</title>
         </Head>
