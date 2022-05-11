@@ -1251,6 +1251,11 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.1.0.tgz#7f698254aadf921e48dda8c0a6b304026b8a9323"
   integrity sha512-JLo+Y592QzIE+q7Dl2pMUtt4q8SKYI5jDrZxrozEQxnGVOyYE+GWK9eLkwTaeN9DDctlaRAQ3TBmzZ1qdLE30A==
 
+"@rvxlab/tailwind-plugin-ios-full-height@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@rvxlab/tailwind-plugin-ios-full-height/-/tailwind-plugin-ios-full-height-1.1.0.tgz#ef28929e7dd5a4ca9bdd45df155beb2b78bfef82"
+  integrity sha512-jPIxXn0raN/YTk8nXesqM+JbS2WWd5XaUk/MbaAgVDDPyYtsPfeN3B26xIhSa2oE2+JB66tegPUMSOmixzroXg==
+
 "@sentry/types@^6.11.0":
   version "6.17.9"
   resolved "https://registry.yarnpkg.com/@sentry/types/-/types-6.17.9.tgz#d579c33cde0301adaf8ff4762479ad017bf0dffa"

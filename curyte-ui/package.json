@@ -123,6 +123,7 @@
     "webpack": "^5.62.1"
   },
   "devDependencies": {
+    "@rvxlab/tailwind-plugin-ios-full-height": "^1.1.0",
     "@types/gtag.js": "^0.0.8",
     "@types/json2csv": "^5.0.3",
     "@types/node": "^16.11.6",
