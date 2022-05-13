@@ -4,7 +4,7 @@ import { GA_TRACKING_ID } from '../utils/gtag'
 export default class MyDocument extends Document {
   render() {
     return (
-      <Html className="scroll-smooth">
+      <Html className="w-full h-full scroll-smooth">
         <Head>
           {/* Global Site Tag (gtag.js) - Google Analytics */}
           <script

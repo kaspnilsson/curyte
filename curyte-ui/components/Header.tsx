@@ -9,8 +9,6 @@ import {
   Portal,
   IconButton,
   Text,
-  BreadcrumbItem,
-  Breadcrumb,
   Tooltip,
 } from '@chakra-ui/react'
 import Head from 'next/head'
@@ -28,7 +26,6 @@ import {
 } from '../utils/routes'
 import { MobileSidebar } from './AppSidebar'
 import Container from './Container'
-import classNames from 'classnames'
 import { useUserAndProfile } from '../contexts/user'
 import { UrlObject } from 'url'
 
@@ -68,46 +65,28 @@ const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
       </Head>
       <div className="sticky top-0 z-20 bg-white border-b">
         <Container>
-          <div className="flex items-center justify-between h-16 py-4">
-            <div className="flex items-center gap-2 md:gap-4">
+          <div className="flex items-center justify-between h-16 min-w-0 py-4">
+            <div className="flex items-center min-w-0 gap-2 md:gap-4">
               <div className="md:hidden">
                 <MobileSidebar />
               </div>
               {breadcrumbs.length ? (
-                <Breadcrumb
-                  spacing="0"
-                  separator={
-                    <ChevronRightIcon className="w-3 h-3 md:w-5 md:h-5 text-zinc-500" />
-                  }
-                  className="flex-wrap hidden -ml-2 md:flex"
-                >
+                <div className="items-center hidden min-w-0 pr-4 xs:flex">
                   {breadcrumbs.map((b, index) => (
-                    <BreadcrumbItem key={index}>
-                      <Link as={b.as} href={b.href} passHref>
-                        <a>
-                          <Button
-                            size="xs"
-                            className={classNames('truncate min-w-0 !py-1', {
-                              'max-w-[15vw] !text-sm md:!text-base lg:!text-xl':
-                                breadcrumbs.length > 2,
-                              'max-w-[25vw] !text-xs md:!text-base lg:!text-xl':
-                                breadcrumbs.length == 2,
-                              'max-w-[40vw] !text-base lg:!text-xl':
-                                breadcrumbs.length < 2,
-                            })}
-                            variant="ghost"
-                          >
-                            <Tooltip label={b.label}>
-                              <Text className="min-w-0 font-bold leading-tight tracking-tighter truncate">
-                                {b.label}
-                              </Text>
-                            </Tooltip>
-                          </Button>
-                        </a>
-                      </Link>
-                    </BreadcrumbItem>
+                    <>
+                      {index !== 0 && (
+                        <ChevronRightIcon className="w-3 h-3 md:w-4 md:h-4 text-zinc-500" />
+                      )}
+                      <div key={index} className="min-w-0 truncate">
+                        <Link as={b.as} href={b.href} passHref>
+                          <a className="min-w-0 font-bold leading-tight tracking-tighter truncate hover:underline">
+                            <Tooltip label={b.label}>{b.label}</Tooltip>
+                          </a>
+                        </Link>
+                      </div>
+                    </>
                   ))}
-                </Breadcrumb>
+                </div>
               ) : null}
             </div>
             {!userAndProfile?.profile && (
