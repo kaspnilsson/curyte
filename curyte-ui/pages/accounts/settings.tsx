@@ -30,7 +30,7 @@ const SettingsView = ({ user, profile }: Props) => {
   const { logout } = useUserAndProfile()
 
   const handleDelete = async () => {
-    if (!user) return
+    if (!user || !logout) return
     setSaving(true)
     await deleteUser(user.id)
     logout()

@@ -1,25 +1,20 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { useUserAndProfile } from '../contexts/user'
-import { loginRoute, nextStepsRoute, workspaceRoute } from '../utils/routes'
+import { nextStepsRoute, workspaceRoute } from '../utils/routes'
+import { Button } from '@chakra-ui/react'
 
 const Redirect = () => {
   const router = useRouter()
   const { referrer } = router.query
-  const { userAndProfile, loading, logout } = useUserAndProfile()
+  const { userAndProfile, loading, logout, error } = useUserAndProfile()
+  const [showError, setShowError] = useState(false)
 
   useEffect(() => {
     if (loading) return
-    debugger
-    if (!userAndProfile) {
-      console.log('not logged in')
-      if (logout) {
-        logout()
-        console.log('logout fn found, logging out')
-      }
-      router.push(loginRoute())
-      return
+    if (!userAndProfile && error) {
+      setTimeout(() => setShowError(true), 5000)
     }
     if (userAndProfile?.profile?.displayName) {
       // If user has name, they probably went thru the walkthrough
@@ -28,9 +23,21 @@ const Redirect = () => {
       // Drop referrer if user is new.
       router.push(nextStepsRoute())
     }
-  }, [loading, logout, referrer, router, userAndProfile])
+  }, [error, loading, logout, referrer, router, userAndProfile])
 
-  return <LoadingSpinner />
+  return (
+    <div>
+      <LoadingSpinner />
+      {showError && logout && (
+        <div className="fixed z-20 flex flex-col items-end gap-2 transition-all bottom-4 right-4">
+          <span className="text-red-500">{error?.message}</span>
+          <Button className="w-fit" onClick={logout}>
+            Log out
+          </Button>
+        </div>
+      )}
+    </div>
+  )
 }
 
 export default Redirect

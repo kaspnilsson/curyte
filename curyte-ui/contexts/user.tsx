@@ -16,15 +16,12 @@ import { createProfile, logoutServerside, getProfile } from '../lib/apiHelpers'
 
 export const UserAuthContext = createContext<ContextProps>({
   userAndProfile: null,
-  logout: () => {
-    console.error('logout called without being logged in')
-  },
   loading: false,
 })
 
 export interface ContextProps {
   userAndProfile: UserAndProfile | null
-  logout: () => void
+  logout?: () => void
   loading: boolean
   error?: Error
 }
