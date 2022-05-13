@@ -11,6 +11,7 @@ const Redirect = () => {
 
   useEffect(() => {
     if (loading) return
+    debugger
     if (!userAndProfile) {
       console.log('not logged in')
       if (logout) {

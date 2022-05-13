@@ -16,10 +16,7 @@ import { User } from '@supabase/supabase-js'
 import useConfirmDialog from '../../hooks/useConfirmDialog'
 import { useUserAndProfile } from '../../contexts/user'
 import { deleteUser, updateProfile } from '../../lib/apiHelpers'
-import {
-  withAuthRequired,
-  getUser,
-} from '@supabase/supabase-auth-helpers/nextjs'
+import { withPageAuth, getUser } from '@supabase/supabase-auth-helpers/nextjs'
 
 interface Props {
   user: User | null
@@ -261,7 +258,7 @@ const SettingsView = ({ user, profile }: Props) => {
   )
 }
 
-export const getServerSideProps = withAuthRequired({
+export const getServerSideProps = withPageAuth({
   redirectTo: loginRoute(),
   getServerSideProps: async (ctx) => {
     const { user } = await getUser(ctx)

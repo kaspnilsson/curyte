@@ -19,7 +19,7 @@
     "@prisma/client": "^3.12.0",
     "@react-hook/debounce": "^4.0.0",
     "@react-hook/resize-observer": "^1.2.5",
-    "@supabase/supabase-auth-helpers": "^1.2.2",
+    "@supabase/supabase-auth-helpers": "^1.4.1",
     "@supabase/supabase-js": "^1.30.0",
     "@supabase/ui": "^0.36.3",
     "@tailwindcss/aspect-ratio": "^0.4.0",

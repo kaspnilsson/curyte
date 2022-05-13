@@ -1,8 +1,5 @@
 /* eslint-disable react/jsx-filename-extension */
-import {
-  withAuthRequired,
-  getUser,
-} from '@supabase/supabase-auth-helpers/nextjs'
+import { withPageAuth, getUser } from '@supabase/supabase-auth-helpers/nextjs'
 import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
 import React, { useEffect } from 'react'
@@ -229,7 +226,7 @@ const WorkspaceView = ({ paths, lessons }: Props) => {
   )
 }
 
-export const getServerSideProps = withAuthRequired({
+export const getServerSideProps = withPageAuth({
   redirectTo: loginRoute(),
   getServerSideProps: async (ctx) => {
     const { user } = await getUser(ctx)

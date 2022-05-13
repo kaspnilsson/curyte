@@ -1321,7 +1321,7 @@
   dependencies:
     cross-fetch "^3.1.0"
 
-"@supabase/supabase-auth-helpers@^1.2.2":
+"@supabase/supabase-auth-helpers@^1.4.1":
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/@supabase/supabase-auth-helpers/-/supabase-auth-helpers-1.4.1.tgz#4f24c745afa15ceff51132aaeeba433ccb414c84"
   integrity sha512-hs+uuGMmgNV/NZO0OwRG6qkPqMNKusobeM4K2jhf99rQFpef3SAEC45+bQe1zWoOabmbk0Qjp7juSOA+DL4KDg==
