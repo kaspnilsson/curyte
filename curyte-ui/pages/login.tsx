@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useEffect, useState } from 'react'
+import React, { SyntheticEvent, useState } from 'react'
 import {
   Button,
   FormControl,
@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react'
 import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs'
 import Link from 'next/link'
-import { exploreRoute } from '../utils/routes'
+import { exploreRoute, PROD_HOST_NAME } from '../utils/routes'
 import GoogleLogo from '../components/icons/GoogleLogo'
 import FacebookLogo from '../components/icons/FacebookLogo'
 import Footer from '../components/Footer'
@@ -18,8 +18,7 @@ import CuryteLogo from '../components/CuryteLogo'
 import Head from 'next/head'
 import Container from '../components/Container'
 import { useRouter } from 'next/router'
-
-const REDIRECT_URL_BASE = process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL
+import { isServerSideRendering } from '../hooks/useWindowSize'
 
 const Login = () => {
   const toast = useToast()
@@ -28,37 +27,12 @@ const Login = () => {
   const [error, setError] = useState('')
   const router = useRouter()
   const { referrer } = router.query
-  const redirectTo = referrer
-    ? `${REDIRECT_URL_BASE}?referrer=${referrer}`
-    : REDIRECT_URL_BASE
 
-  useEffect(() => {
-    if (!REDIRECT_URL_BASE) {
-      toast({
-        // infinite duration
-        duration: null,
-        id: 'wrong-host',
-        isClosable: true,
-        status: 'error',
-        title: 'Invalid server configuration',
-        description: 'Missing REDIRECT_URL_BASE',
-      })
-    } else if (window && window.location) {
-      const redirectHost = new URL(REDIRECT_URL_BASE).host
-      if (window.location.host !== redirectHost) {
-        toast({
-          // infinite duration
-          duration: null,
-          id: 'wrong-host',
-          isClosable: true,
-          status: 'error',
-          title: 'Invalid server configuration',
-          description: `Incorrect REDIRECT_URL_BASE: set to ${REDIRECT_URL_BASE}, which is a different host`,
-        })
-      }
-    }
-  }, [toast])
-
+  const makeRedirectTo = () =>
+    `${isServerSideRendering ? PROD_HOST_NAME : window.location.origin}${
+      referrer || ''
+    }`
+  console.log(makeRedirectTo())
   const submitHandler = async (event: SyntheticEvent) => {
     event.preventDefault()
     setIsLoading(true)
@@ -69,7 +43,7 @@ const Login = () => {
         email,
       },
       {
-        redirectTo,
+        redirectTo: makeRedirectTo(),
       }
     )
     toast({ title: 'Check your email for a sign in link!' })
@@ -88,7 +62,7 @@ const Login = () => {
         provider: 'google',
       },
       {
-        redirectTo,
+        redirectTo: makeRedirectTo(),
       }
     )
     if (error) {
@@ -106,7 +80,7 @@ const Login = () => {
         provider: 'facebook',
       },
       {
-        redirectTo,
+        redirectTo: makeRedirectTo(),
       }
     )
     if (error) {

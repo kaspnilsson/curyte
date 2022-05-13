@@ -8,7 +8,7 @@ import { debounce } from 'ts-debounce'
 import { lessonRoute, loginRoute, workspaceRoute } from '../../../utils/routes'
 import { Portal, useToast } from '@chakra-ui/react'
 import { Confetti } from '../../../components/Confetti'
-import { withAuthRequired } from '@supabase/supabase-auth-helpers/nextjs'
+import { withPageAuth } from '@supabase/supabase-auth-helpers/nextjs'
 import { Lesson } from '@prisma/client'
 import prismaClient from '../../../lib/prisma'
 import { useUserAndProfile } from '../../../contexts/user'
@@ -113,7 +113,7 @@ const LessonView = (props: Props) => {
   )
 }
 
-export const getServerSideProps = withAuthRequired({
+export const getServerSideProps = withPageAuth({
   redirectTo: loginRoute(),
   getServerSideProps: async ({ query }) => {
     const lesson = await prismaClient.lesson.findFirst({
