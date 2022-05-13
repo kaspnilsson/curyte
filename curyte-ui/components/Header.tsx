@@ -75,7 +75,10 @@ const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
                   {breadcrumbs.map((b, index) => (
                     <>
                       {index !== 0 && (
-                        <ChevronRightIcon className="w-3 h-3 md:w-4 md:h-4 text-zinc-500" />
+                        <ChevronRightIcon
+                          key={index}
+                          className="w-3 h-3 md:w-4 md:h-4 text-zinc-500"
+                        />
                       )}
                       <div key={index} className="min-w-0 truncate">
                         <Link as={b.as} href={b.href} passHref>
