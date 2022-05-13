@@ -115,6 +115,7 @@ const PublishedLessonView = (props: Props) => {
       title: `Lesson template state set to ${!lesson.template}`,
     })
   }
+
   return (
     <>
       {loading && <LoadingSpinner />}

@@ -47,11 +47,28 @@ const Notice = Node.create({
 
   addCommands() {
     return {
-      setNotice: () => (args) => args.commands.wrapInList('notice'),
+      setNotice:
+        () =>
+        ({ commands }) =>
+          commands.insertContent({
+            type: 'notice',
+            content: [
+              {
+                type: 'paragraph',
+              },
+            ],
+          }),
       toggleNotice:
         () =>
         ({ commands }) =>
-          commands.wrapInList('notice'),
+          commands.insertContent({
+            type: 'notice',
+            content: [
+              {
+                type: 'paragraph',
+              },
+            ],
+          }),
     }
   },
 })

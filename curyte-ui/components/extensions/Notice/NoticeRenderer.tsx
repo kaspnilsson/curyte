@@ -17,16 +17,16 @@ const colorToEmoji = (color: Color) => {
     return '🛑'
   }
   if (color === 'yellow') {
-    return '⚠️'
+    return '💡'
   }
   if (color === 'green') {
-    return '✅'
+    return '📦'
   }
   if (color === 'blue') {
-    return 'ℹ️'
+    return '💬'
   }
   if (color === 'violet') {
-    return 'ℹ️'
+    return '📢'
   }
   if (color === 'gray') {
     return '✏️'
@@ -82,7 +82,7 @@ const NoticeWrapper = ({
             })
           )}
         >
-          <h2 className="!m-0 flex-0 text-inherit">
+          <h2 className="!m-0 flex-0 text-inherit" contentEditable={false}>
             {colorToEmoji(backgroundColor)}
           </h2>
           <NodeViewContent className="w-full"></NodeViewContent>

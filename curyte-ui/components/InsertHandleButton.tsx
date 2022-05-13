@@ -8,17 +8,13 @@ interface Props {
   editor: Editor | null
   buttonContent: ReactNode
   className?: string
-  forceInsertAtEnd?: boolean
   onOpenStateChange?: (isOpen: boolean) => void
-  forceNewBlock?: boolean
 }
 
 const InsertHandleButton = ({
   editor,
   buttonContent,
   className = '',
-  forceInsertAtEnd = false,
-  forceNewBlock = false,
   onOpenStateChange,
 }: Props) => {
   const [dialogProps, setDialogProps] = useState({} as InputDialogProps)
@@ -62,12 +58,7 @@ const InsertHandleButton = ({
         </Tooltip>
         <Portal>
           <MenuList className="z-20 overflow-auto max-h-96">
-            <InsertMenuItems
-              editor={editor}
-              openDialog={openDialog}
-              forceInsertAtEnd={forceInsertAtEnd}
-              forceNewBlock={forceNewBlock}
-            />
+            <InsertMenuItems editor={editor} openDialog={openDialog} />
           </MenuList>
         </Portal>
       </Menu>
