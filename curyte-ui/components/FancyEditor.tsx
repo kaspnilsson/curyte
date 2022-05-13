@@ -4,7 +4,6 @@ import FancyEditorMenuBar from './FancyEditorMenuBar'
 import TextBubbleMenu from './extensions/BubbleMenu/TextBubbleMenu'
 import TableBubbleMenu from './extensions/BubbleMenu/TableBubbleMenu'
 import classNames from 'classnames'
-import FancyEditorMenuFooter from './FancyEditorMenuFooter'
 
 interface Props {
   editor: Editor | null
@@ -43,7 +42,6 @@ const FancyEditor = ({
           spellCheck
           editor={editor}
         />
-        {!readOnly && <FancyEditorMenuFooter editor={editor} />}
         {editor && (
           <>
             {!readOnly && (

@@ -85,6 +85,7 @@ const PublishedLessonView = (props: Props) => {
   )
 
   if (!lesson || !author) return <ErrorPage statusCode={404} />
+  console.log(lesson?.content)
 
   const openGraphDescription = `${lesson.description}, tags:${[
     lesson.tags || [],
@@ -115,6 +116,7 @@ const PublishedLessonView = (props: Props) => {
       title: `Lesson template state set to ${!lesson.template}`,
     })
   }
+
   return (
     <>
       {loading && <LoadingSpinner />}

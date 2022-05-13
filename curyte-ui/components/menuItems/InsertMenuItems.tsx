@@ -17,43 +17,24 @@ import { initialLessonContent } from '../LessonEditor'
 interface Props {
   editor: Editor
   openDialog: (input: Partial<InputDialogProps>) => void
-  forceInsertAtEnd?: boolean
-  forceNewBlock?: boolean
 }
 
-const InsertMenuItems = ({
-  editor,
-  openDialog,
-  forceInsertAtEnd = false,
-  forceNewBlock = false,
-}: Props) => {
+const InsertMenuItems = ({ editor, openDialog }: Props) => {
   const { getImageSrc } = useImageUploadDialog()
   const { getFileSrc } = useFileUploadDialog()
 
-  const maybeFocusAndAppendToEnd = () => {
-    if (forceInsertAtEnd) {
-      editor
-        .chain()
-        .focus('end', { scrollIntoView: true })
-        .insertContent({ type: 'paragraph' })
-        .run()
-    }
-  }
-
   // https://stackoverflow.com/questions/68146588/tiptap-insert-node-below-at-the-end-of-the-current-one
-  const maybeForceNewBlock = () => {
-    if (forceNewBlock) {
-      const pos = editor.state.selection.$from.after(1)
-      editor.chain().insertContentAt(pos, { type: 'paragraph' }).run()
-    }
+  const forceNewBlock = () => {
+    const pos = editor.state.selection.$from.after(1)
+    // editor.chain().insertContentAt(pos, { type: 'paragraph' }).run()
+    editor.commands.focus(pos)
   }
 
   return (
     <>
       <MenuItem
         onClick={() => {
-          maybeFocusAndAppendToEnd()
-          maybeForceNewBlock()
+          forceNewBlock()
           editor.chain().insertContent(initialLessonContent).run()
         }}
         icon={<i className="font-thin ri-2x ri-input-method-line" />}
@@ -62,8 +43,7 @@ const InsertMenuItems = ({
       />
       <MenuItem
         onClick={() => {
-          maybeFocusAndAppendToEnd()
-          maybeForceNewBlock()
+          forceNewBlock()
           editor.commands.toggleNotice()
         }}
         icon={<i className="font-thin ri-2x ri-lightbulb-line" />}
@@ -78,14 +58,12 @@ const InsertMenuItems = ({
             description: 'Paste a link from either Youtube or Vimeo.',
             onConfirm: (src: string) => {
               if (youtubeUrlMatchRegex.test(src)) {
-                maybeFocusAndAppendToEnd()
-                maybeForceNewBlock()
+                forceNewBlock()
                 editor.commands.setYoutubeVideo({
                   src,
                 })
               } else {
-                maybeFocusAndAppendToEnd()
-                maybeForceNewBlock()
+                forceNewBlock()
                 // It's vimeo
                 editor.commands.setVimeoVideo({
                   src,
@@ -122,8 +100,7 @@ const InsertMenuItems = ({
               </span>
             ),
             onConfirm: (src: string) => {
-              maybeFocusAndAppendToEnd()
-              maybeForceNewBlock()
+              forceNewBlock()
               editor
                 .chain()
                 .focus()
@@ -153,8 +130,7 @@ const InsertMenuItems = ({
             title: 'Upload an image',
           })
           if (src) {
-            maybeFocusAndAppendToEnd()
-            maybeForceNewBlock()
+            forceNewBlock()
             editor.chain().focus().setImage({ src }).run()
           }
         }}
@@ -168,8 +144,7 @@ const InsertMenuItems = ({
             title: 'Upload a PDF',
           })
           if (src) {
-            maybeFocusAndAppendToEnd()
-            maybeForceNewBlock()
+            forceNewBlock()
             editor.chain().focus().setIFrame({ src }).run()
           }
         }}
@@ -184,8 +159,7 @@ const InsertMenuItems = ({
             title: 'Enter a URL',
             description: 'Enter the URL for another website.',
             onConfirm: (src: string) => {
-              maybeFocusAndAppendToEnd()
-              maybeForceNewBlock()
+              forceNewBlock()
               editor.chain().focus().setIFrame({ src }).run()
             },
           })
@@ -196,8 +170,7 @@ const InsertMenuItems = ({
       />
       <MenuItem
         onClick={() => {
-          maybeFocusAndAppendToEnd()
-          maybeForceNewBlock()
+          forceNewBlock()
           editor.chain().focus().toggleCodeBlock().run()
         }}
         icon={<i className="font-thin ri-2x ri-code-box-line" />}
@@ -206,8 +179,7 @@ const InsertMenuItems = ({
       />
       <MenuItem
         onClick={() => {
-          maybeFocusAndAppendToEnd()
-          maybeForceNewBlock()
+          forceNewBlock()
           editor.commands.addMultipleChoice()
         }}
         icon={<i className="font-thin ri-2x ri-survey-line" />}
@@ -216,8 +188,7 @@ const InsertMenuItems = ({
       />
       <MenuItem
         onClick={() => {
-          maybeFocusAndAppendToEnd()
-          maybeForceNewBlock()
+          forceNewBlock()
           editor.commands.toggleDetails()
         }}
         icon={<i className="font-thin ri-2x ri-split-cells-vertical" />}
@@ -226,8 +197,7 @@ const InsertMenuItems = ({
       />
       <MenuItem
         onClick={() => {
-          maybeFocusAndAppendToEnd()
-          maybeForceNewBlock()
+          forceNewBlock()
           editor
             .chain()
             .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
@@ -271,8 +241,7 @@ const InsertMenuItems = ({
             title: 'Enter a lesson URL',
             description: 'Enter the URL for a Curyte lesson.',
             onConfirm: (src: string) => {
-              maybeFocusAndAppendToEnd()
-              maybeForceNewBlock()
+              forceNewBlock()
               editor.commands.setCuryteLink({ src })
             },
             initialValue: '',
