@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
+import { PROD_HOST_NAME } from '../utils/routes'
 
 export const isServerSideRendering = typeof window === 'undefined'
+export const isProd =
+  !isServerSideRendering && window.location.host === PROD_HOST_NAME
 
 const useWindowSize = () => {
   const [windowSize, setWindowSize] = useState({

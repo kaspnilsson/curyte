@@ -132,7 +132,7 @@ const AppMenu = ({ withLabel = true }: AppMenuProps) => {
             <a className="w-full">
               <Button
                 variant="ghost"
-                className={classNames('flex items-center gap-2', {
+                className={classNames('flex items-center gap-2 !w-full', {
                   '!justify-start': withLabel,
                   'justify-center': !withLabel,
                 })}
