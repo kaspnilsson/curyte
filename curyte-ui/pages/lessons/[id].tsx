@@ -125,7 +125,7 @@ const PublishedLessonView = (props: Props) => {
             <>
               <LessonOutline editor={editor} />
               {user && (
-                <div className="hidden md:mt-4 md:flex">
+                <div className="hidden md:mt-4 md:flex max-h-[80vh]">
                   <NotesEditor lessonId={lesson.uid} />
                 </div>
               )}
