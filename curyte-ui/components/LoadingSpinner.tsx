@@ -9,10 +9,10 @@ const LoadingSpinner = ({ message = 'loading...' }: Props) => (
     <div className="text-xl font-bold leading-tight tracking-tighter md:text-2xl ">
       {message}
     </div>
-    <div className="flex items-center justify-center w-48 h-48 rounded-full shadow-2xl shadow-violet-500/50 bg-zinc-500">
+    <div className="flex items-center justify-center rounded-full shadow-2xl w-36 h-36 shadow-violet-500/50 bg-zinc-500">
       <CuryteLogo
-        width="96px"
-        height="96px"
+        width="64px"
+        height="64px"
         color="white"
         className="animate-pulse"
       />
