@@ -73,21 +73,22 @@ const Header = ({ title = 'Curyte', breadcrumbs = [] }: Props) => {
               {breadcrumbs.length ? (
                 <div className="items-center hidden min-w-0 pr-4 xs:flex">
                   {breadcrumbs.map((b, index) => (
-                    <>
+                    <div
+                      key={index}
+                      className="flex items-center min-w-0 truncate"
+                    >
                       {index !== 0 && (
                         <ChevronRightIcon
-                          key={index}
+                          // key={`${index}_icon`}
                           className="w-3 h-3 md:w-4 md:h-4 text-zinc-500"
                         />
                       )}
-                      <div key={index} className="min-w-0 truncate">
-                        <Link as={b.as} href={b.href} passHref>
-                          <a className="min-w-0 font-bold leading-tight tracking-tighter truncate hover:underline">
-                            <Tooltip label={b.label}>{b.label}</Tooltip>
-                          </a>
-                        </Link>
-                      </div>
-                    </>
+                      <Link as={b.as} href={b.href} passHref>
+                        <a className="min-w-0 font-bold leading-tight tracking-tighter truncate hover:underline">
+                          <Tooltip label={b.label}>{b.label}</Tooltip>
+                        </a>
+                      </Link>
+                    </div>
                   ))}
                 </div>
               ) : null}
