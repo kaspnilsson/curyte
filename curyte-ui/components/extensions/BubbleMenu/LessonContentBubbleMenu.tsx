@@ -9,6 +9,7 @@ import { useSpeechSynthesis } from 'react-speech-kit'
 import { Button } from '@chakra-ui/react'
 // import { TextSelection } from 'prosemirror-state'
 import TranslatePanel from '../../TranslatePanel'
+import { isServerSideRendering } from '../../../hooks/useWindowSize'
 
 interface Props {
   editor: Editor
@@ -52,6 +53,8 @@ const LessonContentBubbleMenu = ({ editor }: Props) => {
   useEffect(() => {
     setText(expandSelectionToFullWords(editor))
     setContent(null)
+    if (isServerSideRendering) return
+    window.speechSynthesis.cancel()
   }, [editor, editor.state.selection])
 
   return (
