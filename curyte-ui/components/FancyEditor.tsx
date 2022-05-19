@@ -4,6 +4,7 @@ import FancyEditorMenuBar from './FancyEditorMenuBar'
 import TextBubbleMenu from './extensions/BubbleMenu/TextBubbleMenu'
 import TableBubbleMenu from './extensions/BubbleMenu/TableBubbleMenu'
 import classNames from 'classnames'
+import LessonContentBubbleMenu from './extensions/BubbleMenu/LessonContentBubbleMenu'
 
 interface Props {
   editor: Editor | null
@@ -44,6 +45,7 @@ const FancyEditor = ({
         />
         {editor && (
           <>
+            {readOnly && <LessonContentBubbleMenu editor={editor} />}
             {!readOnly && (
               <>
                 <TableBubbleMenu editor={editor} />
