@@ -32,6 +32,7 @@ const CuryteImage = (uploadFn: UploadFn) => {
       return {
         inline: true,
         HTMLAttributes: {},
+        allowBase64: true,
       }
     },
 

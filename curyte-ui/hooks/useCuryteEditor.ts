@@ -12,7 +12,12 @@ import TaskList from '@tiptap/extension-task-list'
 import Focus from '@tiptap/extension-focus'
 import Typography from '@tiptap/extension-typography'
 import Underline from '@tiptap/extension-underline'
-import { JSONContent, mergeAttributes, useEditor } from '@tiptap/react'
+import {
+  Extension,
+  JSONContent,
+  mergeAttributes,
+  useEditor,
+} from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { DependencyList } from 'react'
 import { GoogleDriveEmbed } from '../components/embeds/GoogleDriveEmbed'
@@ -157,12 +162,12 @@ const useCuryteEditor = (
     )
   } else {
     extensions.push(
-      ...[
+      ...([
         Placeholder.configure({
           showOnlyWhenEditable: true,
           placeholder: placeholder || 'Add notes',
         }),
-      ]
+      ] as Extension[])
     )
   }
 
