@@ -288,3 +288,8 @@ export const updateFeedback = async (
 
 export const logoutServerside = async () =>
   fetch('/api/auth/logout').then(handleFetchErrors)
+
+export const translate = async (q: string, lang: string) =>
+  fetch(`/api/translate?q=${q}&lang=${lang}`)
+    .then(handleFetchErrors)
+    .then((res) => res.json())
