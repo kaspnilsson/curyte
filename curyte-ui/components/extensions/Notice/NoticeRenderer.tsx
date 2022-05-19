@@ -85,7 +85,7 @@ const NoticeWrapper = ({
           <h2 className="!m-0 flex-0 text-inherit" contentEditable={false}>
             {colorToEmoji(backgroundColor)}
           </h2>
-          <NodeViewContent className="w-full"></NodeViewContent>
+          <NodeViewContent className="w-full min-w-0"></NodeViewContent>
         </div>
       </div>
     </NodeViewWrapper>
