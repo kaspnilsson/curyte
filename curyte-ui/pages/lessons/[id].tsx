@@ -11,6 +11,7 @@ import {
   accountRoute,
   accountRouteHrefPath,
   editLessonRoute,
+  getLessonLinkExternal,
   lessonRoute,
   lessonRouteHrefPath,
   loginRoute,
@@ -94,6 +95,8 @@ const PublishedLessonView = (props: Props) => {
     openGraphImages.push({ url: lesson.coverImageUrl })
   }
 
+  const canonicalUrl = getLessonLinkExternal(lesson.uid)
+
   const handleToggleFeatured = async () => {
     setLesson(
       await updateLesson(lesson.uid, {
@@ -166,7 +169,7 @@ const PublishedLessonView = (props: Props) => {
             title={lesson.title || ''}
             description={openGraphDescription}
             openGraph={{
-              url: lessonRoute(lesson.uid),
+              url: canonicalUrl,
               title: lesson.title || '',
               description: openGraphDescription,
               images: openGraphImages,
@@ -174,9 +177,10 @@ const PublishedLessonView = (props: Props) => {
             }}
             twitter={{
               cardType: 'summary_large_image',
-              site: 'http://curyte.com',
+              site: canonicalUrl,
               handle: '@curyte',
             }}
+            canonical={canonicalUrl}
           ></NextSeo>
           <article>
             <LessonHeader

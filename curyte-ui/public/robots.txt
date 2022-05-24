@@ -7,4 +7,5 @@ Host: https://www.curyte.com
 
 # Sitemaps
 Sitemap: https://www.curyte.com/sitemap.xml
+Sitemap: https://www.curyte.com/sitemap-0.xml
 Sitemap: https://www.curyte.com/server-sitemap.xml
