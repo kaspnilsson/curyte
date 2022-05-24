@@ -7,6 +7,7 @@ module.exports = {
   robotsTxtOptions: {
     additionalSitemaps: [
       'https://www.curyte.com/server-sitemap.xml', // <==== Add here
+      'https://www.curyte.com/sitemap-0.xml', // <==== Add here
     ],
   },
 }
